@@ -9,4 +9,18 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Thoughtsy::Application.config.secret_key_base = '1c68ab555af2736feb4b69eb30f77085f6667bc05dfd3ee4b788cbf7a668bf68d2e1936db383fa49b8480d8121f2448fed65b11e7a2f2bdfe5df5e73606f56b4'
+
+def secure_token
+  token_file = Rails.root.join('.secret')
+  if File.exist?(token_file)
+    #use the existing token
+    File.read(token_file).chomp
+  else
+    #generate a new token and store it in token_file
+    token = SecureRandom.hex(64)
+    File.write(token_file, token)
+    token
+  end
+end
+
+Thoughtsy::Application.config.secret_key_base = secure_token
