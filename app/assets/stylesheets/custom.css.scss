@@ -18,6 +18,7 @@ html {
 
 body {
   padding-top: 60px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 section {
@@ -66,17 +67,16 @@ p {
   }
 }
 
-/* logo */
+/* header */
 
 #logo {
   float: left;
-  margin-right: 10px;
+  margin-left: 8%;
   font-size: 1.7em;
-  color: white;
   text-transform: uppercase;
   letter-spacing: -1px;
   padding-top: 9px;
-  font-weight: bold;
+  font-weight: thin;
   line-height: 1;
   &:hover {
     color: white;
@@ -84,6 +84,31 @@ p {
   }
 }
 
+/* Bootstrap btn-success coloring */
+#logo {
+  color: #5bb75b;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+#logo:hover,
+#logo:focus,
+#logo:active,
+#logo.active,
+#logo.disabled,
+#logo[disabled] {
+  color: #51a351;
+}
+
+#logo:active,
+#logo.active {
+  color: #408140 \9;
+}
+
+#nav-links {
+  margin-right: 20%
+}
 
 
 /* footer */
@@ -177,4 +202,49 @@ input {
   width: 100%;
   margin-top: 45px;
   @include box_sizing;      /* uses SASS mixin to include box-sizing rules as stated above */
+}
+
+/* mockup */
+
+.hero-unit {
+  background-color: $grayMediumLight;
+  margin-bottom: 0;
+}
+
+body {
+  background-color: $grayMediumLight;
+}
+
+.row-fluid .well {
+  margin-left: 0;
+}
+
+#thought {
+  background-color: #ddd;
+  margin-bottom: 8%;
+  text-align: center;
+}
+
+span #text-input {
+  margin-bottom: 0;
+}
+
+#classic-responses {
+  margin: 0 0;
+  padding: 0 2%;
+  h3 {
+    text-align: center;
+  }
+}
+
+div #centered {
+  width: 70%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#top-users {
+  text-align: center;
+  margin-left: 0;
 }

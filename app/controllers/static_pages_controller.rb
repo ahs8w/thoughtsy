@@ -5,6 +5,12 @@ class StaticPagesController < ApplicationController
   def about
   end
 
-  def help
+  def team
+  end
+
+  def contact
+  end
+
+  def mockup
   end
 end

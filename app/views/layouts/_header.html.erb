@@ -1,12 +1,12 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
-    <div class="container">
-      <%= link_to "Thoughtsy", '#', id: "logo" %>
+    <div class="container-fluid">
+      <%= link_to "Thoughtsy", root_path, id: "logo" %>
       <nav>
-        <ul class="nav pull-right">
-          <li><%= link_to "Home",    '#' %></li>
-          <li><%= link_to "Help",    '#' %></li>
-          <li><%= link_to "Sign in", '#' %></li>
+        <ul class="nav pull-right" id="nav-links">
+          <li><%= link_to "How it works", about_path %></li>
+          <li><%= link_to "Mockup",      mockup_path %></li> 
+          <li><%= link_to "Sign in",      '#' %></li>
         </ul>
       </nav>
     </div>
