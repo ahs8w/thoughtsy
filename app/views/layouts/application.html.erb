@@ -4,13 +4,15 @@
     <title><%= full_title(yield(:page_title)) %></title>
     <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <link href='http://fonts.googleapis.com/css?family=Merienda:400,700' rel='stylesheet' type='text/css'>
     <%= csrf_meta_tags %>
     <%= render 'layouts/shim' %>
   </head>
   <body>
     <%= render 'layouts/header' %>
-    <div class="container">
+    <div class="container-fluid">
       <%= yield %>
+      <%= render 'layouts/footer' %>
     </div>
 
   </body>
