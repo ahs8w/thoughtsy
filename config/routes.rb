@@ -1,13 +1,17 @@
 Thoughtsy::Application.routes.draw do
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
 
   root 'static_pages#home'
   
   match '/about',   to: 'static_pages#about',   via: 'get'
   match '/team',    to: 'static_pages#team',    via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'
-  match '/signup',  to: 'users#new',            via: 'get'
   
+  match '/signup',  to: 'users#new',            via: 'get'
+  match '/signin',  to: 'sessions#new',         via: 'get'
+  match '/signout', to: 'sessions#destroy',     via: 'delete'
+
   match '/mockup',  to: 'static_pages#mockup',  via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
