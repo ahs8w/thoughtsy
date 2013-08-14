@@ -108,7 +108,7 @@ p {
 }
 
 #nav-links {
-  margin-right: 20%
+  margin-right: 8%
 }
 
 
@@ -127,13 +127,15 @@ footer {
   }
   small {
     float: left;
+    margin-left: 8%;
   }
   ul {
     float: right;
     list-style: none;
+    margin-right: 8%;
     li {
       float: left;
-      margin-left: 10px;
+      margin-left: 35px;
     }
   }
 }
