@@ -25,4 +25,19 @@ module SessionsHelper
     @current_user ||= User.find_by(remember_token: remember_token)
       # '||=' sets @current_user variable to user w/ corresponding remember_token only if not already set
   end
+
+  def current_user?(user)
+    user == current_user
+  end
+
+## Friendly Forwarding ##
+  
+  def redirect_back_or(default)                    # used in 'Users#create' 
+    redirect_to(session[:return_to] || default)    # redirects to desired page (if it exists) or default
+    session.delete(:return_to)                     # remove stored url so subsequent signins don't render protected page
+  end
+
+  def store_location                          # used in 'signed_in_user' before filter
+    session[:return_to] = request.url         # stores desired page in session hash
+  end
 end

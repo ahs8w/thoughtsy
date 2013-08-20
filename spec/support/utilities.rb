@@ -1,9 +1,18 @@
 include ApplicationHelper
 
-def valid_signin(user)
-  fill_in "Email",    with: user.email
-  fill_in "Password", with: user.password
-  click_button "Sign in"
+def sign_in(user, options={})
+  if options[:no_capybara]
+    # Sign in not using Capybara (not using browser buttons/links)
+    # necessary when using HTTP request methods directly
+    remember_token = User.new_remember_token        # creates remember token
+    cookies[:remember_token] = remember_token       # puts created remember token into browser cookies
+    user.update_attribute(:remember_token, User.encrypt(remember_token))  # puts encrypted version in user attributes
+  else
+    visit signin_path
+    fill_in "Email",    with: user.email
+    fill_in "Password", with: user.password
+    click_button "Sign in"
+  end
 end
 
 def page_info(title)

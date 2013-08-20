@@ -7,5 +7,10 @@
         <%= @user.name %>
       </h1>
     </section>
+    <section>
+      <% if current_user?(@user) %>
+        <%= link_to "Edit settings", edit_user_path(current_user) %>
+      <% end %>
+    </section>
   </aside>
 </div>
