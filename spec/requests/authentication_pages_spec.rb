@@ -26,8 +26,9 @@ describe "Authentication  : " do
       let(:user) { FactoryGirl.create(:user) }
       before { sign_in user }
 
-      it { should have_title(user.name) }
+      it { should have_title(user.username) }
       it { should have_success_message('signed in') }
+      it { should have_link('Users',       href: users_path) }
       it { should have_link('Profile',     href: user_path(user)) }
       it { should have_link('Settings',    href: edit_user_path(user)) }
       it { should have_link('Sign out',    href: signout_path) }
@@ -46,6 +47,11 @@ describe "Authentication  : " do
       let(:user) { FactoryGirl.create(:user) }
 
       describe "in the Users Controller" do
+
+        describe "visiting the user index" do
+          before { visit users_path }
+          it { should have_title("Sign in") }
+        end
 
         describe "visiting the edit page" do
           before { visit edit_user_path(user) }
@@ -89,6 +95,18 @@ describe "Authentication  : " do
 
       describe "submitting to the update action" do
         before { patch user_path(wrong_user) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+    end
+
+    describe "as non-admin user" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:non_admin) { FactoryGirl.create(:user) }
+
+      before { sign_in non_admin, no_capybara: true }
+
+      describe "submitting a DELETE request to the Users#destroy action" do
+        before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
