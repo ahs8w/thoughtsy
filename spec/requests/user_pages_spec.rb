@@ -151,5 +151,14 @@ describe "UserPages" do
       specify { expect(user.reload.username).to eq new_name }     # check that attributes are indeed changed in database
       specify { expect(user.reload.email).to eq new_email.downcase }
     end
+
+    describe "admin attribute" do
+      let(:params) do
+        { user: { admin: true, password: user.password,
+                  password_confirmation: user.password } }
+      end
+      before { patch user_path(user), params }
+      specify { expect(user.reload).not_to be_admin }
+    end
   end
 end

@@ -41,9 +41,15 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed"
-    redirect_to users_url
+    to_be_destroyed = User.find(params[:id])
+    if current_user != to_be_destroyed
+      to_be_destroyed.destroy
+      flash[:success] = "User destroyed"
+      redirect_to users_url
+    else
+      flash[:notice] = "Auto-destruction is not allowed"
+      redirect_to root_url
+    end
   end
 
 
