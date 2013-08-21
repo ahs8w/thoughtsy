@@ -14,6 +14,8 @@ describe "Authentication  : " do
 
       it { should have_error_message('Invalid') }
       it { should have_title('Sign in') }
+      it { should_not have_link('Profile') }
+      it { should_not have_link('Settings') }
 
       # testing flash persistence -> flash.now[:error]
       describe "after visiting another page" do
@@ -76,8 +78,19 @@ describe "Authentication  : " do
 
         describe "after signing in" do
 
-          it "should render the desired protected page" do
+          it "should render the desired protected page" do      # friendly forwarding
             expect(page).to have_title('Edit profile')
+          end
+
+          describe "when signing in again" do
+            before do
+              delete signout_path
+              sign_in user
+            end
+
+            it "should render the default (profile) page" do
+              expect(page).to have_title(user.username)
+            end
           end
         end
       end
@@ -117,6 +130,21 @@ describe "Authentication  : " do
 
       describe "should not be able to delete one's self" do
         before { delete user_path(admin) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+    end
+
+    describe "as a signed in user" do
+      let(:user) { FactoryGirl.create(:user) }
+      before { sign_in user, no_capybara: true }
+
+      describe "should not access User#new" do
+        before { get new_user_path }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "should not access User#create" do
+        before { post users_path(user) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
