@@ -53,6 +53,9 @@ describe "UserPages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }
+    let!(:p2) { FactoryGirl.create(:post, user: user, content: "Bar") }
+
     before { visit user_path(user) }
 
     it { should have_content(user.username) }
@@ -63,6 +66,17 @@ describe "UserPages" do
 
       it { should have_link("Sign out", href: signout_path) }
       it { should have_link("Edit settings", href: edit_user_path(user)) }
+    end
+
+    describe "posts" do
+      it { should have_content(p1.content) }
+      it { should have_content(p2.content) }
+      it { should have_content(user.posts.count) }
+      it { should_not have_link('delete') }
+
+      describe "when signed in" do
+        it { should_not have_link('delete') }
+      end
     end
   end
 

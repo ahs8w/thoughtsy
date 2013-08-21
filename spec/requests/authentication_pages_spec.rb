@@ -68,30 +68,47 @@ describe "Authentication  : " do
           # issues PATCH request to /users/1 -> which is routed to update action of Users controller
           # direct HTTP reqests: grants access to 'response' object which can verify the server response (e.g redirection)
         end
+
+        describe "when attempting to visit a protected page" do
+          before do
+            visit edit_user_path(user) # expect redirect to '/signin'
+            sign_in user
+          end
+
+          describe "after signing in" do
+
+            it "should render the desired protected page" do      # friendly forwarding
+              expect(page).to have_title('Edit profile')
+            end
+
+            describe "when signing in again" do
+              before do
+                delete signout_path
+                sign_in user
+              end
+
+              it "should render the default (profile) page" do
+                expect(page).to have_title(user.username)
+              end
+            end
+          end
+        end
       end
 
-      describe "when attempting to visit a protected page" do
-        before do
-          visit edit_user_path(user) # expect redirect to '/signin'
-          sign_in user
+      describe "in the Posts Controller" do
+        describe "submitting to the create action" do
+          before { post posts_path }
+          specify { expect(response).to redirect_to(signin_path) }
         end
 
-        describe "after signing in" do
+        describe "submitting to the destroy action" do
+          before { delete post_path(FactoryGirl.create(:post)) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
 
-          it "should render the desired protected page" do      # friendly forwarding
-            expect(page).to have_title('Edit profile')
-          end
-
-          describe "when signing in again" do
-            before do
-              delete signout_path
-              sign_in user
-            end
-
-            it "should render the default (profile) page" do
-              expect(page).to have_title(user.username)
-            end
-          end
+        describe "visiting the index page" do
+          before { visit posts_path }
+          it { should have_title('Posts') }
         end
       end
     end
@@ -115,11 +132,17 @@ describe "Authentication  : " do
     describe "as non-admin user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:non_admin) { FactoryGirl.create(:user) }
+      let(:post) { FactoryGirl.create(:post) }
 
       before { sign_in non_admin, no_capybara: true }
 
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "submitting a DELETE request to the Posts#destroy action" do
+        before { delete post_path(post) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end

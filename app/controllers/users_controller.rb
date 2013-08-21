@@ -3,8 +3,11 @@ class UsersController < ApplicationController
   before_action :correct_user,      only: [:edit, :update]
   before_action :admin_user,        only: :destroy
   before_action :already_signed_in, only: [:new, :create]
+
+
   def show
     @user = User.find(params[:id])
+    @posts = @user.posts.paginate(page: params[:page])
   end
 
   def new
@@ -59,22 +62,10 @@ class UsersController < ApplicationController
       params.require(:user).permit(:username, :email, :password, :password_confirmation)
     end
 
-    ## Before filters ##
-
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in."
-      end
-    end
-
+## Before filters ##
     def correct_user
       @user = User.find(params[:id])  # common to both edit and update actions -> refactored to shared before filter
       redirect_to(root_url) unless current_user?(@user)
-    end
-
-    def admin_user
-      redirect_to(root_url) unless current_user.admin?
     end
 
     def already_signed_in

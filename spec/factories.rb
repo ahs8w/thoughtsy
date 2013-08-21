@@ -9,4 +9,9 @@ FactoryGirl.define do
       admin true
     end
   end
+
+  factory :post do
+    content "Lorem Ipsum"
+    user                                # all we need to show association with user object
+  end
 end

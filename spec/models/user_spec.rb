@@ -17,6 +17,7 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin?) }
+  it { should respond_to(:posts) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -110,7 +111,7 @@ describe User do
     it { should be_invalid }
   end
 
-  ## covering cases of password match and password mismatch with authenticate method
+## covering cases of password match and password mismatch with authenticate method
   describe "return value of authenticate method" do
     before { @user.save }
     let(:found_user) { User.find_by(email: @user.email) }
@@ -130,11 +131,30 @@ describe User do
     # @user(subject) should not eq (==) user_with_invalid password if password does not match
   end
 
-  ## Remember_token for sessions
+## Remember_token for sessions
   describe "remember token" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
       # applies subsequent test to given attribute of subject
       # equivalent to:  it { expect(@user.remember_token).not_to be_blank }
+  end
+
+  describe "post association" do
+    before { @user.save }
+    let!(:older_post) { FactoryGirl.create(:post, user: @user, created_at: 1.day.ago) }
+    let!(:newer_post) { FactoryGirl.create(:post, user: @user, created_at: 1.hour.ago) }
+
+    it "should have the right posts in the right order" do
+      expect(@user.posts.to_a).to eq [newer_post, older_post]
+    end
+
+    it "should destroy associated posts on user destruction" do
+      posts = @user.posts.to_a                        # allows us to check if the array of user's posts are still in db
+      @user.destroy
+      expect(posts).not_to be_empty                   # safety check to catch errors if 'to_a' were to be removed
+      posts.each do |post|
+        expect(Post.where(id: post.id)).to be_empty
+      end
+    end
   end
 end

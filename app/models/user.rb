@@ -1,8 +1,10 @@
 class User < ActiveRecord::Base
+# associations
+  has_many :posts, dependent: :destroy
+
 # callbacks
   before_save { email.downcase! }
   before_create :create_remember_token
-
 
 # validations
   validates :username, presence: true, length: { maximum: 50 }
@@ -17,6 +19,7 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
                     # uniqueness caveat -> does not guarantee uniqueness!!  must enforce at db level also w/ email index
 
+# User.methods
   def User.new_remember_token
     SecureRandom.urlsafe_base64
     # any large random string works:  returns a random string of length 16 with each character having 64 possibilities
