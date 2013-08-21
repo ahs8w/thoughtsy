@@ -1,20 +1,5 @@
 <% if signed_in? %>
-  <div class="row">
-    <aside class="span4">
-      <section>
-        <%= render 'shared/user_info' %>
-      </section>
-      <section>
-        <%= render 'shared/post_form' %>
-      </section> 
-    </aside>
-  </div>
+  <%= render 'static_pages/authenticated' %>
 <% else %>
-  <div class="center hero-unit">
-    <h1>Thoughtsy</h1>
-
-    <p class="lead">thoughtful exchanges with total strangers</p>
-
-    <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
-  </div>
+  <%= render 'static_pages/unauthenticated' %>
 <% end %>

@@ -139,6 +139,7 @@ describe User do
       # equivalent to:  it { expect(@user.remember_token).not_to be_blank }
   end
 
+## Post Associations ##
   describe "post association" do
     before { @user.save }
     let!(:older_post) { FactoryGirl.create(:post, user: @user, created_at: 1.day.ago) }

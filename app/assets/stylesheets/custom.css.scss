@@ -79,6 +79,7 @@ p {
   padding-top: 9px;
   font-weight: thin;
   line-height: 1;
+  color: $grayLight;
   &:hover {
     color: white;
     text-decoration: none;
@@ -86,7 +87,7 @@ p {
 }
 
 /* Bootstrap btn-success coloring */
-#logo {
+/*#logo {
   color: #5bb75b;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
@@ -105,7 +106,7 @@ p {
 #logo:active,
 #logo.active {
   color: #408140 \9;
-}
+}*/
 
 #nav-links {
   margin-right: 8%

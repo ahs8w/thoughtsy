@@ -22,6 +22,19 @@ describe "Post pages" do
       end
     end
 
+    describe "pagination" do
+      before(:all) { 30.times { FactoryGirl.create(:post) } }
+      after(:all)  { Post.delete_all }
+
+      it { should have_selector('div.pagination') }
+
+      it "should list each post" do
+        Post.paginate(page: 1).each do |post|
+          expect(page).to have_selector('li', text: post.content)
+        end
+      end
+    end
+
     describe "delete links" do
 
       it { should_not have_link('delete') }
@@ -67,4 +80,5 @@ describe "Post pages" do
       end
     end
   end
+  after(:all) { Topic.delete_all }
 end

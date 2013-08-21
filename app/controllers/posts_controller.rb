@@ -12,14 +12,14 @@ class PostsController < ApplicationController
       flash[:success] = "Post created!"
       redirect_to root_url
     else
-      render 'static_pages/home'
+      render root_url
     end
   end
 
   def destroy
     Post.find(params[:id]).destroy
     flash[:success] = "Post destroyed."
-    redirect_to posts_url
+    redirect_to :back
   end
 
 
