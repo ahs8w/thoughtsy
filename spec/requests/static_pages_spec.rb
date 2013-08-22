@@ -17,42 +17,44 @@ describe "StaticPages" do
     it_should_behave_like "all static pages"
 
     describe "when not signed in" do
-      it { should have_link("Sign up now!") }
       it { should_not have_link("Account") }
       it { should_not have_link("Users") }
+      it { should_not have_button("Post") }
       it { should_not have_link("view my profile") }
+      it { should have_link("Sign up now!") }
+      it { should have_link("Sign in") }
     end
 
     describe "when signed in" do
       let(:user) { FactoryGirl.create(:user) }
       before do
+        FactoryGirl.create(:post, user: user)
         sign_in user
         visit root_path
       end
 
-      it { should have_content(user.username) }
-      it { should have_link("view my profile") }
-      it { should have_link("Account") }
-      it { should have_link("Users") }
       it { should have_button("Post") }
+      it { should_not have_link('Sign up now!', href: signup_path) }
+      it { should_not have_link('Sign in',      href: signin_path) }
+      it { should have_link('Account')}
 
-      describe "creating a post should update post count" do
-        before do
-          fill_in "post_content", with: "Lorem ipsum"
-          click_button "Post"
-          click_link "Thoughtsy"
+      describe "the sidebar" do
+
+        it "should singularize one post correctly" do
+          expect(page).to have_content("1 post")
         end
 
-        it { should have_content("1 post") }
-
-        describe "creating a second should pluralize correctly" do
+        describe "with multiple posts" do
           before do
-            fill_in "post_content", with: "Lorem ipsum2"
-            click_button "Post"          
-            click_link "Thoughtsy"
+            FactoryGirl.create(:post, user: user)
+            FactoryGirl.create(:post, user: user)            
+            sign_in user
+            visit root_path
           end
 
-          it { should have_content("2 posts") }
+          it "should pluralize correctly" do
+            expect(page).to have_content("3 posts")
+          end
         end
       end
     end
