@@ -1,5 +1,10 @@
 module PostsHelper
 
+## to fix bug that very long words break the layout
+    # raw method: prevent Rails from escaping the resulting HTML
+    # sanitize method: needed to prevent cross-site scripting
+    # ternary operator
+
   def wrap(content)
     sanitize(raw(content.split.map{ |s| wrap_long_string(s) }.join(' ')))
   end

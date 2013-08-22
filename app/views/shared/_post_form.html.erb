@@ -1,7 +1,7 @@
-<%= form_for(@post) do |f| %>
-  <%= render 'shared/error_messages', object: f.object %>
-  <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new post..." %>
-  </div>
-  <%= f.submit "Post", class: "btn btn-large btn-success" %>
-<% end %>
+<div class="well" id="thought">  
+  <%= form_for(@post) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    <%= f.submit "Post a thought", class: "btn btn-large btn-success" %>
+    <span><%= f.text_area :content, class: "span8", placeholder: "your thought..." %></span>
+  <% end %>
+</div>

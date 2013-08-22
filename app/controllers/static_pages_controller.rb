@@ -13,5 +13,6 @@ class StaticPagesController < ApplicationController
   end
 
   def mockup
+    @post = current_user.posts.build if signed_in?
   end
 end
