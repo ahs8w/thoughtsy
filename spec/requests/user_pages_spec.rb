@@ -17,7 +17,10 @@ describe "UserPages" do
     it { should have_content("Users") }
 
     describe "pagination" do
-      before(:all) { 30.times { FactoryGirl.create(:user) } }
+      before do
+        31.times { FactoryGirl.create(:user) }
+        visit users_path
+      end
       after(:all)  { User.delete_all }
 
       it { should have_selector('div.pagination') }
@@ -74,8 +77,14 @@ describe "UserPages" do
       it { should have_content(user.posts.count) }
       it { should_not have_link('delete') }
 
-      describe "when signed in" do
-        it { should_not have_link('delete') }
+      describe "pagination" do
+        before do
+          31.times { FactoryGirl.create(:post, user: user) }
+          visit user_path(user)   # necessary to revisit profile page if not using before(:all)
+        end
+        after(:all)  { Post.delete_all }
+
+        it { should have_selector('div.pagination') }
       end
     end
   end

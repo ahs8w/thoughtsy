@@ -15,6 +15,48 @@ describe "StaticPages" do
     let(:heading)    { 'Thoughtsy' }
     let(:page_title) { '' }
     it_should_behave_like "all static pages"
+
+    describe "when not signed in" do
+
+      it { should have_link("Sign up now!") }
+      it { should have_link("Sign in") }
+      it { should_not have_button("Post") }
+      it { should_not have_link("view my profile") }
+    end
+
+    describe "when signed in" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:post, user: user)
+        sign_in user
+        visit root_path
+      end
+
+      it { should have_button("Post") }
+      it { should_not have_link('Sign up now!', href: signup_path) }
+      it { should_not have_link('Sign in',      href: signin_path) }
+      it { should have_link('Account')}
+
+      describe "the sidebar" do
+
+        it "should singularize one post correctly" do
+          expect(page).to have_content("1 post")
+        end
+
+        describe "with multiple posts" do
+          before do
+            FactoryGirl.create(:post, user: user)
+            FactoryGirl.create(:post, user: user)            
+            sign_in user
+            visit root_path
+          end
+
+          it "should pluralize correctly" do
+            expect(page).to have_content("3 posts")
+          end
+        end
+      end
+    end
   end
 
   describe "About page" do
