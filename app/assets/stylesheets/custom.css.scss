@@ -79,32 +79,11 @@ p {
   padding-top: 9px;
   font-weight: thin;
   line-height: 1;
+  color: $grayLight;
   &:hover {
     color: white;
     text-decoration: none;
   }
-}
-
-/* Bootstrap btn-success coloring */
-#logo {
-  color: #5bb75b;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-}
-
-#logo:hover,
-#logo:focus,
-#logo:active,
-#logo.active,
-#logo.disabled,
-#logo[disabled] {
-  color: #51a351;
-}
-
-#logo:active,
-#logo.active {
-  color: #408140 \9;
 }
 
 #nav-links {
@@ -144,7 +123,6 @@ footer {
 
 aside {
   section {
-    padding: 10px 0;
     border-top: 1px solid $grayLighter;
     &:first-child {
       border: 0;
@@ -163,6 +141,11 @@ aside {
       margin-top: 0px;
     }
   }
+}
+
+#user_info {
+  padding-left: 2%;
+  padding-top: 10px;
 }
 
 .gravatar {
@@ -250,7 +233,7 @@ aside {
   @include box_sizing;      /* uses SASS mixin to include box-sizing rules as stated above */
 }
 
-/* mockup */
+/* new HOME page */
 
 .hero-unit {
   background-color: $grayMediumLight;
@@ -269,10 +252,15 @@ body {
   background-color: #ddd;
   margin-bottom: 8%;
   text-align: center;
-}
-
-span #text-input {
-  margin-bottom: 0;
+  .new_post {
+    margin-bottom: 0;
+    #post_content {
+      margin-bottom: 0;
+    }
+    .field_with_errors {
+      display: inline;
+    }
+  }
 }
 
 #classic-responses {
@@ -283,11 +271,19 @@ span #text-input {
   }
 }
 
-div #centered {
+#call_to_action {
   width: 70%;
-  display: block;
   margin-left: auto;
   margin-right: auto;
+}
+  
+#signup_button {
+  margin-top: -30px;
+  margin-bottom: 8%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
 }
 
 #top-users {
