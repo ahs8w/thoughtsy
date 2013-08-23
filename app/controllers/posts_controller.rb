@@ -12,7 +12,7 @@ class PostsController < ApplicationController
       flash[:success] = "Post created!"
       redirect_to root_url
     else
-      render root_url
+      render 'static_pages/home'    # render root_url doesn't work -> template missing!!!!!!
     end
   end
 

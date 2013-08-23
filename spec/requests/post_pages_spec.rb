@@ -63,11 +63,11 @@ describe "Post pages" do
     describe "with invalid information" do
 
       it "should not create a post" do
-        expect { click_button "Post" }.not_to change(Post, :count)
+        expect { click_button "Post a thought" }.not_to change(Post, :count)
       end
 
       describe "error messages" do
-        before { click_button "Post" }
+        before { click_button "Post a thought" }
         it { should have_error_message('error') }
       end
     end
@@ -80,5 +80,4 @@ describe "Post pages" do
       end
     end
   end
-  after(:all) { Topic.delete_all }
 end
