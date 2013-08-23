@@ -1,5 +1,5 @@
 <div class="well" id="thought">  
-  <%= form_for(@post) do |f| %>
+  <%= form_for(@post, remote: true) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.submit "Post a thought", class: "btn btn-large btn-success" %>
     <span><%= f.text_area :content, class: "span8", placeholder: "your thought..." %></span>

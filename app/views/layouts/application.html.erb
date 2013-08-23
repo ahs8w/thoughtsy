@@ -12,7 +12,7 @@
   <body>
     <%= render 'layouts/header' %>
     <%= render 'shared/flash_messages' %>
-    <div class="container-fluid">
+    <div class="container-fluid" id="js_flash_messages">
       <%= yield %>
       <%= render 'layouts/footer' %>
       <%= debug(params) if Rails.env.development? %>

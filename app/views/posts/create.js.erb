@@ -1,0 +1,14 @@
+var el = $('#new_post');
+
+<% if !@post.save %>
+
+  el.before("<%= escape_javascript(render('shared/error_messages', object: @post)) %>");
+  el[0].reset();
+
+<% else %>
+
+  $('#js_flash_messages').before("<%= escape_javascript(render('shared/flash_messages')) %>");
+  el[0].reset();
+  $('#post_count').html("<%= pluralize(current_user.posts.count, 'post') %>");
+
+<% end %>

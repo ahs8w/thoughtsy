@@ -9,17 +9,27 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
-      flash[:success] = "Post created!"
-      redirect_to root_url
+      flash.now[:success] = "Post created!"
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.js { flash.now[:success] = "Post created!" }
+      end
     else
-      render 'static_pages/home'    # render root_url doesn't work -> template missing!!!!!!
+      respond_to do |format|
+        format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
+        format.js
+      end
     end
   end
 
   def destroy
-    Post.find(params[:id]).destroy
-    flash[:success] = "Post destroyed."
-    redirect_to :back
+    @post = Post.find(params[:id])
+    @post.destroy!
+    flash.now[:success] = "Post destroyed."
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
 
