@@ -7,7 +7,7 @@ var el = $('#new_post');
 
 <% else %>
 
-  $('#js_flash_messages').before("<%= escape_javascript(render('shared/flash_messages')) %>");
+  $('#js_flash_messages').html("<%= escape_javascript(render('shared/flash_messages')) %>");
   el[0].reset();
   $('#post_count').html("<%= pluralize(current_user.posts.count, 'post') %>");
 

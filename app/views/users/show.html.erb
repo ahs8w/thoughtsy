@@ -15,8 +15,8 @@
   </aside>
   <div class="span8">
     <% if @user.posts.any? %>
-      <h3>Posts (<%= @user.posts.count %>)</h3>
-      <ol class="posts">
+      <h3 id="post_count">Posts (<%= @user.posts.count %>)</h3>
+      <ol class="posts" id="posts">
         <%= render @posts %>
       </ol>
       <%= will_paginate @posts %>

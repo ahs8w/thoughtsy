@@ -2,7 +2,7 @@
 <h1>Posts</h1>
 
 <%= will_paginate %>
-<ul class="posts">
+<ol class="posts" id="posts">
   <%= render @posts %>    <!-- Rails automatically iterates through 'Post' objects rendering each in 'post' partial -->
-</ul>
+</ol>
 <%= will_paginate %>

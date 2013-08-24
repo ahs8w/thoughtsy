@@ -1,0 +1,7 @@
+// destroys post, calls flash message, updates post count
+var posts = $('#link_<%= @post.id %>');
+$('#js_flash_messages').html("<%= escape_javascript(render('shared/flash_messages')) %>");
+$('#post_count').html("Posts (<%= @user.posts.count %>)");
+
+// remove post from view
+posts.remove();

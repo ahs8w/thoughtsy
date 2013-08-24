@@ -68,6 +68,19 @@ p {
   }
 }
 
+/* flash messages */
+
+#js_flash_messages {
+  max-width: 50%;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  .alert {
+    margin-bottom: 0;
+  }
+}
+
 /* header */
 
 #logo {

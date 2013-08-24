@@ -15,3 +15,5 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
+
+setTimeout("$('#js_flash_messages').fadeOut('slow');", 10000);
