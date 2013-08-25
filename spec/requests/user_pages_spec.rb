@@ -68,7 +68,7 @@ describe "UserPages" do
       before { sign_in user }
 
       it { should have_link("Sign out", href: signout_path) }
-      it { should have_link("Edit settings", href: edit_user_path(user)) }
+      it { should have_link("edit settings", href: edit_user_path(user)) }
     end
 
     describe "posts" do

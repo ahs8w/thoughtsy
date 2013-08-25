@@ -71,13 +71,17 @@ p {
 /* flash messages */
 
 #js_flash_messages {
-  max-width: 50%;
   text-align: center;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
   .alert {
     margin-bottom: 0;
+  }
+  .alert-success {
+    width: 30%;
+    position: absolute;
+    /* centering method with fluid layouts and absolute positioning */
+    left: 50%;
+    margin-left: -15%;
   }
 }
 
@@ -159,6 +163,7 @@ aside {
 #user_info {
   padding-left: 2%;
   padding-top: 10px;
+  position: absolute;
 }
 
 .gravatar {

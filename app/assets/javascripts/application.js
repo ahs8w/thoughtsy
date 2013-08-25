@@ -16,4 +16,8 @@
 //= require turbolinks
 //= require_tree .
 
-setTimeout("$('#js_flash_messages').fadeOut('slow');", 10000);
+$(document).ready(function () {
+  setTimeout(function() {
+    $('.alert-success').remove();
+  }, 5000);
+});

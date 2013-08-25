@@ -1,4 +1,8 @@
 var el = $('#new_post');
+var flash = $('#js_flash_messages');
+
+// remove error messages if present
+$('#error_explanation').remove();
 
 <% if !@post.save %>
 
@@ -7,7 +11,8 @@ var el = $('#new_post');
 
 <% else %>
 
-  $('#js_flash_messages').html("<%= escape_javascript(render('shared/flash_messages')) %>");
+  flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+  flash.fadeOut(5000);
   el[0].reset();
   $('#post_count').html("<%= pluralize(current_user.posts.count, 'post') %>");
 

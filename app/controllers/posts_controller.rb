@@ -26,10 +26,10 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @user = @post.user
     @post.destroy!
-    flash.now[:success] = "Post destroyed."
+    flash.now[:success] = "Post destroyed!"
     respond_to do |format|
       format.html { redirect_to :back }
-      format.js { render :layout => false }
+      format.js
     end
   end
 
