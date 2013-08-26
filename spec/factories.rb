@@ -14,4 +14,10 @@ FactoryGirl.define do
     content "Lorem Ipsum"
     user                                # all we need to show association with user object
   end
+
+  factory :response do
+    content "response"
+    user
+    post
+  end
 end

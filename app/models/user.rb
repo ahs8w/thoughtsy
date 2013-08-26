@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 # associations
   has_many :posts, dependent: :destroy
+  has_many :responses, dependent: :destroy
 
 # callbacks
   before_save { email.downcase! }

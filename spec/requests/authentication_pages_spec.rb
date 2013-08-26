@@ -28,7 +28,7 @@ describe "Authentication  : " do
       let(:user) { FactoryGirl.create(:user) }
       before { sign_in user }
 
-## PROFILE page (redirected after sign_in)
+      ## PROFILE page (redirected after sign_in)
       it { should have_title(user.username) }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
@@ -110,6 +110,23 @@ describe "Authentication  : " do
 
         describe "visiting the index page" do
           before { visit posts_path }
+          it { should have_title('Sign in') }
+        end
+      end
+
+      describe "in the Responses Controller" do
+        describe "submitting to the create action" do
+          before { page.driver.post post_responses_path, 'response[:post_id]' => '1' }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete response_path(FactoryGirl.create(:response)) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe "visiting the new action" do
+          before { visit new_post_response_path }
           it { should have_title('Sign in') }
         end
       end

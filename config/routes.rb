@@ -1,7 +1,11 @@
 Thoughtsy::Application.routes.draw do
   resources :users
-  resources :sessions, only: [:new, :create, :destroy]
-  resources :posts,    only: [:index, :create, :destroy]
+  resources :sessions,  only: [:new, :create, :destroy]
+  resources :posts,     only: [:index, :create, :destroy] do
+    resources :responses, only: [:new, :create]
+  end
+  resources :responses, only: :destroy
+
 
   root 'static_pages#home'
   
@@ -12,8 +16,6 @@ Thoughtsy::Application.routes.draw do
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
-
-  match '/mockup',  to: 'static_pages#mockup',  via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

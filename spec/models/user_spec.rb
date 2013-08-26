@@ -18,6 +18,7 @@ describe User do
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin?) }
   it { should respond_to(:posts) }
+  it { should respond_to(:responses) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -155,6 +156,21 @@ describe User do
       expect(posts).not_to be_empty                   # safety check to catch errors if 'to_a' were to be removed
       posts.each do |post|
         expect(Post.where(id: post.id)).to be_empty
+      end
+    end
+  end
+
+## Response Associations ##
+  describe "response association" do
+    before { @user.save }
+    let!(:response) { FactoryGirl.create(:response, user: @user) }
+
+    it "should destroy associated responses on user destruction" do
+      responses = @user.responses.to_a
+      @user.destroy
+      expect(responses).not_to be_empty
+      responses.each do |response|
+        expect(Response.where(id: response.id)).to be_empty
       end
     end
   end

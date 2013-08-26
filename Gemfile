@@ -24,6 +24,7 @@ group :test do
   gem 'libnotify'
   gem 'factory_girl_rails'
   gem 'database_cleaner', '1.0.1'
+  gem 'launchy'
 end
 
 # Use SCSS for stylesheets

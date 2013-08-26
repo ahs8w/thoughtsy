@@ -23,4 +23,16 @@ describe Post do
     before { @post.content = " " }
     it { should_not be_valid }
   end
+
+## Response Associations ##
+  describe "response associations" do
+    before { @post.save }
+    let(:user2) { FactoryGirl.create(:user) }
+    let!(:older_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.day.ago) }
+    let!(:newer_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.hour.ago) }
+
+    it "should have the right responses in the right order" do
+      expect(@post.responses.to_a).to eq [newer_response, older_response]
+    end
+  end  
 end

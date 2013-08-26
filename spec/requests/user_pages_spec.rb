@@ -56,7 +56,7 @@ describe "UserPages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
-    let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }
+    let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }  #creates p1 (instantiates it also)
     let!(:p2) { FactoryGirl.create(:post, user: user, content: "Bar") }
 
     before { visit user_path(user) }
@@ -69,6 +69,14 @@ describe "UserPages" do
 
       it { should have_link("Sign out", href: signout_path) }
       it { should have_link("edit settings", href: edit_user_path(user)) }
+      it { should have_link("Respond") }
+
+      describe "responses" do
+        let!(:response) { FactoryGirl.create(:response, post: p1) }
+        before { visit user_path(user) }
+
+        it { should have_content("#{response.content}") }
+      end
     end
 
     describe "posts" do

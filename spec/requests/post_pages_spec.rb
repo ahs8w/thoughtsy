@@ -15,6 +15,7 @@ describe "Post pages" do
 
     it { should have_title('Posts') }
     it { should have_content('Posts') }
+    it { should have_content('Respond') }
 
     it "should list each post" do
       Post.all.each do |post|

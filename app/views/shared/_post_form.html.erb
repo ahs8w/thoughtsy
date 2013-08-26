@@ -1,4 +1,4 @@
-<div class="well" id="thought">  
+<div class="well" id="post">  
   <%= form_for(@post, remote: true) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.submit "Post a thought", class: "btn btn-large btn-success" %>
