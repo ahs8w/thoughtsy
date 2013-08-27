@@ -8,6 +8,19 @@ describe "Authentication  : " do
 
     it { should have_title("Sign in") }
     it { should have_content("Sign in") }
+    # it { should have_link("password") }
+
+    # describe "password resets" do   # railscasts episode 275 'how i test'
+    #   it "emails user when requesting password reset" do
+    #     user = FactoryGirl(:user)
+    #     click_link "password"
+    #     fill_in "Email", with: user.email
+    #     click_button "Reset password"
+    #     current_path.should eq(root_path)
+    #     page.should have_content("Email sent")  # ActionMailer::Base.deliveries.last (support/mailer_macros.rb)
+    #     last_email.to.should include(user)
+    #   end
+    # end
 
     describe "with invalid information" do
       before { click_button('Sign in') }

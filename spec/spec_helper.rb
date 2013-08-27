@@ -50,6 +50,9 @@ Spork.prefork do
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
+
+    config.include(MailerMacros)
+    # config.before(:each) { reset_email } -> as per RailsCast 275 (not sure if necessary w/ spork or not)
   end
 end
 
