@@ -12,7 +12,7 @@ FactoryGirl.define do
 
   factory :post do
     content "Lorem Ipsum"
-    user                                # all we need to show association with user object
+    user               # ensures parent element is created at same time; show association with user object
   end
 
   factory :response do

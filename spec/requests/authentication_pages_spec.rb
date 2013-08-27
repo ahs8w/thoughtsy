@@ -115,8 +115,9 @@ describe "Authentication  : " do
       end
 
       describe "in the Responses Controller" do
+
         describe "submitting to the create action" do
-          before { page.driver.post post_responses_path, 'response[:post_id]' => '1' }
+          before { post "posts/1/responses" }     # use literal paths w/ nested routes to set proper params
           specify { expect(response).to redirect_to(signin_path) }
         end
 
@@ -126,8 +127,8 @@ describe "Authentication  : " do
         end
 
         describe "visiting the new action" do
-          before { visit new_post_response_path }
-          it { should have_title('Sign in') }
+          before { get "posts/1/responses/new" }   # use http verbs rather than capybara 'visit'
+          specify { expect(response).to redirect_to(signin_path) }
         end
       end
     end
