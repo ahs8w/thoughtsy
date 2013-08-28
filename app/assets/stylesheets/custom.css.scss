@@ -20,6 +20,7 @@ html {
 body {
   padding-top: 60px;
   font-family: 'Open Sans', sans-serif;
+  background-color: $grayMediumLight;
 }
 
 section {
@@ -256,10 +257,6 @@ aside {
 .hero-unit {
   background-color: $grayMediumLight;
   margin-bottom: 0;
-}
-
-body {
-  background-color: $grayMediumLight;
 }
 
 .row-fluid .well {

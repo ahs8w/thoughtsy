@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   validates :username, presence: true, length: { maximum: 50 }
 
   has_secure_password
-  validates :password, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }, :if => :password_required?
             # presence validations are automatically added by has_secure_password
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
@@ -32,7 +32,25 @@ class User < ActiveRecord::Base
     # encryption method we use to store the remember_token;  SHA1 is much faster than Bcrypt
   end
 
+# Password reset
+  def send_password_reset
+    generate_token(:password_reset_token)
+    self.password_reset_sent_at = Time.zone.now
+    save!
+    UserMailer.password_reset(self).deliver
+  end
+
+  def generate_token(column)
+    begin
+      self[column] = User.new_remember_token
+    end while User.exists?(column => self[column])
+  end
+
   private
+
+    def password_required?                # necessary for 'password_reset' to function
+      !persisted? || !password.nil? || !password_confirmation.nil?
+    end
 
     def create_remember_token
       self.remember_token = User.encrypt(User.new_remember_token)

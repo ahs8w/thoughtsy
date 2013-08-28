@@ -1,7 +1,19 @@
 # More info at https://github.com/guard/guard#readme
+#!/usr/bin/env/ ruby
+    #allow sublime text to color syntax by default
 
 require 'active_support/inflector'
 
+guard 'livereload' do
+  watch(%r{app/views/.+\.(erb|haml|slim)$})
+  watch(%r{app/helpers/.+\.rb})
+  watch(%r{public/.+\.(css|js|html)})
+  watch(%r{config/locales/.+\.yml})
+  # Rails Assets Pipeline
+  watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|js|html))).*}) { |m| "/assets/#{m[3]}" }
+end
+
+# files here will automatically reload spork if changed
 guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' },
                :rspec_env    => { 'RAILS_ENV' => 'test' } do
   watch('config/application.rb')
@@ -13,9 +25,11 @@ guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' },
   watch('spec/spec_helper.rb') { :rspec }
   watch('test/test_helper.rb') { :test_unit }
   watch(%r{features/support/}) { :cucumber }
+  watch(%r{^spec/support/.+\.rb$})              #anything in support folder
+  watch('spec/factories.rb')                    #FactoryGirl factories
 end
 
-guard 'rspec', after_all_pass: false, cli: '--drb' do
+guard 'rspec', all_on_start: false, all_after_pass: false, cli: '--drb' do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
@@ -30,10 +44,6 @@ guard 'rspec', after_all_pass: false, cli: '--drb' do
 
   # Capybara features specs
   watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/features/#{m[1]}_spec.rb" }
-
-  # Turnip features and steps
-  watch(%r{^spec/acceptance/(.+)\.feature$})
-  watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 
   # Custom Rails Tutorial specs
   watch(%r{^app/controllers/(.+)_(controller)\.rb$}) do |m|
@@ -51,3 +61,4 @@ guard 'rspec', after_all_pass: false, cli: '--drb' do
     "spec/requests/authentication_pages_spec.rb"
   end
 end
+

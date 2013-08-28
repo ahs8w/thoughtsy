@@ -1,10 +1,12 @@
 Thoughtsy::Application.routes.draw do
+  get "password_resets/new"
   resources :users
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     only: [:index, :create, :destroy] do
     resources :responses, only: [:new, :create]
   end
   resources :responses, only: :destroy
+  resources :password_resets, except: [:show, :index]
 
 
   root 'static_pages#home'

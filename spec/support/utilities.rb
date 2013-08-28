@@ -20,6 +20,15 @@ def page_info(title)
   let(:page_title) { title }
 end
 
+## Mailer methods
+def last_email
+  ActionMailer::Base.deliveries.last
+end
+
+def reset_email
+  ActionMailer::Base.deliveries = []
+end
+
 RSpec::Matchers.define :have_error_message do |message|
   match do |page|
     expect(page).to have_selector('div.alert.alert-error', text: message)

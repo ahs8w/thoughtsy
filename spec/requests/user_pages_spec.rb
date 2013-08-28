@@ -141,14 +141,6 @@ describe "UserPages" do
         it { should have_title(user.username) }
         it { should have_success_message('Welcome') }
         it { should have_link('Sign out') }
-
-        # describe "welcome email" do
-        #   it { should have_content("Email sent") }
-
-        #   it "should be sent to the user after the create action" do
-        #     expect { last_email }.to include(user)
-        #   end
-        # end
       end
     end
   end

@@ -50,9 +50,11 @@ Spork.prefork do
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
-
-    config.include(MailerMacros)
-    # config.before(:each) { reset_email } -> as per RailsCast 275 (not sure if necessary w/ spork or not)
+    config.before(:each) { reset_email }
+    # add ':focus' to a test and guard will automatically only run that test: good for focusing!
+    config.treat_symbols_as_metadata_keys_with_true_values = true
+    config.filter_run :focus => true
+    config.run_all_when_everything_filtered = true
   end
 end
 
