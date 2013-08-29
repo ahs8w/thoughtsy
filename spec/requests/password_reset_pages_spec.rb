@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "PasswordResets" do
-## Tests taken from Railscasts episode 275
+## Tests taken from Railscasts episode 275 and github page
 
   it "emails user when requesting password reset" do
     user = FactoryGirl.create(:user)

@@ -1,0 +1,8 @@
+<% provide(:page_title, "Responses") %>
+<h1>Responses</h1>
+
+<%= will_paginate %>
+<ul class="responses" id="responses">
+  <%= render @responses %>
+</ul>
+<%= will_paginate %>

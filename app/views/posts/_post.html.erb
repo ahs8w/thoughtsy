@@ -7,7 +7,7 @@
     <% end %>
     | <%= link_to "Respond", new_post_response_path(post) %>
   <% end %>
-  <% if !post.responses.empty? %>
+  <% if post.responded_to? %>
     <li id="response">
       <% post.responses.each do |response| %>
         <p>Response: <%= response.content %></p>

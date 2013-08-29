@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :signed_in_user
-  before_action :admin_user, only: :destroy
+  before_action :admin_user, only: [:destroy, :index]
 
   def index
     @posts = Post.paginate(page: params[:page])

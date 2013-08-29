@@ -8,20 +8,7 @@ describe "Authentication  : " do
 
     it { should have_title("Sign in") }
     it { should have_content("Sign in") }
-    # it { should have_link("password") }
-
-    # describe "password resets" do   # railscasts episode 275 'how i test'
-    #   it "emails user when requesting password reset" do
-    #     user = FactoryGirl(:user)
-    #     click_link "password"
-    #     fill_in "Email", with: user.email
-    #     click_button "Reset password"
-    #     current_path.should eq(root_path)
-    #     page.should have_content("Email sent")  # ActionMailer::Base.deliveries.last (support/mailer_macros.rb)
-    #     last_email.to.should include(user)
-    #   end
-    # end
-
+   
     describe "with invalid information" do
       before { click_button('Sign in') }
 
@@ -45,7 +32,7 @@ describe "Authentication  : " do
       it { should have_title(user.username) }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
-      it { should have_link('Posts',            href: posts_path) }
+      it { should have_link('Responses',        href: responses_path) }
       it { should have_link('Profile',          href: user_path(user)) }
       it { should have_link('Settings',         href: edit_user_path(user)) }
       it { should have_link('Sign out',         href: signout_path) }
@@ -176,6 +163,11 @@ describe "Authentication  : " do
 
       describe "submitting a DELETE request to the Posts#destroy action" do
         before { delete post_path(post) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "visiting the index page" do
+        before { get posts_path }
         specify { expect(response).to redirect_to(root_url) }
       end
     end

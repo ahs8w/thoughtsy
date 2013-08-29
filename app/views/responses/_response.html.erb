@@ -1,0 +1,10 @@
+<li id="link_<%= response.id %>">
+  <div class="post">
+    <span class="content"><%= wrap(response.post.content) %></span>
+    <span class="timestamp">Posted <%= time_ago_in_words(response.post.created_at) %> ago</span>
+  </div>
+  <div class="response">
+    <span class="content"><%= wrap(response.content) %></span>
+    <span class="timestamp">Posted <%= time_ago_in_words(response.created_at) %> ago</span>
+  </div>
+</li>

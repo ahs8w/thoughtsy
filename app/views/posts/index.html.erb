@@ -1,8 +1,25 @@
-<% provide(:page_title, "Posts") %>
-<h1>Posts</h1>
+<% provide(:page_title, "Queue") %>
+<h1>Queue</h1>
 
 <%= will_paginate %>
-<ol class="posts" id="posts">
-  <%= render @posts %>    <!-- Rails automatically iterates through 'Post' objects rendering each in 'post' partial -->
-</ol>
+<table class="table table-striped">
+  <thead>
+    <td>User</td>
+    <td>Created at</td>
+    <td>Content</td>
+    <td>Responded to</td>
+  </thead>
+  <tbody>
+    <% @posts.each do |post| %>
+      <% if !post.responded_to? %>
+        <tr>
+          <td><%= post.user.username %></td>
+          <td><%= post.created_at %></td>
+          <td><%= post.content %></td>
+          <td><%= post.responded_to? %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
 <%= will_paginate %>

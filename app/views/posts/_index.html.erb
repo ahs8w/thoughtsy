@@ -1,0 +1,8 @@
+<% provide(:page_title, "Posts") %>
+<h1>Posts</h1>
+
+<%= will_paginate %>
+<ol class="posts" id="posts">
+  <%= render @posts %>    <!-- Rails automatically iterates through 'Post' objects rendering each in 'post' partial -->
+</ol>
+<%= will_paginate %>

@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 # associations
-  has_many :posts, dependent: :destroy
-  has_many :responses, dependent: :destroy
+  has_many :posts, inverse_of: :user, dependent: :destroy
+  has_many :responses, inverse_of: :user, dependent: :destroy
 
 # callbacks
   before_save { email.downcase! }
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     # encryption method we use to store the remember_token;  SHA1 is much faster than Bcrypt
   end
 
-# Password reset
+# Password_reset_methods
   def send_password_reset
     generate_token(:password_reset_token)
     self.password_reset_sent_at = Time.zone.now

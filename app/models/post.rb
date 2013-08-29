@@ -1,7 +1,10 @@
 class Post < ActiveRecord::Base
-  belongs_to :user
-  has_many :responses
+  belongs_to :user, inverse_of: :posts
+  has_many :responses, inverse_of: :post
 
-  default_scope -> { order('created_at DESC') }             # scopes take an anonymous function (for 'lazy' evaluation)
   validates_presence_of :user_id, :content
+
+  def responded_to?
+    !self.responses.empty?
+  end
 end

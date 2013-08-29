@@ -1,6 +1,10 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
 
+  def index
+    @responses = Response.paginate(page: params[:page])
+  end
+
   def new
     @post = Post.find(params[:post_id])
     @author = @post.user

@@ -5,7 +5,7 @@ Thoughtsy::Application.routes.draw do
   resources :posts,     only: [:index, :create, :destroy] do
     resources :responses, only: [:new, :create]
   end
-  resources :responses, only: :destroy
+  resources :responses, only: [:index, :destroy]
   resources :password_resets, except: [:show, :index]
 
 

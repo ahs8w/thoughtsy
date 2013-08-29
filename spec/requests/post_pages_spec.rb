@@ -7,20 +7,33 @@ describe "Post pages" do
   before { sign_in user }
 
   describe "index page" do
+    let(:admin) { FactoryGirl.create(:admin) }
+    let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
     before do
-      FactoryGirl.create(:post)
-      FactoryGirl.create(:post)
+      sign_in admin
       visit posts_path
     end
 
-    it { should have_title('Posts') }
-    it { should have_content('Posts') }
-    it { should have_content('Respond') }
+    it { should have_content("Queue") }
+    it { should have_title("Queue") }
+    it { should have_content(post.created_at) }
+    it { should have_content(post.user.username) }
+    it { should have_content(post.content) }
+    it { should have_content(post.responded_to?) }
 
-    it "should list each post" do
-      Post.all.each do |post|
-        expect(page).to have_selector('li', text: post.content)
+    describe "order of posts" do
+      let!(:older_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
+
+      it "should have the right post in the right order" do
+        expect(first('tr')).to have_content(older_post.content)
       end
+    end
+
+    describe "should not included posts with responses" do
+      let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+      before { visit posts_path }
+
+      it { should_not have_content(post.content) }
     end
 
     describe "pagination" do
@@ -31,28 +44,7 @@ describe "Post pages" do
 
       it "should list each post" do
         Post.paginate(page: 1).each do |post|
-          expect(page).to have_selector('li', text: post.content)
-        end
-      end
-    end
-
-    describe "delete links" do
-
-      it { should_not have_link('delete') }
-
-      describe "as an admin user" do
-        let(:admin) { FactoryGirl.create(:admin) }
-        before do
-          sign_in admin
-          visit posts_path
-        end
-
-        it { should have_link('delete', href: post_path(Post.first)) }
-
-        it "should be able to delete a post" do
-          expect do
-            click_link('delete', match: :first)
-          end.to change(Post, :count).by(-1)
+          expect(page).to have_selector('td', text: post.content)
         end
       end
     end
