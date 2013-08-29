@@ -48,6 +48,6 @@ describe "PasswordResets" do
   it "raises record not found when password token is invalid" do
     expect do
       visit edit_password_reset_path("invalid")
-    end.to raise_exception(ActiveRecord::RecordNotFound)
+    end.to raise_error()
   end
 end

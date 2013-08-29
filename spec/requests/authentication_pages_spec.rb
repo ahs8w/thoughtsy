@@ -156,6 +156,8 @@ describe "Authentication  : " do
 
       before { sign_in non_admin, no_capybara: true }
 
+      it { should_not have_link('Queue') }
+
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
@@ -179,6 +181,12 @@ describe "Authentication  : " do
       describe "should not be able to delete one's self" do
         before { delete user_path(admin) }
         specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "should have Queue link" do
+        before { sign_in admin }
+
+        it { should have_link('Queue', href: posts_path) }
       end
     end
 

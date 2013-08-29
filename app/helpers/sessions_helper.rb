@@ -29,7 +29,7 @@ module SessionsHelper
 
 ## before filters (post, user controller)
   def admin_user
-    redirect_to(root_url) unless current_user.admin?
+    redirect_to(root_url) unless user_admin?
   end
 
   # (user, post, response controllers)
@@ -42,6 +42,10 @@ module SessionsHelper
 
   def signed_in?
     !current_user.nil?          # signed_in? -> true  if current_user is not nil
+  end
+
+  def user_admin?
+    current_user.admin?
   end
 
   ## Friendly Forwarding ##
