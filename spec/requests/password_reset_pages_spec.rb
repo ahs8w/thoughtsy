@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "PasswordResets" do
+describe "Password Resets" do
 ## Tests taken from Railscasts episode 275 and github page
 
   it "emails user when requesting password reset" do
@@ -45,9 +45,8 @@ describe "PasswordResets" do
     expect(page).to have_content("Password reset has expired")
   end
 
-  it "raises record not found when password token is invalid" do
-    expect do
-      visit edit_password_reset_path("invalid")
-    end.to raise_error()
+  it "raises record not found when password token is invalid" do 
+    visit edit_password_reset_path("invalid")
+    expect(page).to have_content("Invalid password reset token.")
   end
 end

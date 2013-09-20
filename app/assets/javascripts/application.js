@@ -20,4 +20,7 @@ $(document).ready(function () {
   setTimeout(function() {
     $('.alert-success').remove();
   }, 5000);
+  setTimeout(function() {
+    $('.alert-notice').remove();
+  }, 5000);
 });

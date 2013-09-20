@@ -3,7 +3,11 @@ class PasswordResetsController < ApplicationController
   end
 
   def edit
-    @user = User.find_by_password_reset_token!(params[:id])
+    @user = User.find_by_password_reset_token(params[:id])
+    if @user.nil?
+      flash[:notice] = "Invalid password reset token."
+      render 'new'
+    end
   end
 
   def create
