@@ -19,7 +19,7 @@ describe "Post pages" do
     it { should have_content(post.created_at) }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }
-    it { should have_content(post.responded_to?) }
+    it { should have_content(post.responded_to) }
 
     describe "order of posts" do
       let!(:older_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
@@ -30,8 +30,13 @@ describe "Post pages" do
     end
 
     describe "should not included posts with responses" do
-      let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-      before { visit posts_path }
+      before do
+        visit root_path
+        click_link "Respond"
+        fill_in "response_content", with: "response"
+        click_on "Respond"
+        visit posts_path
+      end
 
       it { should_not have_content(post.content) }
     end

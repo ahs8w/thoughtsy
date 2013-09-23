@@ -1,23 +1,17 @@
 <% provide(:page_title, @user.username) %>
 <div class="row">
-  <aside class="span4" id="user_info">
-    <section>
-      <h1>
-        <%= gravatar_for @user, size: 55 %>
-        <%= @user.username %>
-      </h1>
-      <span>
-        <% if current_user?(@user) %>
-          <%= link_to "edit settings", edit_user_path(current_user) %>
-        <% end %>
-      </span>
-    </section>
-  </aside>
-  <div class="span8 offset4">
+  <%= render 'shared/user_info', user: @user %>
+
+  <div class="span4 offset3">
     <% if @user.posts.any? %>
       <h3 id="post_count">Posts (<%= @user.posts.count %>)</h3>
       <ol class="posts" id="posts">
-        <%= render @posts %>
+        <% @user.posts.each do |post| %>
+          <li>
+            <%= post.content %>
+            <div class="timestamp"><%= post.created_at %></div>
+          </li>
+        <% end %>
       </ol>
       <%= will_paginate @posts %>
     <% end %>

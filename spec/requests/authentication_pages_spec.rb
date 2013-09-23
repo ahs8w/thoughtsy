@@ -117,7 +117,8 @@ describe "Authentication  : " do
       describe "in the Responses Controller" do
 
         describe "submitting to the create action" do
-          before { post "posts/1/responses" }     # use literal paths w/ nested routes to set proper params
+          # before { post "posts/1/responses" }      use literal paths w/ nested routes to set proper params
+          before { post responses_path }
           specify { expect(response).to redirect_to(signin_path) }
         end
 
@@ -127,7 +128,8 @@ describe "Authentication  : " do
         end
 
         describe "visiting the new action" do
-          before { get "posts/1/responses/new" }   # use http verbs rather than capybara 'visit'
+          # before { get "posts/1/responses/new" }    use http verbs rather than capybara 'visit'
+          before { get new_response_path }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end

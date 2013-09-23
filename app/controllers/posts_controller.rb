@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :admin_user, only: [:destroy, :index]
 
   def index
-    @posts = Post.paginate(page: params[:page])
+    @posts = Post.where(responded_to: false).paginate(page: params[:page])
   end
 
   def create

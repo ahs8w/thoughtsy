@@ -1,14 +1,7 @@
 <% provide(:page_title, "Edit profile") %>
 <div class="row">
-  <aside class="span4" id="user_info">
-    <section>
-      <h1>
-        <%= gravatar_for @user, size: 55 %>
-        <%= @user.username %>
-      </h1>
-      <span><%= link_to 'change', "http://gravatar.com/emails", target: "_blank" %></span>
-    </section>
-  </aside>
+  <%= render 'shared/user_info', user: current_user %>
+  
   <div class="span6 offset5">
     <h1>Update your profile</h1>
     <%= form_for(@user) do |f| %>

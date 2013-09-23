@@ -11,8 +11,9 @@ describe Post do
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
   it { should respond_to(:responses) }
-  it { should respond_to(:responded_to?) }
+  it { should respond_to(:responded_to) }
   its(:user) { should eq user }
+  its(:responded_to) { should eq false }
 
   it { should be_valid }
 

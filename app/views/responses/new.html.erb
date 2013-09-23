@@ -14,10 +14,10 @@
   </div>
   <div class="span6 offset5">
     <div id="response">
-      <%= form_for [@post, @response] do |f| %>
+      <%= form_for @response do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <%= f.text_area :content, placeholder: "your response..." %>
-        <%= f.hidden_field :post_id, value: params[:post_id] %>
+        <%= f.hidden_field :post_id, value: @post.id %>
         <%= f.submit "Respond", class: "btn btn-large btn-success" %>
       <% end %>
     </div>

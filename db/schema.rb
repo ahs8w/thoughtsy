@@ -11,16 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130828093832) do
+ActiveRecord::Schema.define(version: 20130923101601) do
 
   create_table "posts", force: true do |t|
     t.text     "content"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "responded_to", default: false
   end
 
   add_index "posts", ["created_at"], name: "index_posts_on_created_at"
+  add_index "posts", ["responded_to"], name: "index_posts_on_responded_to"
   add_index "posts", ["user_id"], name: "index_posts_on_user_id"
 
   create_table "responses", force: true do |t|

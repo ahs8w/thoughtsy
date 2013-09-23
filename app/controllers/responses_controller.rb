@@ -6,15 +6,16 @@ class ResponsesController < ApplicationController
   end
 
   def new
-    @post = Post.find(params[:post_id])
+    @post = Post.where(responded_to: false).first
     @author = @post.user
     @response = Response.new
   end
 
   def create
-    @post = Post.find(params[:post_id])
     @response = current_user.responses.build(response_params)
+    @post = @response.post
     if @response.save
+      @response.post.update_attribute(:responded_to, true)
       flash[:success] = "Response sent!"
       redirect_to posts_path
     else

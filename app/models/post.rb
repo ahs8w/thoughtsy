@@ -3,8 +3,4 @@ class Post < ActiveRecord::Base
   has_many :responses, inverse_of: :post
 
   validates_presence_of :user_id, :content
-
-  def responded_to?
-    !self.responses.empty?
-  end
 end

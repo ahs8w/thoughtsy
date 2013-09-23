@@ -69,14 +69,13 @@ describe "UserPages" do
 
       it { should have_link("Sign out", href: signout_path) }
       it { should have_link("edit settings", href: edit_user_path(user)) }
-      it { should have_link("Respond") }
 
-      describe "responses" do
-        let!(:response) { FactoryGirl.create(:response, post: p1) }
-        before { visit user_path(user) }
+      # describe "responses" do
+      #   let!(:response) { FactoryGirl.create(:response, post: p1) }
+      #   before { visit user_path(user) }
 
-        it { should have_content("#{response.content}") }
-      end
+      #   it { should have_content("#{response.content}") }
+      # end
     end
 
     describe "posts" do
