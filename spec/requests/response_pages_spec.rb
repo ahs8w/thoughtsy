@@ -8,43 +8,43 @@ describe "ResponsePages" do
   before { sign_in user }
 
   describe "index page" do
+    let!(:response) { FactoryGirl.create(:response) }
     before { visit responses_path }
 
     it { should have_title('Responses') }
     it { should have_content('Responses') }
+    it { should have_content(response.content) }
+    it { should have_content(response.user.username) }
+    it { should have_content(response.post.user.username) }
+    it { should have_content(response.post.content) }
 
-    describe "pagination" do
-      before(:all) { 31.times { FactoryGirl.create(:response) } }
-      after(:all)  { Post.delete_all }
-      after(:all)  { Response.delete_all }
+    # describe "pagination" do
+    #   before(:all) { 31.times { FactoryGirl.create(:response) } }
+    #   after(:all)  { Post.delete_all }
+    #   after(:all)  { Response.delete_all }
 
-      it { should have_selector('div.pagination') }
+    #   it { should have_selector('div.pagination') }
 
-      it "should list each post" do
-        Response.paginate(page: 1).each do |response|
-          expect(page).to have_selector('li', text: response.content)
-        end
-      end
-    end  
+    #   it "should list each post" do
+    #     Response.paginate(page: 1).each do |response|
+    #       expect(page).to have_selector('li', text: response.content)
+    #     end
+    #   end
+    # end  
   end
 
-  # before do
-  #   sign_in user
-  #   FactoryGirl.create(:post)
-  # end
-
   # describe "response creation" do
-  #   before { visit posts_path }
+  #   before { visit root_path }
 
   #   describe "with invalid information" do
-  #     before { click_link "Respond" }
+  #     before { click_link "Respond to a thought" }
 
   #     it "should not create a response" do
   #       expect { click_button "Respond" }.not_to change(Response, :count)
   #     end
 
   #     describe "error messages" do
-  #       before { click_button "Respond" }
+  #       before { click_button "Respond to thought" }
   #       it { should have_error_message('error') }
   #     end
   #   end
@@ -60,6 +60,9 @@ describe "ResponsePages" do
   #     end
   #   end
   # end
+
+
+
 
   # describe "delete links" do
 

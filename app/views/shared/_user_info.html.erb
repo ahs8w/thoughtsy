@@ -11,4 +11,7 @@
       <%= pluralize(current_user.posts.count, "post") %>
     </span>
   </section>
+  <section>
+    <%= link_to "Respond to a thought", new_response_path %>
+  </section>
 </aside>

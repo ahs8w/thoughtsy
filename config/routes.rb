@@ -2,10 +2,8 @@ Thoughtsy::Application.routes.draw do
   get "password_resets/new"
   resources :users
   resources :sessions,  only: [:new, :create, :destroy]
-  resources :posts,     only: [:index, :create, :destroy] do
-    resources :responses, only: [:new, :create]
-  end
-  resources :responses, only: [:index, :destroy]
+  resources :posts,     only: [:index, :create, :destroy]
+  resources :responses, only: [:index, :new, :create, :destroy]
   resources :password_resets, except: [:show, :index]
 
 
