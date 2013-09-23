@@ -5,6 +5,7 @@ describe "ResponsePages" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
+  let!(:post) { FactoryGirl.create(:post) }
   before { sign_in user }
 
   describe "index page" do
@@ -18,48 +19,48 @@ describe "ResponsePages" do
     it { should have_content(response.post.user.username) }
     it { should have_content(response.post.content) }
 
-    # describe "pagination" do
-    #   before(:all) { 31.times { FactoryGirl.create(:response) } }
-    #   after(:all)  { Post.delete_all }
-    #   after(:all)  { Response.delete_all }
+    describe "pagination" do
+      before(:all) { 31.times { FactoryGirl.create(:response) } }
+      after(:all)  { Post.delete_all }
+      after(:all)  { Response.delete_all }
 
-    #   it { should have_selector('div.pagination') }
+      it { should have_selector('div.pagination') }
 
-    #   it "should list each post" do
-    #     Response.paginate(page: 1).each do |response|
-    #       expect(page).to have_selector('li', text: response.content)
-    #     end
-    #   end
-    # end  
+      it "should list each post" do
+        Response.paginate(page: 1).each do |response|
+          expect(page).to have_selector('li', text: response.content)
+        end
+      end
+    end  
   end
 
-  # describe "response creation" do
-  #   before { visit root_path }
+  describe "response creation" do
+    before { visit root_path }
 
-  #   describe "with invalid information" do
-  #     before { click_link "Respond to a thought" }
+    describe "with invalid information" do
+      before { click_button "Respond to a thought" }
 
-  #     it "should not create a response" do
-  #       expect { click_button "Respond" }.not_to change(Response, :count)
-  #     end
+      it "should not create a response" do
+        expect { click_button "Respond" }.not_to change(Response, :count)
+      end
 
-  #     describe "error messages" do
-  #       before { click_button "Respond to thought" }
-  #       it { should have_error_message('error') }
-  #     end
-  #   end
+      it "should have an error message" do
+        click_button "Respond"
+        expect(page).to have_error_message("error")
+      end
+    end
 
-  #   describe "with valid information" do
-  #     before do
-  #       click_link "Respond"
-  #       fill_in 'response_content', with: "Lorem Ipsum"
-  #     end
+    describe "with valid information" do
+      before do
+        click_button "Respond to a thought"
+        fill_in 'response_content', with: "Lorem Ipsum"
+      end
 
-  #     it "should create a response" do
-  #       expect { click_button "Respond" }.to change(Response, :count).by(1)
-  #     end
-  #   end
-  # end
+      it "should create a response" do
+        expect { click_button "Respond" }.to change(Response, :count).by(1)
+      end
+    end
+  end
 
 
 
