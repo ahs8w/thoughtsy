@@ -1,5 +1,6 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
+  before_action :admin_user, only: :destroy
 
   def index
     @responses = Response.paginate(page: params[:page])
@@ -25,6 +26,10 @@ class ResponsesController < ApplicationController
   end
 
   def destroy
+    @response = Response.find(params[:id])
+    @response.destroy!
+    flash[:success] = "Response destroyed!"
+    redirect_to responses_path
   end
 
   private

@@ -62,12 +62,29 @@ describe "ResponsePages" do
     end
   end
 
+  describe "delete links", :focus => true do
+    let!(:response) { FactoryGirl.create(:response) }
+    let(:admin) { FactoryGirl.create(:admin) }
 
+    it { should_not have_link('delete') }
 
+    describe "as admin should have delete links" do
+      before do
+        sign_in admin
+        visit responses_path
+      end
 
-  # describe "delete links" do
+      it { should have_link('delete', href: response_path(response)) }
 
-  #   it { should_not have_link('delete') }
+      it "should delete response" do
+        expect do
+          click_link('delete', match: :first)
+        end.to change(Response, :count).by(-1)
+
+        expect(page).to have_success_message('Response destroyed!')
+      end
+    end
+  end
 
   #   describe "as an admin user" do
   #     let(:admin) { FactoryGirl.create(:admin) }

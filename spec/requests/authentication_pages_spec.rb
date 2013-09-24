@@ -155,6 +155,7 @@ describe "Authentication  : " do
       let(:user) { FactoryGirl.create(:user) }
       let(:non_admin) { FactoryGirl.create(:user) }
       let(:post) { FactoryGirl.create(:post) }
+      let(:response) { FactoryGirl.create(:response) }
 
       before { sign_in non_admin, no_capybara: true }
 
@@ -170,8 +171,13 @@ describe "Authentication  : " do
         specify { expect(response).to redirect_to(root_url) }
       end
 
-      describe "visiting the index page" do
+      describe "visiting the queue page" do
         before { get posts_path }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "submitting a DELETE request to the Responses#destroy action" do
+        before { delete response_path(response) }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
