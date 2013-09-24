@@ -8,7 +8,7 @@ describe "Password Resets" do
     visit signin_path
     click_link "password"
     fill_in "Email", with: user.email
-    click_on "Reset password"
+    click_on "Send instructions"
     expect(page).to have_content("Email sent")
     expect(last_email.to).to include(user.email)
   end
@@ -17,7 +17,7 @@ describe "Password Resets" do
     visit signin_path
     click_link "password"
     fill_in "Email", with: "fake@example.com"
-    click_on "Reset password"
+    click_on "Send instructions"
     expect(page).to have_content("not found")
     expect(last_email).to be_nil
   end

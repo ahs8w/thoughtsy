@@ -7,16 +7,17 @@ class ResponsesController < ApplicationController
   end
 
   def new
-    @post = Post.where(responded_to: false).first
+    @post = Post.where(state: "unanswered").first
     @author = @post.user
     @response = Response.new
+    @post.accept!
   end
 
   def create
     @response = current_user.responses.build(response_params)
     @post = @response.post
     if @response.save
-      @response.post.update_attribute(:responded_to, true)
+      @post.answer!
       flash[:success] = "Response sent!"
       redirect_to posts_path
     else

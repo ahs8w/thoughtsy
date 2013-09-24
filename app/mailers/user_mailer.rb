@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "a.h.schiller@gmail.com"      #hash of default values for emails sent from this mailer
+  default from: "admin@thoughtsy.com"      #hash of default values for emails sent from this mailer
 
   def password_reset(user)
     @user = user

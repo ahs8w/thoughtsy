@@ -25,5 +25,14 @@ module Thoughtsy
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)   #makes bootstrap-sass compatible to asset pipeline
+
+    # For securing sensitive information, put it in application.yml (don't forget to gitignore it)
+    # Load application.yml in dev environment
+    # Will need to be set manually on the command-line for production(Heroku)!!!
+
+    # see:  http://strandcode.com/2013/08/11/security-is-a-feature-9-newb-friendly-steps-to-secure-your-rails-apps/
+    if Rails.env.development?
+      ENV.update YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
+    end
   end
 end

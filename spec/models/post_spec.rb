@@ -11,18 +11,19 @@ describe Post do
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
   it { should respond_to(:responses) }
-  it { should respond_to(:responded_to) }
+  it { should respond_to(:state) }
+  it { should respond_to(:unanswered?) }
   its(:user) { should eq user }
-  its(:responded_to) { should eq false }
+  its(:state) { should eq "unanswered" }
 
   it { should be_valid }
 
-  describe "when user_id is not present" do
+  context "when user_id is not present" do
     before { @post.user_id = nil }
     it { should_not be_valid }
   end
 
-  describe "with blank content" do
+  context "with blank content" do
     before { @post.content = " " }
     it { should_not be_valid }
   end
@@ -37,5 +38,59 @@ describe Post do
     it "should have the right responses in the right order" do
       expect(@post.responses.to_a).to eq [newer_response, older_response]
     end
-  end  
+  end
+
+## Post State ##
+  describe "states :" do
+    
+    describe ":unanswered" do
+
+      it "should be the initial state" do
+        expect(@post).to be_unanswered
+      end
+
+      it "should change to :emailed on :email" do
+        @post.email!
+        expect(@post).to be_emailed
+      end
+
+      it "should change to :accepted on :accept" do
+        @post.accept!
+        expect(@post).to be_pending
+      end
+    end
+
+    describe ":emailed" do
+      before { @post.email! }
+
+      it "should change to :unanswered on :decline" do
+        @post.decline!
+        expect(@post).to be_unanswered
+      end
+
+      it "should change to :accepted on :accept" do
+        @post.accept!
+        expect(@post).to be_pending
+      end
+
+      it "should change to :unanswered on :expire" do
+        @post.expire!
+        expect(@post).to be_unanswered
+      end
+    end
+
+    describe ":pending" do
+      before { @post.accept! }
+
+      it "should change to :unanswered on :expire" do
+        @post.expire!
+        expect(@post).to be_unanswered
+      end
+
+      it "should change to :answered on :answer" do
+        @post.answer!
+        expect(@post).to be_answered
+      end
+    end
+  end
 end

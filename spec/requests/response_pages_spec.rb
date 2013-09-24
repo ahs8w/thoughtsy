@@ -62,7 +62,7 @@ describe "ResponsePages" do
     end
   end
 
-  describe "delete links", :focus => true do
+  describe "delete links" do
     let!(:response) { FactoryGirl.create(:response) }
     let(:admin) { FactoryGirl.create(:admin) }
 
