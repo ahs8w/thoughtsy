@@ -22,13 +22,15 @@ class ResponsesController < ApplicationController
       redirect_to posts_path
     else
       @author = @post.user    # render doesn't instantiate any variables (on error; need @author for gravatar)
+      @post.unanswer!
       render 'new'
     end
   end
 
   def destroy
     @response = Response.find(params[:id])
-    @response.destroy!
+    @response.post.unanswer!
+    @response.destroy
     flash[:success] = "Response destroyed!"
     redirect_to responses_path
   end

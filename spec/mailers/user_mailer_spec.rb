@@ -15,4 +15,16 @@ describe UserMailer do
       expect(mail.body.encoded).to match(edit_password_reset_path(user.password_reset_token))
     end
   end
+
+  describe "post_email" do
+    let(:responder) { FactoryGirl.create(:user) }
+    let(:post) { FactoryGirl.create(:post) }
+    let(:mail) { UserMailer.post_email(responder) }
+
+    it "should send post to the responder" do
+      expect(mail.subject).to eq("Thoughtsy needs you!")
+      expect(mail.to).to eq([responder.email])
+      expect(mail.from).to eq(["admin@thoughtsy.com"])
+    end
+  end
 end

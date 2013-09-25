@@ -5,24 +5,22 @@ class Post < ActiveRecord::Base
   validates_presence_of :user_id, :content
 
   state_machine :state, initial: :unanswered do
-    event :email do
-      transition :unanswered => :emailed
-    end
-
-    event :decline do
-      transition :emailed => :unanswered
-    end
+    # after_transition on: :answer, do: [:send_response_email]
 
     event :accept do
-      transition [:unanswered, :emailed] => :pending
+      transition :unanswered => :pending
     end
 
     event :expire do
-      transition [:emailed, :pending] => :unanswered
+      transition :pending => :unanswered
     end
 
     event :answer do
-      transition :pending => :answered
+      transition any => :answered
+    end
+
+    event :unanswer do
+      transition any => :unanswered
     end
 
     def initialize

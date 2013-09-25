@@ -29,7 +29,7 @@ describe "Post pages" do
       end
     end
 
-    describe "should not included posts with responses" do
+    describe "should not included answered posts" do
       before do
         visit root_path
         click_button "Respond to a thought"
@@ -41,18 +41,24 @@ describe "Post pages" do
       it { should_not have_content(post.content) }
     end
 
-    describe "pagination" do
-      before(:all) { 30.times { FactoryGirl.create(:post) } }
-      after(:all)  { Post.delete_all }
+    describe "should include pending posts" do
+      let!(:pending) { FactoryGirl.create(:pending) }
 
-      it { should have_selector('div.pagination') }
-
-      it "should list each post" do
-        Post.paginate(page: 1).each do |post|
-          expect(page).to have_selector('td', text: post.content)
-        end
-      end
+      it { should have_content(pending.content) }
     end
+
+    # describe "pagination" do
+    #   before(:all) { 30.times { FactoryGirl.create(:post) } }
+    #   after(:all)  { Post.delete_all }
+
+    #   it { should have_selector('div.pagination') }
+
+    #   it "should list each post" do
+    #     Post.paginate(page: 1).each do |post|
+    #       expect(page).to have_selector('td', text: post.content)
+    #     end
+    #   end
+    # end
   end
 
   describe "post creation" do
@@ -78,17 +84,4 @@ describe "Post pages" do
       end
     end
   end
-
-  # describe "post states" do
-  #   let(:post) { FactoryGirl.create(:post) }
-
-  #   context ":emailed state" do
-  #     before { post.email! }
-
-  #     it "should send_post_email" do
-  #       # expect(page).to have_content("Email sent")
-  #       expect { @post.send_post_email }.to change(ActionMailer::Base.deliveries.size, :count).by(1)
-  #     end
-  #   end
-  # end
 end

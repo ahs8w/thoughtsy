@@ -13,6 +13,8 @@ describe Post do
   it { should respond_to(:responses) }
   it { should respond_to(:state) }
   it { should respond_to(:unanswered?) }
+  it { should respond_to(:pending?) }
+  it { should respond_to(:answered?) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -49,47 +51,32 @@ describe Post do
         expect(@post).to be_unanswered
       end
 
-      it "should change to :emailed on :email" do
-        @post.email!
-        expect(@post).to be_emailed
-      end
-
-      it "should change to :accepted on :accept" do
+      it "should change to :pending on #accept" do
         @post.accept!
         expect(@post).to be_pending
-      end
-    end
-
-    describe ":emailed" do
-      before { @post.email! }
-
-      it "should change to :unanswered on :decline" do
-        @post.decline!
-        expect(@post).to be_unanswered
-      end
-
-      it "should change to :accepted on :accept" do
-        @post.accept!
-        expect(@post).to be_pending
-      end
-
-      it "should change to :unanswered on :expire" do
-        @post.expire!
-        expect(@post).to be_unanswered
       end
     end
 
     describe ":pending" do
       before { @post.accept! }
 
-      it "should change to :unanswered on :expire" do
+      it "should change to :unanswered on #expire" do
         @post.expire!
         expect(@post).to be_unanswered
       end
 
-      it "should change to :answered on :answer" do
+      it "should change to :answered on #answer" do
         @post.answer!
         expect(@post).to be_answered
+      end
+    end
+
+    describe ":answered" do
+      before { @post.answer! }
+
+      it "should change to :unanswered on #unanswer" do
+        @post.unanswer!
+        expect(@post).to be_unanswered
       end
     end
   end

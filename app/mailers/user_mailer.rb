@@ -5,4 +5,14 @@ class UserMailer < ActionMailer::Base
     @user = user
     mail to: @user.email, subject: 'Password reset'
   end
+
+  def post_email(user)
+    @user = user
+    mail to: @user.email, subject: 'Thoughtsy needs you!'
+  end
+
+  # def response_email(poster)
+  #   @user = poster
+  #   mail to: @user.email, subject: 'You have a response waiting'
+  # end
 end

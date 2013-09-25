@@ -46,6 +46,11 @@ class User < ActiveRecord::Base
     end while User.exists?(column => self[column])
   end
 
+# State machine mailers
+  # def send_post_email
+  #   UserMailer.post_email(self).deliver
+  # end
+
   private
 
     def password_required?                # necessary for 'password_reset' to function

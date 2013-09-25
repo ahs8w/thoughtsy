@@ -13,11 +13,19 @@ FactoryGirl.define do
   factory :post do
     content "Lorem Ipsum"
     user               # ensures parent element is created at same time; show association with user object
+
+    factory :pending do
+      state 'pending'
+    end
+
+    factory :answered do
+      state 'answered'
+    end
   end
 
   factory :response do
     content "response"
     user
-    post
+    association :post, state: 'answered'
   end
 end
