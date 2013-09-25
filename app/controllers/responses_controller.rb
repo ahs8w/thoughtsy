@@ -7,7 +7,7 @@ class ResponsesController < ApplicationController
   end
 
   def new
-    @post = Post.where(state: "unanswered").first
+    @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
     @author = @post.user
     @response = Response.new
     @post.accept!
@@ -36,7 +36,6 @@ class ResponsesController < ApplicationController
   end
 
   private
-
     def response_params
       params.require(:response).permit(:content, :post_id)
     end

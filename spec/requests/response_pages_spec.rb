@@ -37,6 +37,15 @@ describe "ResponsePages" do
   describe "response creation" do
     before { visit root_path }
 
+    context "from one's own post" do
+      let!(:earlier_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
+
+      it "should not occur" do
+        click_button "Respond to a thought"
+        expect(page).not_to have_content(earlier_post.content)
+      end
+    end
+
     it "should update the state of corresponding post to 'pending'" do
       click_button "Respond to a thought"
       post.reload
@@ -77,6 +86,11 @@ describe "ResponsePages" do
         post.reload
         expect(post).to be_answered
       end
+
+      it "should send_request_email" do
+        click_button "Respond"
+        expect(last_email.to).to include(post.user.email)
+      end
     end
   end
 
@@ -114,5 +128,5 @@ describe "ResponsePages" do
         end
       end
     end
-  end
+  end  
 end

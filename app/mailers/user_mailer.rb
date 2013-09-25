@@ -11,8 +11,8 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: 'Thoughtsy needs you!'
   end
 
-  # def response_email(poster)
-  #   @user = poster
-  #   mail to: @user.email, subject: 'You have a response waiting'
-  # end
+  def response_email(user)
+    @user = user
+    mail to: @user.email, subject: 'Someone has responded to your thought!'
+  end
 end

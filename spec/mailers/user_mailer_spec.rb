@@ -18,13 +18,31 @@ describe UserMailer do
 
   describe "post_email" do
     let(:responder) { FactoryGirl.create(:user) }
-    let(:post) { FactoryGirl.create(:post) }
     let(:mail) { UserMailer.post_email(responder) }
 
-    it "should send post to the responder" do
+    it "should send post_email to the responder" do
       expect(mail.subject).to eq("Thoughtsy needs you!")
       expect(mail.to).to eq([responder.email])
       expect(mail.from).to eq(["admin@thoughtsy.com"])
     end
+
+    it "renders the email body" do
+      expect(mail.body.encoded).to match(new_response_path)
+    end
+  end
+
+  describe "response_email" do
+    let(:poster) { FactoryGirl.create(:user) }
+    let(:mail) { UserMailer.response_email(poster) }
+
+    it "should send response_email to the poster" do
+      expect(mail.subject).to eq("Someone has responded to your thought!")
+      expect(mail.to).to eq([poster.email])
+      expect(mail.from).to eq(["admin@thoughtsy.com"])
+    end
+
+    # it "renders the email body" do
+    #   expect(mail.body.encoded).to match()
+    # end
   end
 end

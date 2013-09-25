@@ -16,21 +16,21 @@ describe "UserPages" do
     it { should have_title("Users") }
     it { should have_content("Users") }
 
-    describe "pagination" do
-      before do
-        31.times { FactoryGirl.create(:user) }
-        visit users_path
-      end
-      after(:all)  { User.delete_all }
+    # describe "pagination" do
+    #   before do
+    #     31.times { FactoryGirl.create(:user) }
+    #     visit users_path
+    #   end
+    #   after(:all)  { User.delete_all }
 
-      it { should have_selector('div.pagination') }
+    #   it { should have_selector('div.pagination') }
 
-      it "should list each user" do
-        User.paginate(page: 1).each do |user|
-          expect(page).to have_selector('li', text: user.username)
-        end
-      end
-    end
+    #   it "should list each user" do
+    #     User.paginate(page: 1).each do |user|
+    #       expect(page).to have_selector('li', text: user.username)
+    #     end
+    #   end
+    # end
 
     describe "delete_links" do
 

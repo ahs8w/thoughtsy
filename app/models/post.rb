@@ -4,8 +4,11 @@ class Post < ActiveRecord::Base
 
   validates_presence_of :user_id, :content
 
+  default_scope -> { order('created_at ASC') }
+
   state_machine :state, initial: :unanswered do
-    # after_transition on: :answer, do: [:send_response_email]
+    after_transition on: :answer, do: [:send_response_email]
+    # after_transition on: :accept, do: [:start_response_timer]
 
     event :accept do
       transition :unanswered => :pending
@@ -26,5 +29,9 @@ class Post < ActiveRecord::Base
     def initialize
       super()
     end
+  end
+
+  def send_response_email
+    UserMailer.response_email(self.user).deliver
   end
 end
