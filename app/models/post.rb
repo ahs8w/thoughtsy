@@ -11,7 +11,7 @@ class Post < ActiveRecord::Base
     # after_transition on: :answer, do: [:reset_response_timer]
 
     event :accept do
-      transition :unanswered => :pending
+      transition any => :pending
     end
 
     event :expire do

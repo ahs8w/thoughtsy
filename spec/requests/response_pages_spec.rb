@@ -38,15 +38,17 @@ describe "ResponsePages" do
     before { visit root_path }
 
     it "should update the state of corresponding post to 'pending'" do
+      expect(post).to be_unanswered
       click_button "Respond to a thought"
       post.reload
       expect(post).to be_pending
     end
 
-    it "should start the response timer on response.user" do
+    it "should start the #response_timer and set #pending_response_id for user" do
       click_button "Respond to a thought"
       user.reload
       expect(user.response_timer).to be_present
+      expect(user.pending_response_id).to eq post.id
     end
 
     context "from one's own post" do
@@ -70,10 +72,10 @@ describe "ResponsePages" do
         expect(page).to have_error_message("error")
       end
 
-      it "should update the state of corresponding post to 'unanswered'" do
+      it "should not change the post state" do
         click_button "Respond"
         post.reload
-        expect(post).to be_unanswered
+        expect(post).to be_pending
       end
     end
 
@@ -97,11 +99,18 @@ describe "ResponsePages" do
         click_button "Respond"
         expect(last_email.to).to include(post.user.email)
       end
+
+      it "should reset temp. user attributes" do
+        click_button "Respond"
+        user.reload
+        expect(user.response_timer).to be_nil
+        expect(user.pending_response_id).to be_nil
+      end
     end
   end
 
-## Response timer ##
-  describe "post creation after 24hrs has passed" do
+## response_timer and pending_response_id ##
+  describe "response creation after 24hrs have passed" do
     let(:expired_user) { FactoryGirl.create(:user, response_timer: 25.hours.ago) }
     before do
       sign_in expired_user
@@ -110,17 +119,42 @@ describe "ResponsePages" do
       fill_in 'response_content', with: "Lorem Ipsum"
     end
 
-    it "should not create a response" do
-      expect { click_button "Respond" }.not_to change(Response, :count).by(1)
-    end
+    # it "should not create a response" do
+    #   expect { click_button "Respond" }.not_to change(Response, :count).by(1)
+    # end
 
     it "should update post state to 'unanswered'" do
+      post.reload
+      expect(post).to be_pending
       click_button "Respond"
       post.reload
       expect(post).to be_unanswered
     end
+
+    it "should reset temp user attributes to nil" do
+      expired_user.reload
+      expect(expired_user.pending_response_id).to eq post.id
+      click_button "Respond"
+      expired_user.reload
+      expect(expired_user.pending_response_id).to be_nil
+      expect(expired_user.response_timer).to be_nil
+    end
   end
 
+  describe "response-post persistance(within 24 hours)" do
+    let(:post2) { FactoryGirl.create(:post, content: "blah") }
+    before do
+      visit root_path
+      click_button "Respond to a thought"
+    end
+
+    it "the same pending post should persist for the user" do
+      expect(page).to have_content(post.content)
+      visit root_path
+      click_button "Respond to a thought"
+      expect(page).to have_content(post.content)
+    end
+  end
 
   describe "delete links:" do
     let!(:response) { FactoryGirl.create(:response) }

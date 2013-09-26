@@ -46,9 +46,16 @@ class User < ActiveRecord::Base
     end while User.exists?(column => self[column])
   end
 
-# Response_timer methods
-  def set_response_timer
+## sets response_timer and pending_response_id attributes
+  def set_response_and_timer(response_id)
     self.response_timer ||= Time.zone.now
+    self.pending_response_id ||= response_id
+    save!
+  end
+
+  def reset_response_and_timer
+    self.response_timer = ''
+    self.pending_response_id = ''
     save!
   end
 
