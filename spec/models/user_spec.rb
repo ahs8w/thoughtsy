@@ -160,7 +160,7 @@ describe User do
     end
   end
 
-## Response Associations ##
+## Response Associations and timer ##
   describe "response association" do
     before { @user.save }
     let!(:response) { FactoryGirl.create(:response, user: @user) }
@@ -175,7 +175,17 @@ describe User do
     end
   end
 
+  describe "set_response_timer" do
+
+    it "sets response_time on user model" do
+      @user.set_response_timer
+      expect(@user.response_timer).to be_present
+    end
+  end
+
+## Password Reset ##
   describe "send password reset" do
+    before { @user.save }       # all the tests work even without saving the user!!??  WHY??
 
     it "generates a unique password_reset_token each time" do
       @user.send_password_reset

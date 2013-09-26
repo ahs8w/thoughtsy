@@ -27,7 +27,7 @@ module SessionsHelper
     user == current_user
   end
 
-## before filters (post, user controller)
+## before filters (post, response, user controller)
   def admin_user
     redirect_to(root_url) unless user_admin?
   end

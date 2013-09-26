@@ -1,6 +1,7 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: :destroy
+  after_action  :start_response_timer, only: :new
 
   def index
     @responses = Response.paginate(page: params[:page])
@@ -16,13 +17,17 @@ class ResponsesController < ApplicationController
   def create
     @response = current_user.responses.build(response_params)
     @post = @response.post
-    if @response.save
+    if current_user.response_timer < 24.hours.ago
+      @post.expire!
+      redirect_to root_path
+      # current_user.reset_response_timer
+    elsif @response.save
       @post.answer!
       flash[:success] = "Response sent!"
       redirect_to posts_path
     else
       @author = @post.user    # render doesn't instantiate any variables (on error; need @author for gravatar)
-      @post.unanswer!
+      @post.expire!
       render 'new'
     end
   end
@@ -38,5 +43,9 @@ class ResponsesController < ApplicationController
   private
     def response_params
       params.require(:response).permit(:content, :post_id)
+    end
+
+    def start_response_timer
+      current_user.set_response_timer
     end
 end

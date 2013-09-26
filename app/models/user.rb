@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     # encryption method we use to store the remember_token;  SHA1 is much faster than Bcrypt
   end
 
-# Password_reset_methods
+# Password_reset methods
   def send_password_reset
     generate_token(:password_reset_token)
     self.password_reset_sent_at = Time.zone.now
@@ -46,10 +46,11 @@ class User < ActiveRecord::Base
     end while User.exists?(column => self[column])
   end
 
-# State machine mailers
-  # def send_post_email
-  #   UserMailer.post_email(self).deliver
-  # end
+# Response_timer methods
+  def set_response_timer
+    self.response_timer ||= Time.zone.now
+    save!
+  end
 
   private
 

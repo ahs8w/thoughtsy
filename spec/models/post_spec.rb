@@ -10,7 +10,7 @@ describe Post do
   it { should respond_to(:content) }
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
-  it { should respond_to(:responses) }
+  it { should respond_to(:response) }
   it { should respond_to(:state) }
   it { should respond_to(:unanswered?) }
   it { should respond_to(:pending?) }
@@ -30,17 +30,17 @@ describe Post do
     it { should_not be_valid }
   end
 
-## Response Associations ##
-  describe "response associations" do
-    before { @post.save }
-    let(:user2) { FactoryGirl.create(:user) }
-    let!(:older_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.day.ago) }
-    let!(:newer_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.hour.ago) }
+## Response Associations (has_many)##
+  # describe "response associations" do
+  #   before { @post.save }
+  #   let(:user2) { FactoryGirl.create(:user) }
+  #   let!(:older_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.day.ago) }
+  #   let!(:newer_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.hour.ago) }
 
-    it "should have the right responses in the right order" do
-      expect(@post.responses.to_a).to eq [newer_response, older_response]
-    end
-  end
+  #   it "should have the right responses in the right order" do
+  #     expect(@post.responses.to_a).to eq [newer_response, older_response]
+  #   end
+  # end
 
 ## Post State ##
   describe "states :" do
@@ -77,6 +77,11 @@ describe Post do
       it "should change to :unanswered on #unanswer" do
         @post.unanswer!
         expect(@post).to be_unanswered
+      end
+
+## send_response_email ##
+      it "should send_response_email" do
+        expect(last_email.to).to include(@post.user.email)
       end
     end
   end

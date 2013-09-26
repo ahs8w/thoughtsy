@@ -37,6 +37,18 @@ describe "ResponsePages" do
   describe "response creation" do
     before { visit root_path }
 
+    it "should update the state of corresponding post to 'pending'" do
+      click_button "Respond to a thought"
+      post.reload
+      expect(post).to be_pending
+    end
+
+    it "should start the response timer on response.user" do
+      click_button "Respond to a thought"
+      user.reload
+      expect(user.response_timer).to be_present
+    end
+
     context "from one's own post" do
       let!(:earlier_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
 
@@ -44,12 +56,6 @@ describe "ResponsePages" do
         click_button "Respond to a thought"
         expect(page).not_to have_content(earlier_post.content)
       end
-    end
-
-    it "should update the state of corresponding post to 'pending'" do
-      click_button "Respond to a thought"
-      post.reload
-      expect(post).to be_pending
     end
 
     describe "with invalid information" do
@@ -93,6 +99,28 @@ describe "ResponsePages" do
       end
     end
   end
+
+## Response timer ##
+  describe "post creation after 24hrs has passed" do
+    let(:expired_user) { FactoryGirl.create(:user, response_timer: 25.hours.ago) }
+    before do
+      sign_in expired_user
+      visit root_path
+      click_button "Respond to a thought"
+      fill_in 'response_content', with: "Lorem Ipsum"
+    end
+
+    it "should not create a response" do
+      expect { click_button "Respond" }.not_to change(Response, :count).by(1)
+    end
+
+    it "should update post state to 'unanswered'" do
+      click_button "Respond"
+      post.reload
+      expect(post).to be_unanswered
+    end
+  end
+
 
   describe "delete links:" do
     let!(:response) { FactoryGirl.create(:response) }

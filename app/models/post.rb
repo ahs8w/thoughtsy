@@ -1,6 +1,6 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts
-  has_many :responses, inverse_of: :post
+  has_one :response
 
   validates_presence_of :user_id, :content
 
@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
 
   state_machine :state, initial: :unanswered do
     after_transition on: :answer, do: [:send_response_email]
-    # after_transition on: :accept, do: [:start_response_timer]
+    # after_transition on: :answer, do: [:reset_response_timer]
 
     event :accept do
       transition :unanswered => :pending
@@ -34,4 +34,8 @@ class Post < ActiveRecord::Base
   def send_response_email
     UserMailer.response_email(self.user).deliver
   end
+
+  # def reset_response_timer
+  #   self.response.user.reset_response_timer
+  # end
 end
