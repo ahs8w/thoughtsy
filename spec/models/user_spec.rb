@@ -19,8 +19,6 @@ describe User do
   it { should respond_to(:admin?) }
   it { should respond_to(:posts) }
   it { should respond_to(:responses) }
-  it { should respond_to(:response_timer?) }
-  it { should respond_to(:pending_response_id?) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -176,26 +174,26 @@ describe User do
       end
     end
 
-    context "#set_response_and_timer" do
-      before { @user.set_response_and_timer(response.post.id) }
+    # context "#set_response_and_timer" do
+    #   before { @user.set_response_and_timer(response.post.id) }
 
-      it "sets response_time on user model" do
-        expect(@user.response_timer).to be_present
-      end
+    #   it "sets response_time on user model" do
+    #     expect(@user.response_timer).to be_present
+    #   end
 
-      it "sets pending_response_id" do
-        expect(@user.pending_response_id).to be_present
-      end
+    #   it "sets pending_response_id" do
+    #     expect(@user.pending_response_id).to be_present
+    #   end
 
-      context "#reset" do
-        before { @user.reset_response_and_timer }
+    #   context "#reset" do
+    #     before { @user.reset_response_and_timer }
 
-        it "resets user attributes" do
-          expect(@user.response_timer).to be_nil
-          expect(@user.pending_response_id).to be_nil
-        end
-      end
-    end
+    #     it "resets user attributes" do
+    #       expect(@user.response_timer).to be_nil
+    #       expect(@user.pending_response_id).to be_nil
+    #     end
+    #   end
+    # end
   end
 
 ## Password Reset ##

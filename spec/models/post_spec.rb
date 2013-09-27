@@ -15,6 +15,7 @@ describe Post do
   it { should respond_to(:unanswered?) }
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
+  it { should respond_to(:responder_token?)}
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -29,18 +30,6 @@ describe Post do
     before { @post.content = " " }
     it { should_not be_valid }
   end
-
-## Response Associations (has_many)##
-  # describe "response associations" do
-  #   before { @post.save }
-  #   let(:user2) { FactoryGirl.create(:user) }
-  #   let!(:older_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.day.ago) }
-  #   let!(:newer_response) { FactoryGirl.create(:response, user: user2, post: @post, created_at: 1.hour.ago) }
-
-  #   it "should have the right responses in the right order" do
-  #     expect(@post.responses.to_a).to eq [newer_response, older_response]
-  #   end
-  # end
 
 ## Post State ##
   describe "states :" do
@@ -79,10 +68,29 @@ describe Post do
         expect(@post).to be_unanswered
       end
 
-## send_response_email ##
+## checking .answer! transition ##
       it "should send_response_email" do
         expect(last_email.to).to include(@post.user.email)
       end
+    end
+  end
+
+## custom methods ##
+  describe ":responder_token" do
+    its(:responder_token) { should eq nil }
+
+    it "should be set with #set_responder_token" do
+      @post.set_responder_token(user.id)
+      expect(@post.responder_token).to eq user.id
+    end
+  end
+
+  describe ":reset_responder_token" do
+    let(:post) { FactoryGirl.create(:post, responder_token: 1) }
+
+    it "should do as it's named" do
+      post.reset_responder_token
+      expect(post.responder_token).to be_nil
     end
   end
 end

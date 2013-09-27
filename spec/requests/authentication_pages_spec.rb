@@ -128,7 +128,6 @@ describe "Authentication  : " do
         end
 
         describe "visiting the new action" do
-          # before { get "posts/1/responses/new" }    use http verbs rather than capybara 'visit'
           before { get new_response_path }
           specify { expect(response).to redirect_to(signin_path) }
         end

@@ -1,0 +1,25 @@
+<% provide(:page_title, "Respond") %>
+<h1>Respond</h1>
+
+<div class="row">
+  <div class="span6 offset5">
+    <div class="well" id="thought">
+      <legend>
+        <%= gravatar_for @author, size: 30 %>
+        <%= @author.username %>
+        thought:
+      </legend>
+      <p><%= @post.content %></p>
+    </div>
+  </div>
+  <div class="span6 offset5">
+    <div id="response">
+      <%= form_for @response do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+        <%= f.text_area :content, placeholder: "your response..." %>
+        <%= f.hidden_field :post_id, value: @post.id %>
+        <%= f.submit "Respond", class: "btn btn-large btn-success" %>
+      <% end %>
+    </div>
+  </div>
+</div>

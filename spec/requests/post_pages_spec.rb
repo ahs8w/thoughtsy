@@ -30,15 +30,10 @@ describe "Post pages" do
     end
 
     describe "should not included answered posts" do
-      before do
-        visit root_path
-        click_button "Respond to a thought"
-        fill_in "response_content", with: "response"
-        click_on "Respond"
-        visit posts_path
-      end
+      let(:answered_post) { FactoryGirl.create(:post, state: 'answered', content: 'foobar') }
+      before { visit posts_path }
 
-      it { should_not have_content(post.content) }
+      it { should_not have_content(answered_post.content) }
     end
 
     describe "should include pending posts" do
@@ -61,6 +56,49 @@ describe "Post pages" do
     # end
   end
 
+## Setting post states ##    
+  describe "response creation" do
+    let!(:post) { FactoryGirl.create(:post) }
+    before { visit root_path }
+
+    it "should update the state of corresponding post to 'pending'" do
+      expect(post).to be_unanswered
+      click_button "Respond to a thought"
+      post.reload
+      expect(post).to be_pending
+    end
+
+    it "should set #responder_token for post" do
+      click_button "Respond to a thought"
+      post.reload
+      expect(post.responder_token).to eq user.id
+    end
+
+    describe "with invalid information" do
+      before { click_button "Respond to a thought" }
+
+      it "should not change the post state" do
+        click_button "Respond"
+        post.reload
+        expect(post).to be_pending
+      end
+    end
+
+    describe "with valid information" do
+      before do
+        click_button "Respond to a thought"
+        fill_in 'response_content', with: "Lorem Ipsum"
+      end
+
+      it "should update the state to 'answered' and reset responder_token" do
+        click_button "Respond"
+        post.reload
+        expect(post).to be_answered
+        expect(post.responder_token).to be_nil
+      end
+    end
+  end
+  
   describe "post creation" do
     before { visit root_path }
 
