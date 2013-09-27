@@ -19,6 +19,8 @@ describe User do
   it { should respond_to(:admin?) }
   it { should respond_to(:posts) }
   it { should respond_to(:responses) }
+  it { should respond_to(:token_id?) }
+  it { should respond_to(:token_timer?) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -160,7 +162,7 @@ describe User do
     end
   end
 
-## Response Associations and timer ##
+## Response Associations ##
   describe "response association" do
     before { @user.save }
     let!(:response) { FactoryGirl.create(:response, user: @user) }
@@ -173,27 +175,49 @@ describe User do
         expect(Response.where(id: response.id)).to be_empty
       end
     end
+  end
 
-    # context "#set_response_and_timer" do
-    #   before { @user.set_response_and_timer(response.post.id) }
+## State Machine Tokens ##
+  describe "state machine tokens" do
+    
+    its(:token_timer) { should be_blank }
+    its(:token_id) { should be_blank }
 
-    #   it "sets response_time on user model" do
-    #     expect(@user.response_timer).to be_present
-    #   end
+    describe "#set_tokens" do
 
-    #   it "sets pending_response_id" do
-    #     expect(@user.pending_response_id).to be_present
-    #   end
+      context "when blank" do
+        before { @user.set_tokens(53) }
 
-    #   context "#reset" do
-    #     before { @user.reset_response_and_timer }
+        it "sets user tokens" do
+          expect(@user.token_timer).to be_present
+          expect(@user.token_id).to eq 53
+        end
 
-    #     it "resets user attributes" do
-    #       expect(@user.response_timer).to be_nil
-    #       expect(@user.pending_response_id).to be_nil
-    #     end
-    #   end
-    # end
+        describe "#reset_tokens" do
+          before { @user.reset_tokens }
+
+          it "reset user tokens" do
+            expect(@user.token_timer).to be_blank
+            expect(@user.token_id).to be_blank
+          end
+        end
+      end
+
+      context "when already defined" do
+        before do
+          @user.token_timer = 15.minutes.ago
+          @user.token_id = 34
+          @user.save
+        end
+
+        it "does not reset the tokens" do
+          @user.set_tokens(53)
+          @user.save
+          # expect(@user.token_timer).to eq 15.minutes.ago      # works in theory
+          expect(@user.token_id).to eq 34
+        end
+      end
+    end
   end
 
 ## Password Reset ##

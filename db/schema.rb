@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130927102402) do
+ActiveRecord::Schema.define(version: 20130927163254) do
 
   create_table "posts", force: true do |t|
     t.text     "content"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20130927102402) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "state"
-    t.integer  "responder_token"
   end
 
   add_index "posts", ["created_at"], name: "index_posts_on_created_at"
@@ -48,6 +47,8 @@ ActiveRecord::Schema.define(version: 20130927102402) do
     t.boolean  "admin",                  default: false
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
+    t.integer  "token_id"
+    t.datetime "token_timer"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

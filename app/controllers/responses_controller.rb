@@ -1,22 +1,24 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: :destroy
+  after_action  :set_tokens, only: :new
 
   def index
     @responses = Response.paginate(page: params[:page])
   end
 
   def new
-    # if current_user.pending_response_id? && current_user.response_timer > 24.hours.ago
-    #   @post = Post.find(current_user.pending_response_id)
-    # elsif current_user.pending_response_id? && current_user.response_timer < 24.hours.ago
-    #   @oldpost = Post.find(current_user.pending_response_id)
-    #   @oldpost.unanswer!
-    #   @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
-    #   current_user.reset_response_and_timer
-    # else
-    @post = Post.find_by(responder_token: current_user.id) || Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
-    # end
+    if current_user.token_id?
+      if current_user.token_timer > 24.hours.ago      # 'greater-than' as in 'after'
+        @post = Post.find(current_user.token_id)
+      else
+        @oldpost = Post.find(current_user.token_id)
+        expire_all(@oldpost)
+        @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
+      end
+    else
+      @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
+    end
     @author = @post.user
     @response = Response.new
     @post.accept(current_user.id)
@@ -25,13 +27,8 @@ class ResponsesController < ApplicationController
   def create
     @response = current_user.responses.build(response_params)
     @post = @response.post
-    # if current_user.response_timer < 24.hours.ago   #'less-than' as in 'before'
-    #   @post.expire!
-    #   current_user.reset_response_and_timer
-    #   redirect_to root_path
     if @response.save
-      @post.answer!
-      # current_user.reset_response_and_timer
+      answer_all(@post)
       flash[:success] = "Response sent!"
       redirect_to posts_path
     else
@@ -51,5 +48,19 @@ class ResponsesController < ApplicationController
   private
     def response_params
       params.require(:response).permit(:content, :post_id)
+    end
+
+    def set_tokens
+      current_user.set_tokens(@post.id)
+    end
+
+    def expire_all(post)
+      post.expire!
+      current_user.reset_tokens
+    end
+
+    def answer_all(post)
+      post.answer!
+      current_user.reset_tokens
     end
 end

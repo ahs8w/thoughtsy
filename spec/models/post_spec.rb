@@ -15,7 +15,6 @@ describe Post do
   it { should respond_to(:unanswered?) }
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
-  it { should respond_to(:responder_token?)}
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -72,25 +71,6 @@ describe Post do
       it "should send_response_email" do
         expect(last_email.to).to include(@post.user.email)
       end
-    end
-  end
-
-## custom methods ##
-  describe ":responder_token" do
-    its(:responder_token) { should eq nil }
-
-    it "should be set with #set_responder_token" do
-      @post.set_responder_token(user.id)
-      expect(@post.responder_token).to eq user.id
-    end
-  end
-
-  describe ":reset_responder_token" do
-    let(:post) { FactoryGirl.create(:post, responder_token: 1) }
-
-    it "should do as it's named" do
-      post.reset_responder_token
-      expect(post.responder_token).to be_nil
     end
   end
 end

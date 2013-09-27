@@ -45,6 +45,19 @@ class User < ActiveRecord::Base
       self[column] = User.new_remember_token
     end while User.exists?(column => self[column])
   end
+
+# State_machine tokens
+  def set_tokens(id)
+    self.token_id ||= id
+    self.token_timer ||= Time.zone.now
+    self.save!
+  end
+
+  def reset_tokens
+    self.token_id = nil
+    self.token_timer = nil
+    self.save!
+  end
   
   private
 

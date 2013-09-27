@@ -5,7 +5,7 @@ describe "ResponsePages" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
-  let!(:post) { FactoryGirl.create(:post) }
+  let!(:post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
   before { sign_in user }
 
   describe "index page" do
@@ -48,16 +48,24 @@ describe "ResponsePages" do
     it { should have_button("Respond") }
   end
 
-  describe "response creation" do
+  describe "creation" do
     before { visit root_path }
 
-    context "from one's own post" do
+    describe "from one's own post" do
       let!(:earlier_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
 
       it "should not occur" do
         click_button "Respond to a thought"
         expect(page).not_to have_content(earlier_post.content)
       end
+    end
+
+    it "should set tokens for user" do
+      expect(user.token_timer).to be_blank
+      click_button "Respond to a thought"
+      user.reload
+      expect(user.token_id).to eq post.id
+      expect(user.token_timer).to be_present
     end
 
     describe "with invalid information" do
@@ -82,29 +90,61 @@ describe "ResponsePages" do
       it "should create a response" do
         expect { click_button "Respond" }.to change(Response, :count).by(1)
       end
+
+      it "should reset user tokens" do
+        click_button "Respond"
+        user.reload
+        expect(user.token_timer).to be_blank
+        expect(user.token_id).to be_blank
+      end
     end
     
-    ## Response-User persistance ##
-    describe "should be consistent for a user for 24hours" do
+## Response-User persistance ##
+    describe "post-user persistance:" do
       before { click_button "Respond to a thought" }
       it { should have_content(post.content) }
 
-      context "with an earlier post in existence" do
+      describe "with an earlier post in existence" do
         let!(:post2) { FactoryGirl.create(:post, content: "blah", created_at: 5.minutes.ago) }
 
         it "the same post should persist upon returning to page" do
+          visit users_path
           visit root_path
           click_button "Respond to a thought"
           expect(page).to have_content(post.content)
         end
+
+        describe "after 24 hours" do
+          before do
+            user.token_timer = 24.hours.ago
+            user.save
+            visit users_path
+            visit root_path
+            click_button "Respond to a thought"
+          end
+
+          it "the same post should not persist" do
+            expect(page).not_to have_content(post.content)
+            expect(page).to have_content(post2.content)
+          end
+
+          describe "with only younger posts in existence" do
+            before do
+              post.created_at = 20.minutes.ago
+              post.save
+              visit users_path
+              visit root_path
+              click_button "Respond to a thought"
+              save_and_open_page
+            end
+
+#######  THIS SHOULD NOT BE PASSING ############
+            it "the same post should not persist" do
+              expect(page).not_to have_content(post.content)
+            end
+          end
+        end
       end
-    end
-
-    describe "after 24 hours" do
-      let!(:post2) { FactoryGirl.create(:post, content: "post2", created_at: 25.hours.ago, responder_token: user.id) }
-      before { click_button "Respond to a thought" }
-
-      it { should_not have_content(post2.content) }
     end
   end
 

@@ -7,12 +7,12 @@ class Post < ActiveRecord::Base
   default_scope -> { order('created_at ASC') }
 
   state_machine :state, initial: :unanswered do
-    after_transition on: :answer, do: [:send_response_email, :reset_responder_token]
+    after_transition on: :answer, do: [:send_response_email]
 
-# allows us to pass in arguments to the transition callback to define the user  
-    after_transition on: :accept do |post, transition|
-      post.set_responder_token(transition.args.first)
-    end
+## keep for reference!!  pass in arguments to the transition callback  
+    # after_transition on: :accept do |post, transition|
+    #   post.set_responder_token(transition.args.first)
+    # end
 
     event :accept do
       transition any => :pending
@@ -35,13 +35,9 @@ class Post < ActiveRecord::Base
     UserMailer.response_email(self.user).deliver
   end
 
-  def set_responder_token(id)
-    self.responder_token = id
-    save!
-  end
-
-  def reset_responder_token
-    self.responder_token = nil
-    save!
-  end
+## keep for reference!!  see above
+  # def set_responder_token(id)
+  #   self.responder_token = id
+  #   save!
+  # end
 end

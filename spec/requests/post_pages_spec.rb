@@ -68,12 +68,6 @@ describe "Post pages" do
       expect(post).to be_pending
     end
 
-    it "should set #responder_token for post" do
-      click_button "Respond to a thought"
-      post.reload
-      expect(post.responder_token).to eq user.id
-    end
-
     describe "with invalid information" do
       before { click_button "Respond to a thought" }
 
@@ -90,11 +84,10 @@ describe "Post pages" do
         fill_in 'response_content', with: "Lorem Ipsum"
       end
 
-      it "should update the state to 'answered' and reset responder_token" do
+      it "should update the state to 'answered'" do
         click_button "Respond"
         post.reload
         expect(post).to be_answered
-        expect(post.responder_token).to be_nil
       end
     end
   end
