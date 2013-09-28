@@ -1,7 +1,7 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: :destroy
-  after_action  :set_tokens, only: :new
+  # after_action  :set_tokens, only: :new
 
   def index
     @responses = Response.paginate(page: params[:page])
@@ -11,17 +11,18 @@ class ResponsesController < ApplicationController
     if current_user.token_id?
       if current_user.token_timer > 24.hours.ago      # 'greater-than' as in 'after'
         @post = Post.find(current_user.token_id)
-      else
-        @oldpost = Post.find(current_user.token_id)
-        expire_all(@oldpost)
+      else                                            # token_timer is expired:
+        @oldpost = Post.find(current_user.token_id)   
+        current_user.reset_tokens     ## before oldpost.expire! to ensure a different post
         @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
+        @oldpost.expire!
       end
     else
       @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
     end
     @author = @post.user
     @response = Response.new
-    @post.accept(current_user.id)
+    set_tokens(@post)
   end
 
   def create
@@ -50,13 +51,9 @@ class ResponsesController < ApplicationController
       params.require(:response).permit(:content, :post_id)
     end
 
-    def set_tokens
-      current_user.set_tokens(@post.id)
-    end
-
-    def expire_all(post)
-      post.expire!
-      current_user.reset_tokens
+    def set_tokens(post)
+      current_user.set_tokens(post.id)
+      post.accept!
     end
 
     def answer_all(post)
