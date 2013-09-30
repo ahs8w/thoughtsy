@@ -1,7 +1,6 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: :destroy
-  # after_action  :set_tokens, only: :new
 
   def index
     @responses = Response.paginate(page: params[:page])
@@ -13,12 +12,12 @@ class ResponsesController < ApplicationController
         @post = Post.find(current_user.token_id)
       else                                            # token_timer is expired:
         @oldpost = Post.find(current_user.token_id)   
-        current_user.reset_tokens     ## before oldpost.expire! to ensure a different post
-        @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
-        @oldpost.expire!
+        current_user.reset_tokens     
+        @post = Post.available(current_user).first
+        @oldpost.expire!            ## wait on :expire! to ensure a new post is selected
       end
     else
-      @post = Post.where("state == 'unanswered' AND user_id != ?", current_user.id).first
+      @post = Post.available(current_user).first
     end
     @author = @post.user
     @response = Response.new

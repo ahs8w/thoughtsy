@@ -37,7 +37,7 @@ describe "ResponsePages" do
   describe "new response page" do
     before do
       visit root_path
-      click_button "Respond to a thought"
+      click_button "Respond"
     end
 
     it { should have_content("Respond") }
@@ -55,21 +55,21 @@ describe "ResponsePages" do
       let!(:earlier_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
 
       it "should not occur" do
-        click_button "Respond to a thought"
+        click_button "Respond"
         expect(page).not_to have_content(earlier_post.content)
       end
     end
 
     it "should set tokens for user" do
       expect(user.token_timer).to be_blank
-      click_button "Respond to a thought"
+      click_button "Respond"
       user.reload
       expect(user.token_id).to eq post.id
       expect(user.token_timer).to be_present
     end
 
     describe "with invalid information" do
-      before { click_button "Respond to a thought" }
+      before { click_button "Respond" }
 
       it "should not create a response" do
         expect { click_button "Respond" }.not_to change(Response, :count)
@@ -83,7 +83,7 @@ describe "ResponsePages" do
 
     describe "with valid information" do
       before do
-        click_button "Respond to a thought"
+        click_button "Respond"
         fill_in 'response_content', with: "Lorem Ipsum"
       end
 
@@ -101,7 +101,7 @@ describe "ResponsePages" do
     
 ## Response-User persistance ##
     describe "post-user persistance:" do
-      before { click_button "Respond to a thought" }
+      before { click_button "Respond" }
       it { should have_content(post.content) }
 
       describe "with another post in existence" do
@@ -110,7 +110,7 @@ describe "ResponsePages" do
         it "the same post should persist upon returning to page" do
           visit users_path
           visit root_path
-          click_button "Respond to a thought"
+          click_button "Respond"
           expect(page).to have_content(post.content)
         end
 
@@ -120,7 +120,7 @@ describe "ResponsePages" do
             user.save
             visit users_path
             visit root_path
-            click_button "Respond to a thought"
+            click_button "Respond"
           end
 
           it "the same post should not persist" do
@@ -136,17 +136,12 @@ describe "ResponsePages" do
             end
 
             it "the user should not have same token_id" do
-              click_button "Respond to a thought"
+              click_button "Respond"
               user.reload
               expect(user.token_id).not_to eq post.id
             end
           end
         end
-      end
-
-      describe "with no other posts in existence" do
-        # 
-        # what should happen?
       end
     end
   end

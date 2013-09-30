@@ -20,6 +20,7 @@ describe "StaticPages" do
       it { should_not have_link("Account") }
       it { should_not have_link("Users") }
       it { should_not have_button("Post") }
+      it { should_not have_button("Respond to a thought") }
       it { should_not have_link("view my profile") }
       it { should have_link("Sign up now!") }
       it { should have_link("Sign in") }
@@ -55,6 +56,65 @@ describe "StaticPages" do
 
           it "should pluralize correctly" do
             expect(page).to have_content("3 posts")
+          end
+        end
+      end
+
+      describe "Response behavior" do
+
+        describe "with no token_timer" do
+
+          context "and no available posts" do
+
+            it { should_not have_button("Respond") }
+            it { should have_selector("aside#no_unanswered") }
+          end
+
+          context "and an available post" do
+            let!(:available) { FactoryGirl.create(:post) }
+            before { visit root_path }
+
+            it { should have_button("Respond") }
+          end
+        end
+
+        describe "with valid token_timer" do
+          let!(:token_response) { FactoryGirl.create(:post) }
+          before do
+            user.token_timer = 12.hours.ago
+            user.token_id = token_response.id
+            user.save
+            visit root_path
+          end
+
+          context "and no available posts" do
+
+            it { should have_button("Respond") }
+          end
+
+          context "and an available post" do
+            let!(:available) { FactoryGirl.create(:post) }
+
+            it { should have_content("until your response expires!") }
+          end
+        end
+
+        describe "with expired token_timer" do
+          before do
+            user.token_timer = 25.hours.ago
+            user.save
+            visit root_path
+          end
+
+          context "and no available posts" do
+            it { should have_selector("aside#no_unanswered") }
+          end
+
+          context "and an available post" do
+            let!(:available) { FactoryGirl.create(:post) }
+            before { visit root_path }
+            
+            it { should have_content("Your response expired") }
           end
         end
       end

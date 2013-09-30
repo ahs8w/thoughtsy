@@ -167,11 +167,29 @@ aside {
 }
 
 #respond_button {
-  padding-top: 80px;
-  .button_to {
+  position: relative;
+  top: 10px;
+  float: right;
+  form input {
+    padding: 16px 20px;
     margin-bottom: 0;
   }
-  position: fixed;
+}
+
+#expiration_message {
+  color: $grayLight;
+  text-align: center;
+  position: absolute;
+  float: right;
+  top: 65px;
+  padding: 0 15px;
+}
+
+#no_unanswered {
+  color: $grayLight;
+  position: relative;
+  top: 10px;
+  float: right;
 }
 
 .gravatar {

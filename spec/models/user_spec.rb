@@ -220,6 +220,12 @@ describe User do
     end
   end
 
+  describe "#timer_valid" do
+    before { @user.token_timer = 25.hours.ago }
+
+    its(:timer_valid) { should eq false }
+  end
+
 ## Password Reset ##
   describe "send password reset" do
     before { @user.save }       # all the tests work even without saving the user!!??  WHY??

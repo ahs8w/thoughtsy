@@ -1,0 +1,46 @@
+<!-- response is valid  -->
+<% if current_user.token_timer? && current_user.timer_valid %>
+  <aside id="respond_button">
+    <%= button_to "Post your response", new_response_path, class: "btn-large btn-warning", id: "Respond", method: :get %>
+    <small id="expiration_message">
+      <% expire_time = current_user.token_timer + 24.hours %>
+      <%= "#{distance_of_time_in_words(Time.zone.now, expire_time)} until your response expires!" %>
+    </small>
+  </aside>
+
+<!-- response is expired -->
+<% elsif current_user.token_timer? && !current_user.timer_valid %>
+
+  <!-- other posts are available -->
+  <% if Post.available(current_user).size > 0 %>
+    <aside id="respond_button">
+      <%= button_to "See a new thought", new_response_path, class: "btn-large btn-danger", id: "Respond", method: :get %>
+      <small id="expiration_message">
+        <% expire_time = current_user.token_timer + 24.hours %>
+        <%= "Your response expired #{distance_of_time_in_words_to_now(Time.zone.now, expire_time)} ago.  Click the button to get another thought." %>
+      </small>
+    </aside>
+
+  <!-- other posts are not available -->  
+  <% else %>
+    <aside class="span2" id="no_unanswered">
+      <small>There are currently no unanswered posts available.  Get posting!!</small>
+    </aside>
+  <% end %>
+
+<!-- user has no tokens -->
+<% else %>
+
+  <!-- other posts are available -->
+  <% if Post.available(current_user).size > 0 %>
+    <aside id="respond_button">
+      <%= button_to "See a new thought", new_response_path, class: "btn-large btn-primary", id: "Respond", method: :get %>
+    </aside>
+
+  <!-- other posts are not available -->
+  <% else %>
+    <aside class="span2" id="no_unanswered">
+      <small>There are currently no unanswered posts available.  Get posting!!</small>
+    </aside>
+  <% end %>
+<% end %>

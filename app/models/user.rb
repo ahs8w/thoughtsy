@@ -58,6 +58,10 @@ class User < ActiveRecord::Base
     self.token_timer = nil
     self.save!
   end
+
+  def timer_valid
+    self.token_timer > 24.hours.ago if self.token_timer?
+  end
   
   private
 

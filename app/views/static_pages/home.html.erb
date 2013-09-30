@@ -2,6 +2,7 @@
 
   <div class="span10">
     <%= render 'shared/user_info', user: current_user if signed_in? %>
+    <%= render 'shared/respond_button' if signed_in? %>
     <div class="center hero-unit">
       <h1>Thoughtsy</h1>
       <p class="lead">thoughtful exchanges with total strangers</p>

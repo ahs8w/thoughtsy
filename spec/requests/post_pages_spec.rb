@@ -63,13 +63,13 @@ describe "Post pages" do
 
     it "should update the state of corresponding post to 'pending'" do
       expect(post).to be_unanswered
-      click_button "Respond to a thought"
+      click_button "Respond"
       post.reload
       expect(post).to be_pending
     end
 
     describe "with invalid information" do
-      before { click_button "Respond to a thought" }
+      before { click_button "Respond" }
 
       it "should not change the post state" do
         click_button "Respond"
@@ -80,7 +80,7 @@ describe "Post pages" do
 
     describe "with valid information" do
       before do
-        click_button "Respond to a thought"
+        click_button "Respond"
         fill_in 'response_content', with: "Lorem Ipsum"
       end
 

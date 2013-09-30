@@ -5,6 +5,7 @@ class Post < ActiveRecord::Base
   validates_presence_of :user_id, :content
 
   default_scope -> { order('created_at ASC') }
+  scope :available, ->(user) { where("state == 'unanswered' AND user_id != ?", user.id) }
 
   state_machine :state, initial: :unanswered do
     after_transition on: :answer, do: [:send_response_email]
