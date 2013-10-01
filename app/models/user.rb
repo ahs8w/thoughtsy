@@ -50,17 +50,21 @@ class User < ActiveRecord::Base
   def set_tokens(id)
     self.token_id ||= id
     self.token_timer ||= Time.zone.now
-    self.save!
+    save!
   end
 
   def reset_tokens
-    self.token_id = nil
-    self.token_timer = nil
-    self.save!
+    self.update_attribute(:token_id, nil)
+    self.update_attribute(:token_timer, nil)
+    # self.save!      #this sets off an error in the post form when token_timer > 24.hours.ago??
   end
 
   def timer_valid
     self.token_timer > 24.hours.ago if self.token_timer?
+  end
+
+  def posts_available
+    Post.available(self).size > 0
   end
   
   private

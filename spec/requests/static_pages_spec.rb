@@ -60,7 +60,8 @@ describe "StaticPages" do
         end
       end
 
-      describe "Response behavior" do
+## views/shared/_respond_button ##
+      describe "Response button behavior" do
 
         describe "with no token_timer" do
 
@@ -87,27 +88,21 @@ describe "StaticPages" do
             visit root_path
           end
 
-          context "and no available posts" do
-
-            it { should have_button("Respond") }
-          end
-
-          context "and an available post" do
-            let!(:available) { FactoryGirl.create(:post) }
-
-            it { should have_content("until your response expires!") }
-          end
+          it { should have_button("Respond") }
+          it { should have_content("until your response expires!") }
         end
 
         describe "with expired token_timer" do
+          let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
           before do
             user.token_timer = 25.hours.ago
+            user.token_id = token_response.id
             user.save
             visit root_path
           end
 
           context "and no available posts" do
-            it { should have_selector("aside#no_unanswered") }
+            it { should have_content("no unanswered posts available") }
           end
 
           context "and an available post" do
@@ -121,6 +116,7 @@ describe "StaticPages" do
     end
   end
 
+## Auxillary Pages ##
   describe "About page" do
     before { visit about_path }
 

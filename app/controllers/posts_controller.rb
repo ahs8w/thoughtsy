@@ -6,6 +6,13 @@ class PostsController < ApplicationController
     @posts = Post.where(state: ["unanswered", "pending"]).paginate(page: params[:page])
   end
 
+  def show
+    @post = Post.find(params[:id])
+    @author = @post.user
+    @response = Response.new
+    set_tokens(@post)
+  end
+
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
@@ -35,8 +42,12 @@ class PostsController < ApplicationController
 
 
   private
-
     def post_params
       params.require(:post).permit(:content)
+    end
+
+    def set_tokens(post)
+      current_user.set_tokens(post.id)
+      post.accept!
     end
 end

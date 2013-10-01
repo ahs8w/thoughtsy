@@ -34,21 +34,7 @@ describe "ResponsePages" do
     # end  
   end
 
-  describe "new response page" do
-    before do
-      visit root_path
-      click_button "Respond"
-    end
-
-    it { should have_content("Respond") }
-    it { should have_title("Respond") }
-    it { should have_content(post.user.username) }
-    it { should have_content(post.content) }
-    it { should have_field('response_content') }
-    it { should have_button("Respond") }
-  end
-
-  describe "creation" do
+  describe "response creation" do
     before { visit root_path }
 
     describe "from one's own post" do
@@ -60,13 +46,13 @@ describe "ResponsePages" do
       end
     end
 
-    it "should set tokens for user" do
-      expect(user.token_timer).to be_blank
-      click_button "Respond"
-      user.reload
-      expect(user.token_id).to eq post.id
-      expect(user.token_timer).to be_present
-    end
+    # it "should set tokens for user" do
+    #   expect(user.token_timer).to be_blank
+    #   click_button "Respond"
+    #   user.reload
+    #   expect(user.token_id).to eq post.id
+    #   expect(user.token_timer).to be_present
+    # end
 
     describe "with invalid information" do
       before { click_button "Respond" }
@@ -98,53 +84,53 @@ describe "ResponsePages" do
         expect(user.token_id).to be_blank
       end
     end
-    
-## Response-User persistance ##
-    describe "post-user persistance:" do
-      before { click_button "Respond" }
-      it { should have_content(post.content) }
-
-      describe "with another post in existence" do
-        let!(:post2) { FactoryGirl.create(:post, content: "blah", created_at: 5.minutes.ago) }
-
-        it "the same post should persist upon returning to page" do
-          visit users_path
-          visit root_path
-          click_button "Respond"
-          expect(page).to have_content(post.content)
-        end
-
-        describe "after 24 hours" do
-          before do
-            user.token_timer = 24.hours.ago
-            user.save
-            visit users_path
-            visit root_path
-            click_button "Respond"
-          end
-
-          it "the same post should not persist" do
-            expect(page).not_to have_content(post.content)
-            expect(page).to have_content(post2.content)
-          end
-
-          describe "with only younger posts in existence" do
-            before do
-              post.created_at = 2.days.ago
-              post.save
-              visit root_path
-            end
-
-            it "the user should not have same token_id" do
-              click_button "Respond"
-              user.reload
-              expect(user.token_id).not_to eq post.id
-            end
-          end
-        end
-      end
-    end
   end
+  
+# ## Response-User persistance ##
+#     describe "post-user persistance:" do
+#       before { click_button "Respond" }
+#       it { should have_content(post.content) }
+
+#       describe "with another post in existence" do
+#         let!(:post2) { FactoryGirl.create(:post, content: "blah", created_at: 5.minutes.ago) }
+
+#         it "the same post should persist upon returning to page" do
+#           visit users_path
+#           visit root_path
+#           click_button "Respond"
+#           expect(page).to have_content(post.content)
+#         end
+
+#         describe "after 24 hours" do
+#           before do
+#             user.token_timer = 24.hours.ago
+#             user.save
+#             visit users_path
+#             visit root_path
+#             click_button "Respond"
+#           end
+
+#           it "the same post should not persist" do
+#             expect(page).not_to have_content(post.content)
+#             expect(page).to have_content(post2.content)
+#           end
+
+#           describe "with only younger posts in existence" do
+#             before do
+#               post.created_at = 2.days.ago
+#               post.save
+#               visit root_path
+#             end
+
+#             it "the user should not have same token_id" do
+#               click_button "Respond"
+#               user.reload
+#               expect(user.token_id).not_to eq post.id
+#             end
+#           end
+#         end
+#       end
+#     end
 
   describe "delete links:" do
     let!(:response) { FactoryGirl.create(:response) }

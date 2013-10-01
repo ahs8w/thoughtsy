@@ -221,9 +221,46 @@ describe User do
   end
 
   describe "#timer_valid" do
-    before { @user.token_timer = 25.hours.ago }
+    before { @user.save }
 
-    its(:timer_valid) { should eq false }
+    context "under 24 hours" do
+      it "equals true" do
+        @user.token_timer = 12.hours.ago
+        @user.save
+        expect(@user.timer_valid).to eq true
+      end
+    end
+
+    context "after 24 hours" do
+      it "equals false" do
+        @user.token_timer = 25.hours.ago
+        @user.save
+        expect(@user.timer_valid).to eq false
+      end
+    end
+  end
+
+  describe "#posts_available" do
+    before { @user.save }
+    context "with no unanswered posts" do
+      it "equals false" do
+        expect(@user.posts_available).to eq false
+      end
+    end
+    context "with unowned unanswered posts" do
+      let!(:post) { FactoryGirl.create(:post, state: 'unanswered') }
+
+      it "equals true" do
+        expect(@user.posts_available).to eq true
+      end
+    end
+    context "with own unanswered posts" do
+      let!(:post) { FactoryGirl.create(:post, user_id: @user.id, state: 'unanswered') }
+
+      it "equals false" do
+        expect(@user.posts_available).to eq false
+      end
+    end 
   end
 
 ## Password Reset ##
