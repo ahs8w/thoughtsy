@@ -1,0 +1,17 @@
+<% provide(:page_title, "Response") %>
+
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <div class="well" id="thought">
+      <%= render partial: "shared/thought", object: @post %>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <div class="well">
+      <%= render partial: "shared/thought", object: @response %>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,11 @@ class ResponsesController < ApplicationController
     @responses = Response.paginate(page: params[:page])
   end
 
+  def show
+    @response = Response.find(params[:id])
+    @post = @response.post
+  end
+
   def create
     @response = current_user.responses.build(response_params)
     @post = @response.post
@@ -15,7 +20,7 @@ class ResponsesController < ApplicationController
       redirect_to posts_path
     else
       @author = @post.user    # render doesn't instantiate any variables (on error; need @author for gravatar)
-      render 'new'
+      render 'posts/show'
     end
   end
 

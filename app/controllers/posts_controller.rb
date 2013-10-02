@@ -8,7 +8,6 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    @author = @post.user
     @response = Response.new
     set_tokens(@post)
   end

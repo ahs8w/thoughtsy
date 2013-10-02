@@ -112,6 +112,11 @@ describe "Authentication  : " do
           before { visit posts_path }
           it { should have_title('Sign in') }
         end
+
+        describe "visiting the show action" do
+          before { get post_path(1) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
       end
 
       describe "in the Responses Controller" do
@@ -127,8 +132,8 @@ describe "Authentication  : " do
           specify { expect(response).to redirect_to(signin_path) }
         end
 
-        describe "visiting the new action" do
-          before { get new_response_path }
+        describe "visiting the show action" do
+          before { get response_path(1) }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end

@@ -63,7 +63,6 @@ describe "Post pages" do
       click_button "Respond"
     end
 
-    it { should have_content("Respond") }
     it { should have_title("Respond") }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }

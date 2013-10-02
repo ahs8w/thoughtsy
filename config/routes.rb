@@ -3,7 +3,7 @@ Thoughtsy::Application.routes.draw do
   resources :users
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     except: [:new, :update, :edit]
-  resources :responses, except: [:update, :edit]
+  resources :responses, except: [:new, :update, :edit]
   resources :password_resets, except: [:show, :index]
 
 

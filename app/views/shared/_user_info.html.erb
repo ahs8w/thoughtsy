@@ -11,6 +11,7 @@
       </span>
       <span id="post_count">
         <%= pluralize(user.posts.count, "post") %>
+        | <%= pluralize(user.responses.count, "response") %>
       </span>
     <% end %>
 
