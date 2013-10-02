@@ -1,18 +1,32 @@
 class StaticPagesController < ApplicationController
+  include StaticPagesHelper
+  after_action :rollback_tokens, only: :home
+
   def home
     if signed_in?
       @post = current_user.posts.build
-      if current_user.token_id?
-        if current_user.timer_valid                     # token_timer is valid:
+      if current_user.token_id?                                   # token_id exists
+        if current_user.timer_valid                               #   timer valid
+          output_3
           @token_post = Post.find(current_user.token_id)
-        else                                            # token_timer is expired:
-          @oldpost = Post.find(current_user.token_id)   
-          current_user.reset_tokens     
+        else                                                      #   timer expired   
+          if current_user.posts_available                         #     posts available
+            output_4
+          else                                                    #     not available
+            output_5
+          end
+          @oldpost = Post.find(current_user.token_id)
+          # can't reset_tokens here because it sets off Post validation error
           @token_post = Post.available(current_user).first
-          @oldpost.expire!            ## wait on :expire! to ensure a new post is selected
+          @oldpost.expire!
         end
-      else
+      else                                                        # no token_id
         @token_post = Post.available(current_user).first
+        if current_user.posts_available                           #     posts available
+          output_2
+        else                                                      #     not available
+          output_1
+        end
       end
     end
   end
@@ -25,4 +39,9 @@ class StaticPagesController < ApplicationController
 
   def contact
   end
+
+  private
+    def rollback_tokens
+      current_user.reset_tokens if signed_in? && current_user.token_id? && !current_user.timer_valid
+    end
 end

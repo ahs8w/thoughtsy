@@ -1,61 +1,9 @@
 <aside id="respond_button">
-  <%= button_to button_text, post_path(@token_post), 
-  class: "btn-large btn-button_class", id: "Respond", method: :get %>
+  <% if @button_text %>
+    <%= button_to @button_text, post_path(@token_post), 
+    class: "btn-large btn-#{@button_class}", id: "Respond", method: :get %>
+  <% end %>
   <small id="expiration_message">
-    <%= small_message %>
+    <%= @small_message if @small_message %>
   </small>
 </aside>
-
-
-
-
-
-
-
-
-<!-- response is valid  3 -->
-<% if current_user.token_timer? && current_user.timer_valid %>
-  <aside id="respond_button">
-    <%= button_to "Post your response", post_path(@token_post), class: "btn-large btn-warning", id: "Respond", method: :get %>
-    <small id="expiration_message">
-      <% expire_time = current_user.token_timer + 24.hours %>
-      <%= "#{distance_of_time_in_words(Time.zone.now, expire_time)} until your response expires!" %>
-    </small>
-  </aside>
-
-<!-- response is expired -->
-<% elsif current_user.token_timer? && !current_user.timer_valid %>
-
-  <!-- other posts are available  4 -->
-  <% if Post.available(current_user).size > 0 %>
-    <aside id="respond_button">
-      <%= button_to "See a new thought", post_path(@token_post), class: "btn-large btn-danger", id: "Respond", method: :get %>
-      <small id="expiration_message">
-        <% expire_time = current_user.token_timer + 24.hours %>
-        <%= "Your response expired #{distance_of_time_in_words_to_now(Time.zone.now, expire_time)} ago.  Click the button to get another thought." %>
-      </small>
-    </aside>
-
-  <!-- other posts are not available  5 -->  
-  <% else %>
-    <aside class="span2" id="no_unanswered">
-      <small>There are currently no unanswered posts available.  Get posting!!</small>
-    </aside>
-  <% end %>
-
-<!-- user has no tokens -->
-<% else %>
-
-  <!-- other posts are available  2 -->
-  <% if Post.available(current_user).size > 0 %>
-    <aside id="respond_button">
-      <%= button_to "See a new thought", post_path(@token_post), class: "btn-large btn-primary", id: "Respond", method: :get %>
-    </aside>
-
-  <!-- other posts are not available  1 -->
-  <% else %>
-    <aside class="span2" id="no_unanswered">
-      <small>There are currently no unanswered posts available.  Get posting!!</small>
-    </aside>
-  <% end %>
-<% end %>

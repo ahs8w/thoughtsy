@@ -68,7 +68,7 @@ describe "StaticPages" do
           context "and no available posts" do
 
             it { should_not have_button("Respond") }
-            it { should have_selector("aside#no_unanswered") }
+            it { should have_content("currently no unanswered posts available") }
           end
 
           context "and an available post" do
@@ -102,15 +102,23 @@ describe "StaticPages" do
           end
 
           context "and no available posts" do
-            it { should have_content("no unanswered posts available") }
-          end
-
-          context "and an available post" do
-            let!(:available) { FactoryGirl.create(:post) }
-            before { visit root_path }
-            
             it { should have_content("Your response expired") }
+            it { should_not have_button("Respond") }
           end
+        end
+
+        describe "and an available post" do
+          let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
+          let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
+          before do
+            user.token_timer = 25.hours.ago
+            user.token_id = token_response.id
+            user.save
+            visit root_path
+          end
+          
+          it { should have_content("Click the button to get another thought.") }
+          it { should have_button("See a new thought") }
         end
       end
     end
