@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts
   has_one :response
+  has_many :ratings, as: :rateable, dependent: :destroy
 
   validates_presence_of :user_id, :content
 

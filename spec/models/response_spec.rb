@@ -17,6 +17,7 @@ describe Response do
   it { should respond_to(:post_id) }
   it { should respond_to(:post) }
   its(:post) { should eq post }
+  it { should respond_to(:ratings) }
 
   it { should be_valid }
 

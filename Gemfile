@@ -20,13 +20,13 @@ group :development, :test do
   gem 'guard-livereload'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'factory_girl_rails'  # moved it here to be able to run it in dev console
 end
 
 group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'libnotify'
-  gem 'factory_girl_rails'
   gem 'database_cleaner', '1.0.1'
   gem 'launchy'
 end

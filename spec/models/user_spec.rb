@@ -21,6 +21,7 @@ describe User do
   it { should respond_to(:responses) }
   it { should respond_to(:token_id?) }
   it { should respond_to(:token_timer?) }
+  it { should respond_to(:ratings) }
 
   it { should be_valid }
   it { should_not be_admin }
