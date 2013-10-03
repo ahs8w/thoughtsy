@@ -1,6 +1,6 @@
 <div class="form-rating">
   <div class="btn-group" data-toggle="buttons-radio">
-    <%= form_for (rating_ballot) do |f| %>
+    <%= form_for [@rateable, current_user.ratings.new] do |f| %>
 
       <%= f.label("value_1", content_tag(:span, '1'), {:class=>"rating", :id=>"1"}) %>
         <%= radio_button_tag("rating[value]", 1, current_user_rating == 1, :class => 'rating_button') %>
@@ -21,3 +21,66 @@
     <% end %>
   </div>
 </div>
+
+
+<%= number_with_precision(asset.rating, 1) %>/5 Stars<br>
+<ul class='star-rating'>    
+  <li class='current-rating' style='width:<%= (asset.rating * 30).to_i -%>px;'>          
+    Currently <%= number_with_precision(asset.rating, 1) %>/5 Stars.        
+  </li>    
+  <li>        
+    <%= link_to_remote( "1", {:url => { :controller => "rating_demo",            
+      :action => "rate", :id => asset.id, :rating => 1}},            
+      :class => 'one-star', :name => '1 star out of 5') %>    
+  </li>    
+  <li>        
+    <%= link_to_remote( "2", {:url => { :controller => "rating_demo",            
+      :action => "rate", :id => asset.id, :rating => 2}},            
+      :class => 'two-stars', :name => '2 stars out of 5') %>    
+  </li>    
+  <li>        
+    <%= link_to_remote( "3", {:url => { :controller => "rating_demo",            
+      :action => "rate", :id => asset.id, :rating => 3}},            
+      :class => 'three-stars', :name => '3 stars out of 5') %>    
+  </li>    
+  <li>        
+    <%= link_to_remote( "4", {:url => { :controller => "rating_demo",            
+      :action => "rate", :id => asset.id, :rating => 4}},            
+      :class => 'four-stars', :name => '4 stars out of 5') %>    
+  </li>    
+  <li>        
+    <%= link_to_remote( "5", {:url => { :controller => "rating_demo",            
+      :action => "rate", :id => asset.id, :rating => 5}},            
+      :class => 'five-stars', :name => '5 stars out of 5') %>    
+  </li>
+</ul>
+
+
+
+<ul class='star-rating'>
+
+  <li class='current-rating'>Currently 3.5/5 Stars.</li>
+
+  <li><a href='#' title='1 star out of 5' class='one-star'>1</a></li>
+
+  <li><a href='#' title='2 stars out of 5' class='two-stars'>2</a></li>
+
+  <li><a href='#' title='3 stars out of 5' class='three-stars'>3</a></li>
+
+  <li><a href='#' title='4 stars out of 5' class='four-stars'>4</a></li>
+
+  <li><a href='#' title='5 stars out of 5' class='five-stars'>5</a></li>
+
+</ul>
+
+
+<%= ratings_for @article, :wrap => false %>
+  <ul class="ajaxful-rating">
+    <li class="current-rating" style="width: 60%;">3</li>
+    <li><%= link_to_remote 1, :url => rate_article_path(@article, :stars => 1), :method => :post, :html => {:class => 'stars-1', :title => '1 star out of 5'} %></li>
+    <li><%= link_to_remote 2, :url => rate_article_path(@article, :stars => 2), :method => :post, :html => {:class => 'stars-2', :title => '2 stars out of 5'} %></li>
+    <li><%= link_to_remote 3, :url => rate_article_path(@article, :stars => 3), :method => :post, :html => {:class => 'stars-3', :title => '3 stars out of 5'} %></li>
+    <li><%= link_to_remote 4, :url => rate_article_path(@article, :stars => 4), :method => :post, :html => {:class => 'stars-4', :title => '4 stars out of 5'} %></li>
+    <li><%= link_to_remote 5, :url => rate_article_path(@article, :stars => 5), :method => :post, :html => {:class => 'stars-5', :title => '5 stars out of 5'} %></li>
+  </ul>
+<% end %>

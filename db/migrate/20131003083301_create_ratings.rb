@@ -4,7 +4,7 @@ class CreateRatings < ActiveRecord::Migration
       t.integer :user_id
       t.integer :rateable_id
       t.string :rateable_type, limit: 20
-      t.integer :value
+      t.integer :value, default: 0
 
       t.timestamps
     end

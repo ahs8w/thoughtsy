@@ -5,7 +5,7 @@ Thoughtsy::Application.routes.draw do
   resources :posts,     except: [:new, :update, :edit]
   resources :responses, except: [:new, :update, :edit]
   resources :password_resets, except: [:show, :index]
-  resources :ratings,   only: :create
+  resources :ratings,   only: :update
 
 
   root 'static_pages#home'

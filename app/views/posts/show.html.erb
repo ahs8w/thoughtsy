@@ -18,6 +18,12 @@
   </div>
 </div>
 
+<p>Averate rating</p>
+<div id="star"></div>
+
+<p>Your rating</p>
+<div id="user_star"></div>
+
 <div id="response">
   <%= form_for @response do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
@@ -26,3 +32,23 @@
     <%= f.submit "Respond", class: "btn btn-large btn-success pull-right" %>
   <% end %>
 </div>
+
+<script>
+  $('#star').raty({
+    readOnly: true,
+    value: <%= @rateable.average_rating %>,
+    path: '/assets'
+  });
+
+  $('#user_star').raty({
+    value: <%= @rating.value %>,
+    path: '/assets',
+    click: function(value, evt) {
+      $.ajax({
+        url: '/ratings/' + <%= @rating.id %>,
+        type: 'PATCH',
+        data: { value: value }
+      });
+    }
+  });
+</script>

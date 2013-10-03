@@ -13,15 +13,6 @@ FactoryGirl.define do
   factory :post do
     sequence(:content) { |n| "Lorem Ipsum post#{n}" } 
     user               # ensures parent element is created at same time; show association with user object
-    state "unanswered"
-
-    factory :pending do
-      state 'pending'
-    end
-
-    factory :answered do
-      state 'answered'
-    end
   end
 
   factory :response do

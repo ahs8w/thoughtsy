@@ -23,6 +23,7 @@ describe "Post pages" do
 
     describe "order of posts" do
       let!(:older_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
+      before { visit queue_path }
 
       it "should have the right post in the right order" do
         expect(first('tr')).to have_content(older_post.content)
@@ -37,7 +38,8 @@ describe "Post pages" do
     end
 
     describe "should include pending posts" do
-      let!(:pending) { FactoryGirl.create(:pending) }
+      let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
+      before { visit queue_path }
 
       it { should have_content(pending.content) }
     end

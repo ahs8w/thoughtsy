@@ -8,7 +8,12 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
+    @rateable = @post
     @response = Response.new
+    if @rating = Rating.where(rateable_id: @post.id, rateable_type: 'Post', user_id: current_user.id).first
+    else
+      @rating = Rating.create(rateable_id: @post.id, rateable_type: 'Post', user_id: current_user.id, value: 0)
+    end
     set_tokens(@post)
   end
 
