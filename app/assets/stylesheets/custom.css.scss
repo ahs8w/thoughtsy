@@ -43,6 +43,19 @@ textarea {
   margin: 0;
 }
 
+/* rating form behavior */
+form.new_rating {
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="submit"] {
+    display: none;
+  }
+  p {
+    text-align: center;
+  }
+}
+
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {

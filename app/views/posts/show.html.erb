@@ -5,6 +5,7 @@
     <div class="well" id="thought">
       <%= render partial: "shared/thought", object: @post %>
     </div>
+    <%= render 'ratings/form' %>
   </div>
   <div class="span5">
     <div class="well" id="time_explanation">
@@ -18,37 +19,4 @@
   </div>
 </div>
 
-<p>Averate rating</p>
-<div id="star"></div>
-
-<p>Your rating</p>
-<div id="user_star"></div>
-
-<div id="response">
-  <%= form_for @response do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-    <%= f.text_area :content, placeholder: "your response..." %>
-    <%= f.hidden_field :post_id, value: @post.id %>
-    <%= f.submit "Respond", class: "btn btn-large btn-success pull-right" %>
-  <% end %>
-</div>
-
-<script>
-  $('#star').raty({
-    readOnly: true,
-    value: <%= @rateable.average_rating %>,
-    path: '/assets'
-  });
-
-  $('#user_star').raty({
-    value: <%= @rating.value %>,
-    path: '/assets',
-    click: function(value, evt) {
-      $.ajax({
-        url: '/ratings/' + <%= @rating.id %>,
-        type: 'PATCH',
-        data: { value: value }
-      });
-    }
-  });
-</script>
+<%= render 'responses/form' %>

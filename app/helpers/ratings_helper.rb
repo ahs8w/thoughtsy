@@ -1,30 +1,19 @@
 module RatingsHelper
 
-  def rating_ballot
-    if @rating = current_user.ratings.where("rateable_type = ? AND rateable_id = ?", 
-                                            params[:controller].classify, params[:id])
-      @rating
-    else
-      @rating = current_user.ratings.new
-      @rating
-    end
-  end
-  # checks for existing rating from current user and returns it or creates a new rating for that user
-
-  # def current_user_rating
-  #   if @rating = current_user.ratings.where("rateable_type = ? AND rateable_id = ?", 
-  #                                           params[:controller].classify, params[:id])
-  #     @rating.value
-  #   else
-  #     'N/A'
-  #   end
-  # end
-
   def current_user_rating
     if @rating = current_user.ratings.find_by_rateable_id_and_rateable_type(params[:id], params[:controller].classify)
-      @rating.value 
+      @rating.human_value 
     else
       'N/A'
+    end
+  end
+
+  def human_value
+    case
+      when '1' then "uninteresting"
+      when '2' then "average"
+      when '3' then "thought provoking"
+      when '4' then "brilliant!"
     end
   end
 

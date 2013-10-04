@@ -6,27 +6,18 @@ class RatingsController < ApplicationController
   #   if current_user.id == @rateable.user_id
   #     redirect_to parent_url, alert: "You cannot rate your own thought"
   #   else
-  #     @rating = @rateable.ratings.build(rating_params)
-  #     if @rating.save
-  #       flash.now[:success] = "Rating saved."
-  #       respond_to do |format|
-  #         format.html { redirect_to parent_url }
-  #         format.js
-  #       end
-  #     else
-  #       respond_to do |format|
-  #         format.html { redirect_to parent_url, alert: "Aack! Something went awry." }
-  #         format.js
-  #       end
-  #     end
-  #   end
-  # end
-
-  def update
-    @rating = Rating.find(params[:id])
-    @rateable = @rating.rateable
-    if @rating.update_attributes(value: params[:value])
+  
+  def create
+    @rating = current_user.ratings.build(rating_params)
+    if @rating.save
+      flash.now[:success] = "Rating saved."
       respond_to do |format|
+        format.html { redirect_to :back }
+        format.js { flash.now[:success] = "Rating saved." }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to :back, alert: "Aack! Something went awry" }
         format.js
       end
     end
@@ -42,7 +33,7 @@ class RatingsController < ApplicationController
     end
 
     def rating_params
-      params.require(:rating).permit(:value)
+      params.require(:rating).permit(:rateable_id, :rateable_type, :value)
     end
 
 end

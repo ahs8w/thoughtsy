@@ -37,9 +37,6 @@ class Post < ActiveRecord::Base
     UserMailer.response_email(self.user).deliver
   end
 
-  def average_rating
-    ratings.sum(:value) / ratings.size
-  end
 ## keep for reference!!  see above
   # def set_responder_token(id)
   #   self.responder_token = id
