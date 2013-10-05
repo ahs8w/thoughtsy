@@ -5,6 +5,7 @@ class Response < ActiveRecord::Base
   belongs_to :post                               # must be on two seperate lines -> undefined method 'arity'
   
   has_many :ratings, as: :rateable, dependent: :destroy
+  has_many :raters, through: :ratings, source: :user
 
   default_scope -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
 end

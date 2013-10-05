@@ -8,19 +8,24 @@ class RatingsController < ApplicationController
   #   else
   
   def create
-    @rating = current_user.ratings.build(rating_params)
-    if @rating.save
-      flash.now[:success] = "Rating saved."
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js { flash.now[:success] = "Rating saved." }
+    # @rateable = Post.find(params[:id])
+    # if current_user != @rateable.raters.first
+      @rating = current_user.ratings.build(rating_params)
+      if @rating.save
+        flash.now[:success] = "Rating saved."
+        respond_to do |format|
+          format.html { redirect_to :back }
+          format.js { flash.now[:success] = "Rating saved." }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to :back, alert: "Aack! Something went awry" }
+          format.js
+        end
       end
-    else
-      respond_to do |format|
-        format.html { redirect_to :back, alert: "Aack! Something went awry" }
-        format.js
-      end
-    end
+    # else
+    #   redirect_to :back, notice: "You have already rated this thought."
+    # end
   end
 
   private

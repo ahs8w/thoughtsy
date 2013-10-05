@@ -67,6 +67,7 @@ describe "ResponsePages" do
 
       it "should create a response" do
         expect { click_button "Respond" }.to change(Response, :count).by(1)
+        expect(page).to have_title("Thoughtsy")
       end
 
       it "should reset user tokens" do
@@ -123,5 +124,6 @@ describe "ResponsePages" do
     it { should have_content(response.user.username) }
     it { should have_content(response.post.user.username) }
     it { should have_content(response.post.content) }
+    it { should have_selector("div#rating_form") }
   end
 end

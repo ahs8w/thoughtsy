@@ -16,6 +16,7 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:ratings) }
+  it { should respond_to(:raters) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 

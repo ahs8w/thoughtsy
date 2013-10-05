@@ -8,6 +8,8 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
+    @rateable = @post
+    @rating = Rating.new
     @response = Response.new
     set_tokens(@post)
   end

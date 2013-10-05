@@ -1,22 +1,28 @@
-<% content_for(:scripts) do %>
-  <%= javascript_include_tag 'rating_form' %>
-<% end %>
-
-<div id="rating_form">
-  <%= form_for Rating.new, :remote => true do |f| %>
-    <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-    <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
-    <p>
-      <%= f.radio_button :value, '1' %>
-      <%= f.label :value, "uninteresting", :value => '1', class: "btn btn-inverse" %>
-      <%= f.radio_button :value, '2' %>
-      <%= f.label :value, "average", :value => '2', class: "btn btn-inverse" %>
-      <%= f.radio_button :value, '3' %>
-      <%= f.label :value, "thought provoking", :value => '3', class: "btn btn-inverse" %>
-      <%= f.radio_button :value, '4' %>
-      <%= f.label :value, "brilliant!", :value => '4', class: "btn btn-inverse" %>
-
-      <%= f.submit "Submit", class: "btn btn-primary" %>
-    </p>
+<% if !@rateable.ratings.empty? && @rateable.raters.first == current_user %>
+  <div>
+    <p class="center">You rated this article: <%= current_user_rating %></p>
+  </div>
+<% else %>
+  <% content_for(:scripts) do %>
+    <%= javascript_include_tag 'rating_form' %>
   <% end %>
-</div>
+
+  <div id="rating_form">
+    <%= form_for(@rating, remote: true) do |f| %>
+      <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
+      <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+      <p>
+        <%= f.radio_button :value, '1' %>
+        <%= f.label :value, "uninteresting", :value => '1', class: "btn btn-inverse" %>
+        <%= f.radio_button :value, '2' %>
+        <%= f.label :value, "average", :value => '2', class: "btn btn-inverse" %>
+        <%= f.radio_button :value, '3' %>
+        <%= f.label :value, "thought provoking", :value => '3', class: "btn btn-inverse" %>
+        <%= f.radio_button :value, '4' %>
+        <%= f.label :value, "brilliant!", :value => '4', class: "btn btn-inverse" %>
+
+        <%= f.submit "Submit", class: "btn btn-primary" %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

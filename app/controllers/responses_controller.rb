@@ -8,6 +8,8 @@ class ResponsesController < ApplicationController
 
   def show
     @response = Response.find(params[:id])
+    @rateable = @response
+    @rating = Rating.new
     @post = @response.post
   end
 
@@ -17,9 +19,11 @@ class ResponsesController < ApplicationController
     if @response.save
       answer_all(@post)
       flash[:success] = "Response sent!"
-      redirect_to posts_path
+      redirect_to root_path
     else
       @author = @post.user    # render doesn't instantiate any variables (on error; need @author for gravatar)
+      @rateable = @post
+      @rating = Rating.new
       render 'posts/show'
     end
   end
