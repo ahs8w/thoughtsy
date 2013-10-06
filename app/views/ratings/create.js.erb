@@ -1,1 +1,12 @@
-$('#rating_form').html("<%= escape_javascript(render('ratings/rating')) %>");
+var flash = $('#js_flash_messages');
+var rating = $('#rating_form');
+
+<% if @rating.save %>
+  rating.html("<%= escape_javascript(render('ratings/rating')) %>");
+  // flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+  // flash.fadeOut(5000);
+<% else %>
+  // flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+  // flash.fadeOut(5000);
+<% end %>
+

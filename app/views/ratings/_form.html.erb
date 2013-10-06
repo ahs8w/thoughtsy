@@ -1,4 +1,4 @@
-<% if !@rateable.ratings.empty? && @rateable.raters.first == current_user %>
+<% if !@rateable.ratings.empty? && @rateable.raters.include?(current_user) %>
   <div>
     <p class="center">You rated this article: <%= current_user_rating %></p>
   </div>

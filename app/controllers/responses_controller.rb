@@ -21,7 +21,6 @@ class ResponsesController < ApplicationController
       flash[:success] = "Response sent!"
       redirect_to root_path
     else
-      @author = @post.user    # render doesn't instantiate any variables (on error; need @author for gravatar)
       @rateable = @post
       @rating = Rating.new
       render 'posts/show'

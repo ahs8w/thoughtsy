@@ -1,9 +1,8 @@
 module RatingsHelper
 
   def current_user_rating
-    # if @rating = current_user.ratings.find_by_rateable_id_and_rateable_type(params[:id], params[:controller].classify)
-    if @rateable.raters.first == current_user
-      @rateable.ratings.first.value
+    if @post.raters.include?(current_user)
+      @current_user.ratings.
     else
       'N/A'
     end

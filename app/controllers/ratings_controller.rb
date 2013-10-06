@@ -20,7 +20,7 @@ class RatingsController < ApplicationController
       else
         respond_to do |format|
           format.html { redirect_to :back, alert: "Aack! Something went awry" }
-          format.js
+          format.js { flash.now[:alert] = "Aack! Something went awry" }
         end
       end
     # else
