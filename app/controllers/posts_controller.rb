@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :admin_user, only: [:destroy, :index]
 
   def index
-    @posts = Post.where(state: ["unanswered", "pending"]).paginate(page: params[:page])
+    @posts = Post.where(state: ["unanswered", "pending"]).ascending.paginate(page: params[:page])
   end
 
   def show

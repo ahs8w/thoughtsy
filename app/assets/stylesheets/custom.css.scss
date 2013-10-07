@@ -45,15 +45,11 @@ textarea {
 
 /* rating form behavior */
 form.new_rating {
-  input[type="radio"] {
-    display: none;
-  }
-  input[type="submit"] {
-    display: none;
-  }
-  p {
-    text-align: center;
-  }
+  display: inline;
+}
+
+#rating_form {
+  text-align: center;
 }
 
 /* typography */

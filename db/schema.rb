@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131003155937) do
+ActiveRecord::Schema.define(version: 20131007092531) do
 
   create_table "posts", force: true do |t|
     t.text     "content"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20131003155937) do
     t.integer  "user_id"
     t.integer  "rateable_id"
     t.string   "rateable_type", limit: 20
-    t.integer  "value",                    default: 0
+    t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

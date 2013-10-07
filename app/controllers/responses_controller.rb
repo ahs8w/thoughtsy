@@ -3,7 +3,7 @@ class ResponsesController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @responses = Response.paginate(page: params[:page])
+    @responses = Response.descending.paginate(page: params[:page])
   end
 
   def show

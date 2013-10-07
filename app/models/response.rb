@@ -7,5 +7,5 @@ class Response < ActiveRecord::Base
   has_many :ratings, as: :rateable, dependent: :destroy
   has_many :raters, through: :ratings, source: :user
 
-  default_scope -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
+  scope :descending, -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
 end

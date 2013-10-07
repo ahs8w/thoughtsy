@@ -1,18 +1,15 @@
 module RatingsHelper
 
   def current_user_rating
-    if @post.raters.include?(current_user)
-      @current_user.ratings.
-    else
-      'N/A'
-    end
+    rating = current_user.ratings.find_by_rateable_id_and_rateable_type(@rateable.id, @rateable.class)
+    rating.value
   end
 
-  def human_value
-    "uninteresting" if 1
-    "average" if 2
-    "thought provoking" if 3
-    "brilliant!" if 4
+  def human_value(value)
+    "uninteresting" if value == 1
+    "average" if value == 2
+    "thought provoking" if value == 3
+    "brilliant!" if value == 4
   end
 end
 

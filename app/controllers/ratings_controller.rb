@@ -8,24 +8,19 @@ class RatingsController < ApplicationController
   #   else
   
   def create
-    # @rateable = Post.find(params[:id])
-    # if current_user != @rateable.raters.first
-      @rating = current_user.ratings.build(rating_params)
-      if @rating.save
-        flash.now[:success] = "Rating saved."
-        respond_to do |format|
-          format.html { redirect_to :back }
-          format.js { flash.now[:success] = "Rating saved." }
-        end
-      else
-        respond_to do |format|
-          format.html { redirect_to :back, alert: "Aack! Something went awry" }
-          format.js { flash.now[:alert] = "Aack! Something went awry" }
-        end
+    @rating = current_user.ratings.build(rating_params)
+    if @rating.save
+      flash.now[:success] = "Rating saved."
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.js
       end
-    # else
-    #   redirect_to :back, notice: "You have already rated this thought."
-    # end
+    else
+      respond_to do |format|
+        format.html { redirect_to :back, alert: "Aack! Something went awry" }
+        format.js #{ flash.now[:alert] = "Aack! Something went awry" }
+      end
+    end
   end
 
   private
@@ -40,5 +35,4 @@ class RatingsController < ApplicationController
     def rating_params
       params.require(:rating).permit(:rateable_id, :rateable_type, :value)
     end
-
 end

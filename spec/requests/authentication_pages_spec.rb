@@ -213,12 +213,12 @@ describe "Authentication  : " do
       let(:user) { FactoryGirl.create(:user) }
       before { sign_in user, no_capybara: true }
 
-      describe "should not access User#new" do
+      describe "cannot access User#new" do
         before { get new_user_path }
         specify { expect(response).to redirect_to(root_url) }
       end
 
-      describe "should not access User#create" do
+      describe "cannot access User#create" do
         before { post users_path(user) }
         specify { expect(response).to redirect_to(root_url) }
       end

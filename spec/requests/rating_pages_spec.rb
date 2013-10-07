@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Ratings" do
   let(:user) { FactoryGirl.create(:user) }
   let!(:post) { FactoryGirl.create(:post) }
+  let(:response) { FactoryGirl.create(:response) }
   before do
     sign_in user
     visit root_path
@@ -12,64 +13,74 @@ describe "Ratings" do
     before {click_button "Respond"}
 
     it "exists" do
-      expect(page).to have_selector("div#rating_form")
-      expect(page).to have_content("brilliant!")
+      page.has_xpath?("//form.new_rating")
     end
 
-    describe "without JS: clicking submit" do
-      before { choose('rating_value_2') }
-      
-      it "saves rating" do
-        # click_button('Submit')
-        # expect(page).to have_content("Rating saved.")        
-        expect{click_button('Submit')}.to change(Rating, :count).by(1)
+    describe "without JS:" do
+      it "clicking a button saves a rating" do
+        expect{click_button('average')}.to change(Rating, :count).by(1)
       end
 
       describe "returning after rating" do
         before do
-          click_button('Submit')
+          click_button('average')
           visit root_path
           click_button "Respond"
         end
 
         it "rating form does not appear" do
-          expect(page).not_to have_selector("div#rating_form")
-          expect(page).to have_content("You rated this article:")
+          page.has_no_xpath?("//form.new_rating")
+          expect(page).to have_content("You rated this article: 2")
         end
       end
     end
   end
 
   describe "Response#Show form" do
-    let(:response) { FactoryGirl.create(:response) }
     before { visit response_path(response) }
 
     it "exists" do
-      expect(page).to have_selector("div#rating_form")
-      expect(page).to have_content("brilliant!")
+      page.has_xpath?("//form.new_rating")
     end
 
-    describe "without JS: clicking submit" do
-      before { choose('rating_value_2') }
-      
-      it "saves rating" do
-        # click_button('Submit')
-        # expect(page).to have_content("Rating saved.")        
-        expect{click_button('Submit')}.to change(Rating, :count).by(1)
+    describe "without JS:" do
+      it "clicking a button saves a rating" do
+        expect{click_button('brilliant!')}.to change(Rating, :count).by(1)
       end
 
       describe "returning after rating" do
         before do
-          click_button('Submit')
+          click_button('brilliant!')
           visit root_path
           visit response_path(response)
         end
 
         it "rating form does not appear" do
-          expect(page).not_to have_selector("div#rating_form")
-          expect(page).to have_content("You rated this article:")
+          page.has_no_xpath?("//form.new_rating")
+          expect(page).to have_content("You rated this article: 4")
         end
       end
     end
   end
+
+  # describe "with JS", :js => true do
+
+  #   describe "rating a post" do
+  #     before { click_button "Respond" }
+
+  #     it "clicking a button displays current rating" do
+  #       click_button('average')
+  #       expect(page).to have_content("You rated this article: 2")
+  #     end
+  #   end
+
+  #   describe "rating a response" do
+  #     before { visit response_path(response) }
+
+  #     it "clicking a button displays current rating" do
+  #       click_button('brilliant!')
+  #       expect(page).to have_content("You rated this article: 4")
+  #     end
+  #   end
+  # end
 end
