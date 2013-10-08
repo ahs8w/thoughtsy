@@ -1,55 +1,40 @@
-<!-- Modal -->
-<div id="RatingModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="rating"
-     aria-hidden="true">
-
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Rate this thought</h3>
+<% if !@rateable.ratings.empty? && @rateable.raters.include?(current_user) %>
+  <div>
+    <p class="center">You rated this article: <%= current_user_rating %></p>
   </div>
-
-  <div class="modal-body">
-    <%= render partial: "shared/thought", object: @post %>
+<% else %>
+  <div id="rating_form">
+    <span id="1">
+      <%= form_for(@rating, remote: true) do |f| %>
+        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
+        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:value, :value => '1') %>
+        <%= f.submit "insipid", class: "btn btn-inverse" %>
+      <% end %>
+    </span>
+    <span id="2">
+      <%= form_for(@rating, remote: true) do |f| %>
+        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
+        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:value, :value => '2') %>
+        <%= f.submit "average", class: "btn btn-inverse" %>
+      <% end %>
+    </span>
+    <span id="3">
+      <%= form_for(@rating, remote: true) do |f| %>
+        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
+        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:value, :value => '3') %>
+        <%= f.submit "thought provoking", class: "btn btn-inverse" %>
+      <% end %>
+    </span>
+    <span id="4">
+      <%= form_for(@rating, remote: true) do |f| %>
+        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
+        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:value, :value => '4') %>
+        <%= f.submit "brilliant!", class: "btn btn-inverse" %>
+      <% end %>
+    </span>
   </div>
-  <div class="modal-body">
-    <div id="rating_form">
-      <span id="1">
-        <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-          <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
-          <%= f.hidden_field(:value, :value => '1') %>
-          <%= f.submit "insipid", class: "btn btn-inverse" %>
-        <% end %>
-      </span>
-      <span id="2">
-        <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-          <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
-          <%= f.hidden_field(:value, :value => '2') %>
-          <%= f.submit "average", class: "btn btn-inverse" %>
-        <% end %>
-      </span>
-      <span id="3">
-        <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-          <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
-          <%= f.hidden_field(:value, :value => '3') %>
-          <%= f.submit "thought provoking", class: "btn btn-inverse" %>
-        <% end %>
-      </span>
-      <span id="4">
-        <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-          <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
-          <%= f.hidden_field(:value, :value => '4') %>
-          <%= f.submit "brilliant!", class: "btn btn-inverse" %>
-        <% end %>
-      </span>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-  </div>
-</div>
-
-
-
+<% end %>

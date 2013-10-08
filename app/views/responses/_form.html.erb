@@ -1,8 +1,8 @@
 <div id="response">
-  <%= form_for(@response, remote: true) do |f| %>
+  <%= form_for(@response) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.text_area :content, placeholder: "your response..." %>
     <%= f.hidden_field :post_id, value: @post.id %>
-    <%= f.button "Respond", class: "btn btn-large btn-primary" %>
+    <%= f.submit "Respond", class: "btn btn-large btn-primary" %>
   <% end %>
 </div>
