@@ -9,6 +9,11 @@ module PostsHelper
     sanitize(raw(content.split.map{ |s| wrap_long_string(s) }.join(' ')))
   end
 
+  def set_tokens_and_state(post)
+    current_user.set_tokens(post.id)
+    post.accept!
+  end
+
   private
 
     def wrap_long_string(text, max_width = 30)

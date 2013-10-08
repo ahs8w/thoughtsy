@@ -11,7 +11,7 @@ class PostsController < ApplicationController
     @rateable = @post
     @rating = Rating.new
     @response = Response.new
-    set_tokens(@post)
+    set_tokens_and_state(@post)
   end
 
   def create
@@ -45,10 +45,5 @@ class PostsController < ApplicationController
   private
     def post_params
       params.require(:post).permit(:content)
-    end
-
-    def set_tokens(post)
-      current_user.set_tokens(post.id)
-      post.accept!
     end
 end

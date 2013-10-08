@@ -10,7 +10,7 @@ describe Post do
   it { should respond_to(:content) }
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
-  it { should respond_to(:response) }
+  it { should respond_to(:responses) }
   it { should respond_to(:state) }
   it { should respond_to(:unanswered?) }
   it { should respond_to(:pending?) }

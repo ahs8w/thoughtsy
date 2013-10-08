@@ -1,0 +1,3 @@
+<% if !@post.ratings.include?(current_user) %>
+  $('#RatingModal').modal();
+<% end %>

@@ -27,12 +27,15 @@ module SessionsHelper
     user == current_user
   end
 
-## before filters (post, response, user controller)
+## before filters
   def admin_user
     redirect_to(root_url) unless user_admin?
   end
+  
+  def user_admin?
+    current_user.admin?
+  end
 
-  # (user, post, response controllers)
   def signed_in_user
     unless signed_in?
       store_location
@@ -44,10 +47,6 @@ module SessionsHelper
     !current_user.nil?          # signed_in? -> true  if current_user is not nil
   end
 
-  def user_admin?
-    current_user.admin?
-  end
-
   ## Friendly Forwarding ##
   
   def redirect_back_or(default)                    # used in 'Users#create' 
@@ -57,5 +56,12 @@ module SessionsHelper
 
   def store_location                          # used in 'signed_in_user' before filter
     session[:return_to] = request.url         # stores desired page in session hash
+  end
+
+  ## State and token setting ##
+
+  def set_tokens_and_state(post)
+    current_user.set_tokens(post.id)
+    post.accept!
   end
 end

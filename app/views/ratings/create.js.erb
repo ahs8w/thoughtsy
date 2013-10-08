@@ -4,7 +4,10 @@ var rating = $('#rating_form');
 <% if @rating.save %>
   rating.html("<%= escape_javascript(render('ratings/rating')) %>");
 <% else %>
-  // flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
-  // flash.fadeOut(5000);
+  flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+  flash.fadeOut(5000);
 <% end %>
 
+<% if @clicked == 'rubbish' %>
+  rating.html("<%= escape_javascript(render('ratings/rubbish')) %>");
+<% end %>

@@ -1,6 +1,6 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts
-  has_one :response
+  has_many :responses
   
   has_many :ratings, as: :rateable, dependent: :destroy
   has_many :raters, :through => :ratings, :source => :user

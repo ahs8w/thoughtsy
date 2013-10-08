@@ -19,7 +19,10 @@ class ResponsesController < ApplicationController
     if @response.save
       answer_all(@post)
       flash[:success] = "Response sent!"
-      redirect_to root_path
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js
+      end
     else
       @rateable = @post
       @rating = Rating.new

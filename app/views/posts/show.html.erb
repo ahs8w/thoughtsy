@@ -5,14 +5,13 @@
     <div class="well" id="thought">
       <%= render partial: "shared/thought", object: @post %>
     </div>
-    <%= render 'ratings/form' %>
   </div>
   <div class="span5">
     <div class="well" id="time_explanation">
       <p>
         You have 24 hours to respond to this post.  <small><%= link_to "why 24 hours?", about_path %></small><br />
         Feel free to take your time when crafting a response.
-        If you need some inspiration browse some of the other responses.<br />
+        If you need some inspiration browse some of the other <%= link_to "responses", responses_path %>.<br />
         Ready... Set... Reflect!
       </p>
     </div>
@@ -20,3 +19,4 @@
 </div>
 
 <%= render 'responses/form' %>
+<%= render 'ratings/form' %>
