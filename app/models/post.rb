@@ -2,9 +2,6 @@ class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts
   has_many :responses
   
-  has_many :ratings, as: :rateable, dependent: :destroy
-  has_many :raters, :through => :ratings, :source => :user
-
   validates_presence_of :user_id, :content
 
   scope :ascending, -> { order('created_at ASC') }

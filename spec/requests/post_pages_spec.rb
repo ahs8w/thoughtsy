@@ -183,4 +183,15 @@ describe "Post pages" do
       end
     end
   end
+
+  describe "repost" do
+    let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
+
+    it "changes state and displays flash" do
+      visit repost_post_path(answered_post)
+      answered_post.reload
+      expect(answered_post.state).to eq 'unanswered'
+      expect(page).to have_success_message("Thought reposted.")
+    end
+  end
 end

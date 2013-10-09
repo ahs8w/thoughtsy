@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :posts, inverse_of: :user, dependent: :destroy
   has_many :responses, inverse_of: :user, dependent: :destroy
   has_many :ratings
+  has_many :messages
 
 # callbacks
   before_save { email.downcase! }

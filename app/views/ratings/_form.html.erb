@@ -1,4 +1,4 @@
-<% if !@rateable.ratings.empty? && @rateable.raters.include?(current_user) %>
+<% if !@response.ratings.empty? && @response.raters.include?(current_user) %>
   <div>
     <p class="center">You rated this article: <%= current_user_rating %></p>
   </div>
@@ -6,32 +6,28 @@
   <div id="rating_form">
     <span id="1">
       <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '1') %>
-        <%= f.submit "insipid", class: "btn btn-inverse" %>
+        <%= f.submit "weak", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="2">
       <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '2') %>
         <%= f.submit "average", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="3">
       <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '3') %>
         <%= f.submit "thought provoking", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="4">
       <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:rateable_type, :value => params[:controller].classify) %>
-        <%= f.hidden_field(:rateable_id, :value => params[:id]) %>
+        <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '4') %>
         <%= f.submit "brilliant!", class: "btn btn-inverse" %>
       <% end %>

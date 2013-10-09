@@ -2,12 +2,14 @@ var flash = $('#js_flash_messages');
 var rating = $('#rating_form');
 
 <% if @rating.save %>
-  rating.html("<%= escape_javascript(render('ratings/rating')) %>");
+  <% if @rating.value == 1 %>
+    rating.html("<%= escape_javascript(render('ratings/weak')) %>");
+  <% elsif @rating.value >= 3 %>
+    rating.html("<%= escape_javascript(render('ratings/strong')) %>");
+  <% else %>
+    rating.html("<%= escape_javascript(render('ratings/rating')) %>");
+  <% end %>
 <% else %>
   flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
   flash.fadeOut(5000);
-<% end %>
-
-<% if @clicked == 'rubbish' %>
-  rating.html("<%= escape_javascript(render('ratings/rubbish')) %>");
 <% end %>

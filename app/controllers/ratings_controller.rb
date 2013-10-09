@@ -3,13 +3,11 @@ class RatingsController < ApplicationController
  
   def create
     @rating = current_user.ratings.build(rating_params)
-    @rateable = @rating.rateable
+    @response = @rating.response
     @clicked = params[:commit]
-    if @clicked == 'rubbish'
-      @new_post = Post.available(current_user).ascending.first
-      @rateable.unanswer!
-      current_user.reset_tokens
-      # send mail to admin
+    if @clicked == 'thought provoking' or 'brilliant'
+      @message = Message.new
+      # send mail to admin if @clicked == 'brilliant'
     end
 
     if @rating.save
@@ -20,27 +18,14 @@ class RatingsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to :back, alert: "You have already rated this post." }
-        format.js   { flash.now[:alert] = "You have already rated this post." }
+        format.html { redirect_to :back, alert: "Your rating could not be saved." }
+        format.js   { flash.now[:alert] = "Your rating could not be saved." }
       end
     end
   end
 
   private
-    # def create
-    #   if current_user.id == @rateable.user_id
-    #     redirect_to parent_url, alert: "You cannot rate your own thought"
-    #   else
-
-    # def parent_url
-    #   if params[:controller] == 'posts'
-    #     post_path(params[:id])
-    #   else 
-    #     response_path(params[:id])
-    #   end
-    # end
-
     def rating_params
-      params.require(:rating).permit(:rateable_id, :rateable_type, :value)
+      params.require(:rating).permit(:response_id, :value)
     end
 end

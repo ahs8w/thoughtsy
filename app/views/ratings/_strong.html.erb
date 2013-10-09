@@ -1,0 +1,28 @@
+<%= render 'ratings/rating' %>
+<small class="center" id="note_toggle">
+  Would you like to <a data-toggle="modal" data-target="#notemodal">send a note</a> to the responder?
+</small>
+
+<!-- Modal -->
+<div id="notemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="note"
+     aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Note to <%= @response.user.username %></h3>
+  </div>
+  <div class="modal-body">
+    <legend>
+      <%= @response.user.username %> wrote:
+    </legend>
+    <p><%= @response.content %></p>
+    <%= form_for(@message, remote: true) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= f.text_area :content, placeholder: "your note..." %>
+      <%= f.hidden_field :to_id, value: @response.user.id %>
+  </div>
+  <div class="modal-footer">
+      <%= f.submit "Send", class: "btn btn-primary pull-left", id: "send_button" %>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <% end %>
+  </div>
+</div>

@@ -1,15 +1,16 @@
 module RatingsHelper
 
   def current_user_rating
-    rating = current_user.ratings.find_by_rateable_id_and_rateable_type(@rateable.id, @rateable.class)
-    rating.value
+    rating = current_user.ratings.find_by_response_id(@response.id)
+    human_value(rating.value)
   end
 
   def human_value(value)
-    "uninteresting" if value == 1
-    "average" if value == 2
-    "thought provoking" if value == 3
-    "brilliant!" if value == 4
+    if value == 1 then "weak"
+    elsif value == 2 then "average"
+    elsif value == 3 then "thought provoking"
+    elsif value == 4 then "brilliant!"
+    end
   end
 end
 

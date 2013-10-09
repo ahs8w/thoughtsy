@@ -8,7 +8,6 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    @rateable = @post
     @rating = Rating.new
     @response = Response.new
     set_tokens_and_state(@post)
@@ -41,6 +40,12 @@ class PostsController < ApplicationController
     end
   end
 
+  def repost
+    @post = Post.find(params[:id])
+    @post.unanswer!
+    flash[:success] = "Thought reposted."
+    redirect_to root_url
+  end
 
   private
     def post_params

@@ -40,11 +40,17 @@ describe PostsController do
   end
 
   describe "post destruction with AJAX" do
-    let(:post) { FactoryGirl.create(:post, user: user, content: 'whatever') }
+    let!(:post) { FactoryGirl.create(:post, user: user, content: 'whatever') }
 
     it "should respond with success" do
       xhr :delete, :destroy, id: post.id
       expect(response).to be_success
+    end
+
+    it "should decrement the post count" do
+      expect do
+        xhr :delete, :destroy, { id: post.id }
+      end.to change(Post, :count).by(-1)
     end
 
     it "should show correct flash message" do
@@ -53,16 +59,3 @@ describe PostsController do
     end
   end
 end
-
-
-
-# it "should decrement the post count" do
-#   expect do
-#     xhr :delete, :destroy, id: post.id
-#   end.to change(Post, :count).by(-1)
-# end
-
-# it "should show the correct error message", js: true do
-#   xhr :post, :create, post: { user: user, content: ' ' }
-#   expect(page).to have_error_message('error')       # not waiting for ajax call to finish?
-# end

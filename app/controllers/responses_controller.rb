@@ -8,9 +8,8 @@ class ResponsesController < ApplicationController
 
   def show
     @response = Response.find(params[:id])
-    @rateable = @response
-    @rating = Rating.new
     @post = @response.post
+    @rating = Rating.new
   end
 
   def create

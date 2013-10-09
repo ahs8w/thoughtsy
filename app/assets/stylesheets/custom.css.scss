@@ -187,9 +187,12 @@ aside {
   position: relative;
   top: 10px;
   float: right;
-  form input {
-    padding: 16px 20px;
+  form {
     margin-bottom: 0;
+    input {
+      margin-bottom: 0;
+      padding: 16px 25px;
+    }
   }
 }
 

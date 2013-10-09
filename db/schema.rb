@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131007092531) do
+ActiveRecord::Schema.define(version: 20131009114944) do
+
+  create_table "messages", force: true do |t|
+    t.text     "content"
+    t.integer  "user_id"
+    t.integer  "to_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "posts", force: true do |t|
     t.text     "content"
@@ -27,11 +35,10 @@ ActiveRecord::Schema.define(version: 20131007092531) do
 
   create_table "ratings", force: true do |t|
     t.integer  "user_id"
-    t.integer  "rateable_id"
-    t.string   "rateable_type", limit: 20
     t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "response_id"
   end
 
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id"
