@@ -43,13 +43,19 @@ textarea {
   margin: 0;
 }
 
-/* rating form behavior */
+/* rating form behaviors */
 form.new_rating {
   display: inline;
 }
 
 #rating_form {
   text-align: center;
+}
+
+#responder_links {
+  span {
+    margin-top: -10px;
+  }
 }
 
 /* typography */
@@ -93,13 +99,12 @@ p {
   display: block;
   .alert {
     margin-bottom: 0;
-  }
-  .alert-success {
-    width: 30%;
+    width: 20%;
     position: absolute;
     /* centering method with fluid layouts and absolute positioning */
-    left: 50%;
-    margin-left: -15%;
+    left: 40%;
+    margin-left: -11%;
+    margin-top: 1px;
   }
 }
 

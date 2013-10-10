@@ -51,7 +51,7 @@ class UsersController < ApplicationController
       flash[:success] = "User destroyed"
       redirect_to users_url
     else
-      flash[:notice] = "Auto-destruction is not allowed"
+      flash[:error] = "Auto-destruction is not allowed"
       redirect_to root_url
     end
   end

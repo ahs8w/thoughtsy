@@ -44,6 +44,13 @@ describe "Post pages" do
       it { should have_content(pending.content) }
     end
 
+    describe "should include flagged posts" do
+      let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+      before { visit queue_path }
+
+      it { should have_content(flagged.content) }
+    end
+
     # describe "pagination" do
     #   before(:all) { 30.times { FactoryGirl.create(:post) } }
     #   after(:all)  { Post.delete_all }
@@ -184,9 +191,10 @@ describe "Post pages" do
     end
   end
 
-  describe "repost" do
-    let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
-
+  ## actions from Response#Show page ##
+  describe "reposting" do
+    let!(:answered_post) { FactoryGirl.create(:post, user_id: user.id, state: 'answered') }
+    
     it "changes state and displays flash" do
       visit repost_post_path(answered_post)
       answered_post.reload
@@ -194,4 +202,33 @@ describe "Post pages" do
       expect(page).to have_success_message("Thought reposted.")
     end
   end
+
+  ## actions from Post#Show page ##
+  describe "flagging and reposting" do
+    let(:post) { FactoryGirl.create(:post) }
+    before { visit post_path(post) }
+
+    it { should have_link("offensive or inappropriate?") }
+    it { should have_link("repost and follow") }
+
+    describe "clicking offensive" do
+      let!(:post2) { FactoryGirl.create(:post) }
+      before { click_link "offensive" }
+
+      it { should have_content(post2.content) }
+      it { should have_content("Post flagged.") }
+    end
+
+    describe "clicking repost" do
+      before { click_link "repost" }
+
+      it { should have_success_message("Thought followed.") }
+
+      it "updates follower attribute" do
+        post.reload
+        expect(post.follower_id).to eq user.id
+      end
+    end
+  end
+
 end

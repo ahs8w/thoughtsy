@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :admin_user, only: [:destroy, :index]
 
   def index
-    @posts = Post.where(state: ["unanswered", "pending"]).ascending.paginate(page: params[:page])
+    @posts = Post.where(state: ["unanswered", "pending", "flagged"]).ascending.paginate(page: params[:page])
   end
 
   def show
@@ -43,8 +43,23 @@ class PostsController < ApplicationController
   def repost
     @post = Post.find(params[:id])
     @post.unanswer!
-    flash[:success] = "Thought reposted."
-    redirect_to root_url
+    if current_user.id != @post.user.id
+      @post.follow(current_user.id)
+      flash[:success] = "Thought followed."
+      redirect_to post_path(@post)
+    else
+      flash[:success] = "Thought reposted."
+      redirect_to root_url
+    end
+  end
+
+  def flag
+    @post = Post.find(params[:id])
+    @token_post = Post.available(current_user).ascending.first
+    @post.flag!
+    # send email to admin
+    current_user.reset_tokens
+    redirect_to post_path(@token_post), alert: "Post flagged."
   end
 
   private

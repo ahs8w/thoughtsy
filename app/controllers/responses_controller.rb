@@ -17,6 +17,7 @@ class ResponsesController < ApplicationController
     @post = @response.post
     if @response.save
       answer_all(@post)
+      # email @post.user and @post.followers
       flash[:success] = "Response sent!"
       redirect_to response_path(@response)
     else

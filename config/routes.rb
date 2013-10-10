@@ -5,6 +5,7 @@ Thoughtsy::Application.routes.draw do
   resources :posts,     except: [:new, :update, :edit] do
     member do
       get 'repost'
+      get 'flag'
     end
   end
   resources :responses, except: [:new, :update, :edit]

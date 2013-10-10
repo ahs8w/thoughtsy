@@ -3,6 +3,9 @@
     <div class="container-fluid">
       <%= link_to "Thoughtsy", root_path, id: "logo" %>
       <nav>
+        <div id="js_flash_messages">
+          <%= render 'shared/flash_messages' %>
+        </div>
         <ul class="nav pull-right" id="nav-links">
           <li><%= link_to "How it works", about_path %></li> 
           <% if signed_in? %>

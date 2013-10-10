@@ -15,6 +15,8 @@ describe Post do
   it { should respond_to(:unanswered?) }
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
+  it { should respond_to(:flagged?) }
+  it { should respond_to(:follower_id) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -59,6 +61,19 @@ describe Post do
       end
     end
 
+    describe ":flagged" do
+      before { @post.flag! }
+
+      it "changes to :flagged on #flag" do
+        @post.flag!
+        expect(@post).to be_flagged
+      end
+
+      # it "sends an email to admin" do
+      #   expect(last_email.to).to include(admin)
+      # end
+    end
+
     describe ":answered" do
       before { @post.answer! }
 
@@ -67,10 +82,15 @@ describe Post do
         expect(@post).to be_unanswered
       end
 
-## checking .answer! transition ##
+      ## checking .answer! transition ##
       it "should send_response_email" do
         expect(last_email.to).to include(@post.user.email)
       end
     end
+  end
+
+  describe "#follow method" do
+    before { @post.follow(user.id) }
+    its(:follower_id) { should eq user.id }
   end
 end

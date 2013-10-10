@@ -17,11 +17,6 @@
 //= require_tree .
 
 
-$(document).ready(function () {
-  setTimeout(function() {
-    $('.alert-success').remove();
-  }, 5000);
-  setTimeout(function() {
-    $('.alert-notice').remove();
-  }, 5000);
+$(document).on("page:change", function () {
+  $('div.alert').delay(3000).fadeOut('slow');
 });

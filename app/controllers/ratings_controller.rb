@@ -5,12 +5,11 @@ class RatingsController < ApplicationController
     @rating = current_user.ratings.build(rating_params)
     @response = @rating.response
     @clicked = params[:commit]
-    if @clicked == 'thought provoking' or 'brilliant'
-      @message = Message.new
-      # send mail to admin if @clicked == 'brilliant'
-    end
-
+    @message = Message.new
     if @rating.save
+      if @clicked == 'brilliant'
+        # send mail to admin
+      end
       flash.now[:success] = "Rating saved."
       respond_to do |format|
         format.html { redirect_to :back }

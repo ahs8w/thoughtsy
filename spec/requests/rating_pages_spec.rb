@@ -4,13 +4,12 @@ describe "Ratings" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:response) { FactoryGirl.create(:response) }
-  before do
-    sign_in user
-    visit response_path(response)
-  end
+  
+  before { sign_in user }
 
   describe "Creation:" do
+    let(:response) { FactoryGirl.create(:response) }
+    before { visit response_path(response) }
 
     it "form:" do
       page.has_xpath?("//form.new_rating")
@@ -35,6 +34,8 @@ describe "Ratings" do
   end
 
   # describe "Creation with JS:", :js => true do
+  #   let(:response) { FactoryGirl.create(:response) }
+  #   before { visit response_path(response) }
 
   #   describe "clicking 'weak'" do
   #     before { click_button 'weak' }
@@ -52,8 +53,8 @@ describe "Ratings" do
   #   describe "clicking 'brilliant!'" do
   #     before { click_button 'brilliant!' }
 
-  #     it { should have_link("send a note") }
-  #     it { should have_content("You rated this article: thought provoking") }
+  #     it { should have_link('send a note') }
+  #     it { should have_content("You rated this article: brilliant!") }
 
   #     describe "-> send a note" do
   #       before { click_link("send a note") }

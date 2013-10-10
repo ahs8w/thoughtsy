@@ -30,10 +30,18 @@ class Post < ActiveRecord::Base
     event :unanswer do
       transition any => :unanswered
     end
+
+    event :flag do
+      transition any => :flagged
+    end
   end
 
   def send_response_email
     UserMailer.response_email(self.user).deliver
+  end
+
+  def follow(id)
+    self.update_attribute(:follower_id, id)
   end
 
 ## keep for reference!!  see above
