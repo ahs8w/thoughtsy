@@ -4,11 +4,12 @@ describe "Ratings" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
+  let(:post) { FactoryGirl.create(:post, user_id: user.id) }
   
   before { sign_in user }
 
   describe "Creation:" do
-    let(:response) { FactoryGirl.create(:response) }
+    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
     before { visit response_path(response) }
 
     it "form:" do
@@ -16,7 +17,7 @@ describe "Ratings" do
     end
 
     it "clicking a button saves a rating" do
-      expect{click_button 'brilliant!' }.to change(Rating, :count).by(1)
+      expect{ click_button 'brilliant!' }.to change(Rating, :count).by(1)
     end
 
     describe "returning after rating" do

@@ -15,5 +15,6 @@
     </div>
   </div>
 </div>
-
-<%= render 'ratings/form' %>
+<% if current_user.id == @post.user.id %>
+  <%= render 'ratings/form' %>
+<% end %>

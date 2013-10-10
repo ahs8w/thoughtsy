@@ -1,0 +1,6 @@
+var links = $('#responder_links');
+var flash = $('#js_flash_messages');
+
+flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+flash.delay(3000).fadeOut('slow');
+links.hide();

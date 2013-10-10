@@ -58,4 +58,26 @@ describe PostsController do
       expect(flash[:success]).to eq "Post destroyed!"
     end
   end
+
+  describe "follow a post" do
+    let!(:post) { FactoryGirl.create(:post) }
+
+    it "shows flash and adds follower_id" do
+      xhr :get, :repost, id: post.id
+      expect(flash[:success]).to eq "Thought followed."
+      post.reload
+      expect(post.follower_id).to eq user.id
+    end
+  end
+
+  describe "flag a post" do
+    let!(:post) { FactoryGirl.create(:post) }
+
+    it "shows flash and changes post state" do
+      xhr :get, :flag, id: post.id
+      expect(flash[:notice]).to eq "Post flagged."
+      post.reload
+      expect(post.state).to eq 'flagged'
+    end
+  end
 end

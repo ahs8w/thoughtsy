@@ -1,0 +1,7 @@
+var links = $('#responder_links');
+var flash = $('#js_flash_messages');
+
+$('#thought').html("<%= escape_javascript(render(partial: 'shared/thought', object: @token_post)) %>");
+
+flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+flash.delay(3000).fadeOut('slow');

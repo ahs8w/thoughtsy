@@ -116,7 +116,8 @@ describe "ResponsePages" do
   end
 
   describe "show page" do
-    let!(:response) { FactoryGirl.create(:response) }
+    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
     before { visit response_path(response) }
 
     it { should have_title('Response') }
@@ -125,5 +126,15 @@ describe "ResponsePages" do
     it { should have_content(response.post.user.username) }
     it { should have_content(response.post.content) }
     it { should have_selector("div#rating_form") }
+
+    describe "as user other than post author" do
+      let(:user2) { FactoryGirl.create(:user) }
+      before do
+        sign_in user2
+        visit response_path(response)
+      end
+
+      it { should_not have_selector("div#rating_form") }
+    end
   end
 end
