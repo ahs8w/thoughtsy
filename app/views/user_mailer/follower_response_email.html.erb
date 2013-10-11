@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>You have a response</h1>
+    <p>
+      You followed:
+      <%= @post.content %>
+    </p>
+    <p>
+      To see the response, head on over to <%= link_to "Thoughtsy", response_url(@response) %>.
+    </p>
+  </body>
+</html>

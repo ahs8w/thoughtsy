@@ -82,11 +82,6 @@ describe Post do
         @post.unanswer!
         expect(@post).to be_unanswered
       end
-
-      ## checking .answer! transition ##
-      it "should send_response_email" do
-        expect(last_email.to).to include(@post.user.email)
-      end
     end
   end
 

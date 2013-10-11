@@ -17,7 +17,7 @@ class ResponsesController < ApplicationController
     @post = @response.post
     if @response.save
       answer_all(@post)
-      # email @post.user and @post.followers
+      send_response_emails(@response)
       flash[:success] = "Response sent!"
       redirect_to response_path(@response)
     else
@@ -43,5 +43,10 @@ class ResponsesController < ApplicationController
     def answer_all(post)
       post.answer!
       current_user.reset_tokens
+    end
+
+    def send_response_emails(response)
+      UserMailer.response_email(response).deliver
+      UserMailer.follower_response_email(response).deliver unless response.post.followers.empty?
     end
 end

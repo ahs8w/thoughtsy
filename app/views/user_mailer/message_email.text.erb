@@ -1,0 +1,6 @@
+<%= @recipient.username %>,
+
+<%= @sender.username %> wrote:
+<%= @message.content %>
+
+Head on over to <%= link_to "Thoughtsy", user_url(@recipient) %> to respond to this message.

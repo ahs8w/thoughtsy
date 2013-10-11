@@ -76,6 +76,21 @@ describe "ResponsePages" do
         expect(user.token_timer).to be_blank
         expect(user.token_id).to be_blank
       end
+
+      it "should send response email" do
+        click_button "Respond"
+        expect(last_email.to).to include(post.user.email)
+      end
+
+      describe "follower_response_email" do
+        let(:follower) { FactoryGirl.create(:user) }
+        before { follower.subscribe!(post) }
+
+        it "sends email (to admin) with bcc's" do
+          click_button "Respond"
+          expect(last_email.bcc).to include(follower.email)
+        end
+      end
     end
   end
   

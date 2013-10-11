@@ -11,11 +11,35 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: 'Thoughtsy needs you!'
   end
 
-  def response_email(user)
-    @user = user
+  def response_email(response)
+    @response = response
+    @post = @response.post
+    @user = @post.user
     mail to: @user.email, subject: 'Someone has responded to your thought!'
-    # followers.each do |f|
-    #   mail to: f.email, subject: "Someone has responded to the thought you're following"
-    # end
+  end
+
+  def follower_response_email(response)
+    @response = response
+    @post = @response.post
+    @recipients = @post.followers
+    emails = @recipients.collect(&:email).join(', ')
+    mail bcc: emails, to: 'info@thoughtsy.com', subject: "Someone has responded to the thought you're following"
+  end
+
+  def message_email(message)
+    @message = message
+    @recipient = User.find(@message.to_id)
+    @sender = User.find(@message.user_id)
+    mail to: @recipient.email, subject: "#{@sender.username} sent you a personal message."
+  end
+
+  def flag_email(post)
+    @post = post
+    mail to: 'admin@thoughtsy.com', subject: "Thoughtsy: post flagged"
+  end
+
+  def brilliant_email(post)
+    @post = post
+    mail to: 'admin@thoughtsy.com', subject: "Thoughtsy: post rated 'brilliant'"
   end
 end

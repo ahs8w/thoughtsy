@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>
+      <%= @post.content %>
+    </p>
+    <p>
+      <%= link_to "Flagged post", post_url(@post) %>
+    </p>
+  </body>
+</html>

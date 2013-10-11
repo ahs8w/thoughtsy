@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @recipient.username %>,</h1>
+    <p>
+      <%= @sender.username %> wrote:
+    </p>
+    <p>
+      <%= @message.content %>
+    </p>
+    <p>Head on over to <%= link_to "Thoughtsy", user_url(@recipient) %> to respond to this message.</p>
+  </body>
+</html>

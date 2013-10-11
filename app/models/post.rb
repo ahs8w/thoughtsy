@@ -11,7 +11,6 @@ class Post < ActiveRecord::Base
   scope :available, ->(user) { where("state == 'unanswered' AND user_id != ?", user.id) }
 
   state_machine :state, initial: :unanswered do
-    after_transition on: :answer, do: [:send_response_email]
 
 ## keep for reference!!  pass in arguments to the transition callback  
     # after_transition on: :accept do |post, transition|
@@ -37,10 +36,6 @@ class Post < ActiveRecord::Base
     event :flag do
       transition any => :flagged
     end
-  end
-
-  def send_response_email
-    UserMailer.response_email(self.user).deliver
   end
 
 ## keep for reference!!  see above

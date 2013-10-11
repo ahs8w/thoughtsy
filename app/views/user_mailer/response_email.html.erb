@@ -4,15 +4,13 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1>Hey <%= @user.username %>,</h1>
+    <h1><%= @user.username %>,</h1>
     <p>
-      You have successfully signed up to Thoughtsy,
-      your password is: <%= @user.password %>.<br/>
+      <%= @response.user.username %> has responded to your thought.
     </p>
     <p>
-      To see your profile and start exchanging thoughts, 
-      just follow this link: <%= link_to "Profile", user_url(@user) %>.
+      To checkout the response, head on over to <%= link_to "Thoughtsy", response_url(@response) %>.
     </p>
-    <p>Thanks for joining and have a great day!</p>
+    <p>Thanks for posting and have a great day!</p>
   </body>
 </html>
