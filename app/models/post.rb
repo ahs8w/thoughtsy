@@ -1,6 +1,9 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts
   has_many :responses
+
+  has_many :subscriptions
+  has_many :followers, through: :subscriptions, source: :user
   
   validates_presence_of :user_id, :content
 
@@ -38,10 +41,6 @@ class Post < ActiveRecord::Base
 
   def send_response_email
     UserMailer.response_email(self.user).deliver
-  end
-
-  def follow(id)
-    self.update_attribute(:follower_id, id)
   end
 
 ## keep for reference!!  see above

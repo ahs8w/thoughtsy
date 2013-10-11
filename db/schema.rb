@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131010084202) do
+ActiveRecord::Schema.define(version: 20131011111831) do
 
   create_table "messages", force: true do |t|
     t.text     "content"
@@ -27,11 +27,9 @@ ActiveRecord::Schema.define(version: 20131010084202) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "state"
-    t.integer  "follower_id"
   end
 
   add_index "posts", ["created_at"], name: "index_posts_on_created_at"
-  add_index "posts", ["follower_id"], name: "index_posts_on_follower_id"
   add_index "posts", ["state"], name: "index_posts_on_state"
   add_index "posts", ["user_id"], name: "index_posts_on_user_id"
 
@@ -56,6 +54,17 @@ ActiveRecord::Schema.define(version: 20131010084202) do
   add_index "responses", ["created_at"], name: "index_responses_on_created_at"
   add_index "responses", ["post_id"], name: "index_responses_on_post_id"
   add_index "responses", ["user_id"], name: "index_responses_on_user_id"
+
+  create_table "subscriptions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["post_id", "user_id"], name: "index_subscriptions_on_post_id_and_user_id", unique: true
+  add_index "subscriptions", ["post_id"], name: "index_subscriptions_on_post_id"
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "username"

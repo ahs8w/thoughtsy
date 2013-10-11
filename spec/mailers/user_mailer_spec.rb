@@ -16,13 +16,13 @@ describe UserMailer do
     end
   end
 
-  describe "post_email" do
-    let(:responder) { FactoryGirl.create(:user) }
-    let(:mail) { UserMailer.post_email(responder) }
+  describe "inactive_user_email" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:mail) { UserMailer.inactive_user_email(user) }
 
-    it "should send post_email to the responder" do
+    it "should send inactive_user_email to the user" do
       expect(mail.subject).to eq("Thoughtsy needs you!")
-      expect(mail.to).to eq([responder.email])
+      expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(["admin@thoughtsy.com"])
     end
 

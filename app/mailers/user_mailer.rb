@@ -6,7 +6,7 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: 'Password reset'
   end
 
-  def post_email(user)
+  def inactive_user_email(user)
     @user = user
     mail to: @user.email, subject: 'Thoughtsy needs you!'
   end
@@ -14,5 +14,8 @@ class UserMailer < ActionMailer::Base
   def response_email(user)
     @user = user
     mail to: @user.email, subject: 'Someone has responded to your thought!'
+    # followers.each do |f|
+    #   mail to: f.email, subject: "Someone has responded to the thought you're following"
+    # end
   end
 end

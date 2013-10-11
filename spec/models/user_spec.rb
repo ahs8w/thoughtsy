@@ -23,6 +23,10 @@ describe User do
   it { should respond_to(:token_timer?) }
   it { should respond_to(:ratings) }
   it { should respond_to(:messages) }
+  it { should respond_to(:subscriptions) }
+  it { should respond_to(:followed_posts) }
+  it { should respond_to(:subscribe!) }
+  it { should respond_to(:unsubscribe!) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -284,6 +288,26 @@ describe User do
     it "delivers email to the user" do
       @user.send_password_reset
       expect(last_email.to).to include(@user.email)
+    end
+  end
+
+## Post Subscriptions ##
+  describe "#subscribe!" do
+    let(:post) { FactoryGirl.create(:post) }
+    before { @user.save }
+
+    it "adds post to 'followed_posts'" do
+      @user.subscribe!(post)
+      expect(@user.followed_posts).to include(post)
+    end
+
+    describe "#unsubscribe!" do
+      before { @user.subscribe!(post) }
+
+      it "removes post from 'followed_posts'" do
+        @user.unsubscribe!(post)
+        expect(@user.followed_posts).not_to include(post)
+      end
     end
   end
 end

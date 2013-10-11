@@ -44,11 +44,13 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @post.unanswer!
     if current_user.id != @post.user.id
-      @post.follow(current_user.id)
-      flash.now[:success] = "Thought followed."
+      current_user.subscribe!(@post)
       respond_to do |format|
-        format.html { redirect_to post_path(@post) }
-        format.js
+        format.html do
+          flash[:success] = "Thought followed."
+          redirect_to post_path(@post)
+        end
+        format.js { flash.now[:success] = "Thought followed." }
       end
     else
       flash[:success] = "Thought reposted."
@@ -62,10 +64,12 @@ class PostsController < ApplicationController
     @post.flag!
     # send email to admin
     current_user.reset_tokens
-    flash.now[:notice] = "Post flagged."
     respond_to do |format|
-      format.html { redirect_to post_path(@token_post) }
-      format.js
+      format.html do
+        flash[:notice] = "Post flagged."
+        redirect_to post_path(@token_post)
+      end
+      format.js { flash.now[:notice] = "Post flagged." }
     end
   end
 

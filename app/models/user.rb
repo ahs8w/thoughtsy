@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   has_many :ratings
   has_many :messages
 
+  has_many :subscriptions
+  has_many :followed_posts, through: :subscriptions, source: :post
+
 # callbacks
   before_save { email.downcase! }
   before_create :create_remember_token
@@ -67,6 +70,15 @@ class User < ActiveRecord::Base
 
   def posts_available
     Post.available(self).size > 0
+  end
+
+# Subscriptions
+  def subscribe!(post)
+    self.subscriptions.create!(post_id: post.id)
+  end
+
+  def unsubscribe!(post)
+    self.subscriptions.find_by(post_id: post.id).destroy!
   end
   
   private

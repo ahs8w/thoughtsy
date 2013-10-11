@@ -16,7 +16,8 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
-  it { should respond_to(:follower_id) }
+  it { should respond_to(:subscriptions) }
+  it { should respond_to(:followers) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -89,8 +90,23 @@ describe Post do
     end
   end
 
-  describe "#follow method" do
-    before { @post.follow(user.id) }
-    its(:follower_id) { should eq user.id }
+## Post Subscriptions ##
+  describe "user.subscribe!" do
+    let(:other_user) { FactoryGirl.create(:user) }
+    before { @post.save }
+
+    it "adds user to 'followers'" do
+      other_user.subscribe!(@post)
+      expect(@post.followers).to include(other_user)
+    end
+
+    describe "user.unsubscribe!" do
+      before { other_user.subscribe!(@post) }
+
+      it "removes user from 'followers'" do
+        other_user.unsubscribe!(@post)
+        expect(@post.followers).not_to include(other_user)
+      end
+    end
   end
 end

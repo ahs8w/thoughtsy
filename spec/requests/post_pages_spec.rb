@@ -226,9 +226,18 @@ describe "Post pages" do
 
       it "updates follower attribute" do
         post.reload
-        expect(post.follower_id).to eq user.id
+        expect(post.followers).to include user
       end
     end
-  end
 
+    describe "after subscribing and returning to the page" do
+      before do
+        user.subscribe!(post)
+        visit post_path(post)
+      end
+
+      it { should have_content("You are following this post.") }
+      it { should_not have_link("repost") }
+    end
+  end
 end

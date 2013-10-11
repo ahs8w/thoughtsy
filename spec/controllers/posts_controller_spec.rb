@@ -66,7 +66,7 @@ describe PostsController do
       xhr :get, :repost, id: post.id
       expect(flash[:success]).to eq "Thought followed."
       post.reload
-      expect(post.follower_id).to eq user.id
+      expect(post.followers).to include user
     end
   end
 
