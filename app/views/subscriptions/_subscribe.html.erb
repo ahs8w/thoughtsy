@@ -1,0 +1,4 @@
+<%= form_for(current_user.subscriptions.build(post_id: @post.id)) do |f| %>
+  <%= f.hidden_field :post_id %>
+  <%= f.submit "follow", class: "btn btn-link" %>
+<% end %>

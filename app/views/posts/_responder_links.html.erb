@@ -1,12 +1,14 @@
-<small id="responder_links">
+<div id="responder_links">
   <% if @post.followers.include?(current_user) %>
-    <span class="pull-right">You are following this post.  <%= link_to "unfollow", '#' %></span>
+    <span class="pull-right">
+      <%= render 'subscriptions/unsubscribe' %>
+    </span>
   <% else %>
     <span class="pull-left">
-      <%= link_to "offensive or inappropriate?", flag_post_path(@post.id), remote: true %>
+      <small><%= link_to "offensive or inappropriate?", flag_post_path(@post.id), remote: true %></small>
     </span>
     <span class="pull-right">
-      <%= link_to "repost and follow", repost_post_path(@post.id), remote: true %>
+      <%= render 'subscriptions/subscribe' %>
     </span>
   <% end %>
-</small>
+</div>

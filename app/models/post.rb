@@ -12,6 +12,10 @@ class Post < ActiveRecord::Base
 
   state_machine :state, initial: :unanswered do
 
+    after_transition on: :flag do |post, transition|
+      UserMailer.flag_email(post).deliver
+    end
+
 ## keep for reference!!  pass in arguments to the transition callback  
     # after_transition on: :accept do |post, transition|
     #   post.set_responder_token(transition.args.first)

@@ -56,6 +56,15 @@ form.new_rating {
   span {
     margin-top: -10px;
   }
+  form {
+    margin: 0;
+    input {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 95%;
+      padding: 0;
+      border: 0;
+    }
+  }
 }
 
 /* typography */

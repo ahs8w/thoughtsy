@@ -204,12 +204,12 @@ describe "Post pages" do
   end
 
   ## actions from Post#Show page ##
-  describe "flagging and reposting" do
+  describe "responder links" do
     let(:post) { FactoryGirl.create(:post) }
     before { visit post_path(post) }
 
     it { should have_link("offensive or inappropriate?") }
-    it { should have_link("repost and follow") }
+    it { should have_button("follow") }
 
     describe "clicking offensive" do
       let!(:post2) { FactoryGirl.create(:post) }
@@ -223,8 +223,8 @@ describe "Post pages" do
       end
     end
 
-    describe "clicking repost" do
-      before { click_link "repost" }
+    describe "clicking follow (subscribing)" do
+      before { click_button "follow" }
 
       it { should have_success_message("Thought followed.") }
 
@@ -241,7 +241,18 @@ describe "Post pages" do
       end
 
       it { should have_content("You are following this post.") }
-      it { should_not have_link("repost") }
+      it { should have_link("unfollow") }
+
+      describe "clicking unfollow (unsubscribing)" do
+        before { click_link "unfollow" }
+
+        it { should have_success_message("Thought unfollowed.") }
+
+        it "updates follower attribute" do
+          post.reload
+          expect(post.followers).not_to include user
+        end
+      end
     end
   end
 end

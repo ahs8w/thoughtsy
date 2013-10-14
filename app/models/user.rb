@@ -65,7 +65,11 @@ class User < ActiveRecord::Base
   end
 
   def timer_valid
-    self.token_timer > 24.hours.ago
+    if self.token_timer?
+      self.token_timer > 24.hours.ago
+    else
+      return false
+    end
   end
 
   def posts_available

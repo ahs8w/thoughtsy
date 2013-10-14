@@ -42,6 +42,6 @@ class StaticPagesController < ApplicationController
 
   private
     def rollback_tokens
-      current_user.reset_tokens if signed_in? && current_user.token_id? && !current_user.timer_valid
+      current_user.reset_tokens if signed_in? && !current_user.timer_valid
     end
 end

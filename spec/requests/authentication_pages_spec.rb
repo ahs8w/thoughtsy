@@ -147,18 +147,33 @@ describe "Authentication  : " do
     end
 
     describe "as the wrong user" do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
-      before { sign_in user, no_capybara: true }
 
-      describe "visiting edit page" do
-        before { visit edit_user_path(wrong_user) }
-        it { should_not have_title('Edit profile') }
+      describe "in Users Controller" do
+        let(:user) { FactoryGirl.create(:user) }
+        let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+        before { sign_in user, no_capybara: true }
+
+        describe "visiting edit page" do
+          before { visit edit_user_path(wrong_user) }
+          it { should_not have_title('Edit profile') }
+        end
+
+        describe "submitting to the update action" do
+          before { patch user_path(wrong_user) }
+          specify { expect(response).to redirect_to(root_url) }
+        end
       end
 
-      describe "submitting to the update action" do
-        before { patch user_path(wrong_user) }
-        specify { expect(response).to redirect_to(root_url) }
+      describe "in the Posts Controller" do
+        let(:wrong_user) { FactoryGirl.create(:user) }
+        let!(:post) { FactoryGirl.create(:post) }
+        before { sign_in wrong_user, no_capybara: true }
+
+        describe "visiting show page" do
+          before { visit post_path(post) }
+          it { should_not have_title('Respond') }
+          it { should have_title('Thoughtsy') }
+        end
       end
     end
 

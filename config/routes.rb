@@ -12,6 +12,7 @@ Thoughtsy::Application.routes.draw do
   resources :password_resets, except: [:show, :index]
   resources :ratings,   only: :create
   resources :messages,  only: :create
+  resources :subscriptions, only: [:create, :destroy]
 
 
   root 'static_pages#home'

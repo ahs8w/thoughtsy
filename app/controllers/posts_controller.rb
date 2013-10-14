@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: [:destroy, :index]
+  before_action :set_tokens_and_state, :correct_responder, only: :show
 
   def index
     @posts = Post.where(state: ["unanswered", "pending", "flagged"]).ascending.paginate(page: params[:page])
@@ -10,7 +11,6 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @rating = Rating.new
     @response = Response.new
-    set_tokens_and_state(@post)
   end
 
   def create
@@ -43,26 +43,14 @@ class PostsController < ApplicationController
   def repost
     @post = Post.find(params[:id])
     @post.unanswer!
-    if current_user.id != @post.user.id
-      current_user.subscribe!(@post)
-      respond_to do |format|
-        format.html do
-          flash[:success] = "Thought followed."
-          redirect_to post_path(@post)
-        end
-        format.js { flash.now[:success] = "Thought followed." }
-      end
-    else
-      flash[:success] = "Thought reposted."
-      redirect_to root_url
-    end
+    flash[:success] = "Thought reposted."
+    redirect_to root_url
   end
 
   def flag
     @post = Post.find(params[:id])
     @token_post = Post.available(current_user).ascending.first
-    @post.flag!
-    UserMailer.flag_email(@post).deliver
+    @post.flag!       # sends flag_email on transition
     current_user.reset_tokens
     respond_to do |format|
       format.html do
@@ -76,5 +64,11 @@ class PostsController < ApplicationController
   private
     def post_params
       params.require(:post).permit(:content)
+    end
+
+    def set_tokens_and_state
+      post = Post.find(params[:id])
+      current_user.set_tokens(post.id)
+      post.accept!
     end
 end

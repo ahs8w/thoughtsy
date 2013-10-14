@@ -47,6 +47,10 @@ module SessionsHelper
     !current_user.nil?          # signed_in? -> true  if current_user is not nil
   end
 
+  def correct_responder
+    redirect_to(root_url) unless current_user.token_id == params[:id].to_i
+  end
+
   ## Friendly Forwarding ##
   
   def redirect_back_or(default)                    # used in 'Users#create' 
@@ -56,12 +60,5 @@ module SessionsHelper
 
   def store_location                          # used in 'signed_in_user' before filter
     session[:return_to] = request.url         # stores desired page in session hash
-  end
-
-  ## State and token setting ##
-
-  def set_tokens_and_state(post)
-    current_user.set_tokens(post.id)
-    post.accept!
   end
 end

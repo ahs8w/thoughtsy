@@ -244,6 +244,12 @@ describe User do
         expect(@user.timer_valid).to eq false
       end
     end
+
+    context "no token_timer" do
+      it "equals false" do
+        expect(@user.timer_valid).to eq false
+      end
+    end
   end
 
   describe "#posts_available" do

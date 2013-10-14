@@ -59,17 +59,6 @@ describe PostsController do
     end
   end
 
-  describe "follow a post" do
-    let!(:post) { FactoryGirl.create(:post) }
-
-    it "shows flash and adds follower_id" do
-      xhr :get, :repost, id: post.id
-      expect(flash[:success]).to eq "Thought followed."
-      post.reload
-      expect(post.followers).to include user
-    end
-  end
-
   describe "flag a post" do
     let!(:post) { FactoryGirl.create(:post) }
 
