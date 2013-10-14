@@ -217,6 +217,10 @@ describe "Post pages" do
 
       it { should have_content(post2.content) }
       it { should have_content("Post flagged.") }
+
+      it "sends an email to admin" do
+        expect(last_email.to).to include('admin@thoughtsy.com')
+      end
     end
 
     describe "clicking repost" do

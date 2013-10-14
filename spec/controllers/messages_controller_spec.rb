@@ -14,7 +14,7 @@ describe MessagesController do
 
     describe "with invalid information" do
 
-      it "should not create a message" do
+      it "does not create a message" do
         expect do
           xhr :post, 'create', message: { user_id: user.id, content: ' ', to_id: response.user.id }
         end.not_to change(Message, :count)
@@ -23,7 +23,7 @@ describe MessagesController do
 
     describe "with valid information" do
 
-      it "should increment the message count" do
+      it "increments the message count" do
         expect do
           xhr :post, 
               :create,
@@ -31,9 +31,14 @@ describe MessagesController do
         end.to change(Message, :count).by(1)
       end
 
-      it "should show the correct flash message" do
+      it "shows the correct flash message" do
         xhr :post, 'create', message: { user_id: user.id, content: 'message', to_id: response.user.id }
         expect(flash[:success]).to eq "Message sent!"
+      end
+
+      it "sends an email" do
+        xhr :post, 'create', message: { user_id: user.id, content: 'message', to_id: response.user.id }
+        expect(last_email.to).to include(response.user.email)
       end
     end
   end

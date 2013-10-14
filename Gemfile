@@ -17,10 +17,10 @@ group :development, :test do
   gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'guard-spork'
   gem 'childprocess'
-  gem 'guard-livereload'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'factory_girl_rails'  # moved it here to be able to run it in dev console
+  gem 'guard', '2.0.5'
 end
 
 group :test do

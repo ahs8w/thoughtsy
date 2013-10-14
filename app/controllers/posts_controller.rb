@@ -62,7 +62,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @token_post = Post.available(current_user).ascending.first
     @post.flag!
-    # send email to admin
+    UserMailer.flag_email(@post).deliver
     current_user.reset_tokens
     respond_to do |format|
       format.html do

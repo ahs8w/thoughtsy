@@ -106,17 +106,17 @@ describe UserMailer do
   end
 
   describe "brilliant_email" do
-    let(:post) { FactoryGirl.create(:post) }
-    let(:mail) { UserMailer.brilliant_email(post) }
+    let(:response) { FactoryGirl.create(:response) }
+    let(:mail) { UserMailer.brilliant_email(response) }
 
-    it "sends flag_email to admin" do
-      expect(mail.subject).to eq("Thoughtsy: post rated 'brilliant'")
+    it "sends brilliant_email to admin" do
+      expect(mail.subject).to eq("Thoughtsy: response rated 'brilliant'")
       expect(mail.to).to eq(['admin@thoughtsy.com'])
       expect(mail.from).to eq(["admin@thoughtsy.com"])
     end
 
     it "renders the email body" do
-      expect(mail.body.encoded).to match(post_path(@post))
+      expect(mail.body.encoded).to match(response_path(response))
     end
   end
 end

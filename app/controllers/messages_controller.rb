@@ -4,6 +4,7 @@ class MessagesController < ApplicationController
     @message = current_user.messages.build(message_params)
     if @message.save
       flash.now[:success] = "Message sent!"
+      UserMailer.message_email(@message).deliver
       respond_to do |format|
         format.html { redirect_to root_path }
         format.js { flash.now[:success] = "Message sent!" }
