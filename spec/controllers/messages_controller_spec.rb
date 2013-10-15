@@ -10,11 +10,27 @@ describe MessagesController do
 
   before { sign_in user, no_capybara: true }
 
-  describe "Message with AJAX" do
+  describe "POST #create sans AJAX" do
+    context "with valid attributes" do
+      it "creates a new message" do
+        expect do
+          post :create, message: { user_id: user.id, content: 'message', to_id: response.user.id }
+        end.to change(Message, :count).by(1)
+      end
+
+      it "redirects to home after save" do
+        post :create, message: { user_id: user.id, content: 'message', to_id: response.user.id }
+        expect(response).to redirect_to root_url
+      end
+    end
+    ## context 'with invalid attributes' -> using AJAX
+  end
+
+  describe "POST #create with AJAX" do
 
     describe "with invalid information" do
 
-      it "does not create a message" do
+      it "does not save a message" do
         expect do
           xhr :post, 'create', message: { user_id: user.id, content: ' ', to_id: response.user.id }
         end.not_to change(Message, :count)
@@ -23,7 +39,7 @@ describe MessagesController do
 
     describe "with valid information" do
 
-      it "increments the message count" do
+      it "saves a message" do
         expect do
           xhr :post, 
               :create,

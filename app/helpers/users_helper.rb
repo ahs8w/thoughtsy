@@ -7,4 +7,12 @@ module UsersHelper
     gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
     image_tag(gravatar_url, alt: user.username, class: "gravatar")
   end
+
+  def username(thought)
+    if thought.user.id != current_user.id
+      thought.user.username
+    else
+      "You"
+    end
+  end
 end

@@ -23,6 +23,7 @@ describe User do
   it { should respond_to(:token_timer?) }
   it { should respond_to(:ratings) }
   it { should respond_to(:messages) }
+  it { should respond_to(:received_messages) }
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followed_posts) }
   it { should respond_to(:subscribe!) }

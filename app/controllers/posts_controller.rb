@@ -68,7 +68,7 @@ class PostsController < ApplicationController
 
     def set_tokens_and_state
       post = Post.find(params[:id])
+      post.accept! unless current_user.token_id == post.id
       current_user.set_tokens(post.id)
-      post.accept!
     end
 end

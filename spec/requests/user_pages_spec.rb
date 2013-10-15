@@ -56,42 +56,64 @@ describe "UserPages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let(:wrong_user) { FactoryGirl.create(:user) }
     let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }  #creates p1 (instantiates it also)
     let!(:p2) { FactoryGirl.create(:post, user: user, content: "Bar") }
+    let!(:user_message) { user.messages.create(content: "sent", to_id: wrong_user.id) }
+    let!(:received_message) { Message.create(content: "received", to_id: user.id, user_id: wrong_user.id) }
+    let!(:response) { FactoryGirl.create(:response, post: p1) }
+    let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
 
-    before { visit user_path(user) }
+    describe "as wrong user" do
+      before do
+        sign_in wrong_user
+        visit user_path(user)
+      end
 
-    it { should have_content(user.username) }
-    it { should have_title(user.username) }
+      it { should have_content(user.username) }
+      it { should have_title(user.username) }
+      it { should_not have_link("edit settings", href: edit_user_path(user)) }
+      it { should_not have_content("Notes") }
 
-    describe "when signed in" do
-      before { sign_in user }
+      context "posts" do
+        it { should have_content(p1.content) }
+        it { should have_content(p2.content) }
+        it { should have_content(user.posts.count) }
+        it { should_not have_link('delete') }
 
-      it { should have_link("Sign out", href: signout_path) }
-      it { should have_link("edit settings", href: edit_user_path(user)) }
+        it "count is correct" do
+          expect(user.posts.count).to eq 2
+        end
 
-      # describe "responses" do
-      #   let!(:response) { FactoryGirl.create(:response, post: p1) }
-      #   before { visit user_path(user) }
+        describe "pagination" do
+          before do
+            31.times { FactoryGirl.create(:post, user: user) }
+            visit user_path(user)   # necessary to revisit profile page if not using before(:all)
+          end
+          after(:all)  { Post.delete_all }
 
-      #   it { should have_content("#{response.content}") }
-      # end
+          it { should have_selector('div.pagination') }
+        end
+      end
+
+      context "responses" do 
+        it { should have_content(response.content) }
+        it { should have_content(user_response.content) }
+        it { should have_content(user.responses.count) }
+      end
     end
 
-    describe "posts" do
-      it { should have_content(p1.content) }
-      it { should have_content(p2.content) }
-      it { should have_content(user.posts.count) }
-      it { should_not have_link('delete') }
+    describe "as the correct user" do
+      before do
+        sign_in user
+        visit user_path(user)
+      end
 
-      describe "pagination" do
-        before do
-          31.times { FactoryGirl.create(:post, user: user) }
-          visit user_path(user)   # necessary to revisit profile page if not using before(:all)
-        end
-        after(:all)  { Post.delete_all }
+      it { should have_link("edit settings", href: edit_user_path(user)) }
 
-        it { should have_selector('div.pagination') }
+      context "sent and received messages" do
+        it { should have_content(user_message.content) }
+        it { should have_content(received_message.content) }
       end
     end
   end

@@ -8,28 +8,59 @@
       <ol class="posts" id="posts">
         <% @user.posts.each do |post| %>
           <li>
-            <%= post.content %>
-            <div class="timestamp"><%= post.created_at %></div>
+            <%= wrapped(post) %>
+            <div class="timestamp"><%= date_time(post) %></div>
           </li>
+          <li>
+            <% if post.responses.empty? %>
+            <% else %>
+              <% post.responses.each do |response| %>
+                <%= wrapped(response) %>
+              <% end %>
+            <% end %>
+          </li>  
         <% end %>
       </ol>
       <%= will_paginate @posts %>
     <% end %>
   </div>
 
-  <div class="span4 offset1">
+  <div class="span4 offset2">
     <% if @user.responses.any? %>
       <h3 id="post_count">Responses (<%= @user.responses.count %>)</h3>
       <ol class="posts" id="posts">
         <% @user.responses.each do |response| %>
           <li>
-            <p class="lighten"><%= response.post.content %></p>
-            <%= response.content %>
-            <div class="timestamp"><%= response.created_at %></div>
+            <p class="lighten"><%= wrapped(response.post) %></p>
+            <%= wrapped(response) %>
+            <div class="timestamp"><%= date_time(response) %></div>
           </li>
         <% end %>
       </ol>
       <%= will_paginate @responses %>
     <% end %>
   </div>
+
+  <% if current_user.id == @user.id %>
+    <div class="span3">
+      <% if current_user.messages.any? %>
+        <h3 id="messages">Notes sent</h3>
+        <% current_user.messages.each do |msg| %>
+          <li>
+            <p>To: <%= User.find(msg.to_id).username %></p>
+            <p><%= msg.content %></p>
+          </li>
+        <% end %>
+      <% end %>
+      <% if current_user.received_messages.any? %>
+        <h3 id="messages">Notes received</h3>
+        <% current_user.received_messages.each do |msg| %>
+          <li>
+            <p>From: <%= User.find(msg.user_id).username %></p>
+            <p><%= msg.content %></p>
+          </li>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
 </div>

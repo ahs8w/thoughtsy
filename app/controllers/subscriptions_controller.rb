@@ -10,6 +10,7 @@ class SubscriptionsController < ApplicationController
   def destroy
     @post = Post.find(params[:id])
     current_user.unsubscribe!(@post)
+    @post.accept! if @post.state == 'unanswered'
     flash[:success] = "Thought unfollowed."
     redirect_to @post
   end

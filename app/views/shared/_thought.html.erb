@@ -1,5 +1,5 @@
 <legend>
   <%= gravatar_for thought.user, size: 30 %>
-  <%= thought.user.username %> wrote:
+  <%= username(thought) %> wrote:
 </legend>
-<p><%= thought.content %></p>
+<p><%= wrap(thought.content) %></p>

@@ -222,37 +222,5 @@ describe "Post pages" do
         expect(last_email.to).to include('admin@thoughtsy.com')
       end
     end
-
-    describe "clicking follow (subscribing)" do
-      before { click_button "follow" }
-
-      it { should have_success_message("Thought followed.") }
-
-      it "updates follower attribute" do
-        post.reload
-        expect(post.followers).to include user
-      end
-    end
-
-    describe "after subscribing and returning to the page" do
-      before do
-        user.subscribe!(post)
-        visit post_path(post)
-      end
-
-      it { should have_content("You are following this post.") }
-      it { should have_link("unfollow") }
-
-      describe "clicking unfollow (unsubscribing)" do
-        before { click_link "unfollow" }
-
-        it { should have_success_message("Thought unfollowed.") }
-
-        it "updates follower attribute" do
-          post.reload
-          expect(post.followers).not_to include user
-        end
-      end
-    end
   end
 end

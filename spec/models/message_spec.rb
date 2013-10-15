@@ -11,6 +11,8 @@ describe Message do
   its(:user) { should eq user }
   it { should respond_to(:to_id) }
   it { should respond_to(:content) }
+  it { should respond_to(:receiver) }
+  its(:receiver) { should eq receiver }
 
   it { should be_valid }
 end

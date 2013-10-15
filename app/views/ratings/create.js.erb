@@ -3,9 +3,9 @@ var rating = $('#rating_form');
 
 <% if @rating.save %>
   <% if @rating.value == 1 %>
-    rating.html("<%= escape_javascript(render('ratings/weak')) %>");
+    rating.html("<%= escape_javascript(render('ratings/repost')) %>");
   <% elsif @rating.value >= 3 %>
-    rating.html("<%= escape_javascript(render('ratings/strong')) %>");
+    rating.html("<%= escape_javascript(render('ratings/message')) %>");
   <% else %>
     rating.html("<%= escape_javascript(render('ratings/rating')) %>");
   <% end %>

@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+### Response#Show ###
+
 describe "Ratings" do
   subject { page }
 
@@ -16,8 +18,22 @@ describe "Ratings" do
       page.has_xpath?("//form.new_rating")
     end
 
+    describe "clicking 'weak'" do
+      before { click_button 'weak' }
+    
+      it { should have_content("You rated this article: weak") }
+    end
+
+    describe "clicking 'average'" do
+      before { click_button 'average' }
+
+      it { should have_content("You rated this article: average") }
+    end
+
     describe "clicking 'thought provoking'" do
       before { click_button 'thought provoking' }
+
+      it { should have_content("You rated this article: thought provoking") }
 
       it "does not send an email" do
         expect(last_email).to be_nil
@@ -26,6 +42,8 @@ describe "Ratings" do
 
     describe "clicking 'brilliant'" do
       before { click_button 'brilliant!' }
+
+      it { should have_content("You rated this article: brilliant!") }
 
       it "saves a rating" do
         expect(Rating.where(value: 4).count).to eq 1
@@ -46,7 +64,7 @@ describe "Ratings" do
     end
   end
 
-  # describe "Creation with JS:", :js => true, :focus => true do
+  # describe "Creation with JS:", :js=>true do
   #   let(:response) { FactoryGirl.create(:response, post_id: post.id) }
   #   before { visit response_path(response) }
 
@@ -54,40 +72,28 @@ describe "Ratings" do
   #     before { click_button 'weak' }
     
   #     it { should have_link("repost this thought") }
-  #     it { should have_content("You rated this article: weak") }
 
   #     describe "-> repost" do
   #       before { click_link("repost this thought") }
   #       it { should have_success_message("Thought reposted.") }
   #       it { should have_button("Post a thought") }
+
+  #       it "post state is 'unanswered'" do
+  #         expect(post.state).to eq 'unanswered'
+  #       end
   #     end
   #   end
 
-  #   describe "clicking 'average'" do
-  #     before { click_button 'average' }
-
-  #     it { should have_content("You rated this article: average") }
-  #     it { should_not have_link("repost this article") }
-  #     it { should_not have_link("send a note") }
-  #   end
-
-  #   describe "clicking 'thought provoking" do
+  #   describe "clicking 'thought provoking'" do
   #     before { click_button 'thought provoking' }
 
   #     it { should have_link('send a note') }
-  #     it { should have_content("You rated this article: thought provoking") }
   #   end
 
   #   describe "clicking 'brilliant!'" do
   #     before { click_button 'brilliant!' }
 
   #     it { should have_link('send a note') }
-  #     it { should have_content("You rated this article: brilliant!") }
-
-  #     describe "-> send a note" do
-  #       before { click_link("send a note") }
-  #       it { should have_content("Note to #{response.user.username}") }
-  #     end
   #   end
   # end
 end

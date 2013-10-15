@@ -9,9 +9,16 @@ module PostsHelper
     sanitize(raw(content.split.map{ |s| wrap_long_string(s) }.join(' ')))
   end
 
-  def set_tokens_and_state(post)
-    current_user.set_tokens(post.id)
-    post.accept!
+  def date_time(thought)
+    if thought.created_at < 10.days.ago
+      thought.created_at.to_date
+    else
+      "Posted #{time_ago_in_words(thought.created_at)} ago"
+    end
+  end
+
+  def wrapped(thought)
+    truncate(wrap(thought.content), length: 50, separator: ' ')
   end
 
   private

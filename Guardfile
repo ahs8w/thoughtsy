@@ -29,7 +29,7 @@ guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' },
   watch('spec/factories.rb')                    #FactoryGirl factories
 end
 
-guard :rspec, keep_failed: true, focus_on_failed: false, cmd: 'rspec --drb' do
+guard :rspec, focus_on_failed: false, cmd: 'rspec --drb' do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
