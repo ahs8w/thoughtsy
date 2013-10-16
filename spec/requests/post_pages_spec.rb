@@ -191,18 +191,6 @@ describe "Post pages" do
     end
   end
 
-  ## actions from Response#Show page ##
-  describe "reposting" do
-    let!(:answered_post) { FactoryGirl.create(:post, user_id: user.id, state: 'answered') }
-    
-    it "changes state and displays flash" do
-      visit repost_post_path(answered_post)
-      answered_post.reload
-      expect(answered_post.state).to eq 'unanswered'
-      expect(page).to have_success_message("Thought reposted.")
-    end
-  end
-
   ## actions from Post#Show page ##
   describe "responder links" do
     let(:post) { FactoryGirl.create(:post) }
@@ -222,5 +210,6 @@ describe "Post pages" do
         expect(last_email.to).to include('admin@thoughtsy.com')
       end
     end
+    ## clicking follow is covered in subscription_pages_spec
   end
 end

@@ -7,8 +7,13 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @posts = @user.posts.paginate(page: params[:page])
-    @responses = @user.responses.paginate(page: params[:page])
+    if current_user.id == @user.id
+      @posts = @user.posts.descending.paginate(page: params[:page])
+      @responses = @user.responses.descending.paginate(page: params[:page])
+    else
+      @posts = @user.posts.descending.paginate(page: params[:page])
+      @responses = @user.responses.descending.paginate(page: params[:page])
+    end
   end
 
   def new

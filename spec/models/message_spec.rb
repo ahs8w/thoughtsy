@@ -15,4 +15,14 @@ describe Message do
   its(:receiver) { should eq receiver }
 
   it { should be_valid }
+
+  describe "when content is not present" do
+    before { @message.content = nil }
+    it { should_not be_valid }
+  end
+
+  describe "when to_id is not present" do
+    before { @message.to_id = nil }
+    it { should_not be_valid }
+  end
 end

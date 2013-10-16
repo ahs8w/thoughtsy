@@ -4,16 +4,16 @@ var flash = $('#js_flash_messages');
 // remove error messages if present
 $('#error_explanation').remove();
 
-<% if !@message.save %>
+<% if @message.errors.any? %>
 
   el.before("<%= escape_javascript(render('shared/error_messages', object: @message)) %>");
-  el[0].reset();
+  el.reset();
 
 <% else %>
 
   $('#notemodal').modal('hide');
   flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
-  flash.fadeOut(5000);
   $('#note_toggle').hide();
+  flash.fadeOut(5000);
 
 <% end %>

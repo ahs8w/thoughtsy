@@ -8,6 +8,7 @@ class Post < ActiveRecord::Base
   validates_presence_of :user_id, :content
 
   scope :ascending, -> { order('created_at ASC') }
+  scope :descending, -> { order('created_at DESC') }
   scope :available, ->(user) { where("state == 'unanswered' AND user_id != ?", user.id) }
 
   state_machine :state, initial: :unanswered do

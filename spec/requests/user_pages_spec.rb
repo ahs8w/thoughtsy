@@ -57,11 +57,11 @@ describe "UserPages" do
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
     let(:wrong_user) { FactoryGirl.create(:user) }
-    let!(:p1) { FactoryGirl.create(:post, user: user, content: "Foo") }  #creates p1 (instantiates it also)
-    let!(:p2) { FactoryGirl.create(:post, user: user, content: "Bar") }
+    let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Foo") }  # creates and instantiates
+    let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Bar") }
     let!(:user_message) { user.messages.create(content: "sent", to_id: wrong_user.id) }
     let!(:received_message) { Message.create(content: "received", to_id: user.id, user_id: wrong_user.id) }
-    let!(:response) { FactoryGirl.create(:response, post: p1) }
+    let!(:response) { FactoryGirl.create(:response, post_id: answered_post.id) }
     let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
 
     describe "as wrong user" do
@@ -74,33 +74,36 @@ describe "UserPages" do
       it { should have_title(user.username) }
       it { should_not have_link("edit settings", href: edit_user_path(user)) }
       it { should_not have_content("Notes") }
+      it { should_not have_content("Posts") }
 
       context "posts" do
-        it { should have_content(p1.content) }
-        it { should have_content(p2.content) }
-        it { should have_content(user.posts.count) }
-        it { should_not have_link('delete') }
+        it { should have_content(answered_post.content) }
 
-        it "count is correct" do
-          expect(user.posts.count).to eq 2
-        end
-
-        describe "pagination" do
-          before do
-            31.times { FactoryGirl.create(:post, user: user) }
-            visit user_path(user)   # necessary to revisit profile page if not using before(:all)
-          end
-          after(:all)  { Post.delete_all }
-
-          it { should have_selector('div.pagination') }
-        end
+        it { should_not have_content(unanswered_post.content) }
+        it { should_not have_content(user.posts.count) }
       end
 
       context "responses" do 
         it { should have_content(response.content) }
         it { should have_content(user_response.content) }
-        it { should have_content(user.responses.count) }
+
+        it { should_not have_content(user.responses.count) }
       end
+
+      context "messages" do
+        it { should_not have_content(user_message.content) }
+        it { should_not have_content(received_message.content) }
+      end  
+
+        # describe "pagination" do
+        #   before do
+        #     31.times { FactoryGirl.create(:post, user: user) }
+        #     visit user_path(user)   # necessary to revisit profile page if not using before(:all)
+        #   end
+        #   after(:all)  { Post.delete_all }
+
+        #   it { should have_selector('div.pagination') }
+        # end
     end
 
     describe "as the correct user" do
@@ -110,6 +113,14 @@ describe "UserPages" do
       end
 
       it { should have_link("edit settings", href: edit_user_path(user)) }
+      it { should have_content(user.responses.count) }
+      it { should have_content(user.posts.count) }
+      it { should have_content(unanswered_post.content) }
+
+      it "counts are correct" do
+        expect(user.posts.count).to eq 2
+        expect(user.responses.count).to eq 1
+      end
 
       context "sent and received messages" do
         it { should have_content(user_message.content) }

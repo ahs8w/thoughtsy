@@ -142,6 +142,20 @@ describe "ResponsePages" do
     it { should have_content(response.post.content) }
     it { should have_selector("div#rating_form") }
 
+    # describe "reposting", :js=>true do
+    #   before do
+    #     post.state = 'answered'
+    #     click_button 'weak'
+    #   end
+
+    #   it "clicking link changes post state and displays flash" do
+    #     click_link "repost this thought?"
+    #     post.reload
+    #     expect(post.state).to eq 'unanswered'
+    #     expect(page).to have_success_message("Thought reposted.")
+    #   end
+    # end
+
     describe "as user other than post author" do
       let(:user2) { FactoryGirl.create(:user) }
       before do

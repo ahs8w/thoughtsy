@@ -33,6 +33,30 @@ describe Post do
     it { should_not be_valid }
   end
 
+## Post Scopes ##
+  describe "ordered scopes" do
+    let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
+    let!(:older_post) { FactoryGirl.create(:post, created_at: 5.hours.ago) }
+
+    it "ascending" do
+      expect(Post.ascending.first).to eq older_post
+    end
+
+    it "descending" do
+      expect(Post.descending.first).to eq newer_post
+    end
+  end
+
+  describe "available scope" do
+    let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
+    let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
+    let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
+
+    it "available" do
+      expect(Post.available(user)).not_to include(user_post, answered_post, pending_post)
+    end
+  end
+
 ## Post State ##
   describe "states :" do
     

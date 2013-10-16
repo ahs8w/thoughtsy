@@ -1,39 +1,45 @@
 require 'spec_helper'
 
-# describe "Messages" do
-#   subject { page }
+describe "Messages" do
+  subject { page }
 
-#   let(:user) { FactoryGirl.create(:user) }
-#   let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+  let(:receiver) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:post) { FactoryGirl.create(:post, user_id: user.id) }
   
-#   before { sign_in user }
+  before { sign_in user }
 
-#   describe "Creation with JS:", :js=>true do
-#     let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-#     before { visit response_path(response) }
+  # describe "Creation with JS:", :js=>true do
+  #   let!(:response) { FactoryGirl.create(:response, user_id: receiver.id, post_id: post.id) }
+  #   before do
+  #     visit response_path(response)
+  #     click_button "brilliant!"
+  #   end
 
-#     describe "clicking 'brilliant!'" do
-#       before { click_button 'brilliant!' }
+  #   it { should have_link('send a note') }
 
-#       it { should have_link('send a note') }
+  #   describe "-> send a note" do
+  #     before { click_link("send a note") }
 
-#       ## Message Controller ##
-#       describe "-> send a note" do
-#         before { click_link("send a note") }
-#         it { should have_content("Note to #{response.user.username}") }
+  #     it { should have_content("Note to #{receiver.username}") }
 
-#         describe "sending note" do
-#           before do
-#             fill_in 'message_content', with: "message"
-#           end
+  #     describe "with invalid information" do
+  #       before { click_button "Send" }
 
-#           it "saves with correct attributes" do
-#             # click_button 'Send'
-#             # expect(Message.count).to eq 1
-#             expect{ click_button 'Send' }.to change(Message, :count).by(1)
-#           end
-#         end
-#       end
-#     end
-#   end
-# end
+  #       it { should have_error_message("error") }
+  #     end
+
+  #     describe "with valid information" do
+  #       before do
+  #         fill_in 'message_content', with: "message"
+  #       end
+        
+  #       it "clicking 'Send' saves note" do
+  #         expect{ click_button 'Send' }.to change(Message, :count).by(1)
+  #         expect(page).to have_content('You rated this article: brilliant!')
+  #         expect(page).to have_selector('#js_flash_messages', text: 'Note sent!')
+  #       end
+  #     end
+  #   end
+  # end
+end
