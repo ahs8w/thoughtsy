@@ -47,13 +47,27 @@ describe Post do
     end
   end
 
-  describe "available scope" do
+  describe "state scopes" do
     let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
     let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
     let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
+    let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
+    let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+    let!(:no_state) { FactoryGirl.create(:post) }
 
     it "available" do
       expect(Post.available(user)).not_to include(user_post, answered_post, pending_post)
+      expect(Post.available(user)).to include(available)
+    end
+
+    it "answered" do
+      expect(Post.answered).not_to include(user_post, pending_post, available)
+      expect(Post.answered).to include(answered_post) 
+    end
+
+    it "personal" do
+      expect(Post.personal).not_to include(answered_post)
+      expect(Post.personal).to include(flagged, pending_post, available, no_state)
     end
   end
 

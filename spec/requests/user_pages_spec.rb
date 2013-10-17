@@ -57,10 +57,15 @@ describe "UserPages" do
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
     let(:wrong_user) { FactoryGirl.create(:user) }
-    let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Foo") }  # creates and instantiates
-    let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Bar") }
+    # let! -> creates and instantiates variable
+    let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Answered", 
+                                              state: 'answered', created_at: 4.hours.ago) }
+    let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", created_at: 3.hours.ago) }
+    let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "New", created_at: 3.minutes.ago) }
+
     let!(:user_message) { user.messages.create(content: "sent", to_id: wrong_user.id) }
     let!(:received_message) { Message.create(content: "received", to_id: user.id, user_id: wrong_user.id) }
+
     let!(:response) { FactoryGirl.create(:response, post_id: answered_post.id) }
     let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
 
@@ -74,20 +79,22 @@ describe "UserPages" do
       it { should have_title(user.username) }
       it { should_not have_link("edit settings", href: edit_user_path(user)) }
       it { should_not have_content("Notes") }
-      it { should_not have_content("Posts") }
 
       context "posts" do
         it { should have_content(answered_post.content) }
-
         it { should_not have_content(unanswered_post.content) }
-        it { should_not have_content(user.posts.count) }
       end
 
       context "responses" do 
         it { should have_content(response.content) }
         it { should have_content(user_response.content) }
+      end
 
-        it { should_not have_content(user.responses.count) }
+      context "thought counts" do
+        it "are not visible" do
+          expect(first('#post_count')).not_to have_content(user.posts.count)
+          expect(first('#response_count')).not_to have_content(user.responses.count)
+        end
       end
 
       context "messages" do
@@ -118,8 +125,12 @@ describe "UserPages" do
       it { should have_content(unanswered_post.content) }
 
       it "counts are correct" do
-        expect(user.posts.count).to eq 2
+        expect(user.posts.count).to eq 3
         expect(user.responses.count).to eq 1
+      end
+
+      it "posts are ordered newest to oldest" do
+        expect(first('#personal_posts li')).to have_content(newer_post.content)
       end
 
       context "sent and received messages" do

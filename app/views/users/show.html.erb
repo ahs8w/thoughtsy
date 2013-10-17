@@ -3,42 +3,20 @@
   <%= render 'shared/user_info', user: @user %>
 
   <div class="span4 offset3">
-    <% if @user.posts.any? %>
-      <h3 id="post_count">Posts (<%= @user.posts.count %>)</h3>
-      <ol class="posts" id="posts">
-        <% @user.posts.each do |post| %>
-          <li>
-            <%= wrapped(post) %>
-            <div class="timestamp"><%= date_time(post) %></div>
-          </li>
-          <li>
-            <% if post.responses.empty? %>
-            <% else %>
-              <% post.responses.each do |response| %>
-                <%= wrapped(response) %>
-              <% end %>
-            <% end %>
-          </li>  
-        <% end %>
-      </ol>
-      <%= will_paginate @posts %>
-    <% end %>
+    <h3 class="counts" id="post_count">Posts <%= "(#{@user.posts.count})" if current_user?(@user) %></h3>
+    <ol class="posts" id="answered_posts">
+      <%= render partial: 'users/profile_partials/answered_post', collection: @answered_posts %>
+    </ol>
+    <ol class="posts" id="personal_posts">
+      <%= render partial: 'users/profile_partials/personal_post', collection: @personal_posts if current_user?(@user) %>
+    </ol>
   </div>
 
   <div class="span4 offset2">
-    <% if @user.responses.any? %>
-      <h3 id="post_count">Responses (<%= @user.responses.count %>)</h3>
-      <ol class="posts" id="posts">
-        <% @user.responses.each do |response| %>
-          <li>
-            <p class="lighten"><%= wrapped(response.post) %></p>
-            <%= wrapped(response) %>
-            <div class="timestamp"><%= date_time(response) %></div>
-          </li>
-        <% end %>
-      </ol>
-      <%= will_paginate @responses %>
-    <% end %>
+    <h3 class="counts" id="response_count">Responses <%= "(#{@responses.count})" if current_user?(@user) %></h3>
+    <ol class="posts" id="profile_response">
+      <%= render partial: 'users/profile_partials/response', collection: @responses %>
+    </ol>
   </div>
 
   <% if current_user.id == @user.id %>

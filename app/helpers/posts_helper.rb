@@ -17,8 +17,8 @@ module PostsHelper
     end
   end
 
-  def wrapped(thought)
-    truncate(wrap(thought.content), length: 50, separator: ' ')
+  def wrapped(content)
+    truncate(wrap(content), length: 100, separator: ' ')
   end
 
   private

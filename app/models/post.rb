@@ -9,7 +9,9 @@ class Post < ActiveRecord::Base
 
   scope :ascending, -> { order('created_at ASC') }
   scope :descending, -> { order('created_at DESC') }
-  scope :available, ->(user) { where("state == 'unanswered' AND user_id != ?", user.id) }
+  scope :available, ->(user) { where("state == ? AND user_id != ?", 'unanswered', user.id) }
+  scope :answered, -> { where("state == ?", 'answered') }
+  scope :personal, -> { where.not("state == ?", 'answered') }
 
   state_machine :state, initial: :unanswered do
 

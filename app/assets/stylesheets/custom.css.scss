@@ -101,6 +101,10 @@ p {
   color: $grayLight;
 }
 
+.darker {
+  background-color: #ddd;
+}
+
 /* flash messages */
 
 #js_flash_messages {
@@ -330,10 +334,10 @@ textarea#response_content {
   margin-left: 0;
 }
 
-#thought {
+/*#thought {
   padding: 10px;
   background-color: #ddd;
-}
+}*/
 
 #post {
   background-color: #ddd;
@@ -376,4 +380,25 @@ textarea#response_content {
 #top-users {
   text-align: center;
   margin-left: 0;
+}
+
+/* _thought partials */
+
+#thought_content {
+  padding: 10px;
+}
+
+#thought_author {
+  font-size: .9em;
+  font-weight: 400;
+}
+
+#response_post {
+  padding: 10px;
+}
+
+#response {
+  padding-left: 25px;
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
