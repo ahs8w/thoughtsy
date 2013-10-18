@@ -1,8 +1,12 @@
 <% provide(:page_title, "Responses") %>
 <h1>Responses</h1>
 
-<%= will_paginate %>
-<ol class="responses" id="responses">
-  <%= render @responses %>
-</ol>
-<%= will_paginate %>
+<div class="row-fluid">  
+  <div class="span6 offset3">
+    <%= will_paginate %>
+    <ol class="responses" id="responses">
+      <%= render @responses %>
+    </ol>
+    <%= will_paginate %>
+  </div>
+</div>

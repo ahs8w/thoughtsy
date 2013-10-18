@@ -5,7 +5,7 @@
     <span class="timestamp">| <%= date_time(response) %></span>
   </p>
   <p class="response">
-    <span class="content"><%= wrap(response.content) %></span>
+    <span class="content"><%= link_to "#{wrapped(response.content)}", response_path(response) %></span>
     <span class="user"><%= response.user.username %></span>
     <span class="timestamp">| <%= date_time(response) %></span><br />
     <% if current_user.admin? %>
