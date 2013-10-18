@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
                     # uniqueness caveat -> does not guarantee uniqueness!!  must enforce at db level also w/ email index
 
-# User.methods
+# Session methods
   def User.new_remember_token
     SecureRandom.urlsafe_base64
     # any large random string works:  returns a random string of length 16 with each character having 64 possibilities
@@ -86,6 +86,7 @@ class User < ActiveRecord::Base
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
   end
+
   
   private
 

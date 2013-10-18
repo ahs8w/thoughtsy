@@ -1,0 +1,9 @@
+<div class="thought">
+  <div class="thought_content">
+    <%= wrap(thought.content) %>
+  </div>
+  <div class="thought_author">
+    <%= link_to "#{thought.user.username}", user_path(thought.user) %>
+    <span class="timestamp pull-right"><%= date_time(thought) %></span>
+  </div>
+</div>

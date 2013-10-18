@@ -69,6 +69,15 @@ describe "UserPages" do
     let!(:response) { FactoryGirl.create(:response, post_id: answered_post.id) }
     let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
 
+    describe "with no posts" do
+      before do
+        sign_in user
+        visit user_path(wrong_user)
+      end
+
+      it { should have_content('There are no answered thoughts') }
+    end
+
     describe "as wrong user" do
       before do
         sign_in wrong_user
@@ -91,10 +100,8 @@ describe "UserPages" do
       end
 
       context "thought counts" do
-        it "are not visible" do
-          expect(first('#post_count')).not_to have_content(user.posts.count)
-          expect(first('#response_count')).not_to have_content(user.responses.count)
-        end
+        it { should_not have_xpath('.//h4', text: 'Posts (3)') }
+        it { should_not have_xpath('.//h4', text: 'Responses (1)') }
       end
 
       context "messages" do
@@ -124,9 +131,9 @@ describe "UserPages" do
       it { should have_content(user.posts.count) }
       it { should have_content(unanswered_post.content) }
 
-      it "counts are correct" do
-        expect(user.posts.count).to eq 3
-        expect(user.responses.count).to eq 1
+      context "counts are correct" do
+        it { should have_xpath('.//h4', text: 'Posts (3)') }
+        it { should have_xpath('.//h4', text: 'Responses (1)') }
       end
 
       it "posts are ordered newest to oldest" do

@@ -138,7 +138,6 @@ describe "ResponsePages" do
     it { should have_title('Response') }
     it { should have_content(response.content) }
     it { should have_content(response.user.username) }
-    it { should have_content('You wrote:') }
     it { should have_content(response.post.content) }
     it { should have_selector("div#rating_form") }
 

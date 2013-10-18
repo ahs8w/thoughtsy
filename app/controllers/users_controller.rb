@@ -7,9 +7,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @answered_posts = @user.posts.answered.descending if @user.posts.answered.any?
-    @personal_posts = @user.posts.personal.descending if @user.posts.personal.any?
-    @responses = @user.responses.descending if @user.responses.any?
   end
 
   def new

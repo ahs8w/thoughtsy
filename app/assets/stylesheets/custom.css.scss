@@ -71,20 +71,19 @@ form.new_rating {
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
+  text-align: center;
 }
 
 h1 {
   font-size: 3em;
   letter-spacing: -2px;
   margin-bottom: 30px;
-  text-align: center;
 }
 
 h2 {
   font-size: 1.2em;
   letter-spacing: -1px;
   margin-bottom: 30px;
-  text-align: center;
   font-weight: normal;
   color: $grayLight;     /* SASS variable inferred from bootstrap framework (orig. LESS) */
 }
@@ -148,7 +147,7 @@ p {
 
 footer {
   margin-top: 45px;
-  padding-top: 5px;
+  padding-top: 10px;
   border-top: 1px solid $grayMediumLight;
   color: $grayLight;
   a {
@@ -281,19 +280,6 @@ textarea#response_content {
   }
 }
 
-/* user profile */
-
-.posts {
-  list-style: none;
-  margin: 10px 0 0 0;
-
-  li {
-    padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
-  }
-}
-
-
 /* responses */
 
 .responses {
@@ -384,21 +370,66 @@ textarea#response_content {
 
 /* _thought partials */
 
-#thought_content {
-  padding: 10px;
+/*.thought {
+  padding-top: 30px;
 }
 
-#thought_author {
-  font-size: .9em;
-  font-weight: 400;
-}
 
-#response_post {
-  padding: 10px;
-}
+
 
 #response {
   padding-left: 25px;
   margin-top: 15px;
   margin-bottom: 20px;
+}*/
+
+/* User Profile */
+
+.profile {
+  list-style: none;
+  margin: 10px 0 0 0;
+  li {
+    padding: 20px 0;
+    border-bottom: 1px solid #FFF;
+  }
 }
+
+.thought {
+  margin-top: 25px;
+}
+
+.thought_author {
+  font-size: .85em;
+  padding-top: 5px;
+}
+
+.thought_response {
+  padding-left: 25px;
+}
+
+#notes {
+  margin-top: 100px;
+}
+
+/*#personal_posts {
+  .thought {
+    border-bottom: 1px solid #FFF;
+  }
+}
+
+#answered_posts {
+  .thought {
+    .thought_author {
+      visibility: hidden;
+    }
+  }
+  .thought_response {
+    .thought_author {
+      visibility: visible;
+    }
+  }
+}
+
+#responses {
+  
+}*/

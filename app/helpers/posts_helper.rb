@@ -11,7 +11,7 @@ module PostsHelper
 
   def date_time(thought)
     if thought.created_at < 10.days.ago
-      thought.created_at.to_date
+      thought.created_at.to_formatted_s(:short_ordinal)
     else
       "Posted #{time_ago_in_words(thought.created_at)} ago"
     end
