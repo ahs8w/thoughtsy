@@ -3,75 +3,29 @@
   <%= render 'shared/user_info', user: @user %>
 
   <!-- Messages -->
-  <% if current_user?(@user) %>
     <div class="span3" id="notes">
-      <ul class="profile">
-        <h4>Notes sent</h4>
-        <% if current_user.messages.each do |msg| %>
-          <li>
-            <p>To: <%= User.find(msg.to_id).username %></p>
-            <p><%= msg.content %></p>
-          </li>
-        <% end.empty? %>
-          <p class="center lighten">You have no sent notes</p>
-        <% end %>
-      </ul>
-      <ul class="profile">
-        <h4>Notes received</h4>
-        <% if current_user.received_messages.each do |msg| %>
-          <li>
-            <p>From: <%= User.find(msg.user_id).username %></p>
-            <p><%= msg.content %></p>
-          </li>
-        <% end.empty? %>
-          <p class="center lighten">You have no received notes</p>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <!-- Posts -->
-  <div class="span5">
-    <h4>Posts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
-    <ul class="profile" id="answered_posts">
-      <% if answered_posts(@user).each do |post| %>
-        <li>
-          <%= render partial: 'shared/thought', object: post %>
-          <div class="thought_response">
-            <%= render partial: 'shared/thought', collection: post.responses %>
-          </div>
-        </li>
-      <% end.empty? %>
-        <p class="center lighten">There are no answered thoughts</p>
+      <% if current_user?(@user) %>
+        <%= render 'message' %>
       <% end %>
-    </ul>
+    </div>
 
+  <!-- Posted thoughts -->
+  <div class="span5">
+    <h4>Posted thoughts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
+    <%= render partial: 'profile_thought', object: answered_posts(@user), locals: {:message=>"answered posts"} %>
     <% if current_user?(@user) %>
-      <ul class="profile" id="personal_posts">
-        <% if personal_posts(@user).each do |post| %>
-          <li>
-            <%= render partial: 'shared/thought', object: post %>
-          </li>
-        <% end.empty? %>
-          <p class="center lighten">There are no unanswered thoughts</p>
-        <% end %>
-      </ul>
+      <%= render partial: 'profile_thought', object: personal_posts(@user), locals: {:message=>"unanswered posts"} %>
     <% end %>
   </div>
 
-  <!-- Responses -->
+  <!-- Thoughts responded to -->
   <div class="span5 offset1">
-    <h4>Responses <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
-    <ul class="profile" id="responses">
+    <h4>Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
+    <ul class="profile">
       <% if responses(@user).each do |response| %>
-        <li>
-          <%= render partial: 'shared/thought', object: response.post %>
-          <div class="thought_response">
-            <%= render partial: 'shared/thought', object: response %>
-          </div>
-        </li>
+        <li><%= render partial: 'post', object: response.post %></li>
       <% end.empty? %>
-        <p class="center lighten">There are no responses</p>
+        <p class="center lighter">There are no responses</p>
       <% end %>
     </ul>
   </div>

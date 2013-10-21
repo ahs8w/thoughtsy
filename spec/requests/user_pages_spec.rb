@@ -105,8 +105,7 @@ describe "UserPages" do
       end
 
       context "messages" do
-        it { should_not have_content(user_message.content) }
-        it { should_not have_content(received_message.content) }
+        it { should_not have_content('Notes') }
       end  
 
         # describe "pagination" do
@@ -141,8 +140,8 @@ describe "UserPages" do
       end
 
       context "sent and received messages" do
-        it { should have_content(user_message.content) }
-        it { should have_content(received_message.content) }
+        it { should have_content(User.find(user_message.to_id).username) }
+        it { should have_content(received_message.user.username) }
       end
     end
   end

@@ -13,14 +13,14 @@ module PostsHelper
     if thought.created_at < 10.days.ago
       thought.created_at.to_formatted_s(:short_ordinal)
     else
-      "Posted #{time_ago_in_words(thought.created_at)} ago"
+      "#{time_ago_in_words(thought.created_at)} ago"
     end
   end
 
   def wrapped(content)
-    truncate(wrap(content), length: 100, separator: ' ')
+    truncate(wrap(content), length: 65, separator: ' ')
   end
-
+  
   private
 
     def wrap_long_string(text, max_width = 30)

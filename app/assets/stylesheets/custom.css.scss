@@ -43,29 +43,10 @@ textarea {
   margin: 0;
 }
 
-/* rating form behaviors */
-form.new_rating {
-  display: inline;
+.timestamp {
+  color: $grayLight;
 }
 
-#rating_form {
-  text-align: center;
-}
-
-#responder_links {
-  span {
-    margin-top: -10px;
-  }
-  form {
-    margin: 0;
-    input {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 95%;
-      padding: 0;
-      border: 0;
-    }
-  }
-}
 
 /* typography */
 
@@ -96,13 +77,39 @@ p {
   }
 }
 
-.lighten {
+.lighter {
   color: $grayLight;
 }
 
 .darker {
   background-color: #ddd;
 }
+
+
+/* rating form behaviors */
+form.new_rating {
+  display: inline;
+}
+
+#rating_form {
+  text-align: center;
+}
+
+#responder_links {
+  span {
+    margin-top: -10px;
+  }
+  form {
+    margin: 0;
+    input {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 95%;
+      padding: 0;
+      border: 0;
+    }
+  }
+}
+
 
 /* flash messages */
 
@@ -280,22 +287,27 @@ textarea#response_content {
   }
 }
 
-/* responses */
+/* Responses index */
 
 .responses {
   list-style: none;
   margin: 10px 0 0 0;
-
   li {
     padding: 10px 0;
     border-top: 1px solid #e8e8e8;
   }
 }
-.content {
-  display: block;
+
+
+/* shared/thought */
+
+.thought {
+  margin: 15px;
 }
-.timestamp {
-  color: $grayLight;
+
+.thought_author {
+  font-size: .85em;
+  padding-top: 5px;
 }
 
 
@@ -319,11 +331,6 @@ textarea#response_content {
 .row-fluid .well {
   margin-left: 0;
 }
-
-/*#thought {
-  padding: 10px;
-  background-color: #ddd;
-}*/
 
 #post {
   background-color: #ddd;
@@ -368,20 +375,6 @@ textarea#response_content {
   margin-left: 0;
 }
 
-/* _thought partials */
-
-/*.thought {
-  padding-top: 30px;
-}
-
-
-
-
-#response {
-  padding-left: 25px;
-  margin-top: 15px;
-  margin-bottom: 20px;
-}*/
 
 /* User Profile */
 
@@ -389,47 +382,17 @@ textarea#response_content {
   list-style: none;
   margin: 10px 0 0 0;
   li {
-    padding: 20px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #FFF;
   }
 }
 
-.thought {
-  margin: 15px;
-}
-
-.thought_author {
-  font-size: .85em;
-  padding-top: 5px;
-}
-
-.thought_response {
+.post_response {
   padding-left: 25px;
+  padding-top: 5px;
+  overflow: auto;
 }
 
 #notes {
   margin-top: 100px;
 }
-
-/*#personal_posts {
-  .thought {
-    border-bottom: 1px solid #FFF;
-  }
-}
-
-#answered_posts {
-  .thought {
-    .thought_author {
-      visibility: hidden;
-    }
-  }
-  .thought_response {
-    .thought_author {
-      visibility: visible;
-    }
-  }
-}
-
-#responses {
-  
-}*/

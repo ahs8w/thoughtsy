@@ -1,0 +1,16 @@
+<ul class="profile">
+  <h4>Notes</h4>
+  <% if current_user.received_messages.each do |msg| %>
+    <%= link_to "From: #{User.find(msg.user_id).username}", '#' %> 
+  <% end.empty? %>
+    <p class="center lighter">You have no received notes</p>
+  <% end %>
+
+  <% if current_user.messages.each do |msg| %>
+    <li>
+      <%= link_to "To: #{User.find(msg.to_id).username}", '#' %>
+    </li>
+  <% end.empty? %>
+    <p class="center lighter">You have no sent notes</p>
+  <% end %>
+</ul>
