@@ -2,6 +2,7 @@ require 'spec_helper'
 
 # controller tests used for testing AJAX (XHR - 'XmlHttpRequest')
 # xhr :HTTP_method, :action, controller: { hash of parameters }
+# testing controller methods
 
 describe PostsController do
 

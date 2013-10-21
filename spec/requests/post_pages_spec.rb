@@ -65,26 +65,16 @@ describe "Post pages" do
     # end
   end
 
-  describe "show page" do
-    let!(:post) { FactoryGirl.create(:post) }
-    before do
-      visit root_path
-      click_button "Respond"
-    end
+  # describe "show page" do
+  #   let!(:post) { FactoryGirl.create(:post) }
+  #   before { visit post_path(post) }
 
-    it { should have_title("Respond") }
-    it { should have_content(post.user.username) }
-    it { should have_content(post.content) }
-    it { should have_field('response_content') }
-    it { should have_button("Respond") }
-
-    it "sets tokens for user" do
-      expect(user.token_timer).to be_blank
-      user.reload
-      expect(user.token_id).to eq post.id
-      expect(user.token_timer).to be_present
-    end
-  end
+  #   it { should have_title("Respond") }
+  #   it { should have_content(post.user.username) }
+  #   it { should have_content(post.content) }
+  #   it { should have_field('response_content') }
+  #   it { should have_button("Respond") }
+  # end
 
   describe "Persistance:" do
     let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
@@ -191,25 +181,5 @@ describe "Post pages" do
     end
   end
 
-  ## actions from Post#Show page ##
-  describe "responder links" do
-    let(:post) { FactoryGirl.create(:post) }
-    before { visit post_path(post) }
-
-    it { should have_link("offensive or inappropriate?") }
-    it { should have_button("follow") }
-
-    describe "clicking offensive" do
-      let!(:post2) { FactoryGirl.create(:post) }
-      before { click_link "offensive" }
-
-      it { should have_content(post2.content) }
-      it { should have_content("Post flagged.") }
-
-      it "sends an email to admin" do
-        expect(last_email.to).to include('admin@thoughtsy.com')
-      end
-    end
-    ## clicking follow is covered in subscription_pages_spec
-  end
+  
 end

@@ -3,14 +3,15 @@ Thoughtsy::Application.routes.draw do
   resources :users
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     except: [:new, :update, :edit] do
+    resources :responses, only: [:show, :new, :index, :create]
     member do
       get 'repost'
       get 'flag'
     end
   end
-  resources :responses, except: [:new, :update, :edit]
+  resources :responses, only: :destroy
   resources :password_resets, except: [:show, :index]
-  resources :ratings,   only: :create
+  resources :ratings,   only: [:new, :create]
   resources :messages,  only: :create
   resources :subscriptions, only: [:create, :destroy]
 

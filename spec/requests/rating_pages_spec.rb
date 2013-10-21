@@ -12,7 +12,7 @@ describe "Ratings" do
 
   describe "Creation:" do
     let(:response) { FactoryGirl.create(:response, post_id: post.id) }
-    before { visit response_path(response) }
+    before { visit post_response_path(post, response) }
 
     it "form:" do
       page.has_xpath?("//form.new_rating")
@@ -54,7 +54,7 @@ describe "Ratings" do
       end
 
       describe "reloading the page" do
-        before { visit response_path(response) }
+        before { visit post_response_path(post, response) }
 
         it "form is replaced by current rating" do
           page.has_no_xpath?("//form.new_rating")

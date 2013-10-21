@@ -46,7 +46,7 @@ describe UserMailer do
       end
 
       it "renders the email body" do
-        expect(mail.body.encoded).to match(response_path(response))
+        expect(mail.body.encoded).to match(post_response_path(post, response))
       end
     end
 
@@ -65,7 +65,7 @@ describe UserMailer do
       end
 
       it "renders the email body" do
-        expect(mail.body.encoded).to match(response_path(response))
+        expect(mail.body.encoded).to match(post_response_path(post, response))
       end
     end
   end

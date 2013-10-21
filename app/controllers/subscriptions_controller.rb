@@ -4,7 +4,7 @@ class SubscriptionsController < ApplicationController
     @post.unanswer!
     current_user.subscribe!(@post)
     flash[:success] = "Thought followed."
-    redirect_to @post
+    redirect_to new_post_response_path(@post)
   end
 
   def destroy
@@ -12,6 +12,6 @@ class SubscriptionsController < ApplicationController
     current_user.unsubscribe!(@post)
     @post.accept! if @post.state == 'unanswered'
     flash[:success] = "Thought unfollowed."
-    redirect_to @post
+    redirect_to new_post_response_path(@post)
   end
 end

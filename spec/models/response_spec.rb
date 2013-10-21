@@ -36,4 +36,18 @@ describe Response do
     before { @response.content = ' ' }
     it { should_not be_valid }
   end
+
+## Response Scopes ##
+  describe "ordered scopes" do
+    let!(:newer_response) { FactoryGirl.create(:response, created_at: 5.minutes.ago) }
+    let!(:older_response) { FactoryGirl.create(:response, created_at: 5.hours.ago) }
+
+    it "ascending" do
+      expect(Response.ascending.first).to eq older_response
+    end
+
+    it "descending" do
+      expect(Response.descending.first).to eq newer_response
+    end
+  end
 end

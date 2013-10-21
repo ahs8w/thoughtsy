@@ -8,4 +8,5 @@ class Response < ActiveRecord::Base
   has_many :raters, through: :ratings, source: :user
 
   scope :descending, -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
+  scope :ascending,  -> { order('created_at ASC') }
 end

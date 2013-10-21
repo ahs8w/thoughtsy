@@ -1,12 +1,26 @@
 <% provide(:page_title, "Responses") %>
-<h1>Responses</h1>
+
+<div class="row-fluid">
+  <div class="span8 offset2">
+    <div class="well darker" id="thought">
+      <%= render partial: "shared/thought", object: @post %>
+    </div>
+  </div>
+</div>
 
 <div class="row-fluid">  
   <div class="span6 offset3">
     <%= will_paginate %>
-    <ol class="responses" id="responses">
-      <%= render @responses %>
-    </ol>
+    <ul class="responses" id="responses">
+      <% @responses.each do |response| %>
+        <li>
+          <%= render partial: "shared/thought", object: response %>
+          <% if current_user.admin? %>
+            <%= link_to "delete", response, method: :delete, data: { confirm: "Are you sure?" } %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
     <%= will_paginate %>
   </div>
 </div>

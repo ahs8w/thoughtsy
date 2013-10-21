@@ -32,7 +32,7 @@ describe "Authentication  : " do
       it { should have_title(user.username) }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
-      it { should have_link('Responses',        href: responses_path) }
+      it { should have_link('Posts',            href: '#') }
       it { should have_link('Profile',          href: user_path(user)) }
       it { should have_link('Settings',         href: edit_user_path(user)) }
       it { should have_link('Sign out',         href: signout_path) }
@@ -123,7 +123,7 @@ describe "Authentication  : " do
 
         describe "submitting to the create action" do
           # before { post "posts/1/responses" }      use literal paths w/ nested routes to set proper params
-          before { post responses_path }
+          before { post "posts/1/responses" }
           specify { expect(response).to redirect_to(signin_path) }
         end
 
@@ -133,7 +133,7 @@ describe "Authentication  : " do
         end
 
         describe "visiting the show action" do
-          before { get response_path(1) }
+          before { get "posts/1/responses/1" }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
@@ -173,6 +173,18 @@ describe "Authentication  : " do
           before { visit post_path(post) }
           it { should_not have_title('Respond') }
           it { should have_title('Thoughtsy') }
+        end
+      end
+
+      describe "in the Responses Controller" do
+        let(:wrong_user) { FactoryGirl.create(:user) }
+        let!(:post) { FactoryGirl.create(:post) }
+        let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+        before { sign_in wrong_user, no_capybara: true }
+
+        describe "visiting show page" do
+          before { get "posts/1/responses/1" }
+          specify { expect(response).to redirect_to(root_url) }
         end
       end
     end

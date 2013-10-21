@@ -10,7 +10,7 @@
       <%= @post.content %>
     </p>
     <p>
-      To see the response, head on over to <%= link_to "Thoughtsy", response_url(@response) %>.
+      To see the response, head on over to <%= link_to "Thoughtsy", post_response_url(@post, @response) %>.
     </p>
   </body>
 </html>
