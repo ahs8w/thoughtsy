@@ -61,7 +61,7 @@ describe "UserPages" do
     let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Answered", 
                                               state: 'answered', created_at: 4.hours.ago) }
     let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", created_at: 3.hours.ago) }
-    let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "New", created_at: 3.minutes.ago) }
+    let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "Newer", created_at: 3.minutes.ago) }
 
     let!(:user_message) { user.messages.create(content: "sent", to_id: wrong_user.id) }
     let!(:received_message) { Message.create(content: "received", to_id: user.id, user_id: wrong_user.id) }
@@ -76,6 +76,7 @@ describe "UserPages" do
       end
 
       it { should have_content('There are no answered thoughts') }
+      it { should have_content('There are no responses') }
     end
 
     describe "as wrong user" do
@@ -90,13 +91,13 @@ describe "UserPages" do
       it { should_not have_content("Notes") }
 
       context "posts" do
-        it { should have_content(answered_post.content) }
+        it { should have_link(answered_post.content) }
+        it { should have_content("#{response.user.username} responded") }
         it { should_not have_content(unanswered_post.content) }
       end
 
-      context "responses" do 
-        it { should have_content(response.content) }
-        it { should have_content(user_response.content) }
+      context "responses" do
+        it { should have_link(user_response.post.content) }
       end
 
       context "thought counts" do
@@ -131,12 +132,23 @@ describe "UserPages" do
       it { should have_content(unanswered_post.content) }
 
       context "counts are correct" do
-        it { should have_xpath('.//h4', text: 'Posts (3)') }
-        it { should have_xpath('.//h4', text: 'Responses (1)') }
+        it { should have_xpath('.//h4', text: 'Posted thoughts (3)') }
+        it { should have_xpath('.//h4', text: 'Thoughts responded to (1)') }
       end
 
-      it "posts are ordered newest to oldest" do
-        expect(first('#personal_posts li')).to have_content(newer_post.content)
+      context "posts are ordered newest to oldest" do
+        it "within section" do
+          expect(find('#personal_posts').first('li')).to have_content(newer_post.content)
+        end
+      end
+
+      context "posts(responded to) appear only once" do
+        let!(:other_post) { FactoryGirl.create(:post, content: 'other_post') }
+        let!(:first_response) { FactoryGirl.create(:response, user_id: user.id, post_id: other_post.id) }
+        let!(:second_response) { FactoryGirl.create(:response, user_id: user.id, post_id: other_post.id) }
+        before { visit user_path(user) }
+
+        it { should have_selector('li', :text => "#{other_post.content}", :count => 1) }
       end
 
       context "sent and received messages" do

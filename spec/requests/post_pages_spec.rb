@@ -180,6 +180,4 @@ describe "Post pages" do
       end
     end
   end
-
-  
 end

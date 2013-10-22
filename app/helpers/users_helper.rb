@@ -27,4 +27,8 @@ module UsersHelper
   def responses(user)
     user.responses.descending
   end
+
+  def unique_posts(user)
+    responses(user).map(&:post).uniq
+  end
 end

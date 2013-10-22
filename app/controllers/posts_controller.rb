@@ -23,7 +23,7 @@ class PostsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
+        format.html { render partial: 'static_pages/post_form' }    # render root_url doesn't work -> template missing!!!!!!
         format.js
       end
     end
