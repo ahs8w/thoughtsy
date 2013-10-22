@@ -2,16 +2,16 @@ require 'spec_helper'
 
 ### Response#Show ###
 
-describe "Ratings" do
+describe "Rating Pages" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+  let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
   
   before { sign_in user }
 
   describe "Creation:" do
-    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
+    let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
     before { visit post_response_path(post, response) }
 
     it "form:" do

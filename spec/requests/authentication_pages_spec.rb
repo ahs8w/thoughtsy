@@ -32,7 +32,7 @@ describe "Authentication  : " do
       it { should have_title(user.username) }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
-      it { should have_link('Posts',            href: '#') }
+      it { should have_link('Posts',            href: posts_path) }
       it { should have_link('Profile',          href: user_path(user)) }
       it { should have_link('Settings',         href: edit_user_path(user)) }
       it { should have_link('Sign out',         href: signout_path) }
@@ -103,19 +103,9 @@ describe "Authentication  : " do
           specify { expect(response).to redirect_to(signin_path) }
         end
 
-        describe "submitting to the destroy action" do
-          before { delete post_path(FactoryGirl.create(:post)) }
-          specify { expect(response).to redirect_to(signin_path) }
-        end
-
         describe "visiting the index page" do
           before { visit posts_path }
           it { should have_title('Sign in') }
-        end
-
-        describe "visiting the show action" do
-          before { get post_path(1) }
-          specify { expect(response).to redirect_to(signin_path) }
         end
       end
 
@@ -134,6 +124,11 @@ describe "Authentication  : " do
 
         describe "visiting the show action" do
           before { get "posts/1/responses/1" }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe "visiting the new action" do
+          before { get "posts/1/responses/new" }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
@@ -169,10 +164,24 @@ describe "Authentication  : " do
         let!(:post) { FactoryGirl.create(:post) }
         before { sign_in wrong_user, no_capybara: true }
 
-        describe "visiting show page" do
-          before { visit post_path(post) }
-          it { should_not have_title('Respond') }
-          it { should have_title('Thoughtsy') }
+        describe "submitting to the repost action" do
+          before { get repost_post_path(post) }
+          specify { expect(response).to redirect_to(root_url) }
+        end
+
+        describe "submitting to the flag action" do
+          before { get flag_post_path(post) }
+          specify { expect(response).to redirect_to(root_url) }
+        end
+      end
+
+      describe "in the Ratings Controller" do
+        let(:wrong_user) { FactoryGirl.create(:user) }
+        before { sign_in wrong_user, no_capybara: true }
+
+        describe "submitting to create action" do
+          before { post ratings_path }
+          specify { expect(response).to redirect_to(root_url) }
         end
       end
 
@@ -185,6 +194,10 @@ describe "Authentication  : " do
         describe "visiting show page" do
           before { get "posts/1/responses/1" }
           specify { expect(response).to redirect_to(root_url) }
+        end
+
+        describe "visiting the new page" do
+
         end
       end
     end
@@ -209,13 +222,13 @@ describe "Authentication  : " do
         specify { expect(response).to redirect_to(root_url) }
       end
 
-      describe "visiting the queue page" do
-        before { get posts_path }
+      describe "submitting a DELETE request to the Responses#destroy action" do
+        before { delete response_path(response) }
         specify { expect(response).to redirect_to(root_url) }
       end
 
-      describe "submitting a DELETE request to the Responses#destroy action" do
-        before { delete response_path(response) }
+      describe "visiting the queue page" do
+        before { get queue_path }
         specify { expect(response).to redirect_to(root_url) }
       end
     end
@@ -232,7 +245,7 @@ describe "Authentication  : " do
       describe "should have Queue link" do
         before { sign_in admin }
 
-        it { should have_link('Queue', href: posts_path) }
+        it { should have_link('Queue', href: queue_path) }
       end
     end
 

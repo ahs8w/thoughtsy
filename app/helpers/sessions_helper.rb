@@ -51,6 +51,11 @@ module SessionsHelper
     redirect_to(root_url) unless current_user.token_id == params[:id].to_i
   end
 
+  def author_or_follower
+    post = Post.find(params[:id])
+    redirect_to root_path unless current_user.id == post.user.id || current_user.followed_posts.include?(post)
+  end
+
   ## Friendly Forwarding ##
   
   def redirect_back_or(default)                    # used in 'Users#create' 

@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-  before_action :signed_in_user
+  before_action :signed_in_user  #, :author_or_follower
  
   def create
     @rating = current_user.ratings.build(rating_params)

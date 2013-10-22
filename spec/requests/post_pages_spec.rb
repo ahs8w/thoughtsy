@@ -63,6 +63,64 @@ describe "Post pages" do
     #     end
     #   end
     # end
+
+    describe "delete links" do
+      
+      context "without flagged posts" do
+        it { should_not have_link('delete') }
+      end
+
+      context "with flagged posts" do
+        let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+        before { visit queue_path }
+
+        it { should have_link('delete', href: post_path(flagged)) }
+
+        describe "clicking delete" do
+
+          it "deletes post and flashes success" do
+            expect do
+              click_link('delete', match: :first)
+            end.to change(Post, :count).by(-1)
+
+            expect(page).to have_success_message('Post destroyed!')
+          end
+        end
+      end
+    end
+  end
+
+  describe "index page" do
+    let(:user) { FactoryGirl.create(:user) }
+    let!(:post) { FactoryGirl.create(:post, created_at: 1.hour.ago, state: 'answered') }
+    before do
+      sign_in user
+      visit posts_path
+    end
+
+    it { should have_title("Thoughts") }
+    it { should have_content(post.user.username) }
+    it { should have_content(post.content) }
+
+    describe "order of posts" do
+      let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago, state: 'answered') }
+      before { visit posts_path }
+
+      it "should have the right post in the right order" do
+        expect(first('#thought')).to have_content(newer_post.content)
+      end
+    end
+
+    describe "includes only answered posts" do
+      let(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
+      let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
+      let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+      before { visit posts_path }
+
+      it { should_not have_content(unanswered.content) }
+      it { should_not have_content(pending.content) }
+      it { should_not have_content(flagged.content) }
+    end
   end
 
   # describe "show page" do
@@ -76,6 +134,9 @@ describe "Post pages" do
   #   it { should have_button("Respond") }
   # end
 
+## StaticPages#Home ##
+
+  ## 'Respond_button' ##
   describe "Persistance:" do
     let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
     before do
@@ -122,6 +183,7 @@ describe "Post pages" do
     end
   end
 
+  ## Response creation ##
   describe "[post states]" do
     let!(:post) { FactoryGirl.create(:post) }
     before { visit root_path }
@@ -157,6 +219,7 @@ describe "Post pages" do
     end
   end
  
+  ## 'Post_a_thought' ##
   describe "post creation" do
     before { visit root_path }
 

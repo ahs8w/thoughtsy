@@ -1,10 +1,15 @@
 class PostsController < ApplicationController
   before_action :signed_in_user
-  before_action :admin_user, only: [:destroy, :index]
+  before_action :admin_user, only: [:destroy, :queue]
+  before_action :author_or_follower, only: :repost
   # before_action :set_tokens_and_state, :correct_responder, only: :show
 
-  def index
+  def queue
     @posts = Post.where(state: ["unanswered", "pending", "flagged"]).ascending.paginate(page: params[:page])
+  end
+
+  def index
+    @posts = Post.where(state: "answered").descending
   end
 
   # def show
@@ -33,10 +38,10 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @user = @post.user
     @post.destroy!
-    flash.now[:success] = "Post destroyed!"
+    flash[:success] = "Post destroyed!"
     respond_to do |format|
-      format.html { redirect_to :back }
-      format.js
+      format.html { redirect_to :queue }
+      format.js 
     end
   end
 

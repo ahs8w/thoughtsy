@@ -1,18 +1,22 @@
-<% provide(:page_title, "Queue") %>
-<h1>Queue</h1>
+<% provide(:page_title, "Thoughts") %>
 
-<%= will_paginate %>
+<% @posts.each do |post| %>
 
-<table class="table table-striped">
-  <thead>
-    <td>User</td>
-    <td>Created at</td>
-    <td>Content</td>
-    <td>State</td>
-  </thead>
-  <tbody>
-    <%= render @posts %>
-  </tbody>
-</table>
+<div class="row-fluid">
+  <div class="span8 offset2">
+    <div class="well darker" id="thought">
+      <%= render partial: "shared/thought", object: post %>
+    </div>
+  </div>
+  <div class="span6 offset3">
+    <ul class="responses" id="responses">
+      <% post.responses.descending.each do |response| %>
+        <li>
+          <%= render partial: "shared/thought", object: response %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
 
-<%= will_paginate %>
+<% end %>

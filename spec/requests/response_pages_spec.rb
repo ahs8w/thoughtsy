@@ -8,75 +8,75 @@ describe "ResponsePages" do
   let!(:post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
   before { sign_in user }
 
-  describe "index page" do
-    let!(:response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
-    let!(:newer_response) { FactoryGirl.create(:response, post: post) }
-    before { visit post_responses_path(post) }
+  # describe "index page" do
+  #   let!(:response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
+  #   let!(:newer_response) { FactoryGirl.create(:response, post: post) }
+  #   before { visit post_responses_path(post) }
 
-    it { should have_title('Responses') }
-    it { should have_content(response.content) }
-    it { should have_content(response.user.username) }
-    it { should have_content(newer_response.content) }
-    it { should have_content(response.post.user.username) }
-    it { should have_content(response.post.content) }
+  #   it { should have_title('Responses') }
+  #   it { should have_content(response.content) }
+  #   it { should have_content(response.user.username) }
+  #   it { should have_content(newer_response.content) }
+  #   it { should have_content(response.post.user.username) }
+  #   it { should have_content(response.post.content) }
 
-    describe "response order" do
-      it "older response is first" do
-        expect(first('#responses li')).to have_content(response.content)
-      end
-    end
+  #   describe "response order" do
+  #     it "older response is first" do
+  #       expect(first('#responses li')).to have_content(response.content)
+  #     end
+  #   end
 
-    describe "#destroy" do
-      let!(:response) { FactoryGirl.create(:response) }
-      let(:admin) { FactoryGirl.create(:admin) }
+  #   describe "#destroy" do
+  #     let!(:response) { FactoryGirl.create(:response) }
+  #     let(:admin) { FactoryGirl.create(:admin) }
 
-      it { should_not have_link('delete') }
+  #     it { should_not have_link('delete') }
 
-      describe "admin" do
-        before do
-          sign_in admin
-          visit post_responses_path(response.post)
-        end
+  #     describe "admin" do
+  #       before do
+  #         sign_in admin
+  #         visit post_responses_path(response.post)
+  #       end
 
-        it { should have_link('delete', href: response_path(response)) }
+  #       it { should have_link('delete', href: response_path(response)) }
 
-        context "clicking delete" do
+  #       context "clicking delete" do
 
-          it "should delete response" do
-            expect do
-              click_link('delete', match: :first)
-            end.to change(Response, :count).by(-1)
+  #         it "should delete response" do
+  #           expect do
+  #             click_link('delete', match: :first)
+  #           end.to change(Response, :count).by(-1)
 
-            expect(page).to have_success_message('Response destroyed!')
-          end
+  #           expect(page).to have_success_message('Response destroyed!')
+  #         end
 
-          it "should return the post to the queue and reset state" do
-            expect(response.post).to be_answered    # checking factories set up correctly
-            click_link('delete', match: :first)
-            visit posts_path
-            expect(page).to have_content(response.post.content)
-            response.post.reload
-            expect(response.post).to be_unanswered
-          end
-        end
-      end
-    end
+  #         it "should return the post to the queue and reset state" do
+  #           expect(response.post).to be_answered    # checking factories set up correctly
+  #           click_link('delete', match: :first)
+  #           visit posts_path
+  #           expect(page).to have_content(response.post.content)
+  #           response.post.reload
+  #           expect(response.post).to be_unanswered
+  #         end
+  #       end
+  #     end
+  #   end
 
-    # describe "pagination" do
-    #   before(:all) { 31.times { FactoryGirl.create(:response, post_id: post.id) } }
-    #   after(:all)  { Post.delete_all }
-    #   after(:all)  { Response.delete_all }
-    #   after(:all)  { User.delete_all }
+  #   # describe "pagination" do
+  #   #   before(:all) { 31.times { FactoryGirl.create(:response, post_id: post.id) } }
+  #   #   after(:all)  { Post.delete_all }
+  #   #   after(:all)  { Response.delete_all }
+  #   #   after(:all)  { User.delete_all }
 
-    #   it { should have_selector('div.pagination') }
+  #   #   it { should have_selector('div.pagination') }
 
-    #   it "should list each post" do
-    #     Response.paginate(page: 1).each do |response|
-    #       expect(page).to have_selector('li', text: response.content)
-    #     end
-    #   end
-    # end  
-  end
+  #   #   it "should list each post" do
+  #   #     Response.paginate(page: 1).each do |response|
+  #   #       expect(page).to have_selector('li', text: response.content)
+  #   #     end
+  #   #   end
+  #   # end  
+  # end
 
   describe "new page" do
     before { visit root_path }
@@ -222,6 +222,4 @@ describe "ResponsePages" do
       end
     end
   end
-
-
 end

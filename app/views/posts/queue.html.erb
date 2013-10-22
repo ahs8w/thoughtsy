@@ -1,0 +1,18 @@
+<% provide(:page_title, "Queue") %>
+<h1>Queue</h1>
+
+<%= will_paginate %>
+
+<table class="table table-striped">
+  <thead>
+    <td>User</td>
+    <td>Created at</td>
+    <td>Content</td>
+    <td>State</td>
+  </thead>
+  <tbody>
+    <%= render @posts %>
+  </tbody>
+</table>
+
+<%= will_paginate %>

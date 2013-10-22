@@ -1,7 +1,14 @@
 <tr>
   <td><%= post.user.username %></td>
   <td><%= post.created_at %></td>
-  <td><%= post.content %></td>
+  <td>
+    <%= wrapped(post.content) %>
+    <% if current_user.admin? && post.state == 'flagged' %>
+      | <%= link_to "delete", post, method: :delete, data: { confirm: "Are you sure?" } %>
+    <% end %>
+  </td>
   <td><%= post.state %></td>
 </tr>
+
+
   

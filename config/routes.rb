@@ -3,13 +3,14 @@ Thoughtsy::Application.routes.draw do
   resources :users
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     except: [:new, :update, :edit] do
-    resources :responses, only: [:show, :new, :index, :create]
+    resources :responses, only: [:show, :new, :create]
     member do
       get 'repost'
       get 'flag'
     end
+    get 'queue', on: :collection
   end
-  resources :responses, only: :destroy
+  resources :responses, only: [:destroy, :index]
   resources :password_resets, except: [:show, :index]
   resources :ratings,   only: [:new, :create]
   resources :messages,  only: :create
@@ -26,7 +27,7 @@ Thoughtsy::Application.routes.draw do
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 
-  match '/queue',   to: 'posts#index',          via: 'get'
+  match '/queue',   to: 'posts#queue',          via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
