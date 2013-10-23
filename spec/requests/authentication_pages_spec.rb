@@ -135,34 +135,32 @@ describe "Authentication  : " do
 
       describe "in the Ratings controller" do
         describe "submitting to the create action" do
-          before { post ratings_path }
+          before { post "posts/1/ratings" }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
     end
 
     describe "as the wrong user" do
+      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+      before { sign_in wrong_user, no_capybara: true }
 
       describe "in Users Controller" do
-        let(:user) { FactoryGirl.create(:user) }
-        let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
-        before { sign_in user, no_capybara: true }
+        let!(:user) { FactoryGirl.create(:user) }
 
         describe "visiting edit page" do
-          before { visit edit_user_path(wrong_user) }
+          before { visit edit_user_path(user) }
           it { should_not have_title('Edit profile') }
         end
 
         describe "submitting to the update action" do
-          before { patch user_path(wrong_user) }
+          before { patch user_path(user) }
           specify { expect(response).to redirect_to(root_url) }
         end
       end
 
       describe "in the Posts Controller" do
-        let(:wrong_user) { FactoryGirl.create(:user) }
         let!(:post) { FactoryGirl.create(:post) }
-        before { sign_in wrong_user, no_capybara: true }
 
         describe "submitting to the repost action" do
           before { get repost_post_path(post) }
@@ -176,28 +174,26 @@ describe "Authentication  : " do
       end
 
       describe "in the Ratings Controller" do
-        let(:wrong_user) { FactoryGirl.create(:user) }
-        before { sign_in wrong_user, no_capybara: true }
 
         describe "submitting to create action" do
-          before { post ratings_path }
+          before { post "posts/1/ratings" }
           specify { expect(response).to redirect_to(root_url) }
         end
       end
 
       describe "in the Responses Controller" do
-        let(:wrong_user) { FactoryGirl.create(:user) }
-        let!(:post) { FactoryGirl.create(:post) }
-        let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-        before { sign_in wrong_user, no_capybara: true }
-
+        
         describe "visiting show page" do
+          let!(:post) { FactoryGirl.create(:post) }
+          let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+
           before { get "posts/1/responses/1" }
           specify { expect(response).to redirect_to(root_url) }
         end
 
-        describe "visiting the new page" do
-
+        describe "submitting to the create action" do
+          before { post "posts/1/responses" }
+          specify { expect(response).to redirect_to(root_url) }
         end
       end
     end

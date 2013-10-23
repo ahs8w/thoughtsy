@@ -123,16 +123,37 @@ describe "Post pages" do
     end
   end
 
-  # describe "show page" do
-  #   let!(:post) { FactoryGirl.create(:post) }
-  #   before { visit post_path(post) }
+## Response#New ##
+  describe "flag action" do
+    let!(:post) { FactoryGirl.create(:post) }
+    let!(:token_post) { FactoryGirl.create(:post) }
+    before do
+      visit root_path
+      click_button "Respond"
+      click_link "offensive or inappropriate?"
+    end
 
-  #   it { should have_title("Respond") }
-  #   it { should have_content(post.user.username) }
-  #   it { should have_content(post.content) }
-  #   it { should have_field('response_content') }
-  #   it { should have_button("Respond") }
-  # end
+    it "displays flash, and changes post state" do
+      expect(page).to have_content "Post flagged."
+      post.reload
+      expect(post).to be_flagged
+    end
+
+    it "gets a new post and sets states" do
+      expect(page).to have_content(token_post.content)
+      user.reload
+      expect(user.token_id).to eq token_post.id
+    end
+
+    it "sends an email to admin" do
+      expect(last_email.to).to include('admin@thoughtsy.com')
+    end
+  end
+
+  describe "repost action" do
+    # covered in ratings_pages_spec -> accessed through AJAX ratings form
+    # action covered in posts_controller_spec
+  end
 
 ## StaticPages#Home ##
 
@@ -243,4 +264,17 @@ describe "Post pages" do
       end
     end
   end
+
+
+  # describe "show page" do
+  #   let!(:post) { FactoryGirl.create(:post) }
+  #   before { visit post_path(post) }
+
+  #   it { should have_title("Respond") }
+  #   it { should have_content(post.user.username) }
+  #   it { should have_content(post.content) }
+  #   it { should have_field('response_content') }
+  #   it { should have_button("Respond") }
+  # end
+
 end

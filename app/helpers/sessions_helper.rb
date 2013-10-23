@@ -47,13 +47,25 @@ module SessionsHelper
     !current_user.nil?          # signed_in? -> true  if current_user is not nil
   end
 
-  def correct_responder
-    redirect_to(root_url) unless current_user.token_id == params[:id].to_i
+  def tokened_responder
+    token = current_user.token_id
+    unless token == params[:id].to_i || token == params[:post_id].to_i
+      redirect_to root_url, notice: "Unauthorized access"
+    end
+  end
+
+  def post_follower(post)
+    current_user.followed_posts.include?(post)
   end
 
   def author_or_follower
+    post = Post.find(params[:post_id])
+    redirect_to root_path unless current_user.id == post.user.id || post_follower(post)
+  end
+
+  def post_author
     post = Post.find(params[:id])
-    redirect_to root_path unless current_user.id == post.user.id || current_user.followed_posts.include?(post)
+    redirect_to root_path unless current_user.id == post.user.id
   end
 
   ## Friendly Forwarding ##

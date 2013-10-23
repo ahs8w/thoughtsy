@@ -2,6 +2,7 @@ class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: :destroy
   before_action :author_or_follower, only: :show
+  before_action :tokened_responder, only: :create
   before_action :set_tokens_and_state, only: :new
 
 
@@ -15,6 +16,7 @@ class ResponsesController < ApplicationController
     @response = Response.new
   end
 
+# Ratings Page #
   def show
     @response = Response.find(params[:id])
     @post = @response.post

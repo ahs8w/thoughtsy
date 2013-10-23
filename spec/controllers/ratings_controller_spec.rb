@@ -16,7 +16,7 @@ describe RatingsController do
 
       it "should not create a rating" do
         expect do
-          xhr :post, 'create', rating: { response_id: response.id, user_id: user.id, value: ' ' }
+          xhr :post, :create, post_id: '1', rating: { response_id: response.id, user_id: user.id, value: ' ' }
         end.not_to change(Rating, :count)
       end
     end
@@ -25,12 +25,12 @@ describe RatingsController do
 
       it "should increment the Rating count" do
         expect do
-          xhr :post, 'create', rating: { response_id: response.id, user_id: user.id, value: '2' }
+          xhr :post, 'create', post_id: '1', rating: { response_id: response.id, user_id: user.id, value: '2' }
         end.to change(Rating, :count).by(1)
       end
 
       it "should show the correct flash message" do
-        xhr :post, 'create', rating: { response_id: response.id, user_id: user.id, value: '1' }
+        xhr :post, 'create', post_id: '1', rating: { response_id: response.id, user_id: user.id, value: '1' }
         expect(flash[:success]).to eq "Rating saved."
       end
     end

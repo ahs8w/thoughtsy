@@ -5,28 +5,28 @@
 <% else %>
   <div id="rating_form">
     <span id="1">
-      <%= form_for(@rating, remote: true) do |f| %>
+      <%= form_for([@post, @rating], remote: true) do |f| %>
         <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '1') %>
         <%= f.submit "weak", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="2">
-      <%= form_for(@rating, remote: true) do |f| %>
+      <%= form_for([@post, @rating], remote: true) do |f| %>
         <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '2') %>
         <%= f.submit "average", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="3">
-      <%= form_for(@rating, remote: true) do |f| %>
+      <%= form_for([@post, @rating], remote: true) do |f| %>
         <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '3') %>
         <%= f.submit "thought provoking", class: "btn btn-inverse" %>
       <% end %>
     </span>
     <span id="4">
-      <%= form_for(@rating, remote: true) do |f| %>
+      <%= form_for([@post, @rating], remote: true) do |f| %>
         <%= f.hidden_field(:response_id, :value => params[:id]) %>
         <%= f.hidden_field(:value, :value => '4') %>
         <%= f.submit "brilliant!", class: "btn btn-inverse" %>

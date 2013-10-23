@@ -2,7 +2,7 @@ var flash = $('#js_flash_messages');
 var rating = $('#rating_form');
 
 <% if @rating.save %>
-  <% if @rating.value == 1 %>
+  <% if @rating.value == 1 && !post_follower(@response.post) %>
     rating.html("<%= escape_javascript(render('ratings/repost')) %>");
   <% elsif @rating.value >= 3 %>
     rating.html("<%= escape_javascript(render('ratings/message')) %>");

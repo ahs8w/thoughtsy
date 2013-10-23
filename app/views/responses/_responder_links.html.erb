@@ -5,7 +5,9 @@
     </span>
   <% else %>
     <span class="pull-left">
-      <small><%= link_to "offensive or inappropriate?", flag_post_path(@post.id), remote: true %></small>
+      <small>
+        <%= link_to "offensive or inappropriate?", flag_post_path(@post.id) %>
+      </small>
     </span>
     <span class="pull-right">
       <%= render 'subscriptions/subscribe' %>

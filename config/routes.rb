@@ -4,6 +4,7 @@ Thoughtsy::Application.routes.draw do
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     except: [:new, :update, :edit] do
     resources :responses, only: [:show, :new, :create]
+    resources :ratings,   only: :create
     member do
       get 'repost'
       get 'flag'
@@ -12,7 +13,6 @@ Thoughtsy::Application.routes.draw do
   end
   resources :responses, only: [:destroy, :index]
   resources :password_resets, except: [:show, :index]
-  resources :ratings,   only: [:new, :create]
   resources :messages,  only: :create
   resources :subscriptions, only: [:create, :destroy]
 

@@ -1,8 +1,8 @@
 class PostsController < ApplicationController
   before_action :signed_in_user
   before_action :admin_user, only: [:destroy, :queue]
-  before_action :author_or_follower, only: :repost
-  # before_action :set_tokens_and_state, :correct_responder, only: :show
+  before_action :post_author, only: :repost
+  before_action :tokened_responder, only: :flag
 
   def queue
     @posts = Post.where(state: ["unanswered", "pending", "flagged"]).ascending.paginate(page: params[:page])
@@ -45,6 +45,7 @@ class PostsController < ApplicationController
     end
   end
 
+# Response#Show #
   def repost
     @post = Post.find(params[:id])
     @post.unanswer!
@@ -57,13 +58,16 @@ class PostsController < ApplicationController
     @token_post = Post.available(current_user).ascending.first
     @post.flag!       # sends flag_email on transition
     current_user.reset_tokens
-    respond_to do |format|
-      format.html do
-        flash[:notice] = "Post flagged."
-        redirect_to new_post_response_path(@token_post)
-      end
-      format.js { flash.now[:notice] = "Post flagged." }
-    end
+    flash[:notice] = "Post flagged."
+    redirect_to new_post_response_path(@token_post)
+
+    # respond_to do |format|
+    #   format.html do
+    #     flash[:notice] = "Post flagged."
+    #     redirect_to new_post_response_path(@token_post)
+    #   end
+    #   format.js { flash.now[:notice] = "Post flagged." }
+    # end
   end
 
   private

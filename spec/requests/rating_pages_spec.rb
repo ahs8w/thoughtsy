@@ -66,21 +66,36 @@ describe "Rating Pages" do
 
   # describe "Creation with JS:", :js=>true do
   #   let(:response) { FactoryGirl.create(:response, post_id: post.id) }
-  #   before { visit response_path(response) }
+  #   before { visit post_response_path(post, response) }
 
   #   describe "clicking 'weak'" do
-  #     before { click_button 'weak' }
-    
-  #     it { should have_link("repost this thought") }
+  #     context "as post author" do
+  #       before { click_button 'weak' }
+      
+  #       it { should have_link("repost this thought") }
 
-  #     describe "-> repost" do
-  #       before { click_link("repost this thought") }
-  #       it { should have_success_message("Thought reposted.") }
-  #       it { should have_button("Post a thought") }
+  #       describe "-> repost" do
+  #         before { click_link("repost this thought") }
+  #         it { should have_success_message("Thought reposted.") }
+  #         it { should have_button("Post a thought") }
 
-  #       it "post state is 'unanswered'" do
-  #         expect(post.state).to eq 'unanswered'
+  #         it "post state is 'unanswered'" do
+  #           expect(post.state).to eq 'unanswered'
+  #         end
   #       end
+  #     end
+
+  #     context "as post follower" do
+  #       let(:follower) { FactoryGirl.create(:user) }
+  #       before do
+  #         follower.subscribe!(post)
+  #         sign_in follower
+  #         visit post_response_path(post, response)
+  #         click_button 'weak'
+  #       end
+
+  #       it { should_not have_link("repost this thought") }
+  #       it { should have_content("You rated this article: weak")}
   #     end
   #   end
 

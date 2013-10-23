@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe PostsController do
 
-  let(:user) { FactoryGirl.create(:admin) }   # for testing destruction as well
+  let(:user) { FactoryGirl.create(:user) }   # :admin - for testing destruction as well
   before { sign_in user, no_capybara: true }
 
   describe "post creation with AJAX" do
@@ -62,9 +62,10 @@ describe PostsController do
 
   describe "flag a post" do
     let!(:post) { FactoryGirl.create(:post) }
+    before { user.set_tokens(post.id) }
 
     it "shows flash and changes post state" do
-      xhr :get, :flag, id: post.id
+      get :flag, id: post.id
       expect(flash[:notice]).to eq "Post flagged."
       post.reload
       expect(post.state).to eq 'flagged'
@@ -72,8 +73,7 @@ describe PostsController do
   end
 
   describe "repost" do
-    let!(:post) { FactoryGirl.create(:post) }
-    before { user.subscribe!(post) }
+    let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
 
     it "unanswers post and flashes success" do
       xhr :get, :repost, id: post.id

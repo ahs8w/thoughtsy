@@ -8,6 +8,123 @@ describe "ResponsePages" do
   let!(:post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
   before { sign_in user }
 
+  describe "new page" do
+    let!(:user_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
+    before do
+      visit root_path
+      click_button "Respond"
+    end
+
+    it { should_not have_content(user_post.content) }
+    it { should have_content(post.content) }
+    it { should have_selector('#time_explanation') }
+    it { should have_link("offensive or inappropriate?") }
+    it { should have_button("follow") }
+    it { should have_selector('#new_response') }
+  end
+
+  describe "create action" do
+    before do
+      visit root_path
+      click_button "Respond"
+    end
+
+    describe "with invalid information" do
+
+      it "sets tokens for user" do
+        expect(user.token_timer).to be_blank
+        user.reload
+        expect(user.token_id).to eq post.id
+        expect(user.token_timer).to be_present
+      end
+
+      it "does not create a response" do
+        expect { click_button "Respond" }.not_to change(Response, :count)
+      end
+
+      it "has an error message" do
+        click_button "Respond"
+        expect(page).to have_error_message("error")
+      end
+    end
+
+    describe "with valid information" do
+      before do
+        fill_in 'response_content', with: "Lorem Ipsum"
+      end
+
+      it "creates a response" do
+        expect { click_button "Respond" }.to change(Response, :count).by(1)
+        expect(page).to have_title("Thoughtsy")
+      end
+
+      it "resets user tokens" do
+        click_button "Respond"
+        user.reload
+        expect(user.token_timer).to be_blank
+        expect(user.token_id).to be_blank
+      end
+
+      it "sends response email" do
+        click_button "Respond"
+        expect(last_email.to).to include(post.user.email)
+      end
+
+      describe "follower_response_email" do
+        let(:follower) { FactoryGirl.create(:user) }
+        before { follower.subscribe!(post) }
+
+        it "sends email (to admin) with bcc's" do
+          click_button "Respond"
+          expect(last_email.bcc).to include(follower.email)
+        end
+      end
+    end
+  end
+
+  describe "show page" do
+    let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
+    let(:response) { FactoryGirl.create(:response, post_id: user_post.id) }
+    before { visit post_response_path(user_post, response) }
+
+    describe "access" do
+
+      context "as post author" do
+        it { should have_title('Response') }
+        it { should have_content(response.content) }
+        it { should have_content(response.user.username) }
+        it { should have_content(user_post.content) }
+        it { should have_selector("div#rating_form") }
+      end
+
+      context "as post follower" do
+        let(:follower) { FactoryGirl.create(:user) }
+        before do
+          sign_in follower
+          follower.subscribe!(user_post)
+        end
+
+        it "renders show page" do
+          visit post_response_path(user_post, response)
+          expect(page).to have_selector("div#rating_form")
+        end
+      end
+
+      context "as normal user" do
+        let(:user2) { FactoryGirl.create(:user) }
+        before do
+          sign_in user2
+        end
+
+        it "redirects to root" do
+         visit post_response_path(user_post, response)
+         expect(page).to have_button('Post a thought')
+        end
+      end
+    end
+  end
+
+
   # describe "index page" do
   #   let!(:response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
   #   let!(:newer_response) { FactoryGirl.create(:response, post: post) }
@@ -77,149 +194,4 @@ describe "ResponsePages" do
   #   #   end
   #   # end  
   # end
-
-  describe "new page" do
-    before { visit root_path }
-
-    describe "responding to one's own post" do
-      let!(:earlier_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
-
-      it "will not occur" do
-        click_button "Respond"
-        expect(page).not_to have_content(earlier_post.content)
-      end
-    end
-
-    describe "responder links" do
-      before { click_button "Respond" }
-
-      it { should have_link("offensive or inappropriate?") }
-      it { should have_button("follow") }
-
-      describe "clicking offensive" do
-        let!(:post2) { FactoryGirl.create(:post) }
-        before { click_link "offensive" }
-
-        it { should have_content(post2.content) }
-        it { should have_content("Post flagged.") }
-
-        it "sends an email to admin" do
-          expect(last_email.to).to include('admin@thoughtsy.com')
-        end
-      end
-      ## clicking follow is covered in subscription_pages_spec
-    end
-  end
-
-  describe "#create" do
-    before do
-      visit root_path
-      click_button "Respond"
-    end
-
-    describe "with invalid information" do
-
-      it "sets tokens for user" do
-        expect(user.token_timer).to be_blank
-        user.reload
-        expect(user.token_id).to eq post.id
-        expect(user.token_timer).to be_present
-      end
-
-      it "should not create a response" do
-        expect { click_button "Respond" }.not_to change(Response, :count)
-      end
-
-      it "should have an error message" do
-        click_button "Respond"
-        expect(page).to have_error_message("error")
-      end
-    end
-
-    describe "with valid information" do
-      before do
-        fill_in 'response_content', with: "Lorem Ipsum"
-      end
-
-      it "should create a response" do
-        expect { click_button "Respond" }.to change(Response, :count).by(1)
-        expect(page).to have_title("Thoughtsy")
-      end
-
-      it "should reset user tokens" do
-        click_button "Respond"
-        user.reload
-        expect(user.token_timer).to be_blank
-        expect(user.token_id).to be_blank
-      end
-
-      it "should send response email" do
-        click_button "Respond"
-        expect(last_email.to).to include(post.user.email)
-      end
-
-      describe "follower_response_email" do
-        let(:follower) { FactoryGirl.create(:user) }
-        before { follower.subscribe!(post) }
-
-        it "sends email (to admin) with bcc's" do
-          click_button "Respond"
-          expect(last_email.bcc).to include(follower.email)
-        end
-      end
-    end
-  end
-
-  describe "show page" do
-    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
-    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
-    before { visit post_response_path(post, response) }
-
-    it { should have_title('Response') }
-    it { should have_content(response.content) }
-    it { should have_content(response.user.username) }
-    it { should have_content(response.post.content) }
-    it { should have_selector("div#rating_form") }
-
-    # describe "reposting", :js=>true do
-    #   before do
-    #     post.state = 'answered'
-    #     click_button 'weak'
-    #   end
-
-    #   it "clicking link changes post state and displays flash" do
-    #     click_link "repost this thought?"
-    #     post.reload
-    #     expect(post.state).to eq 'unanswered'
-    #     expect(page).to have_success_message("Thought reposted.")
-    #   end
-    # end
-
-    describe "access" do
-      context "as normal user" do
-        let(:user2) { FactoryGirl.create(:user) }
-        before do
-          sign_in user2
-        end
-
-        it "redirects to root" do
-         visit post_response_path(post, response)
-         expect(page).to have_button('Post a thought')
-        end
-      end
-
-      context "as post follower" do
-        let(:follower) { FactoryGirl.create(:user) }
-        before do
-          sign_in follower
-          follower.subscribe!(post)
-        end
-
-        it "renders show page" do
-          visit post_response_path(post, response)
-          expect(page).to have_selector("div#rating_form")
-        end
-      end
-    end
-  end
 end
