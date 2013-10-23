@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  before_action :signed_in_user
 
   def create
     @message = current_user.messages.build(message_params)

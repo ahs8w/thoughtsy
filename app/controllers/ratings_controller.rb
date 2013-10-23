@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-  before_action :signed_in_user#, :author_or_follower
+  before_action :signed_in_user, :follower_or_author
  
   def create
     @rating = current_user.ratings.build(rating_params)
@@ -23,5 +23,12 @@ class RatingsController < ApplicationController
   private
     def rating_params
       params.require(:rating).permit(:response_id, :value)
+    end
+
+    def follower_or_author
+      response = Response.find(params[:rating][:response_id])
+      post = response.post
+      author = post.user
+      redirect_to root_path unless current_user.id == author.id || post_follower(post)
     end
 end

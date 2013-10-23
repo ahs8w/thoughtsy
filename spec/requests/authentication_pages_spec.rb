@@ -135,7 +135,26 @@ describe "Authentication  : " do
 
       describe "in the Ratings controller" do
         describe "submitting to the create action" do
-          before { post "posts/1/ratings" }
+          before { post ratings_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
+
+      describe "in the Subscriptions Controller" do
+        describe "submitting to the create action" do
+          before { post subscriptions_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete subscription_path(1) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
+
+      describe "in the Messages Controller" do
+        describe "submitting to the create action" do
+          before { post messages_path }
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
@@ -176,17 +195,16 @@ describe "Authentication  : " do
       describe "in the Ratings Controller" do
 
         describe "submitting to create action" do
-          before { post "posts/1/ratings" }
+          before { post ratings_path }
           specify { expect(response).to redirect_to(root_url) }
         end
       end
 
       describe "in the Responses Controller" do
         
-        describe "visiting show page" do
+        describe "visiting the show page" do
           let!(:post) { FactoryGirl.create(:post) }
           let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-
           before { get "posts/1/responses/1" }
           specify { expect(response).to redirect_to(root_url) }
         end
