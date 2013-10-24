@@ -193,10 +193,11 @@ describe "Authentication  : " do
       end
 
       describe "in the Ratings Controller" do
+        let(:response) { FactoryGirl.create(:response) }
 
-        describe "submitting to create action" do
-          before { post ratings_path }
-          specify { expect(response).to redirect_to(root_url) }
+        it "submitting to create action" do
+          post ratings_path, rating: { response_id: response.id }
+          expect(response).to redirect_to(root_url)
         end
       end
 
