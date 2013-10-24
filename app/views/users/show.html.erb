@@ -11,7 +11,7 @@
 
   <!-- Posted thoughts -->
   <div class="span5">
-    <h4>Posted thoughts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
+    <h4 class="center">Posted thoughts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
     <%= render partial: 'profile_thought', object: answered_posts(@user), locals: {:message=>"answered thoughts"} %>
     <% if current_user?(@user) %>
       <div id="personal_posts">
@@ -23,7 +23,7 @@
 
   <!-- Thoughts responded to -->
   <div class="span5 offset1">
-    <h4>Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
+    <h4 class="center">Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
     <%= render partial: 'profile_thought', object: unique_posts(@user), locals: {:message=>"responses"} %>
   </div>
 </div>

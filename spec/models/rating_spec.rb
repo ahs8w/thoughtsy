@@ -23,4 +23,13 @@ describe Rating do
       expect(@rating_double).not_to be_valid
     end
   end
+
+  describe "user cannot rate his own response" do
+    let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
+    before { @user_rating = Rating.new(user_id: user.id, response_id: user_response.id, value: 2) }
+
+    it "is not valid" do
+      expect(@user_rating).not_to be_valid
+    end
+  end
 end

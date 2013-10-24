@@ -3,7 +3,7 @@
     <% if post.followers.include?(@user) %>
       <i class="icon-share-alt"></i>
     <% end %>
-    <%= link_to "#{wrapped(post.content)}", post_responses_path(post) %>
+    <%= link_to "#{wrapped(post.content)}", post_path(post) %>
   </div>  
 
   <% post.responses.each do |response| %>

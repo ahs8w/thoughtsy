@@ -38,7 +38,7 @@ describe "StaticPages" do
       it { should_not have_link('Sign up now!', href: signup_path) }
       it { should_not have_link('Sign in',      href: signin_path) }
       it { should have_link('Account') }
-      it { should have_link('Posts') }
+      it { should have_link('Thoughts') }
 
       describe "the sidebar" do
 

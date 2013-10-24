@@ -1,5 +1,5 @@
 <ul class="profile">
-  <h4>Notes</h4>
+  <h4 class="center">Notes</h4>
   <% if current_user.received_messages.each do |msg| %>
     <%= link_to "From: #{User.find(msg.user_id).username}", '#' %> 
   <% end.empty? %>

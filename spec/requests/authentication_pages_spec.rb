@@ -32,7 +32,7 @@ describe "Authentication  : " do
       it { should have_title(user.username) }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
-      it { should have_link('Posts',            href: posts_path) }
+      it { should have_link('Thoughts',         href: posts_path) }
       it { should have_link('Profile',          href: user_path(user)) }
       it { should have_link('Settings',         href: edit_user_path(user)) }
       it { should have_link('Sign out',         href: signout_path) }
@@ -117,10 +117,10 @@ describe "Authentication  : " do
           specify { expect(response).to redirect_to(signin_path) }
         end
 
-        describe "submitting to the destroy action" do
-          before { delete response_path(FactoryGirl.create(:response)) }
-          specify { expect(response).to redirect_to(signin_path) }
-        end
+        # describe "submitting to the destroy action" do
+        #   before { delete response_path(FactoryGirl.create(:response)) }
+        #   specify { expect(response).to redirect_to(signin_path) }
+        # end
 
         describe "visiting the show action" do
           before { get "posts/1/responses/1" }
@@ -237,10 +237,10 @@ describe "Authentication  : " do
         specify { expect(response).to redirect_to(root_url) }
       end
 
-      describe "submitting a DELETE request to the Responses#destroy action" do
-        before { delete response_path(response) }
-        specify { expect(response).to redirect_to(root_url) }
-      end
+      # describe "submitting a DELETE request to the Responses#destroy action" do
+      #   before { delete response_path(response) }
+      #   specify { expect(response).to redirect_to(root_url) }
+      # end
 
       describe "visiting the queue page" do
         before { get queue_path }

@@ -107,7 +107,7 @@ describe "Post pages" do
       before { visit posts_path }
 
       it "should have the right post in the right order" do
-        expect(first('#thought')).to have_content(newer_post.content)
+        expect(first('#index_thought')).to have_content(newer_post.content)
       end
     end
 
@@ -120,6 +120,26 @@ describe "Post pages" do
       it { should_not have_content(unanswered.content) }
       it { should_not have_content(pending.content) }
       it { should_not have_content(flagged.content) }
+    end
+  end
+
+  describe "show page" do
+    let!(:post) { FactoryGirl.create(:post) }
+    let!(:older_response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
+    let!(:response) { FactoryGirl.create(:response, post: post) }
+    before { visit post_path(post) }
+
+    it { should have_title("Responses") }
+    it { should have_content(post.user.username) }
+    it { should have_content(post.content) }
+    it { should have_content(response.content) }
+    it { should have_content(response.user.username) }
+    it { should_not have_link('delete') }
+    
+    describe "response order" do
+      it "newer response is first" do
+        expect(first('#responses li')).to have_content(response.content)
+      end
     end
   end
 
@@ -264,17 +284,4 @@ describe "Post pages" do
       end
     end
   end
-
-
-  # describe "show page" do
-  #   let!(:post) { FactoryGirl.create(:post) }
-  #   before { visit post_path(post) }
-
-  #   it { should have_title("Respond") }
-  #   it { should have_content(post.user.username) }
-  #   it { should have_content(post.content) }
-  #   it { should have_field('response_content') }
-  #   it { should have_button("Respond") }
-  # end
-
 end

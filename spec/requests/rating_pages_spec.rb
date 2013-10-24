@@ -64,6 +64,21 @@ describe "Rating Pages" do
     end
   end
 
+  describe "as response author and post follower" do
+    let(:author) { FactoryGirl.create(:user) }
+    let!(:author_response) { FactoryGirl.create(:response, user_id: author.id) }
+    before do
+      author.subscribe!(post)
+      sign_in author
+    end
+
+    it "rating form does not appear" do
+      visit post_response_path(post, author_response)
+      expect(page).to have_title "Response"
+      expect(page).not_to have_selector("#rating_form")
+    end
+  end
+
   # describe "Creation with JS:", :js=>true do
   #   let(:response) { FactoryGirl.create(:response, post_id: post.id) }
   #   before { visit post_response_path(post, response) }

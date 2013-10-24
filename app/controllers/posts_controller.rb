@@ -12,11 +12,10 @@ class PostsController < ApplicationController
     @posts = Post.where(state: "answered").descending
   end
 
-  # def show
-  #   @post = Post.find(params[:id])
-  #   @rating = Rating.new
-  #   @response = Response.new
-  # end
+  def show
+    @post = Post.find(params[:id])
+    @responses = @post.responses.descending
+  end
 
   def create
     @post = current_user.posts.build(post_params)
@@ -74,10 +73,4 @@ class PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:content)
     end
-
-    # def set_tokens_and_state
-    #   post = Post.find(params[:id])
-    #   post.accept! unless current_user.token_id == post.id
-    #   current_user.set_tokens(post.id)
-    # end
 end

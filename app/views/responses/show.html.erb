@@ -15,4 +15,4 @@
     </div>
   </div>
 </div>
-<%= render 'ratings/form' %>
+<%= render 'ratings/form' unless current_user.id == @response.user.id %>

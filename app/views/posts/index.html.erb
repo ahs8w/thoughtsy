@@ -4,18 +4,18 @@
 
 <div class="row-fluid">
   <div class="span8 offset2">
-    <div class="well darker" id="thought">
-      <%= render partial: "shared/thought", object: post %>
+    <div class="well darker" id="index_thought">
+      <%= render partial: "thought", object: post %>
     </div>
-  </div>
-  <div class="span6 offset3">
-    <ul class="responses" id="responses">
-      <% post.responses.descending.each do |response| %>
-        <li>
-          <%= render partial: "shared/thought", object: response %>
-        </li>
-      <% end %>
-    </ul>
+    <div class="span10 offset1">
+      <ul class="responses">
+        <% post.responses.descending.each do |response| %>
+          <li>
+            <%= render partial: "thought", object: response %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
 
