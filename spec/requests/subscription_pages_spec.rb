@@ -30,6 +30,11 @@ describe "Subscription" do
         expect(post.followers).to include user
         expect(post.state).to eq 'unanswered'
       end
+
+      it "updates post author's score" do
+        post.user.reload
+        expect(post.user.score).to be 4
+      end
   
       describe "clicking unfollow (unsubscribing)" do
         before { click_link "unfollow" }
@@ -40,6 +45,11 @@ describe "Subscription" do
           post.reload
           expect(post.followers).not_to include user
           expect(post.state).to eq 'pending'
+        end
+
+        it "updates post author's score" do
+          post.user.reload
+          expect(post.user.score).to be 1
         end
       end
     end

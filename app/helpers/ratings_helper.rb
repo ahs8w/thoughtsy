@@ -9,7 +9,7 @@ module RatingsHelper
     if value == 1 then "weak"
     elsif value == 2 then "average"
     elsif value == 3 then "thought provoking"
-    elsif value == 4 then "brilliant!"
+    elsif value == 5 then "brilliant!"
     end
   end
 end

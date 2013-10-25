@@ -2,12 +2,13 @@ class User < ActiveRecord::Base
 # associations
   has_many :posts, inverse_of: :user, dependent: :destroy
   has_many :responses, inverse_of: :user, dependent: :destroy
+
   has_many :ratings
 
-  has_many :messages
+  has_many :messages, inverse_of: :user
   has_many :received_messages, class_name: 'Message', foreign_key: :to_id
 
-  has_many :subscriptions
+  has_many :subscriptions, inverse_of: :user
   has_many :followed_posts, through: :subscriptions, source: :post
 
 # callbacks
@@ -87,6 +88,11 @@ class User < ActiveRecord::Base
     self.subscriptions.find_by(post_id: post.id).destroy!
   end
 
+# Reputation
+  def update_score!(value)
+    self.score += value
+    save!
+  end
   
   private
 

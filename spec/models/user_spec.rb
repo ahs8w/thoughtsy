@@ -28,6 +28,7 @@ describe User do
   it { should respond_to(:followed_posts) }
   it { should respond_to(:subscribe!) }
   it { should respond_to(:unsubscribe!) }
+  it { should respond_to(:score) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -315,6 +316,15 @@ describe User do
         @user.unsubscribe!(post)
         expect(@user.followed_posts).not_to include(post)
       end
+    end
+  end
+
+## Reputation System ##
+  describe ":update_score" do
+    it "sets or adds to the user score" do
+      @user.update_score!(1)
+      @user.update_score!(3)
+      expect(@user.score).to eq 4
     end
   end
 end

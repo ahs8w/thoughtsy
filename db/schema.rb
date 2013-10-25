@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131011111831) do
+ActiveRecord::Schema.define(version: 20131025074622) do
 
   create_table "messages", force: true do |t|
     t.text     "content"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20131011111831) do
     t.datetime "password_reset_sent_at"
     t.integer  "token_id"
     t.datetime "token_timer"
+    t.integer  "score",                  default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

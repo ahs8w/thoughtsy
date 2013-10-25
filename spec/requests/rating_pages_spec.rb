@@ -22,6 +22,11 @@ describe "Rating Pages" do
       before { click_button 'weak' }
     
       it { should have_content("You rated this article: weak") }
+
+      it "should update response author's score" do
+        response.user.reload
+        expect(response.user.score).to eq 1
+      end
     end
 
     describe "clicking 'average'" do
@@ -46,7 +51,7 @@ describe "Rating Pages" do
       it { should have_content("You rated this article: brilliant!") }
 
       it "saves a rating" do
-        expect(Rating.where(value: 4).count).to eq 1
+        expect(Rating.where(value: 5).count).to eq 1
       end
 
       it "sends an email to admin" do

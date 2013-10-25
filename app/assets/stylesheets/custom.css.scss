@@ -208,9 +208,9 @@ aside {
 }
 
 #respond_button {
-  position: relative;
-  top: 10px;
-  float: right;
+  position: absolute;
+  top: 70px;
+  right: 5%;
   form {
     margin-bottom: 0;
     input {
@@ -336,11 +336,7 @@ textarea#response_content {
   margin-bottom: 0;
 }
 
-.row-fluid .well {
-  margin-left: 0;
-}
-
-#post {
+#post_form {
   background-color: #ddd;
   margin-bottom: 8%;
   text-align: center;
@@ -352,14 +348,6 @@ textarea#response_content {
     .field_with_errors {
       display: inline;
     }
-  }
-}
-
-#classic-responses {
-  margin: 0 0;
-  padding: 0 2%;
-  h3 {
-    text-align: center;
   }
 }
 
@@ -377,12 +365,6 @@ textarea#response_content {
   text-align: center;
   display: block;
 }
-
-#top-users {
-  text-align: center;
-  margin-left: 0;
-}
-
 
 /* User Profile */
 

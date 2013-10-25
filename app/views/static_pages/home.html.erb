@@ -1,36 +1,25 @@
+<div class="row">
+  <%= render 'shared/user_info', user: current_user if signed_in? %>
+  <%= render 'respond_button' if signed_in? %>
+  <div class="center hero-unit">
+    <h1>Thoughtsy</h1>
+    <p class="lead">thoughtful exchanges with total strangers</p>
+  </div>
+  <div id="call_to_action">
+    <% if signed_in? %>
+      <%= render 'post_form' %>
+    <% else %>
+      <div id="signup_button">
+        <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+        <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
+      </div>
+    <% end %>
+  </div>  
+</div>
+
 <div class="row-fluid">
-
-  <div class="span10">
-    <%= render 'shared/user_info', user: current_user if signed_in? %>
-    <%= render 'respond_button' if signed_in? %>
-    <div class="center hero-unit">
-      <h1>Thoughtsy</h1>
-      <p class="lead">thoughtful exchanges with total strangers</p>
-    </div>
-    <div id="call_to_action">
-      <% if signed_in? %>
-        <%= render 'post_form' %>
-      <% else %>
-        <div id="signup_button">
-          <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
-          <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
-        </div>
-      <% end %>
-    </div>
-    
-  </div>
-
-
-
-  <div class="span2 pull-right" id="top-users">
-    <!-- sidebar content -->
-    <h4>Top Users</h4>
-    <img src="http://placehold.it/154x800">
-  </div>
-
-  <div class="span10" id="classic-responses">
-    <!-- start slipsum code -->
-    <h3>Classic Responses</h3>
+  <div class="span10 offset1">
+    <h3 class="center">Classic Responses</h3>
     <h4>We happy?</h4>
     <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'? </p>
 
@@ -42,22 +31,5 @@
 
     <h4>I'm serious as a heart attack</h4>
     <p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother's keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee. </p>
-
-    <!-- please do not remove this line -->
-
-    <div style="display:none;">
-    <a href="http://slipsum.com">lorem ipsum</a></div>
-
-    <!-- end slipsum code -->
-
   </div>
 </div>
-
-
-
-<!-- 
-
- <button class="btn btn-large btn-success">Post a thought</button>
- <span><textarea rows="2" class="span8" placeholder="your post..."></textarea></span>
-
-  -->

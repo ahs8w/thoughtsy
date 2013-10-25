@@ -1,8 +1,12 @@
 <% provide(:page_title, "Users") %>
-<h1>Users</h1>
-
-<%= will_paginate %>
-<ul class="users">
-  <%= render @users %>    <!-- Rails automatically iterates through 'User' objects rendering each in 'user' partial -->
-</ul>
-<%= will_paginate %>
+<div class="row">
+  <h1>Users</h1>
+  <div class="span4 offset6">
+    <%= will_paginate %>
+    <ul class="users">
+      <%= render @users %>    
+      <!-- Rails automatically iterates through 'User' objects rendering each in 'user' partial -->
+    </ul>
+    <%= will_paginate %>
+  </div>
+</div>

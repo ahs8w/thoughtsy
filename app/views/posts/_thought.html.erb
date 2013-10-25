@@ -1,9 +1,0 @@
-<div class="index_thought" name="<%= thought.id %>">
-  <div class="thought_content">
-    <%= wrapped(thought.content) %>
-  </div>
-  <div class="thought_author">
-    <%= link_to "#{thought.user.username}", user_path(thought.user) %>
-    <span class="timestamp pull-right"><%= date_time(thought) %></span>
-  </div>
-</div>

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Rating do
   let!(:user) { FactoryGirl.create(:user) }
   let!(:response) { FactoryGirl.create(:response) }
-  before { @rating = Rating.new(user_id: user.id, response_id: response.id, value: 2) }
+  before { @rating = Rating.new(user_id: user.id, response_id: response.id, value: 1) }
 
   subject { @rating }
 
@@ -30,6 +30,30 @@ describe Rating do
 
     it "is not valid" do
       expect(@user_rating).not_to be_valid
+    end
+  end
+
+  describe "after create" do
+
+    context "rated 'weak'" do
+      before { @rating.save }
+
+      it "updates response author's score" do
+        response.user.reload
+        expect(response.user.score).to eq 1
+      end
+    end
+
+    context "rated 'brilliant'" do
+      before do
+        @rating.value = 5
+        @rating.save
+      end
+
+      it "updates response author's score" do
+        response.user.reload
+        expect(response.user.score).to eq 5
+      end
     end
   end
 end

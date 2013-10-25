@@ -87,6 +87,7 @@ describe "UserPages" do
 
       it { should have_content(user.username) }
       it { should have_title(user.username) }
+      it { should have_content("Karma: #{user.score}") }
       it { should_not have_link("edit settings", href: edit_user_path(user)) }
       it { should_not have_content("Notes") }
 

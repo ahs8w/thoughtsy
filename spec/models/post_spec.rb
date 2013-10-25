@@ -33,6 +33,15 @@ describe Post do
     it { should_not be_valid }
   end
 
+  describe "after save" do
+    before { @post.save }
+
+    it "updates author's score" do
+      user.reload
+      expect(user.score).to eq 1
+    end
+  end
+
 ## Post Scopes ##
   describe "ordered scopes" do
     let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
@@ -108,9 +117,14 @@ describe Post do
         expect(@post).to be_flagged
       end
 
-      # it "sends an email to admin" do
-      #   expect(last_email.to).to include(admin)
-      # end
+      it "sends an email to admin" do
+        expect(last_email.to).to include 'admin@thoughtsy.com'
+      end
+
+      it "updates post author score" do
+        user.reload
+        expect(user.score).to eq -2
+      end
     end
 
     describe ":answered" do

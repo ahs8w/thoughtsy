@@ -1,9 +1,24 @@
-<div class="thought" name="<%= thought.id %>">
-  <div class="thought_content">
-    <%= wrap(thought.content) %>
-  </div>
+<div class="thought" id="<%= thought.id %>">
+  <% wrapped = false unless local_assigns.has_key? :wrapped %>
+  <% link = false unless local_assigns.has_key? :link %>
+
+  <% if wrapped %>
+    <div class="wrapped_thought_content">
+      <% if link %>
+        <%= link_to "#{wrapped(thought.content)}", thought %>
+      <% else %>
+        <%= wrapped(thought.content) %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="thought_content">
+      <%= wrap(thought.content) %>
+    </div>
+  <% end %>
+
   <div class="thought_author">
     <%= link_to "#{thought.user.username}", user_path(thought.user) %>
+    <span class="lighter"> | <%= thought.user.score %></span>
     <span class="timestamp pull-right"><%= date_time(thought) %></span>
   </div>
 </div>

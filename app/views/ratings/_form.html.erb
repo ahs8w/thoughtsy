@@ -28,7 +28,7 @@
     <span id="4">
       <%= form_for(@rating, remote: true) do |f| %>
         <%= f.hidden_field(:response_id, :value => params[:id]) %>
-        <%= f.hidden_field(:value, :value => '4') %>
+        <%= f.hidden_field(:value, :value => '5') %>
         <%= f.submit "brilliant!", class: "btn btn-inverse" %>
       <% end %>
     </span>

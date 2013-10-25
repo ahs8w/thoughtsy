@@ -13,10 +13,15 @@ class Post < ActiveRecord::Base
   scope :answered, -> { where("state == ?", 'answered') }
   scope :personal, -> { where.not("state == ?", 'answered') }
 
+  after_create do |post|
+    post.user.update_score!(1)
+  end
+
   state_machine :state, initial: :unanswered do
 
     after_transition on: :flag do |post, transition|
       UserMailer.flag_email(post).deliver
+      post.user.update_score!(-3)
     end
 
 ## keep for reference!!  pass in arguments to the transition callback  

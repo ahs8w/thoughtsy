@@ -23,4 +23,21 @@ describe Subscription do
     it { should_not be_valid }
   end
 
+  describe "after creating" do
+    before { subscription.save }
+
+    it "updates post author's score" do
+      post.user.reload
+      expect(post.user.score).to eq 4   # +1 for posting also
+    end
+
+    describe "after destroying" do
+      before { subscription.destroy }
+
+      it "updates post author's score" do
+        post.user.reload
+        expect(post.user.score).to eq 1
+      end
+    end
+  end
 end 
