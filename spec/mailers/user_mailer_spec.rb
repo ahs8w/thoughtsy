@@ -75,7 +75,7 @@ describe UserMailer do
     let!(:receiver) { FactoryGirl.create(:user) }
     let(:mail) { UserMailer.message_email(@message) }
     before do
-      @message = Message.new(user_id: sender.id, to_id: receiver.id, content: "hey")
+      @message = Message.new(user_id: sender.id, receiver_id: receiver.id, content: "hey")
       @message.save
     end
 

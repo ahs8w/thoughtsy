@@ -1,0 +1,12 @@
+<% provide(:page_title, "Messages") %>
+
+<div class="row-fluid">
+  <div class="span8 offset2">
+    <div class="well darker" id="message">
+      <p>To: <%= username(@message.receiver) %><br />
+      From: <%= username(@message.user) %></p>
+      <br />
+      <p><%= @message.content %></p>
+    </div>
+  </div>
+</div>

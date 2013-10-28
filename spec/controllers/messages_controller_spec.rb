@@ -6,7 +6,7 @@ require 'spec_helper'
 describe MessagesController do
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:response) { FactoryGirl.create(:response) }
+  let(:receiver) { FactoryGirl.create(:user) }
 
   before { sign_in user, no_capybara: true }
 
@@ -14,12 +14,12 @@ describe MessagesController do
     context "with valid attributes" do
       it "creates a new message" do
         expect do
-          post :create, message: { user_id: user.id, content: 'message', to_id: response.user.id }
+          post :create, message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
         end.to change(Message, :count).by(1)
       end
 
       it "redirects to home after save" do
-        post :create, message: { user_id: user.id, content: 'message', to_id: response.user.id }
+        post :create, message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
         expect(response).to redirect_to root_url
       end
     end
@@ -32,7 +32,7 @@ describe MessagesController do
 
       it "does not save a message" do
         expect do
-          xhr :post, 'create', message: { user_id: user.id, content: ' ', to_id: response.user.id }
+          xhr :post, 'create', message: { user_id: user.id, content: ' ', receiver_id: receiver.id }
         end.not_to change(Message, :count)
       end
     end
@@ -43,18 +43,18 @@ describe MessagesController do
         expect do
           xhr :post, 
               :create,
-              :message => { user_id: user.id, content: 'message', to_id: response.user.id }
+              :message => { user_id: user.id, content: 'message', receiver_id: receiver.id }
         end.to change(Message, :count).by(1)
       end
 
       it "shows the correct flash message" do
-        xhr :post, 'create', message: { user_id: user.id, content: 'message', to_id: response.user.id }
+        xhr :post, 'create', message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
         expect(flash[:success]).to eq "Note sent!"
       end
 
       it "sends an email" do
-        xhr :post, 'create', message: { user_id: user.id, content: 'message', to_id: response.user.id }
-        expect(last_email.to).to include(response.user.email)
+        xhr :post, 'create', message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
+        expect(last_email.to).to include(receiver.email)
       end
     end
   end

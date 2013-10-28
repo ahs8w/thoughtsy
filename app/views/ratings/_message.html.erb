@@ -16,7 +16,7 @@
     <%= form_for(@message, remote: true) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= f.text_area :content, placeholder: "your note..." %>
-      <%= f.hidden_field :to_id, value: @response.user.id %>
+      <%= f.hidden_field :receiver_id, value: @response.user.id %>
       <legend></legend>
       <%= f.submit "Send", class: "btn btn-primary pull-left", id: "send_button" %>
     <% end %>

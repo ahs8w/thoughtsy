@@ -9,7 +9,11 @@
   <% post.responses.each do |response| %>
     <div class="post_response">
       <div class="timestamp pull-right">
-        <%= username(response) %> responded <%= date_time(response) %>
+        <% if response.ratings.where(user_id: @user.id).empty? %>
+          <strong><%= username(response.user) %> responded <%= date_time(response) %></strong>
+        <% else %>
+          <%= username(response.user) %> responded <%= date_time(response) %>
+        <% end %>
       </div>
     </div>
   <% end %>

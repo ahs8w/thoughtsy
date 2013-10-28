@@ -3,16 +3,20 @@
   <%= render 'shared/user_info', user: @user %>
 
   <!-- Messages -->
-    <div class="span3" id="notes">
-      <% if current_user?(@user) %>
-        <%= render 'message' %>
-      <% end %>
+    <div class="span3">
+      <div id="notes">
+        <% if current_user?(@user) %>
+          <%= render 'message' %>
+        <% end %>
+      </div>
     </div>
 
   <!-- Posted thoughts -->
   <div class="span5">
     <h4 class="center">Posted thoughts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
-    <%= render partial: 'profile_thought', object: answered_posts(@user), locals: {:message=>"answered thoughts"} %>
+    <div id="answered_posts">
+      <%= render partial: 'profile_thought', object: answered_posts(@user), locals: {:message=>"answered thoughts"} %>
+    </div>
     <% if current_user?(@user) %>
       <div id="personal_posts">
         <%= render partial: 'profile_thought', object: personal_posts(@user), 

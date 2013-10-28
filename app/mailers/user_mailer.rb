@@ -28,7 +28,7 @@ class UserMailer < ActionMailer::Base
 
   def message_email(message)
     @message = message
-    @recipient = User.find(@message.to_id)
+    @recipient = User.find(@message.receiver_id)
     @sender = User.find(@message.user_id)
     mail to: @recipient.email, subject: "#{@sender.username} sent you a personal message."
   end

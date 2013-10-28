@@ -1,18 +1,36 @@
 require 'spec_helper'
 
-describe "Messages" do
+describe "Message Pages" do
   subject { page }
 
   let(:receiver) { FactoryGirl.create(:user) }
   let(:user) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user_id: user.id) }
   
   before { sign_in user }
 
+  describe "Show page" do
+    let!(:message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: receiver.id) }
+    before do
+      visit user_path(user)
+      click_link("To: #{receiver.username}")
+    end
+        
+    it { should have_title("Messages") }
+    it { should have_content(receiver.username) }
+    it { should have_content("From: You") }
+    it { should have_content(message.content) }
+
+    it "sets viewed? token to true" do
+      message.reload
+      expect(message.viewed?).to eq true
+    end
+  end
+
   # describe "Creation with JS:", :js=>true do
+  #   let(:post) { FactoryGirl.create(:post, user_id: user.id) }
   #   let!(:response) { FactoryGirl.create(:response, user_id: receiver.id, post_id: post.id) }
   #   before do
-  #     visit response_path(response)
+  #     visit post_response_path(post, response)
   #     click_button "brilliant!"
   #   end
 

@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :ratings
 
   has_many :messages, inverse_of: :user
-  has_many :received_messages, class_name: 'Message', foreign_key: :to_id
+  has_many :received_messages, class_name: 'Message', foreign_key: :receiver_id
 
   has_many :subscriptions, inverse_of: :user
   has_many :followed_posts, through: :subscriptions, source: :post

@@ -13,6 +13,13 @@
         <%= pluralize(user.posts.count, "post") %>
         | <%= pluralize(user.responses.count, "response") %>
       </span>
+      <div id="notification_area">
+        <% unless current_user.received_messages.unread.empty? %>
+          <strong><%= link_to "You have #{pluralize(current_user.received_messages.unread.count, 'unread message')}",
+           user_path(user) %></strong>
+        <% end %>
+        <div><strong><%= unrated_responses(user) %></strong></div>
+      </div>
     <% end %>
 
     <% if controller_name == 'users' && action_name == 'show' %>

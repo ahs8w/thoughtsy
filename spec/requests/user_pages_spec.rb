@@ -63,8 +63,8 @@ describe "UserPages" do
     let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", created_at: 3.hours.ago) }
     let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "Newer", created_at: 3.minutes.ago) }
 
-    let!(:user_message) { user.messages.create(content: "sent", to_id: wrong_user.id) }
-    let!(:received_message) { Message.create(content: "received", to_id: user.id, user_id: wrong_user.id) }
+    let!(:user_message) { user.messages.create(content: "sent", receiver_id: wrong_user.id) }
+    let!(:received_message) { Message.create(content: "received", receiver_id: user.id, user_id: wrong_user.id) }
 
     let!(:response) { FactoryGirl.create(:response, post_id: answered_post.id) }
     let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
@@ -137,6 +137,12 @@ describe "UserPages" do
         it { should have_xpath('.//h4', text: 'Thoughts responded to (1)') }
       end
 
+      context "answered posts" do
+        it "with unrated responses are in bold" do
+          expect(find('#answered_posts').first('li')).to have_selector('strong')
+        end
+      end
+
       context "posts are ordered newest to oldest" do
         it "within section" do
           expect(find('#personal_posts').first('li')).to have_content(newer_post.content)
@@ -152,9 +158,19 @@ describe "UserPages" do
         it { should have_selector('li', :text => "#{other_post.content}", :count => 1) }
       end
 
-      context "sent and received messages" do
-        it { should have_content(User.find(user_message.to_id).username) }
+      context "messages" do
+        it { should have_content(User.find(user_message.receiver_id).username) }
         it { should have_content(received_message.user.username) }
+
+        it "unread received are bold" do
+          expect(find('#notes').first('li')).to have_selector('strong')
+        end
+
+        it "after reading, links appear normal" do
+          click_link "From: #{wrong_user.username}"
+          visit user_path(user)
+          expect(find('#notes').first('li')).not_to have_selector('strong')
+        end
       end
     end
   end

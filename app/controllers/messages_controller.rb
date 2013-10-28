@@ -1,5 +1,10 @@
 class MessagesController < ApplicationController
   before_action :signed_in_user
+  after_action  :set_token, only: :show
+
+  def show
+    @message = Message.find(params[:id])
+  end
 
   def create
     @message = current_user.messages.build(message_params)
@@ -20,6 +25,10 @@ class MessagesController < ApplicationController
 
   private
     def message_params
-      params.require(:message).permit(:content, :to_id)
+      params.require(:message).permit(:content, :receiver_id)
+    end
+
+    def set_token
+      @message.set_viewed?
     end
 end

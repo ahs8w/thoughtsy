@@ -20,4 +20,10 @@ FactoryGirl.define do
     user
     association :post, state: 'answered'
   end
+
+  factory :message do
+    sequence(:content) { |n| "Messagio Ipsum#{n}" }
+    user
+    association :receiver, factory: :user
+  end
 end

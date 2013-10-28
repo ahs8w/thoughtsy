@@ -13,7 +13,7 @@ Thoughtsy::Application.routes.draw do
   resources :ratings,   only: :create
   resources :responses, only: [:destroy, :index]
   resources :password_resets, except: [:show, :index]
-  resources :messages,  only: :create
+  resources :messages,  only: [:create, :show]
   resources :subscriptions, only: [:create, :destroy]
 
 
