@@ -9,6 +9,10 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'state_machine'
 
+gem 'rmagick'
+gem 'carrierwave'
+gem 'remotipart', '~> 1.2'
+
 # Use sqlite3 as the database for Active Record
 group :development, :test do
   gem 'sqlite3'

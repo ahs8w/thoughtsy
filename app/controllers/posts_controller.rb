@@ -20,14 +20,14 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
-      flash.now[:success] = "Post created!"
+      flash[:success] = "Post created!"
       respond_to do |format|
         format.html { redirect_to root_url }
         format.js { flash.now[:success] = "Post created!" }
       end
     else
       respond_to do |format|
-        format.html { render partial: 'static_pages/post_form' }    # render root_url doesn't work -> template missing!!!!!!
+        format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
         format.js
       end
     end
@@ -71,6 +71,6 @@ class PostsController < ApplicationController
 
   private
     def post_params
-      params.require(:post).permit(:content)
+      params.require(:post).permit(:content, :image)
     end
 end

@@ -18,6 +18,7 @@ describe Post do
   it { should respond_to(:flagged?) }
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followers) }
+  it { should respond_to(:image) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
 
@@ -30,7 +31,15 @@ describe Post do
 
   context "with blank content" do
     before { @post.content = " " }
-    it { should_not be_valid }
+
+    context "and no image" do
+      it { should_not be_valid }
+    end
+
+    context "and an image" do
+      before { @post.image = File.open(File.join(Rails.root, "app/assets/images/star-on.png")) }
+      it { should be_valid }
+    end
   end
 
   describe "after save" do

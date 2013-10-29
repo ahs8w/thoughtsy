@@ -5,8 +5,12 @@ class Post < ActiveRecord::Base
 
   has_many :subscriptions
   has_many :followers, through: :subscriptions, source: :user
+
+  mount_uploader :image, ImageUploader
   
-  validates_presence_of :user_id, :content
+  validates_presence_of :user_id
+  validate :image_or_content
+
 
   scope :ascending, -> { order('created_at ASC') }
   scope :descending, -> { order('created_at DESC') }
@@ -50,6 +54,11 @@ class Post < ActiveRecord::Base
       transition any => :flagged
     end
   end
+
+  private
+    def image_or_content
+      errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
+    end
 
 ## keep for reference!!  see above
   # def set_responder_token(id)
