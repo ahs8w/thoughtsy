@@ -6,7 +6,7 @@ namespace :db do                    # allows us to call 'rake db:populate' -> to
                  password: "foobar",
                  password_confirmation: "foobar",
                  admin: true)
-    99.times do |n|
+    20.times do |n|
       username = Faker::Name.name
       email = "example-#{n+1}@railstutorial.org"
       password = "foobar"
@@ -16,8 +16,8 @@ namespace :db do                    # allows us to call 'rake db:populate' -> to
                    password_confirmation: password)
     end
     users = User.all(limit: 6)
-    50.times do
-      content = Faker::Lorem.sentence(5)
+    20.times do
+      content = Faker::Lorem.paragraph(3)
       users.each { |user| user.posts.create!(content: content) }
     end
   end

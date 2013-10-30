@@ -3,7 +3,8 @@
     <% if post.followers.include?(@user) %>
       <i class="icon-share-alt"></i>
     <% end %>
-    <%= link_to "#{wrapped(post.content)}", post_path(post) %>
+    <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
+    <%= link_to "#{wrapped(post.content)}", post_path(post) unless post.content.nil? %>
   </div>  
 
   <% post.responses.each do |response| %>
@@ -19,7 +20,10 @@
   <% end %>
 
 <% else %>
-  <div class="post_content"><%= wrap(post.content) %></div>
+  <div class="post_content">
+    <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
+    <%= wrap(post.content) unless post.content.nil? %>
+  </div>
   <div class="post_response">
     <div class="timestamp pull-right">posted <%= date_time(post) %></div>
   </div>

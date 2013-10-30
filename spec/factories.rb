@@ -13,6 +13,11 @@ FactoryGirl.define do
   factory :post do
     sequence(:content) { |n| "Lorem Ipsum post#{n}" } 
     user               # ensures parent element is created at same time; show association with user object
+
+    factory :image_post do
+      content ""
+      image { Rack::Test::UploadedFile.new(File.join(Rails.root, 'app', 'assets', 'images', 'star-on.png')) }
+    end
   end
 
   factory :response do

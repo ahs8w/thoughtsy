@@ -2,6 +2,7 @@
   <%= form_for([@post, @response]) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.text_area :content, placeholder: "your response..." %>
+    <%= render 'shared/image_fields', f: f %>
     <%= f.hidden_field :post_id, value: @post.id %>
     <%= f.submit "Respond", class: "btn btn-large btn-primary" %>
   <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131029091655) do
+ActiveRecord::Schema.define(version: 20131030160201) do
 
   create_table "messages", force: true do |t|
     t.text     "content"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20131029091655) do
     t.integer  "post_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image"
   end
 
   add_index "responses", ["created_at"], name: "index_responses_on_created_at"

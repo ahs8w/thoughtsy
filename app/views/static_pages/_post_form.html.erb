@@ -3,6 +3,6 @@
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.submit "Post a thought", class: "btn btn-large btn-success" %>
     <span><%= f.text_area :content, class: "span8", placeholder: "your thought..." %></span>
-    <%= f.file_field :image %>
+    <%= render 'shared/image_fields', f: f %>
   <% end %>
 </div>

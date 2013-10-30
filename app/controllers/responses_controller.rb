@@ -32,7 +32,7 @@ class ResponsesController < ApplicationController
 
   private
     def response_params
-      params.require(:response).permit(:content, :post_id)
+      params.require(:response).permit(:content, :post_id, :image, :remote_image_url)
     end
 
     def answer_all(post)

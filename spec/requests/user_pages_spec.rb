@@ -171,6 +171,14 @@ describe "UserPages" do
           visit user_path(user)
           expect(find('#notes').first('li')).not_to have_selector('strong')
         end
+
+        describe "images" do
+          let(:image_post) { FactoryGirl.create(:image_post, user_id: user.id) }
+
+          context "with no content" do
+            it { should have_selector('img') }
+          end
+        end
       end
     end
   end

@@ -5,14 +5,17 @@
   <% if wrapped %>
     <div class="wrapped_thought_content">
       <% if link %>
-        <%= link_to "#{wrapped(thought.content)}", thought %>
+        <%= link_to "#{image_tag thought.image_url(:thumb)}", thought if thought.image.present? %>
+        <%= link_to "#{wrapped(thought.content)}", thought unless thought.content.nil? %>
       <% else %>
-        <%= wrapped(thought.content) %>
+        <%= image_tag thought.image_url(:thumb) if thought.image.present? %>
+        <%= wrapped(thought.content) unless thought.content.nil? %>
       <% end %>
     </div>
   <% else %>
     <div class="thought_content">
-      <%= wrap(thought.content) %>
+      <%= image_tag thought.image_url if thought.image.present? %>
+      <%= wrap(thought.content) unless thought.content.nil? %>
     </div>
   <% end %>
 
