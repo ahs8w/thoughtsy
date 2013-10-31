@@ -60,7 +60,7 @@ describe "StaticPages" do
         end
       end
 
-## views/shared/_respond_button ##
+    ## views/shared/_respond_button ##
       describe "Response button behavior" do
 
         describe "with no token_timer" do
@@ -119,6 +119,45 @@ describe "StaticPages" do
           
           it { should have_content("Click the button to get another thought.") }
           it { should have_button("See a new thought") }
+        end
+      end
+    end
+  end
+
+  describe "Notification Area" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+    before do
+      sign_in user
+      visit root_path
+    end
+
+    context "with no notices" do
+      it { should_not have_link("unread message") }
+      it { should_not have_link("unrated response") }
+    end
+
+    context "with notices" do
+      let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
+      let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+      before do
+        post.answer!
+        visit root_path
+      end
+
+      it "has links to appropriate pages" do
+        expect(page).to have_link("1 unread message", href: message_path(message))
+        expect(page).to have_link("1 unrated response", href: post_response_path(post, response))
+      end
+
+      context "with multiple notices" do
+        let!(:message2) { FactoryGirl.create(:message, receiver_id: user.id) }
+        let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
+        before { visit root_path }
+
+        it "pluralizes and links to profile" do
+          expect(page).to have_link("2 unread messages", href: user_path(user))
+          expect(page).to have_link("2 unrated responses", href: user_path(user))
         end
       end
     end

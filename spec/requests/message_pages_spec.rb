@@ -9,20 +9,35 @@ describe "Message Pages" do
   before { sign_in user }
 
   describe "Show page" do
-    let!(:message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: receiver.id) }
-    before do
-      visit user_path(user)
-      click_link("To: #{receiver.username}")
-    end
-        
-    it { should have_title("Messages") }
-    it { should have_content(receiver.username) }
-    it { should have_content("From: You") }
-    it { should have_content(message.content) }
 
-    it "sets viewed? token to true" do
-      message.reload
-      expect(message.viewed?).to eq true
+    context "as note receiver" do
+      let!(:message) { FactoryGirl.create(:message, user_id: receiver.id, receiver_id: user.id) }
+      before do
+        visit user_path(user)
+        click_link("From: #{receiver.username}")
+      end
+          
+      it { should have_title("Messages") }
+      it { should have_content("From: #{receiver.username}") }
+      it { should have_content(message.content) }
+      it { should have_link("Reply") }
+      it { should have_link("Return", href: user_path(user)) }
+
+      it "sets viewed? token to true" do
+        message.reload
+        expect(message.viewed?).to eq true
+      end
+    end
+
+    context "as note sender" do
+      let!(:message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: receiver.id) }
+      before do
+        visit user_path(user)
+        click_link("To: #{receiver.username}")
+      end
+
+      it { should have_content("To: #{receiver.username}") }
+      it { should_not have_link("Reply") }
     end
   end
 

@@ -1,19 +1,11 @@
 module UsersHelper
 
-  # Returns the Gravatar (http://gravatar.com/) for the given user.
+# Home Page #
   def gravatar_for(user, options = { size: 50 })
     gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
     size = options[:size]
     gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
     image_tag(gravatar_url, alt: user.username, class: "gravatar")
-  end
-
-  def username(user)
-    if user.id != current_user.id
-      user.username
-    else
-      "You"
-    end
   end
 
   def unrated_responses(user)
@@ -32,7 +24,27 @@ module UsersHelper
     end
   end
 
+  def unread_messages(user)
+    msgs = user.received_messages.unread
+    count = msgs.count
+    unless msgs.empty?
+      if count == 1
+        link_to("You have 1 unread message", message_path(msgs.first))
+      elsif count > 1
+        link_to("You have #{pluralize(count, 'unread message')}", user_path(user))
+      end
+    end
+  end
+
 # Profile Page #
+  def username(user)
+    if user.id != current_user.id
+      user.username
+    else
+      "You"
+    end
+  end
+
   def answered_posts(user)
     user.posts.answered.descending
   end

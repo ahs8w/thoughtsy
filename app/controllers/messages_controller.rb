@@ -4,6 +4,7 @@ class MessagesController < ApplicationController
 
   def show
     @message = Message.find(params[:id])
+    @reply = Message.new
   end
 
   def create
