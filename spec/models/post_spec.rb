@@ -37,7 +37,7 @@ describe Post do
     end
 
     context "and an image" do
-      before { @post.image = File.open(File.join(Rails.root, "app/assets/images/star-on.png")) }
+      before { @post.image = File.open(File.join(Rails.root, "spec/support/test.png")) }
       it { should be_valid }
     end
   end

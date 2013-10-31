@@ -16,7 +16,7 @@ FactoryGirl.define do
 
     factory :image_post do
       content ""
-      image { Rack::Test::UploadedFile.new(File.join(Rails.root, 'app', 'assets', 'images', 'star-on.png')) }
+      image { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'test.png')) }
     end
   end
 

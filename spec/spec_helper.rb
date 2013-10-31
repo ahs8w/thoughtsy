@@ -57,9 +57,9 @@ Spork.prefork do
     config.filter_run :focus => true
     config.run_all_when_everything_filtered = true
     # carrierwave test clean-up
-    config.after(:all) do
+    config.after(:each) do
       if Rails.env.test?
-        FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/tmp"])
+        FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
       end
     end
   end

@@ -23,7 +23,7 @@ class ResponsesController < ApplicationController
       answer_all(@post)
       send_response_emails(@response)
       flash[:success] = "Response sent!"
-      redirect_to posts_path
+      redirect_to post_path(@post)
     else
       @post = Post.find(params[:post_id])
       render 'new'

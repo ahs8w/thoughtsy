@@ -80,6 +80,15 @@ describe "ResponsePages" do
         end
       end
     end
+
+    describe "with image" do
+      before { attach_file('response[image]', "#{Rails.root}/spec/support/test.png") }
+
+      it "creates a response" do
+        expect { click_button "Respond" }.to change(Response, :count).by(1)
+        expect(page).to have_title("Thoughtsy")
+      end
+    end
   end
 
   describe "show page" do

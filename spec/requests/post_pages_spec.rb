@@ -141,6 +141,13 @@ describe "Post pages" do
         expect(first('#responses li')).to have_content(response.content)
       end
     end
+
+    describe "with post image" do
+      let!(:image_post) { FactoryGirl.create(:image_post) }
+      before { visit post_path(image_post) }
+
+      it { should have_selector('img') }
+    end
   end
 
 ## Response#New ##
@@ -287,7 +294,7 @@ describe "Post pages" do
     context "as an image" do
 
       context "through direct file upload link" do
-        before { attach_file('post[image]', "#{Rails.root}/app/assets/images/star-on.png") }
+        before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
 
         it "saves post" do
           expect{ click_button "Post" }.to change(Post, :count).by(1)
@@ -301,7 +308,7 @@ describe "Post pages" do
         it "saves post" do
           expect { click_button "Post" }.to change(Post, :count).by(1)
         end
-      end 
+      end
     end
   end
 end
