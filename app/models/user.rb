@@ -82,10 +82,12 @@ class User < ActiveRecord::Base
 # Subscriptions
   def subscribe!(post)
     self.subscriptions.create!(post_id: post.id)
+    post.subscribe!     #subscribed
   end
 
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
+    post.accept!    #pending
   end
 
 # Reputation

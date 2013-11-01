@@ -299,7 +299,7 @@ describe User do
     end
   end
 
-## Post Subscriptions ##
+## User.followed_posts, Post.followers ##
   describe "#subscribe!" do
     let(:post) { FactoryGirl.create(:post) }
     before { @user.save }
@@ -307,6 +307,8 @@ describe User do
     it "adds post to 'followed_posts'" do
       @user.subscribe!(post)
       expect(@user.followed_posts).to include(post)
+      expect(post.followers).to include(@user)
+      expect(post.state).to eq 'subscribed'
     end
 
     describe "#unsubscribe!" do
@@ -315,6 +317,8 @@ describe User do
       it "removes post from 'followed_posts'" do
         @user.unsubscribe!(post)
         expect(@user.followed_posts).not_to include(post)
+        expect(post.followers).not_to include(@user)
+        expect(post.state).to eq 'pending'
       end
     end
   end

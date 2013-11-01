@@ -16,6 +16,7 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
+  it { should respond_to(:subscribed?) }
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followers) }
   it { should respond_to(:image) }
@@ -69,23 +70,24 @@ describe Post do
     let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
     let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
     let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
-    let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
+    let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+    let!(:subscribed) { FactoryGirl.create(:post, state: 'subscribed') }
     let!(:no_state) { FactoryGirl.create(:post) }
 
     it "available" do
       expect(Post.available(user)).not_to include(user_post, answered_post, pending_post)
-      expect(Post.available(user)).to include(available)
+      expect(Post.available(user)).to include(unanswered, subscribed)
     end
 
     it "answered" do
-      expect(Post.answered).not_to include(user_post, pending_post, available)
+      expect(Post.answered).not_to include(user_post, pending_post, unanswered)
       expect(Post.answered).to include(answered_post) 
     end
 
     it "personal" do
       expect(Post.personal).not_to include(answered_post)
-      expect(Post.personal).to include(flagged, pending_post, available, no_state)
+      expect(Post.personal).to include(flagged, pending_post, unanswered, no_state)
     end
   end
 
@@ -143,25 +145,10 @@ describe Post do
         @post.unanswer!
         expect(@post).to be_unanswered
       end
-    end
-  end
 
-## Post Subscriptions ##
-  describe "user.subscribe!" do
-    let(:other_user) { FactoryGirl.create(:user) }
-    before { @post.save }
-
-    it "adds user to 'followers'" do
-      other_user.subscribe!(@post)
-      expect(@post.followers).to include(other_user)
-    end
-
-    describe "user.unsubscribe!" do
-      before { other_user.subscribe!(@post) }
-
-      it "removes user from 'followers'" do
-        other_user.unsubscribe!(@post)
-        expect(@post.followers).not_to include(other_user)
+      it "should change to :subscribed on #subscribe" do
+        @post.subscribe!
+        expect(@post).to be_subscribed
       end
     end
   end

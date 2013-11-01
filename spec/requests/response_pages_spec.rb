@@ -89,6 +89,27 @@ describe "ResponsePages" do
         expect(page).to have_title("Thoughtsy")
       end
     end
+
+    describe "after 'following' post" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      before do
+        user.subscribe!(post)
+        fill_in 'response_content', with: "Lorem Ipsum"
+      end
+
+      it "updates certain attributes" do
+        click_button "Respond"
+        expect(post.state).to eq 'subscribed'
+        expect(Post.available(other_user)).to include post
+        expect(Post.available(user)).not_to include post
+        expect(post.user.posts.answered).to include post
+      end
+
+      it "sends email to followers not including responder" do
+        click_button "Respond"
+        expect(last_email.bcc).not_to include(user.email)
+      end
+    end
   end
 
   describe "show page" do

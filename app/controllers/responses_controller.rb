@@ -36,7 +36,7 @@ class ResponsesController < ApplicationController
     end
 
     def answer_all(post)
-      post.answer!
+      post.answer! unless post.state == 'subscribed'
       current_user.reset_tokens
     end
 

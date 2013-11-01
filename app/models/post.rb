@@ -12,11 +12,20 @@ class Post < ActiveRecord::Base
   validate :image_or_content
 
 
-  scope :ascending, -> { order('created_at ASC') }
-  scope :descending, -> { order('created_at DESC') }
-  scope :available, ->(user) { where("state == ? AND user_id != ?", 'unanswered', user.id) }
-  scope :answered, -> { where("state == ?", 'answered') }
-  scope :personal, -> { where.not("state == ?", 'answered') }
+  scope :ascending,   -> { order('created_at ASC') }
+  scope :descending,  -> { order('created_at DESC') }
+  scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
+                                         'unanswered', 'subscribed', user.id) }
+  scope :answered,    -> { where("state == ?", 'answered') }
+  scope :personal,    -> { where.not("state == ?", 'answered') }
+
+
+  # scope :queued,      -> { where("state == ? OR state == ?", 'unanswered', 'subscribed') }
+  # scope :a,           ->(user) { includes(:subscriptions).where.not(subscriptions: {user_id: user.id}).references(:subscriptions) }
+  # scope :b,           ->(user) { joins(:subscriptions).where.not(subscriptions: {user_id: user.id}) }
+  # scope :subscribed,  ->(user) { sub.joins(:subscriptions).where.not(subscriptions: {user_id: user.id}) }
+  # scope :available, ->(user) { available_unanswered(user).available_subscribed(user) }
+
 
   after_create do |post|
     post.user.update_score!(1)
@@ -48,6 +57,10 @@ class Post < ActiveRecord::Base
 
     event :unanswer do
       transition any => :unanswered
+    end
+
+    event :subscribe do
+      transition any => :subscribed
     end
 
     event :flag do
