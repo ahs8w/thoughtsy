@@ -20,8 +20,10 @@ class UserMailer < ActionMailer::Base
 
   def follower_response_email(response)
     @response = response
+    responder = []
+    responder << @response.user
     @post = @response.post
-    @recipients = @post.followers
+    @recipients = @post.followers - responder
     emails = @recipients.collect(&:email).join(', ')
     mail bcc: emails, to: 'info@thoughtsy.com', subject: "Someone has responded to the thought you're following"
   end

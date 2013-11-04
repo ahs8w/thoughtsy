@@ -15,8 +15,8 @@ class Post < ActiveRecord::Base
   scope :ascending,   -> { order('created_at ASC') }
   scope :descending,  -> { order('created_at DESC') }
   scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
-                                         'unanswered', 'subscribed', user.id) }
-  scope :answered,    -> { where("state == ?", 'answered') }
+                                       'unanswered', 'followed', user.id) }
+  scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'followed') }
   scope :personal,    -> { where.not("state == ?", 'answered') }
 
 
@@ -48,11 +48,12 @@ class Post < ActiveRecord::Base
     end
 
     event :expire do
-      transition :pending => :unanswered
+      transition any => :unanswered
     end
 
     event :answer do
-      transition any => :answered
+      transition all - [:subscribed] => :answered
+      transition :subscribed => :followed
     end
 
     event :unanswer do

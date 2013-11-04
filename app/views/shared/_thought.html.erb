@@ -15,7 +15,7 @@
   <% else %>
     <div class="thought_content">
       <%= image_tag thought.image_url if thought.image.present? %>
-      <%= wrap(thought.content) unless thought.content.nil? %>
+      <%= custom_format(thought.content) unless thought.content.nil? %>
     </div>
   <% end %>
 

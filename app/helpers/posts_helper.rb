@@ -1,12 +1,18 @@
 module PostsHelper
 
-## to fix bug that very long words break the layout
+  ## to fix bug that very long words break the layout
     # raw method: prevent Rails from escaping the resulting HTML
     # sanitize method: needed to prevent cross-site scripting
-    # ternary operator
+    # ternary operator:  boolean?  ?  do one thing  :  (else:) do something else
 
   def wrap(content)
     sanitize(raw(content.split.map{ |s| wrap_long_string(s) }.join(' ')))
+  end
+    # split: divides str into substrings based on delimiter(default: whitespace)
+    # map: applies wrap_long_string method to each substring(word)
+
+  def custom_format(content)
+    simple_format(sanitize(raw(content)))
   end
 
   def date_time(thought)
@@ -20,13 +26,26 @@ module PostsHelper
   def wrapped(content)
     truncate(wrap(content), length: 65, separator: ' ')
   end
-  
+
+  def not_subscribed(user)
+    posts = Post.available(user).includes(:subscription).limit(10)
+    a = []
+    posts.each do |post|
+      unless post.followers.include(user)
+        a << post
+      end
+    end
+    a.ascending.first
+  end
+
   private
 
     def wrap_long_string(text, max_width = 30)
       zero_width_space = "&#8203;"
       regex = /.{1,#{max_width}}/
-      (text.length < max_width) ? text :
-                                  text.scan(regex).join(zero_width_space)
+      (text.length < max_width) ? text : text.scan(regex).join(zero_width_space)
     end
+      # ZWS html character: white space which renders with zero width
+      # scan(regex): breaks text into seperate 30 character strings in an array
+      # join(ZWS): joins elements in array by ZWS and returns a string
 end

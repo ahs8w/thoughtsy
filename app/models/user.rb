@@ -79,6 +79,17 @@ class User < ActiveRecord::Base
     Post.available(self).size > 0
   end
 
+  def not_subscribed
+    posts = Post.available(self).ascending.includes(:subscriptions).limit(10)
+    a = []
+    posts.each do |post|
+      unless post.followers.include?(self)
+        a << post
+      end
+    end
+    a.first
+  end
+
 # Subscriptions
   def subscribe!(post)
     self.subscriptions.create!(post_id: post.id)

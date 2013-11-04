@@ -98,11 +98,12 @@ describe "ResponsePages" do
       end
 
       it "updates certain attributes" do
-        click_button "Respond"
         expect(post.state).to eq 'subscribed'
-        expect(Post.available(other_user)).to include post
-        expect(Post.available(user)).not_to include post
-        expect(post.user.posts.answered).to include post
+        click_button "Respond"
+        post.reload
+        expect(post.state).to eq 'followed'
+        expect(other_user.not_subscribed).to eq post
+        expect(user.not_subscribed).not_to eq post
       end
 
       it "sends email to followers not including responder" do

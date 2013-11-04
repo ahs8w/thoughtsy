@@ -141,6 +141,7 @@ describe "StaticPages" do
       let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
       let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
       before do
+        post.subscribe!   # testing subscribed responses as well
         post.answer!
         visit root_path
       end

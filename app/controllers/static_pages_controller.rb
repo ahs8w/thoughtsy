@@ -17,11 +17,11 @@ class StaticPagesController < ApplicationController
           end
           @oldpost = Post.find(current_user.token_id)
           # can't reset_tokens here because it sets off Post validation error
-          @token_post = Post.available(current_user).ascending.first
+          @token_post = current_user.not_subscribed
           @oldpost.expire!
         end
       else                                                        # no token_id
-        @token_post = Post.available(current_user).ascending.first
+        @token_post = current_user.not_subscribed
         if current_user.posts_available                           #     posts available
           output_2
         else                                                      #     not available
@@ -44,4 +44,6 @@ class StaticPagesController < ApplicationController
     def rollback_tokens
       current_user.reset_tokens if signed_in? && !current_user.timer_valid
     end
+
+    # Post.available(current_user).ascending.first
 end

@@ -36,13 +36,14 @@ class ResponsesController < ApplicationController
     end
 
     def answer_all(post)
-      post.answer! unless post.state == 'subscribed'
+      post.answer! #unless post.state == 'subscribed'
       current_user.reset_tokens
     end
 
     def send_response_emails(response)
       UserMailer.response_email(response).deliver
       UserMailer.follower_response_email(response).deliver unless response.post.followers.empty?
+          # only if follower.count > 2
     end
 
     def set_tokens_and_state

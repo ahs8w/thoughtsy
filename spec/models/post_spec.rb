@@ -17,6 +17,7 @@ describe Post do
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
   it { should respond_to(:subscribed?) }
+  it { should respond_to(:followed?) }
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followers) }
   it { should respond_to(:image) }
@@ -72,8 +73,10 @@ describe Post do
     let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-    let!(:subscribed) { FactoryGirl.create(:post, state: 'subscribed') }
+    let!(:subscribed) { FactoryGirl.create(:post, state: 'followed', created_at: 5.minutes.ago) }
+    let!(:followed) { FactoryGirl.create(:post, created_at: 10.minutes.ago) }
     let!(:no_state) { FactoryGirl.create(:post) }
+    before { user.subscribe!(followed) }
 
     it "available" do
       expect(Post.available(user)).not_to include(user_post, answered_post, pending_post)
@@ -81,13 +84,19 @@ describe Post do
     end
 
     it "answered" do
+      subscribed.answer!
       expect(Post.answered).not_to include(user_post, pending_post, unanswered)
-      expect(Post.answered).to include(answered_post) 
+      expect(Post.answered).to include(answered_post, subscribed)
     end
 
     it "personal" do
       expect(Post.personal).not_to include(answered_post)
       expect(Post.personal).to include(flagged, pending_post, unanswered, no_state)
+    end
+
+    #user model method
+    it "not_subscribed method" do
+      expect(user.not_subscribed).to eq subscribed
     end
   end
 
@@ -124,7 +133,6 @@ describe Post do
       before { @post.flag! }
 
       it "changes to :flagged on #flag" do
-        @post.flag!
         expect(@post).to be_flagged
       end
 
@@ -135,6 +143,19 @@ describe Post do
       it "updates post author score" do
         user.reload
         expect(user.score).to eq -2
+      end
+    end
+
+    describe ":subscribed" do
+      before { @post.subscribe! }
+
+      it "changes to :subscribed on #subscribe" do
+        expect(@post).to be_subscribed
+      end
+
+      it "changes to :subscribed_answered on #answer" do
+        @post.answer!
+        expect(@post).to be_followed
       end
     end
 
