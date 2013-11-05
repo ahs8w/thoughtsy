@@ -34,34 +34,34 @@ describe UserMailer do
   describe "response_email" do
     let(:user) { FactoryGirl.create(:user) }
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }
-    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
+    let(:follower) { FactoryGirl.create(:user) }
+    let(:response) { FactoryGirl.create(:response, user_id: follower.id, post_id: post.id) }
 
-    describe "to poster" do
-      let(:mail) { UserMailer.response_email(response) }
+    # describe "to poster" do
+    #   let(:mail) { UserMailer.response_email(response) }
 
-      it "sends correct mail" do
-        expect(mail.subject).to eq("Someone has responded to your thought!")
-        expect(mail.to).to eq([user.email])
-        expect(mail.from).to eq(["admin@thoughtsy.com"])
-      end
+    #   it "sends correct mail" do
+    #     expect(mail.subject).to eq("Someone has responded to your thought!")
+    #     expect(mail.to).to eq([user.email])
+    #     expect(mail.from).to eq(["admin@thoughtsy.com"])
+    #   end
 
-      it "renders the email body" do
-        expect(mail.body.encoded).to match(post_response_path(post, response))
-      end
-    end
+    #   it "renders the email body" do
+    #     expect(mail.body.encoded).to match(post_response_path(post, response))
+    #   end
+    # end
 
     describe "to followers" do
-      let(:follower) { FactoryGirl.create(:user) }
       let(:follower2) { FactoryGirl.create(:user) }
-      let(:mail) { UserMailer.follower_response_email(response) }
+      let(:mail) { UserMailer.response_email(response) }
       before do
         follower.subscribe!(post)
         follower2.subscribe!(post)
       end
 
       it "sends correct mail" do
-        expect(mail.subject).to eq("Someone has responded to the thought you're following")
-        expect(mail.bcc).to eq([follower.email, follower2.email])
+        expect(mail.subject).to eq("You received a new response!")
+        expect(mail.bcc).to eq([follower2.email, user.email])     # order matters
       end
 
       it "renders the email body" do

@@ -40,8 +40,8 @@ describe "Rating Pages" do
 
       it { should have_content("You rated this article: thought provoking") }
 
-      it "does not send an email" do
-        expect(last_email).to be_nil
+      it "does not send an email to admin" do
+        expect(last_email.to).not_to include ('admin@thoughtsy.com')
       end
     end
 

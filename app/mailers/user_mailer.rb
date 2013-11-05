@@ -1,3 +1,5 @@
+include PostsHelper
+
 class UserMailer < ActionMailer::Base
   default from: "admin@thoughtsy.com"      #hash of default values for emails sent from this mailer
 
@@ -11,21 +13,23 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: 'Thoughtsy needs you!'
   end
 
-  def response_email(response)
-    @response = response
-    @post = @response.post
-    @user = @post.user
-    mail to: @user.email, subject: 'Someone has responded to your thought!'
-  end
+  # def response_email(response)
+  #   @response = response
+  #   @post = @response.post
+  #   @user = @post.user
+  #   mail to: @user.email, subject: 'Someone has responded to your thought!'
+  # end
 
-  def follower_response_email(response)
+  def response_email(response)
     @response = response
     responder = []
     responder << @response.user
     @post = @response.post
+    @user = @post.user
     @recipients = @post.followers - responder
+    @recipients << @user
     emails = @recipients.collect(&:email).join(', ')
-    mail bcc: emails, to: 'info@thoughtsy.com', subject: "Someone has responded to the thought you're following"
+    mail bcc: emails, to: 'info@thoughtsy.com', subject: "You received a new response!"
   end
 
   def message_email(message)

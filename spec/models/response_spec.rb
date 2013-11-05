@@ -44,7 +44,7 @@ describe Response do
       post.reload
       expect(post.state).to eq 'answered'
       expect(user.token_id).to eq nil
-      expect(last_email.to).to include(post.user.email)
+      expect(last_email.bcc).to include(post.user.email)
     end
   end
 

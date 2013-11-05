@@ -22,7 +22,7 @@ describe "ResponsePages" do
     it { should have_button("follow") }
     it { should have_selector('#new_response') }
 
-    describe "expiration timer", :focus=>true do
+    describe "expiration timer" do
       it "enqueues a delayed job" do
         post.reload
         expect(post.state).to eq 'pending'

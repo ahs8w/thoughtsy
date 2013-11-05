@@ -51,11 +51,12 @@ Spork.prefork do
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
+    # reset delivered email array
     config.before(:each) { reset_email }
     # add ':focus' to a test and guard will automatically only run that test: good for focusing!
-    config.treat_symbols_as_metadata_keys_with_true_values = true
     config.filter_run :focus => true
     config.run_all_when_everything_filtered = true
+    config.treat_symbols_as_metadata_keys_with_true_values = true
     # carrierwave test clean-up
     config.after(:each) do
       if Rails.env.test?
