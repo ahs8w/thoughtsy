@@ -8,13 +8,23 @@ class Response < ActiveRecord::Base
   has_many :ratings, dependent: :destroy
   has_many :raters, through: :ratings, source: :user
 
+  after_save :update_all
+
   mount_uploader :image, ImageUploader
 
   scope :descending, -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
   scope :ascending,  -> { order('created_at ASC') }
 
+
   private
     def image_or_content
       errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
+    end
+
+    def update_all
+      self.post.answer!
+      self.user.reset_tokens
+      UserMailer.response_email(self).deliver
+      # UserMailer.follower_response_email(self).deliver unless self.post.followers.empty?
     end
 end

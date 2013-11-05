@@ -37,7 +37,18 @@ describe Response do
     it { should_not be_valid }
   end
 
-## Response Scopes ##
+  describe "after save callback" do
+    before { @response.save }
+
+    it "updates attributes" do
+      post.reload
+      expect(post.state).to eq 'answered'
+      expect(user.token_id).to eq nil
+      expect(last_email.to).to include(post.user.email)
+    end
+  end
+
+  ## Response Scopes ##
   describe "ordered scopes" do
     let!(:newer_response) { FactoryGirl.create(:response, created_at: 5.minutes.ago) }
     let!(:older_response) { FactoryGirl.create(:response, created_at: 5.hours.ago) }

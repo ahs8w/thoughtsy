@@ -19,6 +19,7 @@ class StaticPagesController < ApplicationController
           # can't reset_tokens here because it sets off Post validation error
           @token_post = current_user.not_subscribed
           @oldpost.expire!
+          current_user.update_score!(-3)
         end
       else                                                        # no token_id
         @token_post = current_user.not_subscribed

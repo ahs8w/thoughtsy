@@ -20,13 +20,6 @@ class Post < ActiveRecord::Base
   scope :personal,    -> { where.not("state == ?", 'answered') }
 
 
-  # scope :queued,      -> { where("state == ? OR state == ?", 'unanswered', 'subscribed') }
-  # scope :a,           ->(user) { includes(:subscriptions).where.not(subscriptions: {user_id: user.id}).references(:subscriptions) }
-  # scope :b,           ->(user) { joins(:subscriptions).where.not(subscriptions: {user_id: user.id}) }
-  # scope :subscribed,  ->(user) { sub.joins(:subscriptions).where.not(subscriptions: {user_id: user.id}) }
-  # scope :available, ->(user) { available_unanswered(user).available_subscribed(user) }
-
-
   after_create do |post|
     post.user.update_score!(1)
   end
@@ -37,11 +30,6 @@ class Post < ActiveRecord::Base
       UserMailer.flag_email(post).deliver
       post.user.update_score!(-3)
     end
-
-## keep for reference!!  pass in arguments to the transition callback  
-    # after_transition on: :accept do |post, transition|
-    #   post.set_responder_token(transition.args.first)
-    # end
 
     event :accept do
       transition any => :pending
@@ -69,14 +57,28 @@ class Post < ActiveRecord::Base
     end
   end
 
+
+  def set_expiration_timer
+    unless self.answered? || self.followed?
+      self.expire!
+    end
+  end
+  handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }
+
+
   private
     def image_or_content
       errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
     end
+end
 
-## keep for reference!!  see above
+
+## keep for reference!!  pass in arguments to the transition callback  
+  # after_transition on: :accept do |post, transition|
+  #   post.set_responder_token(transition.args.first)
+  # end
+
   # def set_responder_token(id)
   #   self.responder_token = id
   #   save!
   # end
-end

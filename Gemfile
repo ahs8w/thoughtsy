@@ -3,12 +3,11 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 gem 'bootstrap-sass'
-gem 'bcrypt-ruby', '3.0.1'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'state_machine'
-
+gem 'delayed_job_active_record'
 gem 'rmagick'
 gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
@@ -67,7 +66,7 @@ group :production do
 end
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.0.1'
 
 # Use unicorn as the app server
 # gem 'unicorn'

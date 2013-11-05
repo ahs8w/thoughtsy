@@ -103,8 +103,8 @@ class User < ActiveRecord::Base
 
 # Reputation
   def update_score!(value)
-    self.score += value
-    save!
+    new_score = self.score + value
+    self.update_attribute(:score, new_score)
   end
   
   private

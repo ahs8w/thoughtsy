@@ -6,11 +6,12 @@ class ResponsesController < ApplicationController
 
   def new 
     @post = Post.find(params[:post_id])
-    @response = Response.new
+    @response = @post.responses.new
+    @post.set_expiration_timer
   end
 
-# Ratings Page #
   def show
+    # Ratings Page #
     @response = Response.find(params[:id])
     @post = @response.post
     @rating = Rating.new
@@ -20,8 +21,6 @@ class ResponsesController < ApplicationController
     @response = current_user.responses.build(response_params)
     @post = @response.post
     if @response.save
-      answer_all(@post)
-      send_response_emails(@response)
       flash[:success] = "Response sent!"
       redirect_to post_path(@post)
     else
@@ -33,17 +32,6 @@ class ResponsesController < ApplicationController
   private
     def response_params
       params.require(:response).permit(:content, :post_id, :image, :remote_image_url)
-    end
-
-    def answer_all(post)
-      post.answer! #unless post.state == 'subscribed'
-      current_user.reset_tokens
-    end
-
-    def send_response_emails(response)
-      UserMailer.response_email(response).deliver
-      UserMailer.follower_response_email(response).deliver unless response.post.followers.empty?
-          # only if follower.count > 2
     end
 
     def set_tokens_and_state

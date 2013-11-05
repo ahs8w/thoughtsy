@@ -59,67 +59,78 @@ describe "StaticPages" do
           end
         end
       end
+    end
 
     ## views/shared/_respond_button ##
-      describe "Response button behavior" do
+    describe "Response button behavior" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:post, user: user)
+        sign_in user
+        visit root_path
+      end
 
-        describe "with no token_timer" do
+      describe "with no token_timer" do
 
-          context "and no available posts" do
+        context "and no available posts" do
 
-            it { should_not have_button("Respond") }
-            it { should have_content("currently no unanswered posts available") }
-          end
-
-          context "and an available post" do
-            let!(:available) { FactoryGirl.create(:post) }
-            before { visit root_path }
-
-            it { should have_button("Respond") }
-          end
+          it { should_not have_button("Respond") }
+          it { should have_content("currently no unanswered posts available") }
         end
 
-        describe "with valid token_timer" do
-          let!(:token_response) { FactoryGirl.create(:post) }
-          before do
-            user.token_timer = 12.hours.ago
-            user.token_id = token_response.id
-            user.save
-            visit root_path
-          end
+        context "and an available post" do
+          let!(:available) { FactoryGirl.create(:post) }
+          before { visit root_path }
 
           it { should have_button("Respond") }
-          it { should have_content("until your response expires!") }
+        end
+      end
+
+      describe "with valid token_timer" do
+        let!(:token_response) { FactoryGirl.create(:post) }
+        before do
+          user.token_timer = 12.hours.ago
+          user.token_id = token_response.id
+          user.save
+          visit root_path
         end
 
-        describe "with expired token_timer" do
-          let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
-          before do
-            user.token_timer = 25.hours.ago
-            user.token_id = token_response.id
-            user.save
-            visit root_path
-          end
+        it { should have_button("Respond") }
+        it { should have_content("until your response expires!") }
+      end
 
-          context "and no available posts" do
-            it { should have_content("Your response expired") }
-            it { should_not have_button("Respond") }
-          end
+      describe "with expired token_timer" do
+        let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
+        before do
+          user.token_timer = 25.hours.ago
+          user.token_id = token_response.id
+          user.save
+          visit root_path
         end
 
-        describe "and an available post" do
-          let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
-          let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
-          before do
-            user.token_timer = 25.hours.ago
-            user.token_id = token_response.id
-            user.save
-            visit root_path
-          end
-          
-          it { should have_content("Click the button to get another thought.") }
-          it { should have_button("See a new thought") }
+        it "should update user score" do
+          user.reload
+          expect(user.score).to eq -2
         end
+
+        context "and no available posts" do
+          it { should have_content("Your response expired") }
+          it { should_not have_button("Respond") }
+        end
+      end
+
+      describe "and an available post" do
+        let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
+        let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
+        before do
+          user.token_timer = 25.hours.ago
+          user.token_id = token_response.id
+          user.save
+          visit root_path
+        end
+        
+        it { should have_content("Click the button to get another thought.") }
+        it { should have_button("See a new thought") }
       end
     end
   end

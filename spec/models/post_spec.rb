@@ -51,6 +51,32 @@ describe Post do
       user.reload
       expect(user.score).to eq 1
     end
+
+    describe "#set_expiration_timer" do
+      before { @post.accept! }
+
+      context "if unanswered" do
+
+        it "expires post" do
+          expect(@post.state).to eq 'pending'
+          @post.set_expiration_timer_without_delay
+          expect(@post.state).to eq 'unanswered'
+        end
+      end
+
+      context "if answered or followed" do
+        let(:another_user) { FactoryGirl.create(:user) }
+        before do
+          another_user.subscribe!(@post)
+          @post.answer!
+        end
+
+        it "does not change state of post" do
+          @post.set_expiration_timer_without_delay
+          expect(@post.state).to eq 'followed'
+        end
+      end
+    end
   end
 
 ## Post Scopes ##
