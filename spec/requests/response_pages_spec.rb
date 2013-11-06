@@ -1,4 +1,5 @@
 require 'spec_helper'
+Delayed::Worker.delay_jobs = true   # test that DJ jobs are created and timing is correct
 
 describe "ResponsePages" do
 
@@ -29,11 +30,32 @@ describe "ResponsePages" do
         expect(Delayed::Job.count).to eq 1
       end
 
-      it "after job runs, post state is reset to 'unanswered'" do
-        expect(Delayed::Worker.new.work_off).to eq [1, 0]       # processes everything in queue in same thread as test
-        expect(Delayed::Job.count).to eq 0
-        post.reload
-        expect(post.state).to eq 'unanswered'
+      describe "after 25 hours" do
+        # Timecop.freeze(Time.now + 25.hours)  ->  didn't work outside of assertion's block
+
+        it "runs job and resets state to 'unanswered'" do
+          Timecop.freeze(Time.now + 25.hours) 
+          expect(Delayed::Worker.new.work_off).to eq [1, 0]
+          expect(Delayed::Job.count).to eq 0
+          post.reload
+          expect(post.state).to eq 'unanswered'
+          # "processes everything in queue in same thread as test"
+          # but doesn't seem to fire if 'run_at:' is set for future time (w/out Timecop)
+        end
+
+        describe "if post is responded to" do
+          before do
+            user.subscribe!(post)
+            post.answer!
+          end
+
+          it "job does not change state" do
+            Timecop.freeze(Time.now + 25.hours)  # must be in same 'it' block as assertion.  
+            expect(Delayed::Worker.new.work_off).to eq [1, 0]
+            post.reload
+            expect(post.state).to eq 'followed'
+          end
+        end
       end
     end
   end

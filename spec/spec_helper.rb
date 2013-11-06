@@ -51,8 +51,11 @@ Spork.prefork do
     config.expect_with :rspec do |c|
       c.syntax = :expect
     end
-    # reset delivered email array
-    config.before(:each) { reset_email }
+    # reset delivered email array and Time
+    config.before(:each) do
+      reset_email
+      Timecop.return
+    end
     # add ':focus' to a test and guard will automatically only run that test: good for focusing!
     config.filter_run :focus => true
     config.run_all_when_everything_filtered = true

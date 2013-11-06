@@ -27,11 +27,12 @@ class Post < ActiveRecord::Base
   state_machine :state, initial: :unanswered do
 
     after_transition on: :flag do |post, transition|
-      UserMailer.flag_email(post).deliver
+      UserMailer.delay.flag_email(post)
       post.user.update_score!(-3)
     end
 
     event :accept do
+      transition :subscribed => same
       transition any => :pending
     end
 
@@ -40,8 +41,8 @@ class Post < ActiveRecord::Base
     end
 
     event :answer do
-      transition all - [:subscribed] => :answered
       transition :subscribed => :followed
+      transition any => :answered
     end
 
     event :unanswer do
@@ -52,24 +53,33 @@ class Post < ActiveRecord::Base
       transition any => :subscribed
     end
 
+    event :unsubscribe do
+      transition :subscribed => :pending
+    end
+
     event :flag do
       transition any => :flagged
     end
   end
 
 
+  def self.set_expiration_timer(id)   # makes job queue simpler than passing instances to YAML
+    find(id).set_expiration_timer
+  end
+
   def set_expiration_timer
-    unless self.answered? || self.followed?
-      self.expire!
+    unless answered? || followed?
+      expire!
     end
   end
   handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }
 
 
   private
-    def image_or_content
-      errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
-    end
+  
+  def image_or_content
+    errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
+  end
 end
 
 

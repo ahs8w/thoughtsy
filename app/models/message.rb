@@ -6,7 +6,16 @@ class Message < ActiveRecord::Base
 
   scope :unread, -> { where(viewed?: false) }
 
+  after_save :send_email
+
   def set_viewed?
     self.update_attribute(:viewed?, true)
+  end
+
+
+  private
+
+  def send_email
+    UserMailer.delay.message_email(self)
   end
 end

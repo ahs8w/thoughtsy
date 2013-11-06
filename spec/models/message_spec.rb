@@ -38,11 +38,20 @@ describe Message do
     specify { expect(@message.viewed?).to eq true }
   end
 
-  it ":unread scope" do
-    @message.save
-    expect(Message.unread).to include @message
-    @message.set_viewed?
-    @message.reload
-    expect(Message.unread).not_to include @message
+  describe "after saving" do
+    before { @message.save }
+
+    context "scope" do
+      it ":unread scope" do
+        expect(Message.unread).to include @message
+        @message.set_viewed?
+        @message.reload
+        expect(Message.unread).not_to include @message
+      end
+    end
+
+    it "sends email to message receiver" do
+      expect(last_email.to).to eq([receiver.email])
+    end
   end
 end

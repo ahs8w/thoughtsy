@@ -179,9 +179,14 @@ describe Post do
         expect(@post).to be_subscribed
       end
 
-      it "changes to :subscribed_answered on #answer" do
+      it "changes to :followed on #answer" do
         @post.answer!
         expect(@post).to be_followed
+      end
+
+      it "changes to :pending on #unsubscribe" do
+        @post.unsubscribe!
+        expect(@post).to be_pending
       end
     end
 

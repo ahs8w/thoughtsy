@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @username %>,</h1>
+    <p>
+      A post you followed has received a new response!
+    </p>
+    <p>
+      <%= wrapped(@response.content) %>
+    </p>
+    <p>
+      To see the full thought, head to <%= link_to "Thoughtsy.com", post_response_url(@post, @response) %>.
+    </p>
+    <p>
+      Thanks for participating and have a great day!
+    </p>
+  </body>
+</html>
+

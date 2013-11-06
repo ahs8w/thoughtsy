@@ -26,7 +26,7 @@ def last_email
 end
 
 def reset_email
-  ActionMailer::Base.deliveries.clear
+  ActionMailer::Base.deliveries = []
 end
 
 RSpec::Matchers.define :have_error_message do |message|

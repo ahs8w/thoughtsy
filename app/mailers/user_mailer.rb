@@ -8,28 +8,34 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: 'Password reset'
   end
 
-  def inactive_user_email(user)
+  def inactive_user_email(user)     # functional but not hooked up
     @user = user
     mail to: @user.email, subject: 'Thoughtsy needs you!'
   end
 
-  # def response_email(response)
-  #   @response = response
-  #   @post = @response.post
-  #   @user = @post.user
-  #   mail to: @user.email, subject: 'Someone has responded to your thought!'
-  # end
-
-  def response_email(response)
+  def poster_email(user, response)
     @response = response
-    responder = []
-    responder << @response.user
     @post = @response.post
+    @username = user.username
+    mail to: user.email, subject: 'Someone has responded to your thought!'
+  end
+
+  def follower_email(user, response)
+    @response = response
+    @post = @response.post
+    @username = user.username
+    mail to: user.email, subject: "Your followed post has a new response!"
+  end
+
+  def self.response_emails(response)
+    @post = response.post
     @user = @post.user
-    @recipients = @post.followers - responder
-    @recipients << @user
-    emails = @recipients.collect(&:email).join(', ')
-    mail bcc: emails, to: 'info@thoughtsy.com', subject: "You received a new response!"
+    delay.poster_email(@user, response)
+    unless @post.followers.empty?
+      @post.followers.each do |follower|
+        delay.follower_email(follower, response) unless follower == response.user
+      end
+    end
   end
 
   def message_email(message)

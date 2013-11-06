@@ -7,7 +7,8 @@ class ResponsesController < ApplicationController
   def new 
     @post = Post.find(params[:post_id])
     @response = @post.responses.new
-    @post.set_expiration_timer
+    Post.set_expiration_timer(params[:post_id])
+    # calling delay on Class with simple id instead of instance
   end
 
   def show
@@ -36,7 +37,7 @@ class ResponsesController < ApplicationController
 
     def set_tokens_and_state
       post = Post.find(params[:post_id])
-      post.accept! unless current_user.token_id == post.id
+      post.accept!
       current_user.set_tokens(post.id)
     end
 end

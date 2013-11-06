@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Response do
   
   let(:user) { FactoryGirl.create(:user) }
-  let(:user2) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user: user2, content: "blah") }
+  let(:poster) { FactoryGirl.create(:user) }
+  let(:post) { FactoryGirl.create(:post, user: poster, content: "blah") }
 
   before { @response = user.responses.build(content: "blahblah", post_id: post.id) }
 
@@ -44,7 +44,29 @@ describe Response do
       post.reload
       expect(post.state).to eq 'answered'
       expect(user.token_id).to eq nil
-      expect(last_email.bcc).to include(post.user.email)
+    end
+
+    it "sends email to responder" do
+      expect(last_email.to).to include(post.user.email)
+    end
+  end
+
+  describe "after save callback with several followers" do
+    let(:follower) { FactoryGirl.create(:user) }
+    let(:follower2) { FactoryGirl.create(:user) }
+    before do
+      follower.subscribe!(post)
+      follower2.subscribe!(post)
+      user.subscribe!(post)
+      @response.save
+    end
+
+    it "sends follower email to followers" do
+      expect(ActionMailer::Base.deliveries.size).to eq 3
+    end
+
+    it "does not send follower email to responder" do
+      expect(last_email.to).not_to include(user.email)
     end
   end
 

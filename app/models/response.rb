@@ -24,7 +24,6 @@ class Response < ActiveRecord::Base
     def update_all
       self.post.answer!
       self.user.reset_tokens
-      UserMailer.response_email(self).deliver
-      # UserMailer.follower_response_email(self).deliver unless self.post.followers.empty?
+      UserMailer.response_emails(self)
     end
 end

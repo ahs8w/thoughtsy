@@ -7,7 +7,7 @@ class RatingsController < ApplicationController
     @response = @rating.response
     @message = Message.new
     if @rating.save
-      UserMailer.brilliant_email(@response).deliver if params[:commit] == 'brilliant!'
+      UserMailer.delay.brilliant_email(@response) if params[:commit] == 'brilliant!'
       flash.now[:success] = "Rating saved."
       respond_to do |format|
         format.html { redirect_to :back }

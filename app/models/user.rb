@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     generate_token(:password_reset_token)
     self.password_reset_sent_at = Time.zone.now
     save!
-    UserMailer.password_reset(self).deliver
+    UserMailer.delay.password_reset(self)
   end
 
   def generate_token(column)
@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
 
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
-    post.accept!    #pending
+    post.unsubscribe!    #pending
   end
 
 # Reputation
