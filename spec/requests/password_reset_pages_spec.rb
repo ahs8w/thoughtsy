@@ -10,6 +10,7 @@ describe "Password Resets" do
     fill_in "Email", with: user.email
     click_on "Send instructions"
     expect(page).to have_content("Email sent")
+    Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
     expect(last_email.to).to include(user.email)
   end
 

@@ -31,6 +31,14 @@ class Post < ActiveRecord::Base
       post.user.update_score!(-3)
     end
 
+    after_transition on: :accept do |post, transition|
+      post.set_token_timer
+      post.set_expiration_timer
+    end
+
+    after_transition on: :expire, do: :reset_token_timer
+
+
     event :accept do
       transition :subscribed => same
       transition any => :pending
@@ -63,17 +71,21 @@ class Post < ActiveRecord::Base
   end
 
 
-  def self.set_expiration_timer(id)   # makes job queue simpler than passing instances to YAML
-    find(id).set_expiration_timer
-  end
-
   def set_expiration_timer
-    unless answered? || followed?
-      expire!
+    if token_timer? && token_timer < 24.hours.ago
+      expire! unless answered? || followed?
     end
   end
   handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }
 
+  def set_token_timer
+    self.token_timer ||= Time.zone.now
+    save!
+  end
+
+  def reset_token_timer
+    self.update_attribute(:token_timer, nil)
+  end
 
   private
   

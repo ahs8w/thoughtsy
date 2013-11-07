@@ -123,7 +123,7 @@ describe User do
   end
 
 ## covering cases of password match and password mismatch with authenticate method
-  describe "return value of authenticate method" do
+  describe ".authenticate(password)" do
     before { @user.save }
     let(:found_user) { User.find_by(email: @user.email) }
 
@@ -151,7 +151,7 @@ describe User do
   end
 
 ## Post Associations ##
-  describe "post association" do
+  describe "post-user association" do
     before { @user.save }
     let!(:older_post) { FactoryGirl.create(:post, user: @user, created_at: 1.day.ago) }
     let!(:newer_post) { FactoryGirl.create(:post, user: @user, created_at: 1.hour.ago) }
@@ -160,7 +160,7 @@ describe User do
     #   expect(@user.posts.to_a).to eq [newer_post, older_post]
     # end
 
-    it "should destroy associated posts on user destruction" do
+    it "posts destroyed on user destruction" do
       posts = @user.posts.to_a             # allows us to check if the array of user's posts are still in db
       @user.destroy
       expect(posts).not_to be_empty        # safety check to catch errors if 'to_a' were to be removed
@@ -171,11 +171,11 @@ describe User do
   end
 
 ## Response Associations ##
-  describe "response association" do
+  describe "response-user association" do
     before { @user.save }
     let!(:response) { FactoryGirl.create(:response, user: @user) }
 
-    it "should destroy associated responses on user destruction" do
+    it "responses destroyed on user destruction" do
       responses = @user.responses.to_a
       @user.destroy
       expect(responses).not_to be_empty
@@ -278,10 +278,10 @@ describe User do
   end
 
 ## Password Reset ##
-  describe "send password reset" do
+  describe "#send_password_reset" do
     before { @user.save }       # all the tests work even without saving the user!!??  WHY??
 
-    it "generates a unique password_reset_token each time" do
+    it "generates a unique password_reset_token" do
       @user.send_password_reset
       last_token = @user.password_reset_token
       @user.send_password_reset
@@ -295,6 +295,7 @@ describe User do
 
     it "delivers email to the user" do
       @user.send_password_reset
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers      
       expect(last_email.to).to include(@user.email)
     end
   end
@@ -324,7 +325,7 @@ describe User do
   end
 
 ## Reputation System ##
-  describe ":update_score" do
+  describe "#update_score!" do
     it "sets or adds to the user score" do
       @user.update_score!(1)
       @user.update_score!(3)

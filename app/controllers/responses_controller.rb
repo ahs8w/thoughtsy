@@ -2,13 +2,12 @@ class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :author_or_follower, only: :show
   before_action :tokened_responder, only: :create
-  before_action :set_tokens_and_state, only: :new
+  before_action :set_user_tokens, only: :new
 
   def new 
     @post = Post.find(params[:post_id])
+    @post.accept!
     @response = @post.responses.new
-    Post.set_expiration_timer(params[:post_id])
-    # calling delay on Class with simple id instead of instance
   end
 
   def show
@@ -35,9 +34,8 @@ class ResponsesController < ApplicationController
       params.require(:response).permit(:content, :post_id, :image, :remote_image_url)
     end
 
-    def set_tokens_and_state
+    def set_user_tokens
       post = Post.find(params[:post_id])
-      post.accept!
       current_user.set_tokens(post.id)
     end
 end

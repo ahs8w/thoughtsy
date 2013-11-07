@@ -108,8 +108,10 @@ describe "StaticPages" do
           visit root_path
         end
 
-        it "should update user score" do
+        it "updates user tokens and score" do
           user.reload
+          expect(user.token_timer).to be_nil
+          expect(user.token_id).to be_nil
           expect(user.score).to eq -2
         end
 

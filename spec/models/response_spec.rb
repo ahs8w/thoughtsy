@@ -37,21 +37,22 @@ describe Response do
     it { should_not be_valid }
   end
 
-  describe "after save callback" do
+  describe "::after_save" do
     before { @response.save }
 
-    it "updates attributes" do
+    it "updates post state and user tokens" do
       post.reload
       expect(post.state).to eq 'answered'
       expect(user.token_id).to eq nil
     end
 
     it "sends email to responder" do
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
       expect(last_email.to).to include(post.user.email)
     end
   end
 
-  describe "after save callback with several followers" do
+  describe "::after_save with several followers" do
     let(:follower) { FactoryGirl.create(:user) }
     let(:follower2) { FactoryGirl.create(:user) }
     before do
@@ -62,10 +63,12 @@ describe Response do
     end
 
     it "sends follower email to followers" do
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
       expect(ActionMailer::Base.deliveries.size).to eq 3
     end
 
     it "does not send follower email to responder" do
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
       expect(last_email.to).not_to include(user.email)
     end
   end

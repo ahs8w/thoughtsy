@@ -6,7 +6,7 @@ describe "Post pages" do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
-  describe "queue page" do
+  describe "Queue page" do
     let(:admin) { FactoryGirl.create(:admin) }
     let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
     before do
@@ -25,26 +25,26 @@ describe "Post pages" do
       let!(:older_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
       before { visit queue_path }
 
-      it "should have the right post in the right order" do
+      it "oldest post is first" do
         expect(first('tr')).to have_content(older_post.content)
       end
     end
 
-    describe "should not included answered posts" do
+    describe "does not include answered posts" do
       let(:answered_post) { FactoryGirl.create(:post, state: 'answered', content: 'foobar') }
       before { visit queue_path }
 
       it { should_not have_content(answered_post.content) }
     end
 
-    describe "should include pending posts" do
+    describe "includes pending posts" do
       let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
       before { visit queue_path }
 
       it { should have_content(pending.content) }
     end
 
-    describe "should include flagged posts" do
+    describe "includes flagged posts" do
       let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
       before { visit queue_path }
 
@@ -90,7 +90,7 @@ describe "Post pages" do
     end
   end
 
-  describe "index page" do
+  describe "Index page" do
     let(:user) { FactoryGirl.create(:user) }
     let!(:post) { FactoryGirl.create(:post, created_at: 1.hour.ago, state: 'answered') }
     before do
@@ -106,7 +106,7 @@ describe "Post pages" do
       let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago, state: 'answered') }
       before { visit posts_path }
 
-      it "should have the right post in the right order" do
+      it "newest post is first" do
         expect(first('#index_thought')).to have_content(newer_post.content)
       end
     end
@@ -123,7 +123,7 @@ describe "Post pages" do
     end
   end
 
-  describe "show page" do
+  describe "Show page" do
     let!(:post) { FactoryGirl.create(:post) }
     let!(:older_response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
     let!(:response) { FactoryGirl.create(:response, post: post) }
@@ -151,7 +151,7 @@ describe "Post pages" do
   end
 
 ## Response#New ##
-  describe "flag action" do
+  describe "Flag action" do
     let!(:post) { FactoryGirl.create(:post) }
     let!(:token_post) { FactoryGirl.create(:post) }
     before do
@@ -173,11 +173,12 @@ describe "Post pages" do
     end
 
     it "sends an email to admin" do
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
       expect(last_email.to).to include('admin@thoughtsy.com')
     end
   end
 
-  describe "repost action" do
+  describe "Repost action" do
     # covered in ratings_pages_spec -> accessed through AJAX ratings form
     # action covered in posts_controller_spec
   end
@@ -232,7 +233,7 @@ describe "Post pages" do
   end
 
   ## Response creation ##
-  describe "[post states]" do
+  describe "States:" do
     let!(:post) { FactoryGirl.create(:post) }
     before { visit root_path }
 
@@ -268,7 +269,7 @@ describe "Post pages" do
   end
  
   ## 'Post_a_thought' ##
-  describe "post creation" do
+  describe "Post#Create" do
     before { visit root_path }
 
     context "with invalid information" do

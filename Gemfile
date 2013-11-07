@@ -11,7 +11,7 @@ gem 'delayed_job_active_record'
 gem 'rmagick'
 gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
-gem 'rb-readline', '~> 0.5.0'    # hopefully to solve occasional pry errors
+# gem 'rb-readline', '~> 0.5.0'    # hopefully to solve occasional pry errors
 
 # Use sqlite3 as the database for Active Record
 group :development, :test do

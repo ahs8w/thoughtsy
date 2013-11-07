@@ -1,4 +1,5 @@
 require 'spec_helper'
+Delayed::Worker.delay_jobs = true   # test that DJ jobs are created and timing is correct
 
 describe Post do
   
@@ -21,8 +22,10 @@ describe Post do
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followers) }
   it { should respond_to(:image) }
+  it { should respond_to(:token_timer) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
+  its(:token_timer) { should be_nil }
 
   it { should be_valid }
 
@@ -44,38 +47,65 @@ describe Post do
     end
   end
 
-  describe "after save" do
+
+  describe "#set_expiration_timer" do
+    before do
+      @post.save
+      @post.accept!
+    end
+
+    it "enqueues a delayed job" do
+      expect(Delayed::Job.count).to eq 1
+    end
+
+    describe "after 25 hours" do
+      before { Timecop.freeze(Time.now + 25.hours) }
+
+      context "when post has not been answered" do
+        
+        it "post state is reset to 'unanswered'" do
+          expect(Delayed::Worker.new.work_off).to eq [1, 0]
+          @post.reload
+          expect(@post.state).to eq 'unanswered'
+        end
+      end
+
+      context "when state is 'answered' or 'followed'" do
+        before do
+          user.subscribe!(@post)
+          @post.answer!
+        end
+
+        it "worker runs but does nothing" do
+          expect(Delayed::Worker.new.work_off).to eq [1, 0]
+          @post.reload
+          expect(@post.state).to eq 'followed'
+        end
+      end
+    end
+  end
+
+  describe "#set_token_timer" do
+    before do
+      Timecop.freeze
+      @post.set_token_timer
+    end
+
+    its(:token_timer) { should eq Time.zone.now }
+
+    describe "#reset_token_timer" do
+      before { @post.reset_token_timer }
+
+      its(:token_timer) { should be nil }
+    end
+  end
+
+  describe "::after_create" do
     before { @post.save }
 
     it "updates author's score" do
       user.reload
       expect(user.score).to eq 1
-    end
-
-    describe "#set_expiration_timer" do
-      before { @post.accept! }
-
-      context "if unanswered" do
-
-        it "expires post" do
-          expect(@post.state).to eq 'pending'
-          @post.set_expiration_timer_without_delay
-          expect(@post.state).to eq 'unanswered'
-        end
-      end
-
-      context "if answered or followed" do
-        let(:another_user) { FactoryGirl.create(:user) }
-        before do
-          another_user.subscribe!(@post)
-          @post.answer!
-        end
-
-        it "does not change state of post" do
-          @post.set_expiration_timer_without_delay
-          expect(@post.state).to eq 'followed'
-        end
-      end
     end
   end
 
@@ -84,16 +114,16 @@ describe Post do
     let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
     let!(:older_post) { FactoryGirl.create(:post, created_at: 5.hours.ago) }
 
-    it "ascending" do
+    it ".ascending" do
       expect(Post.ascending.first).to eq older_post
     end
 
-    it "descending" do
+    it ".descending" do
       expect(Post.descending.first).to eq newer_post
     end
   end
 
-  describe "state scopes" do
+  describe "states" do
     let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
     let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
     let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
@@ -104,30 +134,30 @@ describe Post do
     let!(:no_state) { FactoryGirl.create(:post) }
     before { user.subscribe!(followed) }
 
-    it "available" do
+    it ".available" do
       expect(Post.available(user)).not_to include(user_post, answered_post, pending_post)
       expect(Post.available(user)).to include(unanswered, subscribed)
     end
 
-    it "answered" do
+    it ".answered" do
       subscribed.answer!
       expect(Post.answered).not_to include(user_post, pending_post, unanswered)
       expect(Post.answered).to include(answered_post, subscribed)
     end
 
-    it "personal" do
+    it ".personal" do
       expect(Post.personal).not_to include(answered_post)
       expect(Post.personal).to include(flagged, pending_post, unanswered, no_state)
     end
 
     #user model method
-    it "not_subscribed method" do
+    it "#not_subscribed" do
       expect(user.not_subscribed).to eq subscribed
     end
   end
 
 ## Post State ##
-  describe "states :" do
+  describe "state behavior and transitions" do
     
     describe ":unanswered" do
 
@@ -135,7 +165,7 @@ describe Post do
         expect(@post).to be_unanswered
       end
 
-      it "should change to :pending on #accept" do
+      it "changes state to :pending on #accept" do
         @post.accept!
         expect(@post).to be_pending
       end
@@ -144,9 +174,24 @@ describe Post do
     describe ":pending" do
       before { @post.accept! }
 
-      it "should change to :unanswered on #expire" do
-        @post.expire!
-        expect(@post).to be_unanswered
+      it "#sets token_timer" do
+        expect(@post.token_timer).not_to be_nil
+      end
+
+      it "#sets expiration_timer" do
+        expect(Delayed::Job.count).to eq 1
+      end
+
+      describe "#expire!" do
+        before { @post.expire! }
+
+        it "changes state to :unanswered" do
+          expect(@post).to be_unanswered
+        end
+
+        it "resets token_timer" do
+          expect(@post.token_timer).to be_nil
+        end
       end
 
       it "should change to :answered on #answer" do
@@ -163,6 +208,7 @@ describe Post do
       end
 
       it "sends an email to admin" do
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
         expect(last_email.to).to include 'admin@thoughtsy.com'
       end
 

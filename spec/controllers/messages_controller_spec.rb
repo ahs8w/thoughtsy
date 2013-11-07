@@ -10,7 +10,7 @@ describe MessagesController do
 
   before { sign_in user, no_capybara: true }
 
-  describe "POST #create sans AJAX" do
+  describe "::Create sans AJAX" do
     context "with valid attributes" do
       it "creates a new message" do
         expect do
@@ -26,7 +26,7 @@ describe MessagesController do
     ## context 'with invalid attributes' -> using AJAX
   end
 
-  describe "POST #create with AJAX" do
+  describe "::create with AJAX" do
 
     describe "with invalid information" do
 
@@ -54,6 +54,7 @@ describe MessagesController do
 
       it "sends an email" do
         xhr :post, 'create', message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
         expect(last_email.to).to include(receiver.email)
       end
     end

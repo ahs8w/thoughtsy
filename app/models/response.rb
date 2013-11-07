@@ -1,4 +1,6 @@
 class Response < ActiveRecord::Base
+
+# Class methods {  
   validates_presence_of :user_id, :post_id
   validate :image_or_content
 
@@ -14,9 +16,11 @@ class Response < ActiveRecord::Base
 
   scope :descending, -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
   scope :ascending,  -> { order('created_at ASC') }
-
+# }
 
   private
+
+  # Instance methods {
     def image_or_content
       errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
     end
@@ -26,4 +30,5 @@ class Response < ActiveRecord::Base
       self.user.reset_tokens
       UserMailer.response_emails(self)
     end
+  # }
 end
