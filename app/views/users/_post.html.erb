@@ -1,16 +1,25 @@
-<% if post.instance_of?(Post) && post.responses.any? %>
-  <div class="post_content">
-    <% if post.followers.include?(@user) %>
-      <i class="icon-share-alt"></i>
-    <% end %>
-    <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
-    <%= link_to "#{wrapped(post.content)}", post_path(post) unless post.content.nil? %>
-  </div>  
+<div class="post_content">
+  <% if post.followers.include?(@user) %>
+    <i class="icon-share-alt"></i>
+  <% end %>
+  <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
+  <%= link_to "#{wrapped(post.content)}", post_path(post) unless post.content.nil? %>
+</div>
+
+<% if post.responses.any? %>
 
   <% post.responses.each do |response| %>
     <div class="post_response">
+      <div class="timestamp pull-left">
+        <% if !post.followers.empty? && !post.followers.include?(@user) %>
+          <i class="icon-share-alt"></i> <%= pluralize(post.followers.size, "follower") %>
+        <% end %>
+        <% if post.user != current_user %>
+          <%= post.user.username %>
+        <% end %>
+      </div>
       <div class="timestamp pull-right">
-        <% if response.ratings.where(user_id: @user.id).empty? %>
+        <% if response.user != @user && response.ratings.where(user_id: @user.id).empty? %>
           <strong><%= username(response.user) %> responded <%= date_time(response) %></strong>
         <% else %>
           <%= username(response.user) %> responded <%= date_time(response) %>
@@ -20,11 +29,9 @@
   <% end %>
 
 <% else %>
-  <div class="post_content">
-    <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
-    <%= wrap(post.content) unless post.content.nil? %>
-  </div>
+
   <div class="post_response">
     <div class="timestamp pull-right">posted <%= date_time(post) %></div>
   </div>
+
 <% end %>

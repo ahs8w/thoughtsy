@@ -17,7 +17,7 @@ class Post < ActiveRecord::Base
   scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
                                        'unanswered', 'followed', user.id) }
   scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'followed') }
-  scope :personal,    -> { where.not("state == ?", 'answered') }
+  scope :personal,    -> { where.not("state == ? OR state == ?", 'answered', 'followed') }
 
 
   after_create do |post|

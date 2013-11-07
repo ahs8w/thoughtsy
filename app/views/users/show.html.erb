@@ -13,14 +13,15 @@
 
   <!-- Posted thoughts -->
   <div class="span5">
-    <h4 class="center">Posted thoughts <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
+    <h4 class="center">Thoughts posted <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
     <div id="answered_posts">
-      <%= render partial: 'profile_thought', object: answered_posts(@user), locals: {:message=>"answered thoughts"} %>
+      <%= render partial: 'profile_thought', object: answered_posts(@user), 
+          locals: {:message=>"answered thoughts"} %>
     </div>
     <% if current_user?(@user) %>
       <div id="personal_posts">
         <%= render partial: 'profile_thought', object: personal_posts(@user), 
-                                               locals: {:message=>"unanswered thoughts"} %>
+            locals: {:message=>"unanswered thoughts"} %>
       </div>
     <% end %>
   </div>
@@ -28,6 +29,7 @@
   <!-- Thoughts responded to -->
   <div class="span5 offset1">
     <h4 class="center">Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
-    <%= render partial: 'profile_thought', object: unique_posts(@user), locals: {:message=>"responses"} %>
+    <%= render partial: 'profile_thought', object: unique_posts(@user), 
+        locals: {:message=>"responses"} %>
   </div>
 </div>

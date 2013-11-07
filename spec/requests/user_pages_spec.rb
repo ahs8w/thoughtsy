@@ -123,6 +123,8 @@ describe "UserPages" do
 
     describe "as the correct user" do
       before do
+        wrong_user.subscribe!(answered_post)
+        answered_post.answer!
         sign_in user
         visit user_path(user)
       end
@@ -133,7 +135,7 @@ describe "UserPages" do
       it { should have_content(unanswered_post.content) }
 
       context "counts are correct" do
-        it { should have_xpath('.//h4', text: 'Posted thoughts (3)') }
+        it { should have_xpath('.//h4', text: 'Thoughts posted (3)') }
         it { should have_xpath('.//h4', text: 'Thoughts responded to (1)') }
       end
 
@@ -147,6 +149,10 @@ describe "UserPages" do
         it "within section" do
           expect(find('#personal_posts').first('li')).to have_content(newer_post.content)
         end
+      end
+
+      context "follower count" do
+        it { should have_content("1 follower") }
       end
 
       context "posts(responded to) appear only once" do

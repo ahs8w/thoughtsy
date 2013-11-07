@@ -17,6 +17,9 @@
 //= require turbolinks
 //= require_tree .
 
-$(document).on("page:change", function () {
-  $('div.alert').delay(3000).fadeOut('slow');
-});
+ready = function () {
+  $('div.alert').delay(2000).fadeOut(5000);
+};
+
+$(document).ready(ready)
+$(window).bind("page:change", ready)
