@@ -1,7 +1,13 @@
 <%= render 'ratings/rating' %>
-<small class="center" id="note_toggle">
-  Would you like to <a href="#" data-toggle="modal" data-target="#notemodal">send a note</a> to the responder?
+<small>
+  <div id="note_toggle">
+    <p>
+      Great response? <a href="#" data-toggle="modal" data-target="#notemodal">Send a note</a> to the responder or share it.
+    </p>
+  </div>
+  <%= render 'shared/social_links' %>
 </small>
+
 
 <!-- Modal -->
 <div id="notemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="note"

@@ -1,16 +1,40 @@
-<a href="https://twitter.com/intent/tweet?url=YOURURLHERE&text=YOURPOSTTITLEHERE&via=YOURTWITTERNAMEHERE">Twitter</a>
+<div id="social_links">
+  <a href="https://twitter.com/intent/tweet?url=<%= post_response_url(@post, @response) %>&text=<%= wrapped(@response.content) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
+    <i class="ion-social-twitter"></i>
+  </a>
 
-<a href="https://facebook.com/sharer.php?u=YOURURLHERE">Facebook</a>
+  <a href="https://facebook.com/sharer.php?u=<%= post_response_url(@post, @response) %>" target="_blank">
+    <i class="ion-social-facebook"></i>
+  </a>
 
-<a href="https://plus.google.com/share?url=YOURURLHERE">Google+</a>
+  <a href="https://plus.google.com/share?url=<%= post_response_url(@post, @response) %>" target="_blank">
+    <i class="ion-social-googleplus"></i>
+  </a>
 
-<a href="mailto:?subject=EMAIL_SUBJECT&body=EMAIL_BODY">Email</a>
+  <% if @response.image? %>
+    <a href="http://pinterest.com/pin/create/button/?url=<%= post_response_url(@post, @response) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@response) %>" target="_blank">
+      <i class="ion-social-pinterest"></i>
+    </a>
+    <!-- everything after second url is optional for adding description or photo
+         Haven't tested in browser because I don't have an account
+     -->
+  <% end %>
 
-<a href="http://pinterest.com/pin/create/button/?url=url&description=This+page+is+really+cool&media=URL of image to pin">Pinterest</a>
-<!-- everything after second url is optional for adding description or photo -->
+  <a href="http://reddit.com/submit?url=<%= post_response_url(@post, @response) %>&title=Great Response from Thoughtsy.com" target="_blank">
+    <i class="ion-social-reddit"></i>
+  </a>
 
-<a href="http://www.linkedin.com/shareArticle?mini=true&url=YOURURLHERE">LinkedIn</a>
+  <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= post_response_url(@post, @response) %>" target="_blank">
+    <i class="ion-ios7-email"></i>
+  </a>
+</div>
 
-<a href="http://digg.com/submit?url=YOURURLHERE">Digg</a>
 
-<a href="http://reddit.com/submit?url=YOURURLHERE&title=YOURTITLE">Reddit</a>
+
+<!-- 
+<a href="http://www.linkedin.com/shareArticle?mini=true&
+  url=YOURURLHERE" target="_blank">LinkedIn</a>
+
+<a href="http://digg.com/submit?
+  url=YOURURLHERE" target="_blank">Digg</a>
+ -->

@@ -5,6 +5,7 @@ class RatingsController < ApplicationController
   def create
     @rating = current_user.ratings.build(rating_params)
     @response = @rating.response
+    @post = @response.post
     @message = Message.new
     if @rating.save
       UserMailer.delay.brilliant_email(@response) if params[:commit] == 'brilliant!'

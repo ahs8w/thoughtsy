@@ -26,6 +26,9 @@ module Thoughtsy
     # config.i18n.default_locale = :de
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)   #makes bootstrap-sass compatible to asset pipeline
 
+    # configuring an external font
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+
     # For securing sensitive information, put it in application.yml (don't forget to gitignore it)
     # Load application.yml in dev environment
     # Will need to be set manually on the command-line for production(Heroku)!!!

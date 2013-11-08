@@ -1,6 +1,6 @@
 <div class="post_content">
   <% if post.followers.include?(@user) %>
-    <i class="icon-share-alt"></i>
+    <i class="ion-ios7-redo"></i>
   <% end %>
   <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
   <%= link_to "#{wrapped(post.content)}", post_path(post) unless post.content.nil? %>
@@ -12,7 +12,7 @@
     <div class="post_response">
       <div class="timestamp pull-left">
         <% if !post.followers.empty? && !post.followers.include?(@user) %>
-          <i class="icon-share-alt"></i> <%= pluralize(post.followers.size, "follower") %>
+          <i class="ion-ios7-redo"></i> <%= pluralize(post.followers.size, "follower") %>
         <% end %>
         <% if post.user != current_user %>
           <%= post.user.username %>
