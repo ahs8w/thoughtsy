@@ -47,7 +47,7 @@ class PostsController < ApplicationController
 # Response#Show #
   def repost
     @post = Post.find(params[:id])
-    @post.unanswer!
+    @post.repost!
     flash[:success] = "Thought reposted."
     redirect_to root_url
   end

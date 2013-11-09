@@ -18,7 +18,7 @@ module UsersHelper
       end
     end
     if unrated.count == 1
-      link_to("You have 1 unrated response", post_response_path(unrated.first.post, unrated.first))
+      link_to("You have 1 unrated response", response_path(unrated.first))
     elsif unrated.count > 1
       link_to("You have #{pluralize(unrated.count, 'unrated response')}", user_path(user))
     end

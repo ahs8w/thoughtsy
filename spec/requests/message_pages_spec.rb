@@ -45,7 +45,7 @@ describe "Message Pages" do
   #   let(:post) { FactoryGirl.create(:post, user_id: user.id) }
   #   let!(:response) { FactoryGirl.create(:response, user_id: receiver.id, post_id: post.id) }
   #   before do
-  #     visit post_response_path(post, response)
+  #     visit response_path(response)
   #     click_button "brilliant!"
   #   end
 

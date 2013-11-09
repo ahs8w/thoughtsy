@@ -15,4 +15,6 @@
     </div>
   </div>
 </div>
-<%= render 'ratings/form' unless current_user.id == @response.user.id %>
+<% if author_or_follower(@post) %>
+  <%= render 'ratings/form' unless current_user.id == @response.user.id %>
+<% end %>

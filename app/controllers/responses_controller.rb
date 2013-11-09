@@ -1,6 +1,5 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
-  before_action :author_or_follower, only: :show
   before_action :tokened_responder, only: :create
   before_action :set_user_tokens, only: :new
 

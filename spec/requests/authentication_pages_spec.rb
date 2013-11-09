@@ -122,10 +122,10 @@ describe "Authentication  : " do
         #   specify { expect(response).to redirect_to(signin_path) }
         # end
 
-        describe "visiting the show action" do
-          before { get "posts/1/responses/1" }
-          specify { expect(response).to redirect_to(signin_path) }
-        end
+        # describe "visiting the show action" do
+        #   before { get "posts/1/responses/1" }
+        #   specify { expect(response).to redirect_to(signin_path) }
+        # end
 
         describe "visiting the new action" do
           before { get "posts/1/responses/new" }
@@ -203,12 +203,12 @@ describe "Authentication  : " do
 
       describe "in the Responses Controller" do
         
-        describe "visiting the show page" do
-          let!(:post) { FactoryGirl.create(:post) }
-          let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-          before { get "posts/1/responses/1" }
-          specify { expect(response).to redirect_to(root_url) }
-        end
+        # describe "visiting the show page" do
+        #   let!(:post) { FactoryGirl.create(:post) }
+        #   let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+        #   before { get "posts/1/responses/1" }
+        #   specify { expect(response).to redirect_to(root_url) }
+        # end
 
         describe "submitting to the create action" do
           before { post "posts/1/responses" }

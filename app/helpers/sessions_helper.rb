@@ -54,15 +54,6 @@ module SessionsHelper
     end
   end
 
-  def post_follower(post)
-    current_user.followed_posts.include?(post)
-  end
-
-  def author_or_follower
-    post = Post.find(params[:post_id])
-    redirect_to root_path unless current_user.id == post.user.id || post_follower(post)
-  end
-
   def post_author
     post = Post.find(params[:id])
     redirect_to root_path unless current_user.id == post.user.id

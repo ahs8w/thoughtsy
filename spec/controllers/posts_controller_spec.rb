@@ -79,7 +79,7 @@ describe PostsController do
       xhr :get, :repost, id: post.id
       expect(flash[:success]).to eq "Thought reposted."
       post.reload
-      expect(post.state).to eq 'unanswered'
+      expect(post.state).to eq 'reposted'
     end
   end
 end

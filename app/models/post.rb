@@ -15,9 +15,9 @@ class Post < ActiveRecord::Base
   scope :ascending,   -> { order('created_at ASC') }
   scope :descending,  -> { order('created_at DESC') }
   scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
-                                       'unanswered', 'followed', user.id) }
-  scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'followed') }
-  scope :personal,    -> { where.not("state == ? OR state == ?", 'answered', 'followed') }
+                                       'unanswered', 'reposted', user.id) }
+  scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'reposted') }
+  scope :personal,    -> { where.not("state == ? OR state == ?", 'answered', 'reposted') }
 
 
   after_create do |post|
@@ -49,7 +49,7 @@ class Post < ActiveRecord::Base
     end
 
     event :answer do
-      transition :subscribed => :followed
+      transition :subscribed => :reposted
       transition any => :answered
     end
 
@@ -68,12 +68,16 @@ class Post < ActiveRecord::Base
     event :flag do
       transition any => :flagged
     end
+
+    event :repost do
+      transition any => :reposted
+    end
   end
 
 
   def set_expiration_timer
     if token_timer? && token_timer < 24.hours.ago
-      expire! unless answered? || followed?
+      expire! unless answered? || reposted?
     end
   end
   handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }

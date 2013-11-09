@@ -101,7 +101,7 @@ describe "ResponsePages" do
         expect(post.state).to eq 'subscribed'
         click_button "Respond"
         post.reload
-        expect(post.state).to eq 'followed'
+        expect(post.state).to eq 'reposted'
         expect(other_user.not_subscribed).to eq post
         expect(user.not_subscribed).not_to eq post
       end
@@ -117,15 +117,16 @@ describe "ResponsePages" do
   describe "show page" do
     let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
     let(:response) { FactoryGirl.create(:response, post_id: user_post.id) }
-    before { visit post_response_path(user_post, response) }
+    before { visit response_path(response) }
 
-    describe "access" do
+    it { should have_title('Response') }
+    it { should have_content(response.content) }
+    it { should have_content(response.user.username) }
+    it { should have_content(user_post.content) }
+
+    describe "rating form access" do
 
       context "as post author" do
-        it { should have_title('Response') }
-        it { should have_content(response.content) }
-        it { should have_content(response.user.username) }
-        it { should have_content(user_post.content) }
         it { should have_selector("div#rating_form") }
       end
 
@@ -134,24 +135,29 @@ describe "ResponsePages" do
         before do
           sign_in follower
           follower.subscribe!(user_post)
+          visit response_path(response)
         end
 
-        it "renders show page" do
-          visit post_response_path(user_post, response)
-          expect(page).to have_selector("div#rating_form")
+        it { should have_selector("div#rating_form") }
+
+        context "as guest" do
+          before do
+            follower.unsubscribe!(user_post)
+            visit response_path(response)
+          end
+
+          it { should_not have_selector("div#rating_form") }
         end
       end
 
-      context "as normal user" do
-        let(:user2) { FactoryGirl.create(:user) }
+      context "as response author" do
         before do
-          sign_in user2
+          sign_in response.user
+          response.user.subscribe!(user_post)
+          visit response_path(response)
         end
 
-        it "redirects to root" do
-         visit post_response_path(user_post, response)
-         expect(page).to have_button('Post a thought')
-        end
+        it { should_not have_selector("div#rating_form") }
       end
     end
   end
