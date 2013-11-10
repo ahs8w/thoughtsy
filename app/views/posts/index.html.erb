@@ -2,12 +2,12 @@
 
 <% @posts.each do |post| %>
 
-<div class="row-fluid">
-  <div class="span8 offset2">
+<div class="row">
+  <div class="col-md-8 col-md-offset2">
     <div class="well darker" id="index_thought">
       <%= render partial: "shared/thought", object: post, locals: { wrapped: true, link: true } %>
     </div>
-    <div class="span10 offset1">
+    <div class="col-md-10 col-md-offset1">
       <ul class="responses">
         <% post.responses.descending.each do |response| %>
           <li>

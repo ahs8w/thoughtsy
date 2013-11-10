@@ -1,6 +1,6 @@
 <h1>Reset Password</h1>
 <div class="row">
-  <div class="span6 offset5">
+  <div class="col-md-6 col-md-offset5">
     <%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <div class="field">

@@ -1,8 +1,8 @@
-<div class="well" id="post_form">  
+<div id="post_form">
   <%= form_for(@post, remote: true) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <%= f.submit "Post a thought", class: "btn btn-large btn-success" %>
-    <span><%= f.text_area :content, class: "span8", placeholder: "your thought..." %></span>
+    <%= f.text_area :content, class: "form-control form-inline", rows: "3", placeholder: "your thought..." %>
+    <div class="col-md-3" id="submit"><%= f.submit "Post a thought", class: "btn btn-lg btn-primary" %></div>
     <%= render 'shared/image_fields', f: f %>
   <% end %>
 </div>

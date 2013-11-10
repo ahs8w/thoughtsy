@@ -1,7 +1,7 @@
 <div class="row">
   <%= render 'shared/user_info', user: current_user if signed_in? %>
   <%= render 'static_pages/respond_button' if signed_in? %>
-  <div class="center hero-unit">
+  <div class="center jumbotron">
     <h1>Thoughtsy</h1>
     <p class="lead">thoughtful exchanges with total strangers</p>
   </div>
@@ -10,15 +10,15 @@
       <%= render 'static_pages/post_form' %>
     <% else %>
       <div id="signup_button">
-        <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+        <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
         <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
       </div>
     <% end %>
   </div>  
 </div>
 
-<div class="row-fluid">
-  <div class="span10 offset1">
+<div class="row">
+  <div class="col-md-14 col-md-offset1">
     <h3 class="center">Classic Responses</h3>
     <h4>We happy?</h4>
     <p>Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house, fuckin' up the way the nigger talks. Motherfucker do that shit to me, he better paralyze my ass, 'cause I'll kill the motherfucker, know what I'm sayin'? </p>

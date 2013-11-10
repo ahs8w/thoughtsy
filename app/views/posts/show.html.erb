@@ -1,15 +1,15 @@
 <% provide(:page_title, "Responses") %>
 
-<div class="row-fluid">
-  <div class="span8 offset2">
+<div class="row">
+  <div class="col-md-8 col-md-offset2">
     <div class="well darker" id="thought">
       <%= render partial: "shared/thought", object: @post %>
     </div>
   </div>
 </div>
 
-<div class="row-fluid">  
-  <div class="span6 offset3">
+<div class="row">  
+  <div class="col-md-6 col-md-offset3">
     <ul class="responses" id="responses">
       <% @responses.each do |response| %>
         <li>

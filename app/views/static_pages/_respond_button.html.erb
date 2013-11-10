@@ -1,9 +1,9 @@
 <aside id="respond_button">
   <% if @button_text %>
     <%= button_to @button_text, new_post_response_path(@token_post), 
-    class: "btn-large btn-#{@button_class}", id: "Respond", method: :get %>
+    class: "btn-lg btn-#{@button_class} pull-right", id: "Respond", method: :get %>
   <% end %>
   <small id="expiration_message">
-    <%= @small_message if @small_message %>
+    <p><%= @small_message if @small_message %></p>
   </small>
 </aside>

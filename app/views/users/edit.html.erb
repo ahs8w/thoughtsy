@@ -2,7 +2,7 @@
 <div class="row">
   <%= render 'shared/user_info', user: current_user %>
   
-  <div class="span6 offset5">
+  <div class="col-md-6 col-md-offset5">
     <h1>Update your profile</h1>
     <%= form_for(@user) do |f| %>
       <%= render 'fields', f: f %>
