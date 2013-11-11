@@ -9,10 +9,12 @@
     </button>
     <%= link_to "Thoughtsy", root_path, class: "navbar-brand", id: "logo" %>
   </div>
-
+  
+  <div id="js_flash_messages">
+    <%= render 'shared/flash_messages' %>
+  </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">  
     <ul class="nav navbar-nav navbar-right">
       <li><%= link_to "How it works", about_path %></li> 
     <% if signed_in? %>

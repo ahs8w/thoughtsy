@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
-gem 'bootstrap-sass', github: 'thomas-mcdonald/bootstrap-sass'
+# gem 'bootstrap-sass', github: 'thomas-mcdonald/bootstrap-sass'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -15,20 +15,21 @@ gem 'remotipart', '~> 1.2'
 # Use sqlite3 as the database for Active Record
 group :development, :test do
   gem 'sqlite3'
-  gem 'rspec-rails'
   gem 'guard-rspec'
+  # gem 'guard-livereload', require: false
   gem 'spork-rails', github: 'sporkrb/spork-rails'
   gem 'guard-spork'
   gem 'childprocess'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'factory_girl_rails'  # moved it here to be able to run it in dev console
   gem 'guard', '2.0.5'
 end
 
 group :test do
+  gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'capybara'
+  gem 'factory_girl_rails'
   gem 'libnotify'
   gem 'database_cleaner', '1.0.1'
   gem 'launchy'

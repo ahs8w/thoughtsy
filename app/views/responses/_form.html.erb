@@ -1,9 +1,11 @@
-<div id="response">
+<div id="response_form">
   <%= form_for([@post, @response]) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
-    <%= f.text_area :content, placeholder: "your response..." %>
+    <div class="form-group">
+      <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your response..." %>
+    </div>
+    <div class="col-md-3" id="submit"><%= f.submit "Respond", class: "btn btn-lg btn-primary" %></div>
     <%= render 'shared/image_fields', f: f %>
     <%= f.hidden_field :post_id, value: @post.id %>
-    <%= f.submit "Respond", class: "btn btn-large btn-primary" %>
   <% end %>
 </div>
