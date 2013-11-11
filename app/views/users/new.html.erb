@@ -2,11 +2,13 @@
 <h1>Sign up</h1>
 
 <div class="row">
-  <div class="col-md-6 col-md-offset5">
-    <%= form_for(@user) do |f| %>
-      <%= render 'fields', f: f %>
-      <%= f.submit "Create my account", class: "btn btn-large btn-success" %>
-    <% end %>
+  <div class="col-md-6 col-md-offset-3">
+    <form role="form">
+      <%= form_for(@user) do |f| %>
+        <%= render 'fields', f: f %>
+        <%= f.submit "Create my account", class: "btn btn-lg btn-primary" %>
+      <% end %>
+    </form>
     <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
   </div>
 </div>

@@ -1,4 +1,5 @@
-@import "../../../vendor/assets/stylesheets/bootstrap/bootstrap.scss";
+/*@import "../../../vendor/assets/stylesheets/bootstrap/bootstrap.scss";*/
+@import "bootstrap";    /* used with sass-bootstrap gem */
 
 /* mixins, variables, etc. */
 /* color variables already defined by bootstrap: http://bootstrapdocs.com/v2.0.4/docs/less.html */
@@ -29,19 +30,11 @@ textarea {
   resize: vertical;
 }
 
-.row {
-  margin: 0;
-}
-
-.timestamp {
-  color: $gray-light;
-}
-
-
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
+  font-family: 'Open Sans', sans-serif;
 }
 
 h1 {
@@ -49,6 +42,7 @@ h1 {
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
+  font-variant: small-caps;
 }
 
 h2 {
@@ -62,9 +56,10 @@ h2 {
 p {
   font-size: 1.1em;
   line-height: 1.7em;
-  .lead {
-    text-align: center;
-  }
+}
+
+.center {
+  text-align: center;
 }
 
 .lighter {
@@ -73,6 +68,14 @@ p {
 
 .darker {
   background-color: #ddd;
+}
+
+.row {
+  margin: 0;
+}
+
+.timestamp {
+  color: $gray-light;
 }
 
 
@@ -114,6 +117,7 @@ form.new_rating {
   text-align: center;
   display: block;
   .alert {
+    z-index: 1100;
     margin-bottom: 0;
     width: 20%;
     position: absolute;
@@ -127,26 +131,16 @@ form.new_rating {
 /* header */
 
 #logo {
-  font-size: 1.7em;
+  font-size: 2em;
   text-transform: uppercase;
   letter-spacing: -1px;
-  font-weight: thin;
-  line-height: 1;
-
-  /*float: left;
-  margin-left: 8%;
-  padding-top: 9px;
-  color: $gray-light;
-  &:hover {
-    color: white;
-    text-decoration: none;
-  }*/
+  font-weight: 300;
+  margin-left: 20px;
 }
 
-#nav-links {
-  margin-right: 8%
+.navbar-right:last-child {
+  margin-right: 20px !important;
 }
-
 
 /* footer */
 
@@ -213,12 +207,13 @@ aside {
 
 /* forms */
 
+.btn {
+  margin-bottom: 15px;
+}
+
 input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  @include box_sizing;
+  margin-bottom: 20px;
 }
 
 input {
@@ -226,17 +221,21 @@ input {
 }
 
 #error_explanation {
+  text-align: center;
+  .alert {
+    width: 50%;
+    margin: 15px auto;
+  }
   color: #f00;
   ul {
     list-style: none;
-    margin: 0 0 18px 0;
   }
 }
 
-/*.field_with_errors {
+.field_with_errors {
   @extend .control-group;
   @extend .error;
-}*/
+}
 
 textarea#response_content {
   height: 400px;
@@ -336,80 +335,6 @@ textarea#response_content {
   width: 100%;
   margin-top: 45px;
   @include box_sizing;      /* uses SASS mixin to include box-sizing rules as stated above */
-}
-
-/* HOME page */
-
-.jumbotron {
-  text-align: center;
-  background-color: $gray-lighter;
-  margin-bottom: 0;
-  h1 {
-    margin-bottom: 30px;
-    font-family: 'Merienda', cursive;
-  }
-}
-
-#call_to_action {
-  background-color: $gray-lighter;
-  margin-bottom: 5%;
-  padding-bottom: 20px;
-}
-
-#post_form {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 20px;
-  .new_post {
-    margin-bottom: 0;
-    div#submit {
-      padding: 0;
-    }
-    .field_with_errors {
-      display: inline;
-    }
-  }
-}
-
-#signup_button {
-  text-align: center;
-  display: block;
-  a.btn {
-    padding: 10px 35px;
-  }
-  p {
-    margin-top: 15px;
-  }
-}
-
-#respond_button {
-  position: relative;
-  float: right;
-  text-align: center;
-  width: 250px;
-  top: 10px;
-  right: 5px;
-  form {
-    margin-bottom: 0;
-    input {
-      margin-bottom: 0;
-      padding: 16px 0;
-    }
-  }
-}
-
-#expiration_message {
-  position: absolute;
-  color: $gray-light;
-  top: 65px;
-}
-
-#no_unanswered {
-  color: $gray-light;
-  position: relative;
-  top: 10px;
-  float: right;
 }
 
 

@@ -6,6 +6,13 @@ GIT
       rails (>= 3.0.0, < 5)
       spork (>= 1.0rc0)
 
+GIT
+  remote: git://github.com/thomas-mcdonald/bootstrap-sass.git
+  revision: efab96f854dc8b08d46297b9af313fbe815124ac
+  specs:
+    bootstrap-sass (3.0.2.1)
+      sass (~> 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -231,6 +238,7 @@ DEPENDENCIES
   bcrypt-ruby (~> 3.0.1)
   better_errors
   binding_of_caller
+  bootstrap-sass!
   bootstrap-will_paginate
   capybara
   carrierwave

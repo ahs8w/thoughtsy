@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.remotipart
-//= require bootstrap/bootstrap
+//= require bootstrap
 //= require turbolinks
 //= require_tree .
 
