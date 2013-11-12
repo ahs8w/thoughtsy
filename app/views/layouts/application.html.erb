@@ -11,11 +11,15 @@
     <%= render 'layouts/shim' %>
   </head>
   <body>
-    <%= render 'layouts/header' %>
-    <div class="container">
-      <%= yield %>
+    <div class="wrapper">
+      <%= render 'layouts/header' %>
+      <div class="container">
+        <%= yield %>
+        <div class="push"></div>
+      </div>
+    </div>
+    <div class="footer">
       <%= render 'layouts/footer' %>
-<!--       <%= debug(params) if Rails.env.development? %>      -->
     </div>
   </body>
 </html>

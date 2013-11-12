@@ -3,7 +3,7 @@
  
 A post you followed has received a new response!
 
-<%= wrapped(@response.content) %>
+<%= wrapped(@response.content, 65) %>
 
 To see the full thought, head to <%= link_to "Thoughtsy.com", response_url(@response) %>.
 

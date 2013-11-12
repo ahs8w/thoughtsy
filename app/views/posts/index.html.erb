@@ -3,19 +3,26 @@
 <% @posts.each do |post| %>
 
 <div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <div class="panel index_post">
+      <span>
+        <%= gravatar_for(post.user, size: 50) %>
+      </span>
+      <p class="lead">
+        <%= link_to "#{wrap(post.content)}", post_path(post) %>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div class="well darker" id="index_thought">
-      <%= render partial: "shared/thought", object: post, locals: { wrapped: true, link: true } %>
-    </div>
-    <div class="col-md-10 col-md-offset-1">
-      <ul class="responses">
-        <% post.responses.descending.each do |response| %>
-          <li class="list-unstyled">
-            <%= render partial: "shared/thought", object: response, locals: { wrapped: true } %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+    <ul class="responses">
+      <% post.responses.descending.each do |response| %>
+        <li class="list-unstyled">
+          <%= render partial: "shared/thought", object: response, locals: { wrapped: true } %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>
 

@@ -3,7 +3,7 @@
     <i class="ion-ios7-redo"></i>
   <% end %>
   <%= image_tag post.image_url(:thumb) unless post.image.nil? %>
-  <%= link_to "#{wrapped(post.content)}", post_path(post) unless post.content.nil? %>
+  <%= link_to "#{wrapped(post.content, 65)}", post_path(post) unless post.content.nil? %>
 </div>
 
 <% if post.responses.any? %>
@@ -20,7 +20,7 @@
       </div>
       <div class="timestamp pull-right">
         <% if response.user != @user && response.ratings.where(user_id: @user.id).empty? %>
-          <strong><%= username(response.user) %> responded <%= date_time(response) %></strong>
+          <%= link_to "#{username(response.user)} responded #{date_time(response)}", response_path(response) %>
         <% else %>
           <%= username(response.user) %> responded <%= date_time(response) %>
         <% end %>

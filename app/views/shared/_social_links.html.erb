@@ -1,5 +1,5 @@
 <div id="social_links">
-  <a href="https://twitter.com/intent/tweet?url=<%= response_url(@response) %>&text=<%= wrapped(@response.content) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
+  <a href="https://twitter.com/intent/tweet?url=<%= response_url(@response) %>&text=<%= wrapped(@response.content, 65) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
     <i class="ion-social-twitter"></i>
   </a>
 

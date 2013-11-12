@@ -23,8 +23,8 @@ module PostsHelper
     end
   end
 
-  def wrapped(content)
-    truncate(wrap(content), length: 65, separator: ' ')
+  def wrapped(content, length)
+    truncate(wrap(content), length: length, separator: ' ')
   end
 
   def not_subscribed(user)

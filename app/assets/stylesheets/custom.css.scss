@@ -14,12 +14,15 @@ $gray-medium-light: #eaeaea;
 
   html {
     overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
   }
 
   body {
     padding-top: 70px;
     font-family: 'Open Sans', sans-serif;
     background-color: $gray-medium-light;
+    height: 100%;
   }
 
   section {
@@ -30,6 +33,45 @@ $gray-medium-light: #eaeaea;
     resize: vertical;
   }
 
+  ul {
+    padding-left: 0;
+  }
+
+  .wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -81px;
+  }
+
+  .well {
+    background-color: #fff;
+    margin: -20px -500px 0;
+    box-shadow: inset 0 -1px 2px #999;
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+
+  .gravatar {
+    @extend .img-circle;
+  }
+
+  .btn-rating1 {
+    background: linear-gradient(90deg, #e6ebfa, #99adeb);
+  }
+
+  .btn-rating2 {
+    background: linear-gradient(90deg, #8099e6, #335cd6);
+  }
+
+  .btn-rating3 {
+    background: linear-gradient(90deg, #1947d1, #0029a3);
+  }
+
+  .btn-rating4 {
+    background: linear-gradient(90deg, #00248f, #001452);
+    color: #fff;
+  }
 /* typography */
 
   h1, h2, h3, h4, h5, h6 {
@@ -88,21 +130,6 @@ $gray-medium-light: #eaeaea;
     text-align: center;
   }
 
-  #responder_links {
-    span {
-      margin-top: -10px;
-    }
-    form {
-      margin: 0;
-      input {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 95%;
-        padding: 0;
-        border: 0;
-      }
-    }
-  }
-
   #social_links {
     i {
       font-size: 26px;
@@ -152,10 +179,14 @@ $gray-medium-light: #eaeaea;
 
 /* footer */
 
-  footer {
-    margin-top: 45px;
+  .footer, .push {
+    height: 40px;
+  }
+
+  .footer {
+    margin-top: 30px;
     padding-top: 10px;
-    border-top: 1px solid $gray-lighter;
+    border-top: 1px solid #fff;
     color: $gray-light;
     a {
       color: $gray;
@@ -176,7 +207,7 @@ $gray-medium-light: #eaeaea;
     }
   }
 
-/* forms */
+/* forms/inputs */
 
   input, textarea, select, .uneditable-input {
     border: 1px solid #bbb;
@@ -204,13 +235,6 @@ $gray-medium-light: #eaeaea;
 
   .field_with_errors {
     @extend .control-group.error;
-  }
-
-  #response_form {
-    margin-top: 30px;
-    #submit {
-      padding-left: 0;
-    }
   }
 
   #image_fields_container {
@@ -265,11 +289,65 @@ $gray-medium-light: #eaeaea;
     }
   }
 
-/* Posts index */
+/* Response#new */
 
+  #responder_links {
+    margin-top: 5px;
+    form {
+      margin: 0;
+      input {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 95%;
+        padding: 0;
+        border: 0;
+      }
+    }
+  }
+
+  #time_explanation {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
   
+  #response_form {
+    margin-top: 30px;
+    #submit {
+      padding-left: 0;
+    }
+  }
+
+/* Posts#index #show */
+
+  .index_post {
+    padding: 10px;
+    margin-bottom: 0;
+    .lead {
+      font-weight: 400;
+      margin-bottom: 0;
+      a {
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+    img {
+      margin-top: 5px;
+    }
+  }
+
+  .responses {
+    margin: 20px 0 40px;
+  }
+
+  .responses_show {
+    margin-top: 40px;
+  }
 
 /* shared/thought */
+  
+  .thought_content, .wrapped_thought_content {
+    font-size: 1.15em;
+  }
 
   .thought {
     margin: 15px;
@@ -280,7 +358,7 @@ $gray-medium-light: #eaeaea;
     padding-top: 5px;
   }
 
-/* miscellaneous */
+/* debug */
 
   .debug_dump {
     clear: both;
@@ -289,6 +367,8 @@ $gray-medium-light: #eaeaea;
     margin-top: 45px;
     @include box_sizing;      /* uses SASS mixin to include box-sizing rules as stated above */
   }
+
+  /*  <%= debug(params) if Rails.env.development? %>  */
 
 /* User Profile */
 

@@ -3,7 +3,7 @@
   <%= render 'shared/user_info', user: @user %>
 
   <!-- Messages -->
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div id="notes">
         <% if current_user?(@user) %>
           <%= render 'message' %>
@@ -12,7 +12,7 @@
     </div>
 
   <!-- Posted thoughts -->
-  <div class="col-md-4">
+  <div class="col-md-5">
     <h4 class="center">Thoughts posted <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
     <div id="answered_posts">
       <%= render partial: 'profile_thought', object: answered_posts(@user), 
@@ -27,7 +27,7 @@
   </div>
 
   <!-- Thoughts responded to -->
-  <div class="col-md-4 col-md-offset-1">
+  <div class="col-md-5">
     <h4 class="center">Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
     <%= render partial: 'profile_thought', object: unique_posts(@user), 
         locals: {:message=>"responses"} %>

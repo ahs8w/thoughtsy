@@ -1,20 +1,26 @@
 <% provide(:page_title, "Response") %>
 
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div class="well darker">
-      <%= render partial: "shared/thought", object: @post %>
+<div class="well">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="posts_show">
+          <%= render partial: "shared/thought", object: @post %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div class="well">
-      <%= render partial: "shared/thought", object: @response %>
+  <div class="container">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="responses_show">
+        <%= render partial: "shared/thought", object: @response %>
+      </ul>
     </div>
+    <% if author_or_follower(@post) %>
+      <%= render 'ratings/form' unless current_user.id == @response.user.id %>
+    <% end %>
   </div>
 </div>
-<% if author_or_follower(@post) %>
-  <%= render 'ratings/form' unless current_user.id == @response.user.id %>
-<% end %>
