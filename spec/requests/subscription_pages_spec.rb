@@ -18,10 +18,10 @@ describe "Subscription" do
       expect(post.state).to eq 'pending'
     end
 
-    describe "clicking follow" do 
-      before { click_button "follow" }
+    describe "following (clicking repost)" do
+      before { click_button "repost" }
 
-      it { should have_success_message("Thought followed.") }
+      it { should have_info_message("Thought followed.") }
       it { should have_content("You are following this post.") }
       it { should have_link("unfollow") }
 
@@ -49,7 +49,7 @@ describe "Subscription" do
       describe "clicking unfollow (unsubscribing)" do
         before { click_link "unfollow" }
 
-        it { should have_success_message("Thought unfollowed.") }
+        it { should have_info_message("Thought unfollowed.") }
 
         it "updates follower attribute and post state" do
           post.reload

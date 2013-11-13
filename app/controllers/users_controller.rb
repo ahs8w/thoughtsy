@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:success] = "Welcome to Thoughtsy!"
-      redirect_to @user, notice: "Email sent!"
+      redirect_to @user
     else
       render 'new'
     end
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       sign_in @user           # remember_token is reset when user is saved -> must sign_in again after update
-      flash[:success] = "Profile updated"
+      flash[:info] = "Profile updated"
       redirect_to @user
     else
       render 'edit'
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
       flash[:success] = "User destroyed"
       redirect_to users_url
     else
-      flash[:error] = "Auto-destruction is not allowed"
+      flash[:danger] = "Auto-destruction is not allowed"
       redirect_to root_url
     end
   end

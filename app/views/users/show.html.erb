@@ -1,6 +1,8 @@
 <% provide(:page_title, @user.username) %>
 <div class="row">
-  <%= render 'shared/user_info', user: @user %>
+  <div class="col-md-3 sidebar">
+    <%= render 'shared/user_info', user: @user %>
+  </div>
 
   <!-- Messages -->
     <div class="col-md-2">

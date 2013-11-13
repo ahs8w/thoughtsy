@@ -66,7 +66,7 @@ describe PostsController do
 
     it "shows flash and changes post state" do
       get :flag, id: post.id
-      expect(flash[:notice]).to eq "Post flagged."
+      expect(flash[:warning]).to eq "Post flagged."
       post.reload
       expect(post.state).to eq 'flagged'
     end
@@ -75,9 +75,9 @@ describe PostsController do
   describe "repost" do
     let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
 
-    it "unanswers post and flashes success" do
+    it "unanswers post and flashes message" do
       xhr :get, :repost, id: post.id
-      expect(flash[:success]).to eq "Thought reposted."
+      expect(flash[:info]).to eq "Thought reposted."
       post.reload
       expect(post.state).to eq 'reposted'
     end

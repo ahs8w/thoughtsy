@@ -1,12 +1,18 @@
-<h2>Please provide your email address and follow the link to reset your password</h2>
 <div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= form_tag password_resets_path do %>
-      <div class="field">
-        <%= label_tag :email %>
-        <%= text_field_tag :email, params[:email] %>
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well">
+      <h2 class="center">Please provide your email address and follow the link to reset your password</h2>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <%= form_tag password_resets_path do %>
+            <div class="field">
+              <%= label_tag :email %>
+              <%= text_field_tag :email, params[:email], class: "form-control" %>
+            </div>
+            <div class="actions"><%= submit_tag "Send instructions", class: "btn btn-lg btn-primary" %></div>
+          <% end %>
+        </div>
       </div>
-      <div class="actions"><%= submit_tag "Send instructions", class: "btn btn-success" %></div>
-    <% end %>
+    </div>
   </div>
 </div>

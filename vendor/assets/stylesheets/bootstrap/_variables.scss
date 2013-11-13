@@ -20,7 +20,7 @@ $gray-lighter:           lighten(#000, 93.5%) !default; // #eee
 
 $brand-primary:         #428bca !default;
 $brand-success:         #5cb85c !default;
-$brand-warning:         #f0ad4e !default;
+$brand-warning:         #f4cc5d /*#f0ad4e*/ !default;
 $brand-danger:          #d9534f !default;
 $brand-info:            #5bc0de !default;
 
@@ -302,12 +302,12 @@ $navbar-inverse-link-disabled-bg:           transparent !default;
 
 // Inverted navbar brand label
 $navbar-inverse-brand-color:                $navbar-inverse-link-color !default;
-$navbar-inverse-brand-hover-color:          #fff !default;
+$navbar-inverse-brand-hover-color:          $navbar-inverse-link-hover-color !default;
 $navbar-inverse-brand-hover-bg:             transparent !default;
 
 // Inverted navbar toggle
 $navbar-inverse-toggle-hover-bg:            #333 !default;
-$navbar-inverse-toggle-icon-bar-bg:         #fff !default;
+$navbar-inverse-toggle-icon-bar-bg:         $navbar-inverse-link-hover-color /*#fff*/ !default;
 $navbar-inverse-toggle-border-color:        #333 !default;
 
 

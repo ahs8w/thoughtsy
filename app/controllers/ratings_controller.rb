@@ -16,8 +16,11 @@ class RatingsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to :back, alert: "Your rating could not be saved." }
-        format.js   { flash.now[:alert] = "Your rating could not be saved." }
+        format.html do
+          flash[:warning] = "Your rating could not be saved."
+          redirect_to :back
+        end
+        format.js  { flash.now[:warning] = "Your rating could not be saved." }
       end
     end
   end

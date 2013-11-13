@@ -99,7 +99,7 @@ describe "Post pages" do
     end
 
     it { should have_title("Thoughts") }
-    it { should have_content(post.user.username) }
+    # it { should have_content(post.user.username) }
     it { should have_content(post.content) }
 
     describe "order of posts" do
@@ -107,7 +107,7 @@ describe "Post pages" do
       before { visit posts_path }
 
       it "newest post is first" do
-        expect(first('#index_thought')).to have_content(newer_post.content)
+        expect(first('.index_post')).to have_content(newer_post.content)
       end
     end
 
@@ -138,7 +138,7 @@ describe "Post pages" do
     
     describe "response order" do
       it "newer response is first" do
-        expect(first('#responses li')).to have_content(response.content)
+        expect(first('.responses_show li')).to have_content(response.content)
       end
     end
 

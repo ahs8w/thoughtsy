@@ -1,20 +1,23 @@
-<div class="row">
-  <div id="user_banner">
-    <%= render 'shared/user_info', user: current_user if signed_in? %>
-    <%= render 'static_pages/respond_button' if signed_in? %>
-  </div>
-  <div class="well" id="title_banner">
-    <h1>Thoughtsy</h1>
-    <p class="lead">thoughtful exchanges with total strangers</p>
-<% unless signed_in? %>
+<div class="well">  
+  <div class="row">
+    <div id="user_banner">
+      <div class="col-md-3 sidebar">
+        <%= render 'shared/user_info', user: current_user if signed_in? %>
+      </div>
+      <%= render 'static_pages/respond_button' if signed_in? %>
+    </div>
+    <div id="title_banner">
+      <h1>Thoughtsy</h1>
+      <p class="lead">thoughtful exchanges with total strangers</p>
+  <% unless signed_in? %>
       <div id="signup_button">
         <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
         <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
       </div>
-<% else %>
-  </div>
-</div>
-<div class="row">
+    </div>
+  <% else %>
+    </div>
     <%= render 'static_pages/post_form' %>      
-<% end %> 
+  <% end %> 
+  </div>
 </div>

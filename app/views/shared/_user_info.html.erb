@@ -1,8 +1,8 @@
-<aside class="col-md-3" id="user_info">
+<aside>
   <section>
     <h1>
-      <%= gravatar_for user, size: 55 %>
-      <%= user.username %>
+      <%= link_to gravatar_for(user, size: 55), user %>
+      <%= link_to user.username, user %>
     </h1>
 
     <% if controller_name == 'static_pages' %>
@@ -19,19 +19,28 @@
       </div>
     <% end %>
 
-    <% if controller_name == 'users' && action_name == 'show' %>
-      <span>
-        <%= link_to "edit settings", edit_user_path(user) if current_user.id == user.id %>
-      </span>
-      <span class="lighter">
-        Karma: <%= user.score %>
-      </span>
-    <% end %>
-
-    <% if controller_name == 'users' && action_name == 'edit' %>
-      <span>
-        <%= link_to 'change profile image', "http://gravatar.com/emails", target: "_blank" %>
-      </span>
+    <% if controller_name == 'users' %>
+      <% if action_name == 'show' %>
+        <span>
+          <%= link_to "edit settings", edit_user_path(user) if current_user == user %>
+        </span>
+        <span class="lighter">
+          Karma: <%= user.score %>
+        </span>
+      <% elsif action_name == 'edit' %>
+        <span>
+          <%= link_to 'change image', "http://gravatar.com/emails", target: "_blank" %>
+        </span>
+      <% elsif action_name == 'index' %>
+        <span class="lighter">
+          Karma: <%= user.score %>
+        </span>
+        <span>
+          <% if current_user.admin? && !current_user?(user) %>
+            | <%= link_to "delete", user, method: :delete, data: { confirm: "Are you sure?" } %>
+          <% end %>
+        </span>
+      <% end %>
     <% end %>
   </section>
 </aside>

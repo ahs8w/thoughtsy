@@ -17,7 +17,6 @@ describe "StaticPages" do
     it_should_behave_like "all static pages"
 
     describe "when not signed in" do
-      it { should_not have_link("Account") }
       it { should_not have_link("Users") }
       it { should_not have_button("Post") }
       it { should_not have_button("Respond to a thought") }
@@ -37,7 +36,7 @@ describe "StaticPages" do
       it { should have_button("Post") }
       it { should_not have_link('Sign up now!', href: signup_path) }
       it { should_not have_link('Sign in',      href: signin_path) }
-      it { should have_link('Account') }
+      it { should have_link("#{user.username}") }
       it { should have_link('Thoughts') }
 
       describe "the sidebar" do

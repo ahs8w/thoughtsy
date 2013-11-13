@@ -102,8 +102,8 @@ describe "UserPages" do
       end
 
       context "thought counts" do
-        it { should_not have_xpath('.//h4', text: 'Posts (3)') }
-        it { should_not have_xpath('.//h4', text: 'Responses (1)') }
+        it { should_not have_content('Thoughts posted (3)') }
+        it { should_not have_content('Thoughts responded to (1)') }
       end
 
       context "messages" do
@@ -135,15 +135,15 @@ describe "UserPages" do
       it { should have_content(unanswered_post.content) }
 
       context "counts are correct" do
-        it { should have_xpath('.//h4', text: 'Thoughts posted (3)') }
-        it { should have_xpath('.//h4', text: 'Thoughts responded to (1)') }
+        it { should have_content('Thoughts posted (3)') }
+        it { should have_content('Thoughts responded to (1)') }
       end
 
-      context "answered posts" do
-        it "with unrated responses are in bold" do
-          expect(find('#answered_posts').first('li')).to have_selector('strong')
-        end
-      end
+      # context "answered posts" do
+      #   it "with unrated responses are in bold" do
+      #     expect(find('#answered_posts').first('li')).to have_selector('strong')
+      #   end
+      # end
 
       context "posts are ordered newest to oldest" do
         it "within section" do
@@ -241,7 +241,7 @@ describe "UserPages" do
     let(:user) { FactoryGirl.create(:user) }
     before do
       sign_in user
-      visit edit_user_path(user)
+      click_link "edit settings"
     end
 
 
@@ -269,7 +269,7 @@ describe "UserPages" do
       end
 
       it { should have_title(new_name) }
-      it { should have_success_message("Profile updated") }
+      it { should have_info_message("Profile updated") }
       it { should have_link("Sign out", href: signout_path) }
       specify { expect(user.reload.username).to eq new_name }     # check that attributes are indeed changed in database
       specify { expect(user.reload.email).to eq new_email.downcase }

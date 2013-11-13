@@ -5,7 +5,7 @@ class PasswordResetsController < ApplicationController
   def edit
     @user = User.find_by_password_reset_token(params[:id])
     if @user.nil?
-      flash[:notice] = "Invalid password reset token."
+      flash[:danger] = "Invalid password reset token."
       render 'new'
     end
   end
@@ -14,9 +14,10 @@ class PasswordResetsController < ApplicationController
     @user = User.find_by_email(params[:email])
     if !@user.nil?
       @user.send_password_reset
-      redirect_to :root, :notice => "Email sent with password reset instructions."
+      flash[:info] = "Email sent with password reset instructions."
+      redirect_to :root
     else
-      flash[:notice] = "Email address not found in database."
+      flash[:danger] = "Email address not found in database."
       render 'new'
     end
   end
@@ -24,10 +25,12 @@ class PasswordResetsController < ApplicationController
   def update
     @user = User.find_by!(password_reset_token: (params[:id]))
     if @user.password_reset_sent_at < 2.hours.ago   # setting expiration time
-      redirect_to new_password_reset_path, :alert => "Password reset has expired."
+      flash[:warning] = "Password reset has expired."
+      redirect_to new_password_reset_path
     elsif @user.update_attributes(password_reset_params)
       sign_in @user
-      redirect_to root_url, :notice => "Password has been reset!"
+      flash[:success] = "Password has been reset!"
+      redirect_to root_url
     else
       render 'edit'
     end

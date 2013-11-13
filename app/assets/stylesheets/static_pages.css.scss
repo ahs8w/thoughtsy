@@ -4,7 +4,7 @@
 
 #title_banner {
   text-align: center;
-  padding-top: 150px;
+  padding: 10% 0;
   /*border-bottom: lightgray solid 2px;*/
   h1 {
     font-size: 6em;
@@ -17,7 +17,6 @@
   }
   #signup_button {
     margin-top: 40px;
-    margin-bottom: -40px;
     display: block;
     a.btn {
       padding: 10px 35px;
@@ -28,9 +27,7 @@
 
 #post_form {
   width: 80%;
-  margin: 6% auto;
-  /*margin-left: auto;
-  margin-right: auto;*/
+  margin: -25px auto 25px;
   .new_post {
     margin-bottom: 0;
     div#submit {
@@ -45,70 +42,67 @@
 
 #user_banner {
   position: relative;
-}
-
-#respond_button {
-  position: relative;
-  float: right;
-  text-align: center;
-  top: 10px;
-  right: 0;
-  form {
-    margin-bottom: 0;
-    input {
+  #respond_button {
+    position: relative;
+    float: right;
+    max-width: 237px;
+    text-align: center;
+    top: 10px;
+    right: 0;
+    form {
       margin-bottom: 0;
-      padding: 16px 36px;
+      input {
+        margin-bottom: 10px;
+        padding: 16px 36px;
+      }
+    }
+    #expiration_message {
+      color: $gray-light;
+      top: 65px;
+    }
+    #no_unanswered {
+      color: $gray-light;
+      position: relative;
+      top: 10px;
+      float: right;
     }
   }
-}
-
-#expiration_message {
-  position: absolute;
-  color: $gray-light;
-  top: 65px;
-}
-
-#no_unanswered {
-  color: $gray-light;
-  position: relative;
-  top: 10px;
-  float: right;
 }
 
 /* sidebar */
 
-aside {
-  section {
-    &:first-child {
-      border: 0;
-      padding-top: 0;
-    }
-    span {
-      display: block;
-      margin-bottom: 3px;
-      line-height: 1;
-    }
-    h1 {
-      font-size: 1.4em;
-      text-align: left;
-      letter-spacing: -1px;
-      margin-bottom: 3px;
-      margin-top: 0px;
+  aside {
+    section {
+      &:first-child {
+        border: 0;
+        padding-top: 0;
+      }
+      span {
+        display: block;
+        margin-bottom: 3px;
+        line-height: 1;
+      }
+      h1 {
+        font-size: 1.4em;
+        text-align: left;
+        letter-spacing: -1px;
+        margin-bottom: 3px;
+        margin-top: 0px;
+      }
     }
   }
-}
 
-#user_info {
-  padding-top: 10px;
-  padding-left: 0;
-  position: absolute;
-}
+  .sidebar {
+    padding-top: 10px;
+    padding-left: 0;
+    position: absolute;
+  }
 
-#notification_area {
-  padding-top: 25px;
-}
+  #notification_area {
+    padding-top: 25px;
+  }
 
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
+  .gravatar {
+    float: left;
+    margin-right: 10px;
+  }
