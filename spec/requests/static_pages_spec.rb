@@ -160,7 +160,7 @@ describe "StaticPages" do
 
       it "has links to appropriate pages" do
         expect(page).to have_link("1 unread message", href: message_path(message))
-        expect(page).to have_link("1 unrated response", href: response_path(response))
+        expect(page).to have_link("1 unrated response", href: post_path(post))
       end
 
       context "with multiple notices" do

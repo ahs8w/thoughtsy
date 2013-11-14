@@ -52,6 +52,7 @@ class UserMailer < ActionMailer::Base
 
   def brilliant_email(response)
     @response = response
+    @post = @response.post
     mail to: 'admin@thoughtsy.com', subject: "Thoughtsy: response rated 'brilliant'"
   end
 end

@@ -4,12 +4,17 @@ class User < ActiveRecord::Base
   has_many :responses, inverse_of: :user, dependent: :destroy
 
   has_many :ratings
+  # has_many :rated_responses, through: :ratings, source: :response  
+    # all responses rated by user.  matches rating.user_id to user
+  has_many :response_ratings, through: :responses, source: :ratings
+    # all ratings for user.responses
 
   has_many :messages, inverse_of: :user
   has_many :received_messages, class_name: 'Message', foreign_key: :receiver_id
 
   has_many :subscriptions, inverse_of: :user
-  has_many :followed_posts, through: :subscriptions, source: :post
+  has_many :followed_posts, through: :subscriptions, source: :post  
+    # fetches all posts in subscription table w/ user_id that matches user
 
 # callbacks
   before_save { email.downcase! }

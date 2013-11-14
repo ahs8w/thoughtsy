@@ -8,6 +8,19 @@ module ProfileHelper
     end
   end
 
+  def average_user_rating(user)
+    unless user.response_ratings.empty?
+      score = 0
+      user.response_ratings.each do |rating|
+        score += rating.value
+      end
+      total = user.response_ratings.size
+      "average rating: #{score.to_f / total.to_f}"
+    else
+      "user has no rated responses"
+    end
+  end
+
   def answered_posts(user)
     user.posts.answered.descending
   end

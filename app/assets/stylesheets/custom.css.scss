@@ -12,8 +12,13 @@
     height: 100%;
   }
 
+  .thought img {
+    @extend .thumbnail;
+    @include center-block();
+  }
+
   body {
-    padding-top: 70px;
+    padding-top: 50px;
     font-family: 'Open Sans', sans-serif;
     background-image: -webkit-radial-gradient(center, circle cover, rgb(246, 225, 167), rgb(244, 204, 93));
     height: 100%;
@@ -43,6 +48,8 @@
 
   .well {
     border: 1px solid darken($well-bg, 16%);
+    margin-top: -55px;
+    padding-top: 50px;
   }
 
   .gravatar {
@@ -60,6 +67,7 @@
     font-size: 3em;
     letter-spacing: -2px;
     margin-bottom: 30px;
+    margin-top: 5px;
     text-align: center;
     font-variant: small-caps;
   }
@@ -97,13 +105,39 @@
     color: $gray-light;
   }
 
+/* sidebar */
+
+  aside {
+    section {
+      border: 0;
+      padding-top: 0;
+      .gravatar {
+        float: left;
+        margin-right: 10px;
+      }
+      span {
+        display: block;
+        margin-bottom: 3px;
+        line-height: 1;
+      }
+      h3 {
+        font-size: 1.4em;
+        text-align: left;
+        letter-spacing: -1px;
+        margin-bottom: 3px;
+        margin-top: 0px;
+        font-variant: small-caps;
+      }
+    }
+  }
+
 /* rating form behaviors */
 
   form.new_rating {
     display: inline;
   }
 
-  #rating_form {
+  .rating_form {
     text-align: center;
   }
 
@@ -319,18 +353,23 @@
     }
   }
 
+  .posts_show {
+    margin: 40px 0;
+  }
+
   .responses {
     margin: 20px 0 40px;
   }
 
-  .responses_show {
-    margin-top: 40px;
+  .responses_show li {
+    margin: 40px 0;
   }
 
 /* shared/thought */
   
   .thought_content, .wrapped_thought_content {
     font-size: 1.15em;
+    text-align: center;
   }
 
   .thought {
@@ -372,6 +411,18 @@
     overflow: auto;
   }
 
-  #notes {
-    margin-top: 100px;
+  .user_stats {
+    font-size: 1.4em;
+    color: #999;
+    margin: -10px auto 40px;
+    .dropdown {
+      display: inline-block;
+      button {
+        margin-left: 20px;
+        margin-right: 20px;
+        .ion-email {
+          font-size: 32px;
+        }
+      }
+    }
   }

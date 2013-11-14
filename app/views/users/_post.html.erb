@@ -20,7 +20,7 @@
       </div>
       <div class="timestamp pull-right">
         <% if response.user != @user && response.ratings.where(user_id: @user.id).empty? %>
-          <%= link_to "#{username(response.user)} responded #{date_time(response)}", response_path(response) %>
+          <strong><%= username(response.user) %> responded <%= date_time(response) %></strong>
         <% else %>
           <%= username(response.user) %> responded <%= date_time(response) %>
         <% end %>

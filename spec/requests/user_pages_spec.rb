@@ -230,7 +230,7 @@ describe "UserPages" do
         before { click_button submit }
         let(:user) { User.find_by(email: 'user@example.com') }
 
-        it { should have_title(user.username) }
+        it { should have_button("Post a thought") }
         it { should have_success_message('Welcome') }
         it { should have_link('Sign out') }
       end
@@ -241,7 +241,8 @@ describe "UserPages" do
     let(:user) { FactoryGirl.create(:user) }
     before do
       sign_in user
-      click_link "edit settings"
+      find('ul.navbar-right').click_link "#{user.username}"
+      click_link "Settings"
     end
 
 

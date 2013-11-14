@@ -1,18 +1,18 @@
 <div id="social_links">
-  <a href="https://twitter.com/intent/tweet?url=<%= response_url(@response) %>&text=<%= wrapped(@response.content, 65) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
+  <a href="https://twitter.com/intent/tweet?url=<%= post_url(@post) %>&text=<%= wrapped(@response.content, 65) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
     <i class="ion-social-twitter"></i>
   </a>
 
-  <a href="https://facebook.com/sharer.php?u=<%= response_url(@response) %>" target="_blank">
+  <a href="https://facebook.com/sharer.php?u=<%= post_url(@post) %>" target="_blank">
     <i class="ion-social-facebook"></i>
   </a>
 
-  <a href="https://plus.google.com/share?url=<%= response_url(@response) %>" target="_blank">
+  <a href="https://plus.google.com/share?url=<%= post_url(@post) %>" target="_blank">
     <i class="ion-social-googleplus"></i>
   </a>
 
   <% if @response.image? %>
-    <a href="http://pinterest.com/pin/create/button/?url=<%= response_url(@response) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@response) %>" target="_blank">
+    <a href="http://pinterest.com/pin/create/button/?url=<%= post_url(@post) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@response) %>" target="_blank">
       <i class="ion-social-pinterest"></i>
     </a>
     <!-- everything after second url is optional for adding description or photo
@@ -20,11 +20,11 @@
      -->
   <% end %>
 
-  <a href="http://reddit.com/submit?url=<%= response_url(@response) %>&title=Great Response from Thoughtsy.com" target="_blank">
+  <a href="http://reddit.com/submit?url=<%= post_url(@post) %>&title=Great Response from Thoughtsy.com" target="_blank">
     <i class="ion-social-reddit"></i>
   </a>
 
-  <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= response_url(@response) %>" target="_blank">
+  <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= post_url(@post) %>" target="_blank">
     <i class="ion-ios7-email"></i>
   </a>
 </div>

@@ -1,24 +1,33 @@
-<ul class="profile">
-  <h4 class="center">Notes</h4>
-  <% if current_user.received_messages.each do |msg| %>
-    <% if msg.viewed? %>
-      <li>
-        <%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %>
-      </li>
-    <% else %>
-      <li>
-        <strong><%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></strong>
-      </li>
+<div class="dropdown">
+  <button class="btn dropdown-toggle" type="button" id="messageMenu1" data-toggle="dropdown">
+    Messages
+    <span class="ion-email"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="messageMenu1">
+    <li role="presentation" class="dropdown-header">Received Messages</li>
+    <% if current_user.received_messages.each do |msg| %>
+      <% if msg.viewed? %>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+          <%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></a>
+        </li>
+      <% else %>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+          <strong><%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></strong></a>
+        </li>
+      <% end %>
+    <% end.empty? %>
+      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">empty</a></li>
     <% end %>
-  <% end.empty? %>
-    <p class="center lighter">You have no received notes</p>
-  <% end %>
 
-  <% if current_user.messages.each do |msg| %>
-    <li>
-      <%= link_to "To: #{User.find(msg.receiver_id).username}", message_path(msg) %>
-    </li>
-  <% end.empty? %>
-    <p class="center lighter">You have no sent notes</p>
-  <% end %>
-</ul>
+    <li role="presentation" class="divider"></li>
+
+    <li role="presentation" class="dropdown-header">Sent Messages</li>
+    <% if current_user.messages.each do |msg| %>
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+        <%= link_to "To: #{User.find(msg.receiver_id).username}", message_path(msg) %></a>
+      </li>
+    <% end.empty? %>
+      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">empty</a></li>
+    <% end %>
+  </ul>
+</div>

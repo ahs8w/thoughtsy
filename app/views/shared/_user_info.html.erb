@@ -1,9 +1,9 @@
 <aside>
   <section>
-    <h1>
-      <%= link_to gravatar_for(user, size: 55), user %>
+    <%= link_to gravatar_for(user, size: 55), user %>
+    <h3>
       <%= link_to user.username, user %>
-    </h1>
+    </h3>
 
     <% if controller_name == 'static_pages' %>
       <span>

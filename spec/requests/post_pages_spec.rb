@@ -124,8 +124,7 @@ describe "Post pages" do
   end
 
   describe "Show page" do
-    let!(:post) { FactoryGirl.create(:post) }
-    let!(:older_response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
+    let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
     let!(:response) { FactoryGirl.create(:response, post: post) }
     before { visit post_path(post) }
 
@@ -137,6 +136,9 @@ describe "Post pages" do
     it { should_not have_link('delete') }
     
     describe "response order" do
+      let!(:older_response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
+      before { visit post_path(post) }
+      
       it "newer response is first" do
         expect(first('.responses_show li')).to have_content(response.content)
       end
@@ -147,6 +149,43 @@ describe "Post pages" do
       before { visit post_path(image_post) }
 
       it { should have_selector('img') }
+    end
+
+    describe "rating form access" do
+
+      context "as post author" do
+        it { should have_selector("div.rating_form") }
+      end
+
+      context "as post follower" do
+        let(:follower) { FactoryGirl.create(:user) }
+        before do
+          sign_in follower
+          follower.subscribe!(post)
+          visit post_path(post)
+        end
+
+        it { should have_selector("div.rating_form") }
+
+        context "as guest" do
+          before do
+            follower.unsubscribe!(post)
+            visit post_path(post)
+          end
+
+          it { should_not have_selector("div.rating_form") }
+        end
+      end
+
+      context "as response author" do
+        before do
+          sign_in response.user
+          response.user.subscribe!(post)
+          visit post_path(post)
+        end
+
+        it { should_not have_selector("div.rating_form") }
+      end
     end
   end
 

@@ -14,7 +14,7 @@
     </div>
   <% else %>
     <div class="thought_content">
-      <%= image_tag thought.image_url if thought.image.present? %>
+      <%= image_tag thought.image_url, class: "img-responsive" if thought.image.present? %>
       <%= custom_format(thought.content) unless thought.content.nil? %>
     </div>
   <% end %>

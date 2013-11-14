@@ -6,11 +6,11 @@ describe "Rating Creation" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user_id: user.id) }
-  let(:response) { FactoryGirl.create(:response, post_id: post.id) }
+  let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
+  let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
   before do
     sign_in user
-    visit response_path(response)
+    visit post_path(post)
   end
     
   describe "clicking 'weak'" do
@@ -56,7 +56,7 @@ describe "Rating Creation" do
     end
 
     describe "reloading the page" do
-      before { visit response_path(response) }
+      before { visit post_path(post) }
 
       it "form is replaced by current rating" do
         page.has_no_xpath?("//form.new_rating")
@@ -67,7 +67,7 @@ describe "Rating Creation" do
 
   # context "with AJAX", :js=>true do
   #   let(:response) { FactoryGirl.create(:response, post_id: post.id) }
-  #   before { visit response_path(response) }
+  #   before { visit post_path(post) }
 
   #   describe "clicking 'weak'" do
 
@@ -87,7 +87,7 @@ describe "Rating Creation" do
   #       before do
   #         follower.subscribe!(post)
   #         sign_in follower
-  #         visit response_path(response)
+  #         visit post_path(post)
   #         click_button 'weak'
   #       end
 

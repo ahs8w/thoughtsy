@@ -48,7 +48,7 @@ describe UserMailer do
       end
 
       it "renders the email body" do
-        expect(mail.body.encoded).to match(response_path(response))
+        expect(mail.body.encoded).to match(post_path(post))
       end
     end
 
@@ -63,7 +63,7 @@ describe UserMailer do
         expect(mail.subject).to eq("Your followed post has a new response!")
         expect(mail.to).to eq([follower.email])
         expect(mail.from).to eq (["admin@thoughtsy.com"])
-        expect(mail.body.encoded).to match(response_path(response))
+        expect(mail.body.encoded).to match(post_path(post))
       end
 
       it "doesn't send mail to responder" do
@@ -121,7 +121,7 @@ describe UserMailer do
     end
 
     it "renders the email body" do
-      expect(mail.body.encoded).to match(response_path(response))
+      expect(mail.body.encoded).to match(post_path(response.post))
     end
   end
 end

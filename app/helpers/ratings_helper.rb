@@ -1,7 +1,7 @@
 module RatingsHelper
 
-  def current_user_rating
-    rating = current_user.ratings.find_by_response_id(@response.id)
+  def current_user_rating(thought)
+    rating = current_user.ratings.find_by_response_id(thought.id)
     human_value(rating.value)
   end
 
@@ -13,16 +13,3 @@ module RatingsHelper
     end
   end
 end
-
-  # def average_rating
-  #   if ratings.exists?
-  #     @value = 0
-  #     self.ratings.each do |rating|
-  #       @value = @value + rating.value
-  #     end
-  #     @total = self.ratings.size
-  #     @value.to_f / @total.to_f
-  #   else
-  #     "not yet rated"
-  #   end
-  # end

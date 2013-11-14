@@ -114,51 +114,51 @@ describe "ResponsePages" do
     end
   end
 
-  describe "show page" do
-    let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
-    let(:response) { FactoryGirl.create(:response, post_id: user_post.id) }
-    before { visit response_path(response) }
+  # describe "show page" do
+  #   let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
+  #   let(:response) { FactoryGirl.create(:response, post_id: user_post.id) }
+  #   before { visit response_path(response) }
 
-    it { should have_title('Response') }
-    it { should have_content(response.content) }
-    it { should have_content(response.user.username) }
-    it { should have_content(user_post.content) }
+  #   it { should have_title('Response') }
+  #   it { should have_content(response.content) }
+  #   it { should have_content(response.user.username) }
+  #   it { should have_content(user_post.content) }
 
-    describe "rating form access" do
+  #   describe "rating form access" do
 
-      context "as post author" do
-        it { should have_selector("div#rating_form") }
-      end
+  #     context "as post author" do
+  #       it { should have_selector("div#rating_form") }
+  #     end
 
-      context "as post follower" do
-        let(:follower) { FactoryGirl.create(:user) }
-        before do
-          sign_in follower
-          follower.subscribe!(user_post)
-          visit response_path(response)
-        end
+  #     context "as post follower" do
+  #       let(:follower) { FactoryGirl.create(:user) }
+  #       before do
+  #         sign_in follower
+  #         follower.subscribe!(user_post)
+  #         visit post_path(post)
+  #       end
 
-        it { should have_selector("div#rating_form") }
+  #       it { should have_selector("div#rating_form") }
 
-        context "as guest" do
-          before do
-            follower.unsubscribe!(user_post)
-            visit response_path(response)
-          end
+  #       context "as guest" do
+  #         before do
+  #           follower.unsubscribe!(user_post)
+  #           visit post_path(post)
+  #         end
 
-          it { should_not have_selector("div#rating_form") }
-        end
-      end
+  #         it { should_not have_selector("div#rating_form") }
+  #       end
+  #     end
 
-      context "as response author" do
-        before do
-          sign_in response.user
-          response.user.subscribe!(user_post)
-          visit response_path(response)
-        end
+  #     context "as response author" do
+  #       before do
+  #         sign_in response.user
+  #         response.user.subscribe!(user_post)
+  #         visit post_path(post)
+  #       end
 
-        it { should_not have_selector("div#rating_form") }
-      end
-    end
-  end
+  #       it { should_not have_selector("div#rating_form") }
+  #     end
+  #   end
+  # end
 end

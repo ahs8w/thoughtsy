@@ -22,6 +22,7 @@ describe User do
   it { should respond_to(:token_id?) }
   it { should respond_to(:token_timer?) }
   it { should respond_to(:ratings) }
+  it { should respond_to(:response_ratings) }
   it { should respond_to(:messages) }
   it { should respond_to(:received_messages) }
   it { should respond_to(:subscriptions) }
@@ -181,6 +182,14 @@ describe User do
       expect(responses).not_to be_empty
       responses.each do |response|
         expect(Response.where(id: response.id)).to be_empty
+      end
+    end
+
+    describe "through rating" do
+      let(:rating) { response.ratings.create(user_id: 5, value: 5) }
+
+      it "user.response_ratings works" do
+        expect(@user.response_ratings).to include(rating)
       end
     end
   end

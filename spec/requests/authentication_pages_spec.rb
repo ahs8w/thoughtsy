@@ -29,7 +29,7 @@ describe "Authentication  : " do
       before { sign_in user }
 
       ## PROFILE page (redirected after sign_in)
-      it { should have_title(user.username) }
+      it { should have_button("Post a thought") }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
       it { should have_link('Thoughts',         href: posts_path) }
@@ -89,8 +89,8 @@ describe "Authentication  : " do
                 sign_in user
               end
 
-              it "should render the default (profile) page" do
-                expect(page).to have_title(user.username)
+              it "should render the default (home) page" do
+                expect(page).to have_button("Post a thought")
               end
             end
           end

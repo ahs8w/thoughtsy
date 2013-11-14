@@ -15,6 +15,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
     @responses = @post.responses.descending
+    @rating = Rating.new
   end
 
   def create

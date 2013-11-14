@@ -1,5 +1,5 @@
 var flash = $('#js_flash_messages');
-var rating = $('#rating_form');
+var rating = $('#rating_form_<%= @response.id %>');
 
 <% if @rating.save %>
   <% if @rating.value == 1 && !post_follower(@response.post) %>
