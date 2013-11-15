@@ -8,7 +8,7 @@ describe "Post pages" do
 
   describe "Queue page" do
     let(:admin) { FactoryGirl.create(:admin) }
-    let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
+    let!(:post) { FactoryGirl.create(:post, updated_at: 1.minute.ago) }
     before do
       sign_in admin
       visit queue_path
@@ -16,13 +16,13 @@ describe "Post pages" do
 
     it { should have_content("Queue") }
     it { should have_title("Queue") }
-    it { should have_content(post.created_at) }
+    it { should have_content(post.updated_at) }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }
     it { should have_content(post.state) }
 
     describe "order of posts" do
-      let!(:older_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
+      let!(:older_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago) }
       before { visit queue_path }
 
       it "oldest post is first" do
@@ -92,7 +92,7 @@ describe "Post pages" do
 
   describe "Index page" do
     let(:user) { FactoryGirl.create(:user) }
-    let!(:post) { FactoryGirl.create(:post, created_at: 1.hour.ago, state: 'answered') }
+    let!(:post) { FactoryGirl.create(:post, updated_at: 1.hour.ago, state: 'answered') }
     before do
       sign_in user
       visit posts_path
@@ -103,7 +103,7 @@ describe "Post pages" do
     it { should have_content(post.content) }
 
     describe "order of posts" do
-      let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago, state: 'answered') }
+      let!(:newer_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago, state: 'answered') }
       before { visit posts_path }
 
       it "newest post is first" do
@@ -226,14 +226,14 @@ describe "Post pages" do
 
   ## 'Respond_button' ##
   describe "Persistance:" do
-    let!(:post) { FactoryGirl.create(:post, created_at: 1.minute.ago) }
+    let!(:post) { FactoryGirl.create(:post, updated_at: 1.minute.ago) }
     before do
       visit root_path
       click_button "Respond"
     end
 
     describe "with an earlier post in existence" do
-      let!(:older_post) { FactoryGirl.create(:post, content: "blah", created_at: 5.minutes.ago) }
+      let!(:older_post) { FactoryGirl.create(:post, content: "blah", updated_at: 5.minutes.ago) }
 
       it "the same post persists upon returning to page" do
         visit root_path
@@ -257,7 +257,7 @@ describe "Post pages" do
 
       # describe "with only younger posts in existence" do
       #   before do
-      #     post.created_at = 2.days.ago
+      #     post.updated_at = 2.days.ago
       #     post.save
       #     visit root_path
       #   end

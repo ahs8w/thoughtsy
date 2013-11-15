@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 # associations
   has_many :posts, inverse_of: :user, dependent: :destroy
   has_many :responses, inverse_of: :user, dependent: :destroy
+  has_many :posts_responded_to, through: :responses, source: :post
+    # returns posts with responses where response.user = user
 
   has_many :ratings
   # has_many :rated_responses, through: :ratings, source: :response  
@@ -13,8 +15,12 @@ class User < ActiveRecord::Base
   has_many :received_messages, class_name: 'Message', foreign_key: :receiver_id
 
   has_many :subscriptions, inverse_of: :user
-  has_many :followed_posts, through: :subscriptions, source: :post  
-    # fetches all posts in subscription table w/ user_id that matches user
+    # returns subscriptions where subscription.user = user
+  has_many :followed_posts, through: :subscriptions, source: :post
+    # returns posts which the user is following
+  has_many :inverse_subscriptions, through: :posts, source: :subscriptions
+    # returns subscriptions where post.user == user
+    
 
 # callbacks
   before_save { email.downcase! }
@@ -84,7 +90,7 @@ class User < ActiveRecord::Base
     Post.available(self).size > 0
   end
 
-  def not_subscribed
+  def oldest_available_post  # also means unsubscribed
     posts = Post.available(self).ascending.includes(:subscriptions).limit(10)
     a = []
     posts.each do |post|

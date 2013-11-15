@@ -7,27 +7,27 @@
     <li role="presentation" class="dropdown-header">Received Messages</li>
     <% if current_user.received_messages.each do |msg| %>
       <% if msg.viewed? %>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+        <li role="presentation"><a role="menuitem" tabindex="-1">
           <%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></a>
         </li>
       <% else %>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+        <li role="presentation"><a role="menuitem" tabindex="-1">
           <strong><%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></strong></a>
         </li>
       <% end %>
     <% end.empty? %>
-      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">empty</a></li>
+      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1">empty</a></li>
     <% end %>
 
     <li role="presentation" class="divider"></li>
 
     <li role="presentation" class="dropdown-header">Sent Messages</li>
     <% if current_user.messages.each do |msg| %>
-      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">
+      <li role="presentation"><a role="menuitem" tabindex="-1">
         <%= link_to "To: #{User.find(msg.receiver_id).username}", message_path(msg) %></a>
       </li>
     <% end.empty? %>
-      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">empty</a></li>
+      <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1">empty</a></li>
     <% end %>
   </ul>
 </div>

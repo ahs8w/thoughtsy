@@ -9,31 +9,25 @@ module ProfileHelper
   end
 
   def average_user_rating(user)
-    unless user.response_ratings.empty?
-      score = 0
-      user.response_ratings.each do |rating|
-        score += rating.value
-      end
-      total = user.response_ratings.size
-      "average rating: #{score.to_f / total.to_f}"
+    ratings = user.response_ratings
+    unless ratings.empty?     
+      "Average rating: #{ratings.sum('value')/ratings.size}"
     else
-      "user has no rated responses"
+      "No ratings"
     end
-  end
-
-  def answered_posts(user)
-    user.posts.answered.descending
   end
 
   def personal_posts(user)
     user.posts.personal.descending
   end
 
-  def responses(user)
-    user.responses.descending
-  end
+  # def unique_response_posts(user)
+  #   # user.responses.descending.map(&:post).uniq
+  #   # user.responses.pluck(:post).uniq
+  # end
 
-  def unique_posts(user)
-    responses(user).map(&:post).uniq
+  def public_posts(user)
+    posts = user.posts.answered + user.posts_responded_to.uniq
+    posts.sort_by { |post| post[:updated_at] }.reverse!   # posts sorted by most recent update/responses
   end
 end

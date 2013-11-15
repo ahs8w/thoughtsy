@@ -18,8 +18,10 @@
   <div class="col-md-8 col-md-offset-2">
     <ul class="responses">
       <% post.responses.descending.each do |response| %>
-        <li class="list-unstyled">
-          <%= render partial: "shared/thought", object: response, locals: { wrapped: true } %>
+        <li>
+          <div class="thought_wrapper" id="posts_index">
+            <%= render partial: "shared/thought", object: response, locals: { wrapped: true } %>
+          </div>
         </li>
       <% end %>
     </ul>

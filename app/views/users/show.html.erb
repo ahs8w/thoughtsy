@@ -1,55 +1,75 @@
 <% provide(:page_title, @user.username) %>
 
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div class="well">
-      <h1>
-        <%= gravatar_for(@user, size: 55) %>
-        <%= @user.username %>
-      </h1>
 
+<div class="col-md-10 col-md-offset-1">
+<div class="well">
+  <h1>
+    <%= gravatar_for(@user, size: 55) %>
+    <%= @user.username %>
+    <small> | <%= @user.score %></small>
+  </h1>
+
+  <% if current_user?(@user) %>
+    <div class="user_stats center">
+      <span>
+        <%= render "profile_messages" %>
+      </span>
+      <span>
+        <%= render "profile_stats" %>
+      </span>
+    </div>
+  <% end %>
+  
+  
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h4 class="center">Public posts</h4>
+
+      <ul class="profile">
+        <% public_posts(@user).each do |post| %>
+          <li>
+            <div class="profile_post">
+              <% if post.user == @user %>
+                <div class="panel">
+                  <div class="thought_wrapper users_show">
+                    <%= render partial: 'shared/thought', object: post, locals: {wrapped: true, profile: true, length: 100, link: true} %>
+                  </div>
+                </div>
+              <% else %>
+                <div class="thought_wrapper users_show">
+                  <%= render partial: 'shared/thought', object: post, locals: {wrapped: true, profile: true, length: 100, link: true} %>
+                </div>
+              <% end %>
+            </div>
+            
+            <ul class="profile_response">
+              <% post.responses.descending.each do |response| %>
+                <li>
+                  <% if response.user == @user %>
+                    <div class="panel">
+                      <div class="thought_wrapper users_show">
+                        <%= render partial: 'shared/thought', object: response, locals: {wrapped: true, profile: true, length: 80} %>
+                      </div>
+                    </div>
+                    <%= pluralize(post.responses.count - 1, 'other response') %>
+                  <% else %>
+                    <%= pluralize(post.responses.count - 1, 'response') %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+      
       <% if current_user?(@user) %>
-        <div class="user_stats center">
-          <span>karma: <%= @user.score %></span>
-          <span>
-            <%= render "message" %>
-          </span>
-          <span><%= average_user_rating(@user) %></span>
+        <h4 class="center">Unanswered Thoughts</h4>
+        <div id="personal_posts">
+          <%= render partial: 'profile_thought', object: personal_posts(@user), 
+              locals: {:message=>"unanswered thoughts"} %>
         </div>
       <% end %>
-      
-      
-      <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-          <h4 class="center">Thoughts responded to <%= "(#{@user.responses.count})" if current_user?(@user) %></h4>
-          <div id="responded_posts">
-            <%= render partial: 'profile_thought', object: unique_posts(@user), 
-                locals: {:message=>"responses"} %>
-          </div>
-          <h4 class="center">Thoughts answered <%= "(#{@user.posts.count})" if current_user?(@user) %></h4>
-          <div id="answered_posts">
-            <%= render partial: 'profile_thought', object: answered_posts(@user), 
-                locals: {:message=>"answered thoughts"} %>
-          </div>
-          <% if current_user?(@user) %>
-            <h4 class="center">Thoughts posted</h4>
-            <div id="personal_posts">
-              <%= render partial: 'profile_thought', object: personal_posts(@user), 
-                  locals: {:message=>"unanswered thoughts"} %>
-            </div>
-          <% end %>
-        </div>
-      </div>
     </div>
   </div>
 </div>
-
-<!-- Messages 
-  <div class="col-md-2">
-    <div id="notes">
-      <% if current_user?(@user) %>
-        <%= render 'message' %>
-      <% end %>
-    </div>
-  </div>
--->
+</div>

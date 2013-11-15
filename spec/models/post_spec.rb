@@ -111,8 +111,8 @@ describe Post do
 
 ## Post Scopes ##
   describe "ordered scopes" do
-    let!(:newer_post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
-    let!(:older_post) { FactoryGirl.create(:post, created_at: 5.hours.ago) }
+    let!(:newer_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago) }
+    let!(:older_post) { FactoryGirl.create(:post, updated_at: 5.hours.ago) }
 
     it ".ascending" do
       expect(Post.ascending.first).to eq older_post
@@ -129,8 +129,8 @@ describe Post do
     let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-    let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', created_at: 5.minutes.ago) }
-    let!(:subscribed) { FactoryGirl.create(:post, created_at: 10.minutes.ago) }
+    let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', updated_at: 5.minutes.ago) }
+    let!(:subscribed) { FactoryGirl.create(:post, updated_at: 10.minutes.ago) }
     let!(:no_state) { FactoryGirl.create(:post) }
     before { user.subscribe!(subscribed) }
 
@@ -151,8 +151,8 @@ describe Post do
     end
 
     #user model method
-    it "#not_subscribed" do
-      expect(user.not_subscribed).to eq reposted
+    it "#oldest_available_post" do
+      expect(user.oldest_available_post).to eq reposted
     end
   end
 

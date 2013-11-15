@@ -1,27 +1,32 @@
 <div class="thought" id="<%= thought.id %>">
   <% wrapped = false unless local_assigns.has_key? :wrapped %>
+  <% length = 65 unless local_assigns.has_key? :length %>
   <% link = false unless local_assigns.has_key? :link %>
+  <% profile = false unless local_assigns.has_key? :profile %>
 
-  <% if wrapped %>
-    <div class="wrapped_thought_content">
+  <div class="thought_content">  
+    <% if wrapped %>
       <% if link %>
         <%= link_to "#{image_tag thought.image_url(:thumb)}", thought if thought.image.present? %>
-        <%= link_to "#{wrapped(thought.content, 65)}", thought unless thought.content.nil? %>
+        <%= link_to "#{wrapped(thought.content, length)}", thought unless thought.content.nil? %>
       <% else %>
         <%= image_tag thought.image_url(:thumb) if thought.image.present? %>
-        <%= wrapped(thought.content, 65) unless thought.content.nil? %>
+        <%= wrapped(thought.content, length) unless thought.content.nil? %>
       <% end %>
-    </div>
-  <% else %>
-    <div class="thought_content">
+    <% else %>
       <%= image_tag thought.image_url, class: "img-responsive" if thought.image.present? %>
       <%= custom_format(thought.content) unless thought.content.nil? %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 
   <div class="thought_author">
-    <%= link_to "#{thought.user.username}", user_path(thought.user) %>
-    <span class="lighter"> | <%= thought.user.score %></span>
-    <span class="timestamp pull-right"><%= date_time(thought) %></span>
+    <% if profile %>
+      <%= link_to "#{thought.user.username}", user_path(thought.user) %>
+      <span class="timestamp pull-right"><%= date_time(thought) %></span>
+    <% else %>
+      <%= link_to "#{thought.user.username}", user_path(thought.user) %>
+      <span class="lighter"> | <%= thought.user.score %></span>
+      <span class="timestamp pull-right"><%= date_time(thought) %></span>
+    <% end %>
   </div>
 </div>

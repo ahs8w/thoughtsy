@@ -4,8 +4,8 @@ class Response < ActiveRecord::Base
   validates_presence_of :user_id, :post_id
   validate :image_or_content
 
-  belongs_to :user, inverse_of: :responses
-  belongs_to :post                               # must be on two seperate lines -> undefined method 'arity'
+  belongs_to :user, inverse_of: :responses, counter_cache: true
+  belongs_to :post                  # must be on two seperate lines -> undefined method 'arity'
   
   has_many :ratings, dependent: :destroy
   has_many :raters, through: :ratings, source: :user

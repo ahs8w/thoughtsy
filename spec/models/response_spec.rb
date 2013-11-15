@@ -4,7 +4,8 @@ describe Response do
   
   let(:user) { FactoryGirl.create(:user) }
   let(:poster) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user: poster, content: "blah") }
+  let(:post) { FactoryGirl.create(:post, user: poster, content: "blah", 
+                                  created_at: 2.hours.ago, updated_at: 2.hours.ago) }
 
   before { @response = user.responses.build(content: "blahblah", post_id: post.id) }
 

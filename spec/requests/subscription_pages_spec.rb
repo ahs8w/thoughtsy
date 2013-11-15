@@ -29,20 +29,31 @@ describe "Subscription" do
         post.reload
         expect(post.followers).to include user
         expect(post.state).to eq 'subscribed'
-        expect(post.user.score).to be 4
+        expect(post.user.score).to be 4     # (1 + 3)
       end
 
-      describe "answering followed post and clicking respond again" do
+      describe "after answering followed post" do
         let!(:newer_post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
         before do
           fill_in 'response_content', with: "Lorem Ipsum"
           click_button "Respond"
-          visit root_path
-          click_button "Respond"
         end
 
-        it "the same post does not appear again" do
+        it "click respond again does not yield the same post" do
+          visit root_path
+          click_button "Respond"
           expect(page).not_to have_content("#{post.content}")
+        end
+
+        describe "as a different user" do
+          let(:new_user) { FactoryGirl.create(:user) }
+          before { sign_in new_user }
+
+          it "clicking respond does not yield the answered post" do
+            visit root_path
+            click_button "Respond"
+            expect(page).not_to have_content("#{post.content}")
+          end
         end
       end
 

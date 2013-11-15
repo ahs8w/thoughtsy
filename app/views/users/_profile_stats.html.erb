@@ -1,0 +1,31 @@
+<div class="dropdown">
+  <button class="btn dropdown-toggle" type="button" id="statMenu1" data-toggle="dropdown">
+    Thought Stats
+    <span class="ion-stats-bars"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="statMenu1">
+    <li role="presentation" class="dropdown-header">Responding</li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= "Responses: #{@user.responses.count}" %></a>
+    </li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= average_user_rating(@user) %></a>
+    </li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= "Reposts: #{@user.subscriptions.count}" %></a>
+    </li>
+      
+    <li role="presentation" class="divider"></li>
+
+    <li role="presentation" class="dropdown-header">Posting</li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= "Answered: #{@user.posts.answered.count}" %></a>
+    </li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= "Unanswered: #{@user.posts.personal.count}" %></a>
+    </li>
+    <li role="presentation"><a role="menuitem" tabindex="-1">
+      <%= "Reposts: #{@user.inverse_subscriptions.count}" %></a>
+    </li>
+  </ul>
+</div>

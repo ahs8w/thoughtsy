@@ -36,6 +36,10 @@
     padding-left: 0;
   }
 
+  li {
+    @extend .list-unstyled;
+  }
+
   .wrapper {
     min-height: 100%;
     height: auto !important;
@@ -50,6 +54,11 @@
     border: 1px solid darken($well-bg, 16%);
     margin-top: -55px;
     padding-top: 50px;
+  }
+
+  .panel {
+    background-color: #ddd;
+    padding: 10px;
   }
 
   .gravatar {
@@ -367,62 +376,53 @@
 
 /* shared/thought */
   
-  .thought_content, .wrapped_thought_content {
-    font-size: 1.15em;
-    text-align: center;
+  .thought_wrapper {
+    .thought {
+      margin: 15px;
+      .thought_content {
+        font-size: 1.15em;
+        text-align: center;
+      }
+      .thought_author {
+        font-size: .85em;
+        padding-top: 5px;
+      }
+    }
   }
-
-  .thought {
-    margin: 15px;
-  }
-
-  .thought_author {
-    font-size: .85em;
-    padding-top: 5px;
-  }
-
-/* debug */
-
-  /* uses SASS mixin to include box-sizing rules as stated above */
-
-  /*.debug_dump {
-    clear: both;
-    float: left;
-    width: 100%;
-    margin-top: 45px;
-    @include box_sizing;      
-  }*/
-
-  /*  <%= debug(params) if Rails.env.development? %>  */
 
 /* User Profile */
 
   .profile {
-    list-style: none;
     margin: 10px 0 0 0;
     li {
-      padding: 10px 0;
+      margin: 20px 0;
       border-bottom: 1px solid #FFF;
+      .users_show {
+        .thought_content {
+          text-align: left;
+        }
+      }
+      .profile_response {
+        margin: 10px 0;
+        padding-left: 40px;
+        overflow: auto;
+      }
+      .panel {
+        .thought_author a {
+          display: none;
+        }
+      }
     }
   }
 
-  .post_response {
-    padding-top: 5px;
-    overflow: auto;
-  }
-
   .user_stats {
-    font-size: 1.4em;
-    color: #999;
     margin: -10px auto 40px;
     .dropdown {
       display: inline-block;
+      margin-left: 20px;
+      margin-right: 20px;
       button {
-        margin-left: 20px;
-        margin-right: 20px;
-        .ion-email {
-          font-size: 32px;
-        }
+        font-size: 20px;
       }
     }
   }

@@ -4,7 +4,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
-        <%= render partial: "shared/thought", object: @post %>
+        <div class="thought_wrapper" id="responses_new">
+          <%= render partial: "shared/thought", object: @post %>
+        </div>
       </div>
     </div>
   </div>

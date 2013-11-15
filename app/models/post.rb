@@ -1,10 +1,11 @@
 class Post < ActiveRecord::Base
-  belongs_to :user, inverse_of: :posts
+  belongs_to :user, inverse_of: :posts, counter_cache: true
   has_many :responses
   has_many :ratings, through: :responses
 
   has_many :subscriptions
   has_many :followers, through: :subscriptions, source: :user
+    # returns users which are following the post
 
   mount_uploader :image, ImageUploader
   
@@ -12,8 +13,8 @@ class Post < ActiveRecord::Base
   validate :image_or_content
 
 
-  scope :ascending,   -> { order('created_at ASC') }
-  scope :descending,  -> { order('created_at DESC') }
+  scope :ascending,   -> { order('updated_at ASC') }
+  scope :descending,  -> { order('updated_at DESC') }
   scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
                                        'unanswered', 'reposted', user.id) }
   scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'reposted') }
