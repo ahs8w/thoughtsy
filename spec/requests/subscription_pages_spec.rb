@@ -19,7 +19,7 @@ describe "Subscription" do
     end
 
     describe "following (clicking repost)" do
-      before { click_button "repost" }
+      before { click_button "Repost" }
 
       it { should have_info_message("Thought followed.") }
       it { should have_content("You are following this post.") }

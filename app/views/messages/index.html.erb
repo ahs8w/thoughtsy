@@ -1,0 +1,39 @@
+<% provide(:page_title, "Messages") %>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well">
+      <h1>
+        <%= gravatar_for(@user, size: 55) %>
+        Personal Messages
+      </h1>
+      <p class="center small" id="profile_link"><%= link_to "Return to profile", user_path(@user) %></p>
+
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="panel-focus">
+            <h3>Received</h3>
+            <%= render partial: "message", collection: @received %>
+          </div>
+          <div class="panel-focus">
+            <h3>Sent</h3>
+            <%= render partial: "message", collection: @sent %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $('.collapse').on('show.bs.collapse', function() {
+    var $self = $(this).attr("id");
+    var id = $self.replace( /^\D+/g, '');
+    $.ajax({
+      url: "/messages/" + id +"/view",
+      type: 'PUT'
+    });
+    $(this).prev().find('div.strong').removeClass("strong");
+  });
+</script>

@@ -20,7 +20,8 @@ class User < ActiveRecord::Base
     # returns posts which the user is following
   has_many :inverse_subscriptions, through: :posts, source: :subscriptions
     # returns subscriptions where post.user == user
-    
+  
+  scope :score_descending,  -> { order('score DESC') }
 
 # callbacks
   before_save { email.downcase! }

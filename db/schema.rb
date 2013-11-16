@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131107094009) do
+ActiveRecord::Schema.define(version: 20131116083915) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -99,6 +99,8 @@ ActiveRecord::Schema.define(version: 20131107094009) do
     t.integer  "token_id"
     t.datetime "token_timer"
     t.integer  "score",                  default: 0
+    t.integer  "posts_count",            default: 0,     null: false
+    t.integer  "responses_count",        default: 0,     null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

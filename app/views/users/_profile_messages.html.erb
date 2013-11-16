@@ -8,11 +8,11 @@
     <% if current_user.received_messages.each do |msg| %>
       <% if msg.viewed? %>
         <li role="presentation"><a role="menuitem" tabindex="-1">
-          <%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></a>
+          <%= link_to "From: #{User.find(msg.user_id).username}", user_message_path(@user, msg) %></a>
         </li>
       <% else %>
         <li role="presentation"><a role="menuitem" tabindex="-1">
-          <strong><%= link_to "From: #{User.find(msg.user_id).username}", message_path(msg) %></strong></a>
+          <strong><%= link_to "From: #{User.find(msg.user_id).username}", user_message_path(@user, msg) %></strong></a>
         </li>
       <% end %>
     <% end.empty? %>
@@ -24,7 +24,7 @@
     <li role="presentation" class="dropdown-header">Sent Messages</li>
     <% if current_user.messages.each do |msg| %>
       <li role="presentation"><a role="menuitem" tabindex="-1">
-        <%= link_to "To: #{User.find(msg.receiver_id).username}", message_path(msg) %></a>
+        <%= link_to "To: #{User.find(msg.receiver_id).username}", user_message_path(@user, msg) %></a>
       </li>
     <% end.empty? %>
       <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1">empty</a></li>

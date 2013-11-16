@@ -27,12 +27,7 @@ module UsersHelper
   def unread_messages(user)
     msgs = user.received_messages.unread
     count = msgs.count
-    unless msgs.empty?
-      if count == 1
-        link_to("You have 1 unread message", message_path(msgs.first))
-      elsif count > 1
-        link_to("You have #{pluralize(count, 'unread message')}", user_path(user))
-      end
-    end
+    link_to("You have #{pluralize(count, 'unread message')}", user_messages_path(user)) unless msgs.empty?
   end
+
 end

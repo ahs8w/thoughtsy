@@ -101,14 +101,14 @@ describe "Rating Creation" do
   #   describe "clicking 'thought provoking'" do
   #     before { click_button 'thought provoking' }
 
-  #     it { should have_link('Send a note') }
+  #     it { should have_link('Send a message') }
   #   end
 
   #   describe "clicking 'brilliant!'" do
   #     before { click_button 'brilliant!' }
 
   #     it "has links for message and sharing" do
-  #       expect(page).to have_link('Send a note')
+  #       expect(page).to have_link('Send a message')
   #       expect(page).to have_selector('div#social_links')
   #     end
   #   end

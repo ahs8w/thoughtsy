@@ -56,7 +56,8 @@
     padding-top: 50px;
   }
 
-  .panel {
+  .panel-focus {
+    @extend .panel;
     background-color: #ddd;
     padding: 10px;
   }
@@ -321,12 +322,14 @@
   #responder_links {
     margin-top: 5px;
     form {
+      display: inline-block;
       margin: 0;
       input {
         font-family: 'Open Sans', sans-serif;
-        font-size: 95%;
+        font-size: 99%;
         padding: 0;
         border: 0;
+        margin-bottom: 2px;
       }
     }
   }
@@ -407,7 +410,7 @@
         padding-left: 40px;
         overflow: auto;
       }
-      .panel {
+      .panel-focus {
         .thought_author a {
           display: none;
         }
@@ -425,4 +428,31 @@
         font-size: 20px;
       }
     }
+  }
+
+  .panel-focus {
+    h3 {
+      text-align: center;
+      margin-top: 0;
+    }
+  }
+
+  #profile_link {
+    margin: -35px 0 50px;
+  }
+
+/* Messages Modal */
+
+  .modal {
+    overflow-y: auto;
+    .modal-dialog {
+      padding: 100px 0;
+      .modal-body {
+        padding-bottom: 50px;
+      }
+    }
+  }
+  
+  div.strong {
+    font-weight: bold;
   }

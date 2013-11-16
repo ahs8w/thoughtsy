@@ -19,7 +19,7 @@ describe "ResponsePages" do
     it { should have_content(post.content) }
     it { should have_selector('#time_explanation') }
     it { should have_link("offensive or inappropriate?") }
-    it { should have_button("repost") }
+    it { should have_button("Repost") }
     it { should have_selector('#new_response') }
   end
 

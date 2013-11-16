@@ -1,6 +1,8 @@
 Thoughtsy::Application.routes.draw do
   get "password_resets/new"
-  resources :users
+  resources :users do
+    resources :messages,  only: [:show, :index, :new]
+  end
   resources :sessions,  only: [:new, :create, :destroy]
   resources :posts,     except: [:new, :update, :edit] do
     resources :responses, only: [:new, :create]
@@ -13,7 +15,9 @@ Thoughtsy::Application.routes.draw do
   resources :ratings,   only: :create
   resources :responses, only: [:show, :destroy, :index]
   resources :password_resets, except: [:show, :index]
-  resources :messages,  only: [:create, :show]
+  resources :messages,  only: [:create, :destroy] do
+    put 'view', on: :member
+  end
   resources :subscriptions, only: [:create, :destroy]
 
 

@@ -151,6 +151,18 @@ describe User do
       # equivalent to:  it { expect(@user.remember_token).not_to be_blank }
   end
 
+## Scope ##
+  describe "score descending scope" do
+    let!(:second_user) { FactoryGirl.create(:user, score: 10) }
+    before do
+      @user.save
+    end
+
+    it "returns user with highest score first" do
+      expect(User.score_descending.first).to eq second_user
+    end
+  end 
+
 ## Post Associations ##
   describe "post-user association" do
     before { @user.save }

@@ -1,8 +1,8 @@
 <%= render 'ratings/rating' %>
 <small>
-  <div id="note_toggle">
+  <div id="message_toggle">
     <p>
-      Great response? <a href="#" data-toggle="modal" data-target="#notemodal">Send a note</a> to the responder or share it.
+      Great response? <a href="#" data-toggle="modal" data-target="#messagemodal">Send a message</a> to the responder or share it.
     </p>
   </div>
   <%= render 'shared/social_links' %>
@@ -10,22 +10,25 @@
 
 
 <!-- Modal -->
-<div id="notemodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="note"
+<div class="modal fade" id="messagemodal" tabindex="-1" role="dialog" aria-labelledby="messageToUser"
      aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Note to <%= @response.user.username %></h3>
-  </div>
-  <div class="modal-body">
-    <p><%= @response.user.username %> wrote:</p>
-    <p><%= @response.content %></p>
-    <%= form_for(@message, remote: true) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
-      <%= f.text_area :content, placeholder: "your note..." %>
-      <%= f.hidden_field :receiver_id, value: @response.user.id %>
-      <legend></legend>
-      <%= f.submit "Send", class: "btn btn-primary pull-left", id: "send_button" %>
-    <% end %>
-    <button class="btn pull-right" data-dismiss="modal" aria-hidden="true">Close</button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title" id="messageToUser">Message to <%= @response.user.username %></h3>
+      </div>
+      <div class="modal-body">
+        <p><%= @response.user.username %> wrote:</p>
+        <p><%= @response.content %></p>
+        <%= form_for(@message, remote: true) do |f| %>
+          <%= render 'shared/error_messages', object: f.object %>
+          <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your message..." %>
+          <%= f.hidden_field :receiver_id, value: @response.user.id %>
+          <%= f.submit "Send", class: "btn btn-primary pull-left", id: "send_button" %>
+        <% end %>
+        <button class="btn btn-default pull-right" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
   </div>
 </div>

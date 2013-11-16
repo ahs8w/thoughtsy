@@ -1,0 +1,44 @@
+<% provide(:page_title, "Messages") %>
+
+<div class="row">
+  <div class="col-md-2 center">
+    <%= link_to "Return to profile page", user_path(current_user) %>
+  </div>
+  <div class="col-md-8">
+    <div class="well darker" id="message">
+      <div><%= user_display(@message) %></div>
+      <br />
+      <p><%= @message.content %></p>
+    </div>
+    <% if current_user == @message.receiver %>
+      <div id="message_toggle">
+        <a href="#" data-toggle="modal" data-target="#messagemodal">Reply</a>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="messagemodal" tabindex="-1" role="dialog" aria-labelledby="replyToUser"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title" id="replyToUser">Reply to <%= @message.user.username %></h3>
+      </div>
+      <div class="modal-body">
+        <p><%= @message.user.username %> wrote:</p>
+        <p><%= @message.content %></p>
+        <%= form_for([@user, @reply], remote: true) do |f| %>
+          <%= render 'shared/error_messages', object: f.object %>
+          <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your reply..." %>
+          <%= f.hidden_field :receiver_id, value: @message.user.id %>
+          <%= f.submit "Send", class: "btn btn-primary pull-left", id: "send_button" %>
+        <% end %>
+        <button class="btn btn-default pull-right" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

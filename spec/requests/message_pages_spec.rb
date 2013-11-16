@@ -10,7 +10,7 @@ describe "Message Pages" do
 
   describe "Show page" do
 
-    context "as note receiver" do
+    context "as message receiver" do
       let!(:message) { FactoryGirl.create(:message, user_id: receiver.id, receiver_id: user.id) }
       before do
         visit user_path(user)
@@ -29,7 +29,7 @@ describe "Message Pages" do
       end
     end
 
-    context "as note sender" do
+    context "as message sender" do
       let!(:message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: receiver.id) }
       before do
         visit user_path(user)
@@ -49,12 +49,12 @@ describe "Message Pages" do
   #     click_button "brilliant!"
   #   end
 
-  #   it { should have_link('send a note') }
+  #   it { should have_link('Send a message') }
 
-  #   describe "-> send a note" do
-  #     before { click_link("send a note") }
+  #   describe "-> send a message" do
+  #     before { click_link("Send a message") }
 
-  #     it { should have_content("Note to #{receiver.username}") }
+  #     it { should have_content("Message to #{receiver.username}") }
 
   #     describe "with invalid information" do
   #       before { click_button "Send" }
@@ -67,10 +67,10 @@ describe "Message Pages" do
   #         fill_in 'message_content', with: "message"
   #       end
         
-  #       it "clicking 'Send' saves note" do
+  #       it "clicking 'Send' saves message" do
   #         expect{ click_button 'Send' }.to change(Message, :count).by(1)
   #         expect(page).to have_content('You rated this article: brilliant!')
-  #         expect(page).to have_selector('#js_flash_messages', text: 'Note sent!')
+  #         expect(page).to have_selector('#js_flash_messages', text: 'Message sent!')
   #       end
   #     end
   #   end

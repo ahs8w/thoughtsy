@@ -49,7 +49,7 @@ describe MessagesController do
 
       it "shows the correct flash message" do
         xhr :post, 'create', message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
-        expect(flash[:success]).to eq "Note sent!"
+        expect(flash[:success]).to eq "Message sent!"
       end
 
       it "sends an email" do
