@@ -106,8 +106,8 @@ describe "Post pages" do
       let!(:newer_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago, state: 'answered') }
       before { visit posts_path }
 
-      it "newest post is first" do
-        expect(first('.index_post')).to have_content(newer_post.content)
+      it "most recently updated (responded) post is first" do
+        expect(first('h3')).to have_content(newer_post.content)
       end
     end
 
@@ -319,7 +319,7 @@ describe "Post pages" do
 
       describe "error messages" do
         before { click_button "Post a thought" }
-        it { should have_error_message('error') }
+        it { should have_content("* Post must include either an image or content") }
       end
     end
 

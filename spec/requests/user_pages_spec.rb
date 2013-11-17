@@ -57,7 +57,7 @@ describe "UserPages" do
       let!(:new_user) { FactoryGirl.create(:user, score: 5) }
       before { visit users_path }
 
-      it "higher score is at the top", :focus=>true do
+      it "higher score is at the top" do
         expect(find('ul.users').first('li')).to have_content("#{new_user.username}")
       end
     end
@@ -218,8 +218,12 @@ describe "UserPages" do
       describe "after submission" do
         before { click_button submit }
 
-        it { should have_title('Sign up') }
-        it { should have_error_message('error') }
+        it "redisplays form with error messages" do
+          expect(page).to have_content("Username can't be blank")
+          expect(page).to have_content("Password can't be blank")
+          expect(page).to have_content("Email can't be blank")
+          expect(page).to have_content("Email is invalid")
+        end
       end
     end
 
@@ -264,7 +268,10 @@ describe "UserPages" do
     describe "with invalid information" do
       before { click_button "Save changes" }
 
-      it { should have_error_message('error') }
+      it "redisplays form with error messages" do
+        expect(page).to have_content("form contains 1 error")
+        expect(page).to have_content("Password is too short")
+      end
     end
 
     describe "with valid information" do

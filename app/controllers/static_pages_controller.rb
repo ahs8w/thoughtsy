@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
 
   def home
     if signed_in?
-      @post = current_user.posts.build
+      @post = Post.new
       if current_user.token_id?                                   # token_id exists
         if current_user.timer_valid                               #   timer valid
           output_3

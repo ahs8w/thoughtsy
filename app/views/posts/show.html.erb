@@ -3,28 +3,29 @@
 <div class="well">
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      <div class="thought_wrapper" id="posts_show">
-        <%= render partial: "shared/thought", object: @post %>
+      <div id="posts_show">
+        <div class="thought_wrapper">
+          <div class="panel-focus">
+            <%= render partial: "shared/thought", object: @post %>
+          </div>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+          <ul class="responses">
+            <% @responses.each do |response| %>
+              <li>
+                <div class="thought_wrapper">
+                  <div class="panel-focus">
+                    <%= render partial: "shared/thought", object: response %>
+                    <% if author_or_follower(@post) %>
+                      <%= render partial: 'ratings/form', locals: { response: response } unless current_user.id == response.user.id %>
+                    <% end %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="well">
-  <div class="row">  
-    <div class="col-md-10 col-md-offset-1">
-      <ul class="responses_show">
-        <% @responses.each do |response| %>
-          <li>
-            <div class="thought_wrapper" id="posts_show">
-              <%= render partial: "shared/thought", object: response %>
-              <% if author_or_follower(@post) %>
-                <%= render partial: 'ratings/form', locals: { response: response } unless current_user.id == response.user.id %>
-              <% end %>
-            </div>
-          </li>
-        <% end %>
-      </ul>
     </div>
   </div>
 </div>

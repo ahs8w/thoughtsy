@@ -84,8 +84,7 @@ class Post < ActiveRecord::Base
   handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }
 
   def set_token_timer
-    self.token_timer ||= Time.zone.now
-    save!
+    self.update_attribute(:token_timer, Time.zone.now) unless self.token_timer
   end
 
   def reset_token_timer

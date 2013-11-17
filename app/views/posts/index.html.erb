@@ -1,31 +1,22 @@
 <% provide(:page_title, "Thoughts") %>
 
-<% @posts.each do |post| %>
+<div class="well">
+  <% @posts.each do |post| %>
 
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div class="panel-focus index_post">
-      <span>
-        <%= gravatar_for(post.user, size: 50) %>
-      </span>
-      <p class="lead">
-        <%= link_to "#{wrap(post.content)}", post_path(post) %>
-      </p>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div id="posts_index">
+        <div class="panel-focus">
+          <h3>
+            <%= gravatar_for(post.user, size: 50) %>
+            <%= link_to "#{wrapped(post.content, 140)}", post_path(post) %><br />
+            <span class="label label-default"><%= date_time(post) %></span>
+          </h3>
+          
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <ul class="responses">
-      <% post.responses.descending.each do |response| %>
-        <li>
-          <div class="thought_wrapper" id="posts_index">
-            <%= render partial: "shared/thought", object: response, locals: { wrapped: true } %>
-          </div>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-</div>
 
-<% end %>
+  <% end %>
+</div>

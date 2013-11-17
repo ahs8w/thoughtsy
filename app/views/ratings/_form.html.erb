@@ -1,36 +1,38 @@
-<% if !response.ratings.empty? && response.raters.include?(current_user) %>
-  <div>
-    <p class="center">You rated this article: <%= current_user_rating(response) %></p>
-  </div>
-<% else %>
-  <div class="rating_form" id="rating_form_<%= response.id %>">
-    <span id="1">
-      <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:response_id, :value => response.id) %>
-        <%= f.hidden_field(:value, :value => '1') %>
-        <%= f.submit "weak", class: "btn btn-rating1" %>
-      <% end %>
-    </span>
-    <span id="2">
-      <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:response_id, :value => response.id) %>
-        <%= f.hidden_field(:value, :value => '2') %>
-        <%= f.submit "average", class: "btn btn-rating2" %>
-      <% end %>
-    </span>
-    <span id="3">
-      <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:response_id, :value => response.id) %>
-        <%= f.hidden_field(:value, :value => '3') %>
-        <%= f.submit "thought provoking", class: "btn btn-rating3" %>
-      <% end %>
-    </span>
-    <span id="4">
-      <%= form_for(@rating, remote: true) do |f| %>
-        <%= f.hidden_field(:response_id, :value => response.id) %>
-        <%= f.hidden_field(:value, :value => '5') %>
-        <%= f.submit "brilliant!", class: "btn btn-rating4" %>
-      <% end %>
-    </span>
-  </div>
-<% end %>
+<div class="ratings">
+  <% if !response.ratings.empty? && response.raters.include?(current_user) %>
+    <div>
+      <p class="center small">You rated this article: <%= current_user_rating(response) %></p>
+    </div>
+  <% else %>
+    <div class="rating_form" id="rating_form_<%= response.id %>">
+      <span id="1">
+        <%= form_for(@rating, remote: true) do |f| %>
+          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:value, :value => '1') %>
+          <%= f.submit "weak", class: "btn btn-xs btn-primary" %>
+        <% end %>
+      </span>
+      <span id="2">
+        <%= form_for(@rating, remote: true) do |f| %>
+          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:value, :value => '2') %>
+          <%= f.submit "average", class: "btn btn-xs btn-primary" %>
+        <% end %>
+      </span>
+      <span id="3">
+        <%= form_for(@rating, remote: true) do |f| %>
+          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:value, :value => '3') %>
+          <%= f.submit "thought provoking", class: "btn btn-xs btn-primary" %>
+        <% end %>
+      </span>
+      <span id="4">
+        <%= form_for(@rating, remote: true) do |f| %>
+          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:value, :value => '5') %>
+          <%= f.submit "brilliant!", class: "btn btn-xs btn-primary" %>
+        <% end %>
+      </span>
+    </div>
+  <% end %>
+</div>

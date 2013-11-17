@@ -55,8 +55,7 @@ class User < ActiveRecord::Base
 # Password_reset methods
   def send_password_reset
     generate_token(:password_reset_token)
-    self.password_reset_sent_at = Time.zone.now
-    save!
+    self.update_attribute(:password_reset_sent_at, Time.zone.now)
     UserMailer.delay.password_reset(self)
   end
 
@@ -68,9 +67,8 @@ class User < ActiveRecord::Base
 
 # State_machine tokens
   def set_tokens(id)
-    self.token_id ||= id
-    self.token_timer ||= Time.zone.now
-    save!
+    self.update_attribute(:token_id, id) unless self.token_id
+    self.update_attribute(:token_timer, Time.zone.now) unless self.token_timer
   end
 
   def reset_tokens

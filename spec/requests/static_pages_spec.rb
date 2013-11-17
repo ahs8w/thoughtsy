@@ -101,10 +101,13 @@ describe "StaticPages" do
       describe "with expired token_timer" do
         let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
         before do
-          user.token_timer = 25.hours.ago
-          user.token_id = token_response.id
-          user.save
+          user.update_attribute(:token_timer, 25.hours.ago)
+          user.update_attribute(:token_id, token_response.id)
           visit root_path
+        end
+
+        it "post form does not have an error message" do
+          expect(page).not_to have_content("* Post must include either an image or content")
         end
 
         it "updates user tokens and score" do

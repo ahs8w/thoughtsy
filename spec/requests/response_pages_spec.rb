@@ -44,7 +44,7 @@ describe "ResponsePages" do
 
       it "has an error message" do
         click_button "Respond"
-        expect(page).to have_error_message("error")
+        expect(page).to have_content("* Post must include either an image or content")
       end
     end
 

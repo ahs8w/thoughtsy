@@ -12,11 +12,6 @@
     height: 100%;
   }
 
-  .thought img {
-    @extend .thumbnail;
-    @include center-block();
-  }
-
   body {
     padding-top: 50px;
     font-family: 'Open Sans', sans-serif;
@@ -48,6 +43,11 @@
     .container {
       padding-top: 50px;
     }
+  }
+
+  .thought img {
+    @extend .thumbnail;
+    @include center-block();
   }
 
   .well {
@@ -141,24 +141,7 @@
     }
   }
 
-/* rating form behaviors */
-
-  form.new_rating {
-    display: inline;
-  }
-
-  .rating_form {
-    text-align: center;
-  }
-
-  #social_links {
-    i {
-      font-size: 26px;
-      margin: 0 10px;
-    }
-  }
-
-/* flash messages */
+/* flash/error messages */
 
   #js_flash_messages {
     text-align: center;
@@ -169,16 +152,6 @@
       position: absolute;
       width: 100%;
     }
-    /*  
-      z-index: 1050;
-      margin: 2px 0;
-      height: 46px;
-      width: 20%;
-      position: absolute;
-      left: 40%;
-    }*/
-    /* centering method with fluid layouts and absolute positioning */
-
   }
 
   div #error_explanation {
@@ -245,27 +218,31 @@
   }
 
   form input.btn {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   #error_explanation {
-    @extend .alert;
-    @extend .alert-danger;
-    @extend .alert-block;
-    text-align: center;
-    .alert {
-      width: 50%;
-      margin: 15px auto;
-    }
+    margin-top: -20px;
     color: #f00;
-    ul {
-      list-style: none;
-    }
+    text-align: center;
   }
 
   .field_with_errors {
-    @extend .control-group.danger;
-    @extend .label-danger
+    @extend .has-error;
+  }
+
+  #post_form, #response_form {
+    position: relative;
+    .panel-focus {
+      padding: 20px;
+    }
+    #error_explanation {
+      position: absolute;
+      width: 316px;
+      left: 50%;
+      top: -10px;
+      margin-left: -158px;
+    }
   }
 
   #image_fields_container {
@@ -346,35 +323,53 @@
     }
   }
 
-/* Posts#index #show */
+/* Posts Pages */
+  
+  .responses li {
+    margin: 40px 0;
+  }
 
-  .index_post {
-    padding: 10px;
-    margin-bottom: 0;
-    .lead {
-      font-weight: 400;
-      margin-bottom: 0;
-      a {
-        &:hover {
-          text-decoration: none;
+  #posts_index {
+    .panel-focus {
+      @include clearfix();
+      h3 {
+        line-height: 1.3;
+      }
+      .timestamp {
+        float: right;
+      }
+    }
+    a {
+      text-decoration: none;
+    }
+    img {
+      margin-right: 10px;
+      float: left;
+    }
+  }
+
+  #posts_show {
+    .ratings {
+      margin-top: -34px;
+      .rating_form {
+        text-align: center;
+        form.new_rating {
+          display: inline;
+          input.btn {
+            margin-bottom: 0;
+          }
+        }
+        .panel-focus {
+        }
+      }
+
+      #social_links {
+        i {
+          font-size: 26px;
+          margin: 0 10px;
         }
       }
     }
-    img {
-      margin-top: 5px;
-    }
-  }
-
-  .posts_show {
-    margin: 40px 0;
-  }
-
-  .responses {
-    margin: 20px 0 40px;
-  }
-
-  .responses_show li {
-    margin: 40px 0;
   }
 
 /* shared/thought */

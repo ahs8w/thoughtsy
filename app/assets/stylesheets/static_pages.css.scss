@@ -26,11 +26,10 @@
 }
 
 #post_form {
-  width: 80%;
-  margin: -25px auto 25px;
+  margin: -30px auto 30px;
   .new_post {
     margin-bottom: 0;
-    div#submit {
+    #submit {
       padding: 0;
     }
     .field_with_errors {
@@ -52,11 +51,12 @@
     form {
       margin-bottom: 0;
       input {
-        margin-bottom: 10px;
         padding: 16px 36px;
       }
     }
     #expiration_message {
+      position: absolute;
+      text-align: center;
       color: $gray-light;
       top: 65px;
     }

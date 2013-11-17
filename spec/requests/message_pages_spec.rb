@@ -3,47 +3,65 @@ require 'spec_helper'
 describe "Message Pages" do
   subject { page }
 
-  let(:receiver) { FactoryGirl.create(:user) }
+  let(:sender) { FactoryGirl.create(:user) }
   let(:user) { FactoryGirl.create(:user) }
   
   before { sign_in user }
 
-  describe "Show page" do
+  describe "Index page" do
+    let!(:message) { FactoryGirl.create(:message, user_id: sender.id, receiver_id: user.id) }
 
-    context "as message receiver" do
-      let!(:message) { FactoryGirl.create(:message, user_id: receiver.id, receiver_id: user.id) }
+    describe "as message receiver" do
       before do
-        visit user_path(user)
-        click_link("From: #{receiver.username}")
+        visit root_path
+        click_link("You have 1 unread message")
       end
           
       it { should have_title("Messages") }
-      it { should have_content("From: #{receiver.username}") }
+      it { should have_link("From: #{sender.username}") }
+      it { should have_selector("div.strong") }
       it { should have_content(message.content) }
       it { should have_link("Reply") }
       it { should have_link("Return", href: user_path(user)) }
 
-      it "sets viewed? token to true" do
-        message.reload
-        expect(message.viewed?).to eq true
-      end
-    end
+      describe "Replying" do
+        before { click_link "Reply" }
 
-    context "as message sender" do
-      let!(:message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: receiver.id) }
-      before do
-        visit user_path(user)
-        click_link("To: #{receiver.username}")
-      end
+        context "with invalid information" do
+          it "redirects back and displays error" do
+            click_button "Send"
+            expect(page).to have_error_message("Message cannot be blank!")
+          end
+        end
 
-      it { should have_content("To: #{receiver.username}") }
-      it { should_not have_link("Reply") }
+        context "with valid information" do
+          before do
+            fill_in 'message_content', with: "reply"
+            click_button "Send"
+          end
+
+          it "sends a reply to sender" do
+            expect(page).to have_success_message("Message sent!")
+            expect(Message.count).to eq 2
+          end
+
+          describe "as message sender" do
+            before do
+              sign_in sender
+              visit user_messages_path(sender)
+            end
+
+            it { should have_content("To: #{user.username}") }
+            it { should have_link("From: #{user.username}") }
+          end
+        end
+      end
     end
   end
 
-  # describe "Creation with JS:", :js=>true do
+  # describe "Message creation with JS:", :js=>true do
   #   let(:post) { FactoryGirl.create(:post, user_id: user.id) }
-  #   let!(:response) { FactoryGirl.create(:response, user_id: receiver.id, post_id: post.id) }
+  #   let!(:response) { FactoryGirl.create(:response, user_id: sender.id, post_id: post.id) }
   #   before do
   #     visit post_path(post)
   #     click_button "brilliant!"
@@ -54,12 +72,12 @@ describe "Message Pages" do
   #   describe "-> send a message" do
   #     before { click_link("Send a message") }
 
-  #     it { should have_content("Message to #{receiver.username}") }
+  #     it { should have_content("Message to #{sender.username}") }
 
   #     describe "with invalid information" do
   #       before { click_button "Send" }
 
-  #       it { should have_error_message("error") }
+  #       it { should have_content("error") }
   #     end
 
   #     describe "with valid information" do
@@ -74,5 +92,26 @@ describe "Message Pages" do
   #       end
   #     end
   #   end
+  # end
+
+  # describe "Reply creation with JS:", :js=>true do
+  #   let!(:message) { FactoryGirl.create(:message, user_id: sender.id, receiver_id: user.id) }
+  #   let!(:sent_message) { FactoryGirl.create(:message, user_id: user.id, receiver_id: sender.id) }
+  #   before do
+  #     visit user_messages_path(user)
+  #   end
+
+  #   it "clicking received message sets viewed? and removes strong tag" do
+  #     click_link "From:"
+  #     message.reload
+  #     expect(message.viewed?).to eq true
+  #     expect(page).not_to have_selector('div.strong')
+  #   end
+
+  #   it "clicking sent message doesn't affect viewed?" do
+  #     click_link "To:"
+  #     message.reload
+  #     expect(message.viewed?).to eq false
+  #   end 
   # end
 end

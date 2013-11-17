@@ -20,7 +20,7 @@ describe MessagesController do
 
       it "redirects to home after save" do
         post :create, message: { user_id: user.id, content: 'message', receiver_id: receiver.id }
-        expect(response).to redirect_to root_url
+        expect(response).to redirect_to user_messages_path(user)
       end
     end
     ## context 'with invalid attributes' -> using AJAX
