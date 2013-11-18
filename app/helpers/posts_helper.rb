@@ -11,10 +11,11 @@ module PostsHelper
     # split: divides str into substrings based on delimiter(default: whitespace)
     # map: applies wrap_long_string method to each substring(word)
 
-    # allows for n/ entered into content to be maintained in display
   def custom_format(content)
     simple_format(sanitize(raw(content)))
   end
+    # allows for n/ entered into content to be maintained in display
+    # doesn't function properly when truncated
 
   def date_time(thought)
     if thought.updated_at < 10.days.ago

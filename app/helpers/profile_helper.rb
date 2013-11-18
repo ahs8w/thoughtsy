@@ -1,4 +1,5 @@
 module ProfileHelper
+  require 'will_paginate/array'
   
   def username(user)
     if user.id != current_user.id

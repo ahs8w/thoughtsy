@@ -1,0 +1,33 @@
+// destroy.js.erb
+
+var posts = $('#link_<%= @post.id %>');
+var flash = $('#js_flash_messages');
+
+// calls flash message, updates post count
+flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+flash.fadeOut(5000);
+$('#post_count').html("Posts (<%= @user.posts.count %>)");
+
+// remove post from view
+posts.remove();
+
+
+// flag.js.erb
+
+var links = $('#responder_links');
+var flash = $('#js_flash_messages');
+
+$('#thought').html("<%= escape_javascript(render(partial: 'shared/thought', object: @token_post)) %>");
+
+flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+flash.delay(3000).fadeOut('slow');
+
+
+// repost.js.erb
+
+var links = $('#responder_links');
+var flash = $('#js_flash_messages');
+
+flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
+flash.delay(3000).fadeOut('slow');
+links.hide();

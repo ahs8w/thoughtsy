@@ -1,0 +1,10 @@
+<div class="index_post">
+  <h3>
+    <%= link_to gravatar_for(index_post.user, size: 50), user_path(index_post.user) %>
+    <%= link_to wrapped(index_post.content, 140), post_path(index_post) unless index_post.content.nil? %>
+    <div class="image">
+      <%= link_to image_tag(index_post.image_url(:thumb)), post_path(index_post) if index_post.image.present? %>
+    </div>
+    <span class="label label-default"><%= date_time(index_post) %></span>
+  </h3>
+</div>

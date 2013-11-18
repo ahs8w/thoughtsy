@@ -45,15 +45,18 @@
     }
   }
 
-  .thought img {
-    @extend .thumbnail;
-    @include center-block();
+  .thought, .image {
+    img {
+      @extend .thumbnail;
+      @include center-block();
+      margin-bottom: 0;
+    }
   }
 
   .well {
     border: 1px solid darken($well-bg, 16%);
     margin-top: -55px;
-    padding-top: 50px;
+    padding-top: 55px;
   }
 
   .panel-focus {
@@ -62,8 +65,18 @@
     padding: 10px;
   }
 
+  .panel-lighter {
+    @extend .panel;
+    background-color: #eee;
+    border-color: #ddd;
+  }
+
   .gravatar {
     @extend .img-circle;
+  }
+
+  div.pagination {
+    margin-top: 0;
   }
 
 /* typography */
@@ -80,14 +93,6 @@
     margin-top: 5px;
     text-align: center;
     font-variant: small-caps;
-  }
-
-  h2 {
-    font-size: 1.2em;
-    letter-spacing: -1px;
-    margin-bottom: 30px;
-    font-weight: normal;
-    color: $gray-light;     /* SASS variable inferred from bootstrap framework (orig. LESS) */
   }
 
   p {
@@ -113,6 +118,11 @@
 
   .timestamp {
     color: $gray-light;
+  }
+
+  h4#password_reset {
+    text-align: center;
+    margin-bottom: 40px;
   }
 
 /* sidebar */
@@ -162,20 +172,31 @@
 
 /* header */
 
-  #logo {
-    font-size: 2em;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-    font-weight: 300;
-    margin-left: 20px;
-  }
-
-  .navbar-right:last-child {
-    margin-right: 20px !important;
-  }
-
-  button.navbar-toggle {
-    margin-right: 20px;
+  .navbar {
+    #logo {
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      font-weight: 300;
+      margin-left: 20px;
+    }
+    .navbar-right:last-child {
+      margin-right: 20px !important;
+    }
+    button.navbar-toggle {
+      margin-right: 20px;
+    }
+    .dropdown-menu {
+      a {
+        display: inline-block;
+      }
+      .ion {
+        float: right;
+        padding-top: 5px;
+        padding-right: 10%;
+        font-size: 18px;
+      }
+    }
   }
 
 /* footer */
@@ -282,17 +303,44 @@
     }
   }
 
-/* Users index */
-
-  .users {
-    list-style: none;
-    margin: 0;
-    li {
-      overflow: auto;
-      padding: 10px 0;
-      border-top: 1px solid $gray-lighter;
+/* shared/thought */
+    
+    .thought_wrapper {
+      .thought {
+        margin: 15px;
+        .thought_content {
+          font-size: 1.15em;
+          text-align: center;
+        }
+        .thought_author {
+          @include clearfix();
+          font-size: .85em;
+          padding-top: 5px;
+        }
+      }
     }
-  }
+
+    .index_post {
+      text-align: center;
+      h3 {
+        line-height: 1.3;
+        margin: 10px;
+      }
+      .label {
+        vertical-align: bottom;
+      }
+      a {
+        text-decoration: none;
+      }
+      .gravatar {
+        margin-right: 10px;
+        float: left;
+      }
+      .image {
+        width: 50%;
+        @include center-block();
+      }
+    }
 
 /* Response#new */
 
@@ -324,97 +372,63 @@
   }
 
 /* Posts Pages */
-  
+
+  #posts_show {
+    img {
+      margin-bottom: 10px;
+    }
+  }
+
+  #show_post {
+    .thought_content {
+      font-size: 24px;
+      font-weight: 500;
+      p {
+        line-height: 1.3;
+      }
+    }
+  }
+
   .responses li {
     margin: 40px 0;
   }
 
-  #posts_index {
-    .panel-focus {
-      @include clearfix();
-      h3 {
-        line-height: 1.3;
+  .ratings {
+    margin-top: -34px;
+    .rating_form {
+      text-align: center;
+      form.new_rating {
+        display: inline;
+        input.btn {
+          margin-bottom: 0;
+        }
       }
-      .timestamp {
-        float: right;
-      }
     }
-    a {
-      text-decoration: none;
-    }
-    img {
-      margin-right: 10px;
-      float: left;
-    }
-  }
 
-  #posts_show {
-    .ratings {
-      margin-top: -34px;
-      .rating_form {
-        text-align: center;
-        form.new_rating {
-          display: inline;
-          input.btn {
-            margin-bottom: 0;
-          }
-        }
-        .panel-focus {
-        }
-      }
-
-      #social_links {
-        i {
-          font-size: 26px;
-          margin: 0 10px;
-        }
+    #social_links {
+      i {
+        font-size: 26px;
+        margin: 0 10px;
       }
     }
   }
 
-/* shared/thought */
-  
-  .thought_wrapper {
-    .thought {
-      margin: 15px;
-      .thought_content {
-        font-size: 1.15em;
-        text-align: center;
-      }
-      .thought_author {
-        font-size: .85em;
-        padding-top: 5px;
-      }
-    }
-  }
+/* User Pages */
 
-/* User Profile */
-
-  .profile {
-    margin: 10px 0 0 0;
-    li {
-      margin: 20px 0;
-      border-bottom: 1px solid #FFF;
-      .users_show {
-        .thought_content {
-          text-align: left;
-        }
-      }
-      .profile_response {
-        margin: 10px 0;
-        padding-left: 40px;
+  #users_index {
+    .users {
+      list-style: none;
+      margin: 0;
+      li {
         overflow: auto;
-      }
-      .panel-focus {
-        .thought_author a {
-          display: none;
-        }
+        padding: 10px 0;
+        border-top: 1px solid $gray-lighter;
       }
     }
   }
 
   .user_stats {
-    margin: -10px auto 40px;
+    margin: -10px auto 70px;
     .dropdown {
       display: inline-block;
       margin-left: 20px;
@@ -422,13 +436,26 @@
       button {
         font-size: 20px;
       }
+      .dropdown-menu {
+        width: 179px;
+      }
     }
   }
 
-  .panel-focus {
-    h3 {
-      text-align: center;
-      margin-top: 0;
+  #profile {
+    margin-bottom: 70px;
+    text-align: center;
+    .panel-focus {
+      .gravatar {
+        visibility: hidden;
+      }
+    }
+    .thought_wrapper {
+      @include center-block();
+      width: 80%;
+      a {
+        text-decoration: none;
+      }
     }
   }
 
@@ -436,18 +463,43 @@
     margin: -35px 0 50px;
   }
 
-/* Messages Modal */
+/* Messages Pages */
 
-  .modal {
-    overflow-y: auto;
-    .modal-dialog {
-      padding: 100px 0;
-      .modal-body {
-        padding-bottom: 50px;
+  #messages_index {
+    .panel-focus {
+      h3 {
+        text-align: center;
+        margin-top: 0;
       }
     }
+    .modal {
+      overflow-y: auto;
+      .modal-dialog {
+        padding: 100px 0;
+        .modal-body {
+          padding-bottom: 50px;
+        }
+      }
+    }
+    div.strong {
+      font-weight: bold;
+    }
   }
-  
-  div.strong {
-    font-weight: bold;
+
+/* About */
+
+  #about {
+    p {
+      font-size: 1.2em
+    }
+    .panel-focus {
+      h4 {
+        margin: 30px auto;
+        font-size: 1.4em;
+        font-weight: 600;
+      }
+      p {
+        margin-left: 20px;
+      }
+    }
   }

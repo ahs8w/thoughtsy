@@ -46,6 +46,9 @@ class MessagesController < ApplicationController
 
     def correct_user
       @user = User.find(params[:user_id])
-      redirect_to root_path unless current_user == @user
+      unless current_user == @user
+        flash[:info] = "Unauthorized access"
+        redirect_to root_path
+      end
     end
 end

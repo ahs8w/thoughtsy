@@ -55,6 +55,7 @@ describe "Authentication  : " do
         describe "visiting the user index" do
           before { visit users_path }
           it { should have_title("Sign in") }
+          it { should have_info_message("Please sign in") }
         end
 
         describe "visiting the edit page" do

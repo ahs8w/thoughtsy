@@ -2,74 +2,72 @@
 
 
 <div class="col-md-10 col-md-offset-1">
-<div class="well">
-  <h1>
-    <%= gravatar_for(@user, size: 55) %>
-    <%= @user.username %>
-    <small> | <%= @user.score %></small>
-  </h1>
+  <div class="well" id="profile">
+    <h1>
+      <%= gravatar_for(@user, size: 55) %>
+      <%= @user.username %>
+      <small> | <%= @user.score %></small>
+    </h1>
 
-  <% if current_user?(@user) %>
-    <div class="user_stats center">
-      <span>
-        <%= render "profile_messages" %>
-      </span>
-      <span>
-        <%= render "profile_stats" %>
-      </span>
-    </div>
-  <% end %>
-  
-  
-  <div class="row">
-    <div class="col-md-10 col-md-offset-1">
-      <h4 class="center">Public posts</h4>
-
-      <ul class="profile">
-        <% public_posts(@user).each do |post| %>
-          <li>
-            <div class="profile_post">
-              <% if post.user == @user %>
-                <div class="panel-focus">
-                  <div class="thought_wrapper users_show">
-                    <%= render partial: 'shared/thought', object: post, locals: {wrapped: true, profile: true, length: 100, link: true} %>
-                  </div>
-                </div>
-              <% else %>
-                <div class="thought_wrapper users_show">
-                  <%= render partial: 'shared/thought', object: post, locals: {wrapped: true, profile: true, length: 100, link: true} %>
-                </div>
-              <% end %>
+    <% if current_user?(@user) %>
+      <div class="user_stats center">
+        <span>
+          <button class="btn dropdown-toggle">
+            <%= link_to "Messages", user_messages_path(@user) %>
+            <% if @user.received_messages.unread.empty? %>
+              <span class="ion-email"></span>
+            <% else %>
+              <span class="badge"><%= @user.received_messages.unread.size %></span>
+            <% end %>
+          </button>
+        </span>
+        <span>
+          <%= render "profile_stats" %>
+        </span>
+        <span>
+          <button class="btn dropdown-toggle">
+            <%= link_to "Settings", edit_user_path(@user) %> <span class="ion-gear-a"></span>
+          </button>
+        </span>
+      </div>
+    <% end %>
+    
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <h2 class="center">Answered thoughts and responses</h2>
+        <% @public_posts.each do |post| %>
+          <% if post.user == @user %>
+            <div class="panel-focus">
+              <%= render partial: 'posts/index_post', object: post %>
             </div>
-            
-            <ul class="profile_response">
-              <% post.responses.descending.each do |response| %>
-                <li>
-                  <% if response.user == @user %>
-                    <div class="panel-focus">
-                      <div class="thought_wrapper users_show">
-                        <%= render partial: 'shared/thought', object: response, locals: {wrapped: true, profile: true, length: 80} %>
-                      </div>
-                    </div>
-                    <%= pluralize(post.responses.count - 1, 'other response') %>
-                  <% else %>
-                    <%= pluralize(post.responses.count - 1, 'response') %>
-                  <% end %>
-                </li>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
-      </ul>
+          <% end %>
       
-      <% if current_user?(@user) %>
-        <h4 class="center">Unanswered Thoughts</h4>
-        <div id="personal_posts">
-          <%= render partial: 'profile_thought', object: personal_posts(@user), 
-              locals: {:message=>"unanswered thoughts"} %>
-        </div>
-      <% end %>
+          <% post.responses.descending.each do |response| %>
+            <% if response.user == @user %>
+              <div class="thought_wrapper">
+                <div class="panel-focus">
+                  <%= render partial: 'shared/thought', object: response, locals: { profile: true } %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= will_paginate @public_posts %>
+        
+        <% if current_user?(@user) %>
+          <div class="personal_posts">
+            <h2 class="center">Unanswered thoughts</h2>
+            <% @personal_posts.each do |post| %>
+              <div class="thought_wrapper">
+                <div class="panel-lighter">
+                  <%= render partial: 'shared/thought', object: post, locals: { profile: true } %>
+                </div>
+              </div>
+            <% end %>
+            <%= will_paginate @personal_posts %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
 </div>

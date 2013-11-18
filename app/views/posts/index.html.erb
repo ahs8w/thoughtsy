@@ -1,22 +1,13 @@
 <% provide(:page_title, "Thoughts") %>
 
 <div class="well">
-  <% @posts.each do |post| %>
-
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <div id="posts_index">
+      <% @posts.each do |post| %>
         <div class="panel-focus">
-          <h3>
-            <%= gravatar_for(post.user, size: 50) %>
-            <%= link_to "#{wrapped(post.content, 140)}", post_path(post) %><br />
-            <span class="label label-default"><%= date_time(post) %></span>
-          </h3>
-          
+          <%= render partial: 'index_post', object: post %>
         </div>
-      </div>
+      <% end %> 
     </div>
   </div>
-
-  <% end %>
 </div>

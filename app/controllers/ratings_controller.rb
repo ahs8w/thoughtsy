@@ -17,10 +17,10 @@ class RatingsController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          flash[:warning] = "Your rating could not be saved."
+          flash[:danger] = "Your rating could not be saved."
           redirect_to :back
         end
-        format.js  { flash.now[:warning] = "Your rating could not be saved." }
+        format.js  { flash.now[:danger] = "Your rating could not be saved." }
       end
     end
   end
@@ -34,6 +34,9 @@ class RatingsController < ApplicationController
       response = Response.find(rating_params[:response_id])  # or (params[:rating][:response_id])
       post = response.post
       author = post.user
-      redirect_to root_path unless current_user.id == author.id || current_user.followed_posts.include?(post)
+      unless current_user.id == author.id || current_user.followed_posts.include?(post)
+        flash[:info] = "Unauthorized access"
+        redirect_to root_path
+      end
     end
 end

@@ -7,6 +7,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @public_posts = public_posts(@user).paginate(page: params[:page], :per_page => 4)
+    @personal_posts = @user.posts.personal.descending.paginate(page: params[:page], :per_page => 5)
   end
 
   def new
@@ -64,10 +66,16 @@ class UsersController < ApplicationController
 ## Before filters ##
     def correct_user
       @user = User.find(params[:id])  # common to both edit and update actions -> refactored to shared before filter
-      redirect_to(root_url) unless current_user?(@user)
+      unless current_user?(@user)  
+        flash[:info] = "Unauthorized access"
+        redirect_to(root_url)
+      end
     end
 
     def already_signed_in
-      redirect_to(root_url) unless !signed_in?
+      unless !signed_in?
+        flash[:info] = "Unauthorized access"
+        redirect_to(root_url)
+      end
     end
 end

@@ -29,7 +29,10 @@ module SessionsHelper
 
 ## before filters
   def admin_user
-    redirect_to(root_url) unless user_admin?
+    unless user_admin?
+      flash[:info] = "Unauthorized access"
+      redirect_to(root_url) 
+    end
   end
   
   def user_admin?
@@ -39,7 +42,8 @@ module SessionsHelper
   def signed_in_user
     unless signed_in?
       store_location
-      redirect_to signin_url, notice: "Please sign in."
+      flash[:info] = "Please sign in."
+      redirect_to signin_url
     end
   end
 
@@ -50,7 +54,8 @@ module SessionsHelper
   def tokened_responder
     token = current_user.token_id
     unless token == params[:id].to_i || token == params[:post_id].to_i
-      redirect_to root_url, notice: "Unauthorized access"
+      flash[:info] = "Unauthorized access"
+      redirect_to root_url
     end
   end
 
@@ -59,7 +64,7 @@ module SessionsHelper
     redirect_to root_path unless current_user.id == post.user.id
   end
 
-  ## Friendly Forwarding ##
+## Friendly Forwarding ##
   
   def redirect_back_or(default)                    # used in 'Users#create' 
     redirect_to(session[:return_to] || default)    # redirects to desired page (if it exists) or default
@@ -68,5 +73,11 @@ module SessionsHelper
 
   def store_location                          # used in 'signed_in_user' before filter
     session[:return_to] = request.url         # stores desired page in session hash
+  end
+
+## Profile ##
+  def public_posts(user)
+    posts = user.posts.answered + user.posts_responded_to.uniq
+    posts.sort_by { |post| post[:updated_at] }.reverse!   # posts sorted by most recent update/responses
   end
 end
