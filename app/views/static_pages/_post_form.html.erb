@@ -1,5 +1,5 @@
 <div id="post_form">
-  <div class="panel-focus">
+  <div class="panel-darker">
     <%= form_for(@post, remote: true) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= f.text_area :content, class: "form-control", rows: "3", placeholder: "your thought..." %>

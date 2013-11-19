@@ -1,9 +1,20 @@
 @import "../../../vendor/assets/stylesheets/bootstrap/bootstrap.scss";
 
-/* mixins, variables, etc. */
-/* color variables already defined by bootstrap: http://bootstrapdocs.com/v2.0.4/docs/less.html */
-/* @mixin variable { ... }    in CSS:  @include variable;
+/* 
+mixins, variables, etc.
+color variables already defined by bootstrap: http://bootstrapdocs.com/v2.0.4/docs/less.html
+@mixin variable { ... }    in CSS:  @include variable;
+*/
  
+/* 
+yellow-orange
+rgb(246, 225, 167), rgb(244, 204, 93));
+
+flat-green
+rgb(242, 235, 191), rgb(165, 200, 143));
+
+*/
+
 /* universal */
 
   html {
@@ -15,7 +26,7 @@
   body {
     padding-top: 50px;
     font-family: 'Open Sans', sans-serif;
-    background-image: -webkit-radial-gradient(center, circle cover, rgb(246, 225, 167), rgb(244, 204, 93));
+    background-image: -webkit-radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
     height: 100%;
   }
 
@@ -69,6 +80,12 @@
     @extend .panel;
     background-color: #eee;
     border-color: #ddd;
+  }
+
+  .panel-darker {
+    @extend .panel;
+    background-color: #ccc;
+    padding: 15px;
   }
 
   .gravatar {
@@ -166,7 +183,31 @@
 
   div #error_explanation {
     ul {
-      padding: 0 0;
+      padding: 0;
+    }
+  }
+
+  #error_explanation {
+    margin-top: -20px;
+    color: #f00;
+    text-align: center;
+  }
+
+  .field_with_errors {
+    @extend .has-error;
+  }
+
+  #post_form, #response_form {
+    position: relative;
+    .panel-focus {
+      padding: 20px;
+    }
+    #error_explanation {
+      position: absolute;
+      width: 316px;
+      left: 50%;
+      top: -10px;
+      margin-left: -158px;
     }
   }
 
@@ -240,30 +281,6 @@
 
   form input.btn {
     margin-bottom: 10px;
-  }
-
-  #error_explanation {
-    margin-top: -20px;
-    color: #f00;
-    text-align: center;
-  }
-
-  .field_with_errors {
-    @extend .has-error;
-  }
-
-  #post_form, #response_form {
-    position: relative;
-    .panel-focus {
-      padding: 20px;
-    }
-    #error_explanation {
-      position: absolute;
-      width: 316px;
-      left: 50%;
-      top: -10px;
-      margin-left: -158px;
-    }
   }
 
   #image_fields_container {
@@ -366,6 +383,13 @@
   
   #response_form {
     margin-top: 30px;
+    position: relative;
+    .form-group {
+      margin: 0;
+      .form-control {
+        margin-bottom: 10px;
+      }
+    }
     #submit {
       padding-left: 0;
     }

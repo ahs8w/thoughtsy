@@ -1,3 +1,17 @@
 <% provide(:page_title, "Team") %>
-<h1>Team</h1>
-<p>Find me in app/views/static_pages/team.html.erb</p>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="well">
+      <h1>Team</h1>
+      <div class="panel-focus">
+        <h2 class="center">
+          <%= gravatar_adam(size: 55) %>
+          Adam
+        </h2>
+        <p class="center">There's no I in this team!  Only me...</p>
+      </div>
+      <p class="center">If you'd like to help out feel free to send me an <%= mail_to "a.h.schiller@gmail.com", "email", subject: "Thoughtsy: Join the team!", target: "_blank" %> or check out the code on <%= link_to "github", "https://github.com/ahs8w/thoughtsy", target: "_blank" %>.</p>
+    </div>
+  </div>
+</div>

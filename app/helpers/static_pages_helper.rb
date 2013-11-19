@@ -37,4 +37,13 @@ module StaticPagesHelper
     @small_message = "Your response expired #{expiration} ago.  
     There are currently no unanswered posts available.  Get posting!!"
   end
+
+## Team ##
+
+  def gravatar_adam(options = { size: 50 })
+    gravatar_id = Digest::MD5::hexdigest('ahs8w@virginia.edu')
+    size = options[:size]
+    gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
+    image_tag(gravatar_url, alt: "Adam Schiller", class: "gravatar")
+  end
 end

@@ -1,3 +1,12 @@
 <% provide(:page_title, "Contact") %>
-<h1>Contact</h1>
-<p>Find me in app/views/static_pages/contact.html.erb</p>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="well">
+      <h1>Contact</h1>
+      <div class="panel-focus">
+        <p class="center">If you find a bug or have any comments or suggestions please don't hesitate to send an <%= mail_to "a.h.schiller@gmail.com", "email", subject: "Thoughtsy: Join the team!", target: "_blank" %>.</p>
+      </div>
+    </div>
+  </div>
+</div>

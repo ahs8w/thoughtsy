@@ -1,29 +1,29 @@
 <% provide(:page_title, "Respond") %>
 
-<div class="well" id="thought">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="thought_wrapper" id="responses_new">
+<div class="row">
+  <div class="well">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="thought_wrapper">
+        <div class="panel-focus" id="show_post">
           <%= render partial: "shared/thought", object: @post %>
         </div>
       </div>
+      <%= render 'responder_links' %>
     </div>
-  </div>
-</div>
-  <%= render 'responder_links' %>
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2" id="time_explanation">
-      <p class="center lighter">
-        You have 24 hours to respond to this post.  <small><%= link_to "why 24 hours?", about_path %></small>
-        Feel free to take your time when crafting a response.  If you need some inspiration browse some of the other <%= link_to "thoughts", posts_path %>.  Ready... Set... Reflect!
-      </p>
+    
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2" id="time_explanation">
+        <p class="center lighter">
+          You have 24 hours to respond to this post.  <small><%= link_to "why 24 hours?", about_path %></small>
+          Feel free to take your time when crafting a response.  If you need some inspiration browse some of the other <%= link_to "thoughts", posts_path %>.  Ready... Set... Reflect!
+        </p>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <%= render 'responses/form' %>
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <%= render 'responses/form' %>
+      </div>
+    </div>
   </div>
 </div>
