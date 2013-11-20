@@ -1,31 +1,27 @@
 <div class="panel-group" id="accordion">
-  <% if message %>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%= message.id %>">
-            <% if message.user == current_user || message.viewed? %>
-              <%= user_display(message) %>
-            <% else %>
-              <div class="strong"><%= "From: #{message.user.username}" %></div>
-            <% end %>
-          </a>
-        </h4>
-      </div>
-      <div id="collapse_<%= message.id %>" class="panel-collapse collapse">
-        <div class="panel-body">
-          <%= message.content %>
-          <% if current_user == message.receiver %>
-            <div id="message_toggle">
-              <a href="#" data-toggle="modal" data-target="#messagemodal">Reply</a>
-            </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%= message.id %>">
+          <% if message.user == current_user || message.viewed? %>
+            <%= user_display(message) %>
+          <% else %>
+            <div class="strong"><%= "From: #{message.user.username}" %></div>
           <% end %>
-        </div>
+        </a>
+      </h4>
+    </div>
+    <div id="collapse_<%= message.id %>" class="panel-collapse collapse">
+      <div class="panel-body">
+        <%= message.content %>
+        <% if current_user == message.receiver %>
+          <div id="message_toggle">
+            <a href="#" data-toggle="modal" data-target="#messagemodal">Reply</a>
+          </div>
+        <% end %>
       </div>
     </div>
-  <% else %>
-    <p class="lighter">there are no messages</p>
-  <% end %>
+  </div>
 </div>
 
 <!-- Reply Modal -->

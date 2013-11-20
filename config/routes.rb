@@ -4,7 +4,7 @@ Thoughtsy::Application.routes.draw do
     resources :messages,  only: [:show, :index, :new]
   end
   resources :sessions,  only: [:new, :create, :destroy]
-  resources :posts,     except: [:new, :update, :edit] do
+  resources :posts,     except: [:update, :edit] do
     resources :responses, only: [:new, :create]
     member do
       get 'repost'

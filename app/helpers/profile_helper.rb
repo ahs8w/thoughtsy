@@ -18,6 +18,14 @@ module ProfileHelper
     end
   end
 
+  def average_rating(response)
+    response.ratings.sum('value')/response.ratings.size
+  end
+
+  def unrated_count(post)
+    pluralize(post.responses.unrated.size, "unrated response")
+  end
+
   def personal_posts(user)
     user.posts.personal.descending
   end

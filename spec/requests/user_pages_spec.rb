@@ -63,140 +63,105 @@ describe "UserPages" do
     end
   end
 
-  # describe "profile page" do
-  #   let(:user) { FactoryGirl.create(:user) }
-  #   let(:wrong_user) { FactoryGirl.create(:user) }
-  #   # let! -> creates and instantiates variable
-  #   let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Answered", 
-  #                                             state: 'answered', created_at: 4.hours.ago) }
-  #   let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", created_at: 3.hours.ago) }
-  #   let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "Newer", created_at: 3.minutes.ago) }
+  describe "profile page" do
+    let(:user) { FactoryGirl.create(:user) }
+    
+    context "as correct user" do
 
-  #   let!(:user_message) { user.messages.create(content: "sent", receiver_id: wrong_user.id) }
-  #   let!(:received_message) { Message.create(content: "received", receiver_id: user.id, user_id: wrong_user.id) }
+      before do
+        sign_in user
+        visit user_path(user)
+      end
 
-  #   let!(:response) { FactoryGirl.create(:response, post_id: answered_post.id) }
-  #   let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
+      it "should have correct layout" do
+        expect(page).to have_content("#{user.username} | #{user.score}")
+        expect(page).to have_title(user.username)
+        expect(page).to have_link("Settings", href: edit_user_path(user))
+        expect(page).to have_link("Messages", href: user_messages_path(user))
+        expect(page).to have_button("Stats")
+        expect(page).to have_content("Answered thoughts")
+        expect(page).to have_content("no answered thoughts")
+        expect(page).to have_content("Unanswered thoughts")
+        expect(page).to have_content("no unanswered thoughts")
+      end
 
-  #   describe "with no posts" do
-  #     before do
-  #       sign_in user
-  #       visit user_path(wrong_user)
-  #     end
+      describe "with content" do
+        let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Answered", 
+                                                  state: 'answered', updated_at: 4.hours.ago) }
+        let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", 
+                                                    updated_at: 3.hours.ago) }
 
-  #     it { should have_content('There are no answered thoughts') }
-  #     it { should have_content('There are no responses') }
-  #   end
+        let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
+        before { visit user_path(user) }
 
-  #   describe "as wrong user" do
-  #     before do
-  #       sign_in wrong_user
-  #       visit user_path(user)
-  #     end
+        describe "display" do
+          it "has content of thoughts" do
+            expect(page).to have_link(answered_post.content)
+            expect(page).to have_link(unanswered_post.content)
+            expect(page).to have_link(user_response.content)
+          end
+        end
 
-  #     it { should have_content(user.username) }
-  #     it { should have_title(user.username) }
-  #     it { should have_content("Karma: #{user.score}") }
-  #     it { should_not have_link("edit settings", href: edit_user_path(user)) }
-  #     it { should_not have_content("Messages") }
+        describe "post order" do
+          let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "Newer", updated_at: 3.minutes.ago) }
+          before { visit user_path(user) }
 
-  #     context "posts" do
-  #       it { should have_link(answered_post.content) }
-  #       it { should have_content("#{response.user.username} responded") }
-  #       it { should_not have_content(unanswered_post.content) }
-  #     end
+          it "is newest to oldest(updated_at)" do
+            expect(find('.personal_posts').first('.thought')).to have_content(newer_post.content)
+          end
+        end
 
-  #     context "responses" do
-  #       it { should have_link(user_response.post.content) }
-  #     end
+        # describe "thought stats", js: true do
+        #   before do
+        #     FactoryGirl.create(:rating, response: user_response)
+        #     FactoryGirl.create(:subscription, user: user)
+        #     visit user_path(user)
+        #     click_button "Thought Stats"
+        #   end
 
-  #     context "thought counts" do
-  #       it { should_not have_content('Thoughts posted (3)') }
-  #       it { should_not have_content('Thoughts responded to (1)') }
-  #     end
+        #   it "displays dropdown stats menu" do
+        #     expect(page).to have_content("Responses: 1")
+        #     expect(page).to have_content("Average rating: 3")
+        #     expect(page).to have_content("Reposts: 1")
+        #     expect(page).to have_content("Answered: 1")
+        #     expect(page).to have_content("Unanswered: 1")
+        #   end
+        # end
 
-  #     context "messages" do
-  #       it { should_not have_content('Messages') }
-  #     end  
+        context "as wrong user" do
+          let(:wrong_user) { FactoryGirl.create(:user) }
 
-  #       # describe "pagination" do
-  #       #   before do
-  #       #     31.times { FactoryGirl.create(:post, user: user) }
-  #       #     visit user_path(user)   # necessary to revisit profile page if not using before(:all)
-  #       #   end
-  #       #   after(:all)  { Post.delete_all }
+          before do
+            sign_in wrong_user
+            visit user_path(user)
+          end
 
-  #       #   it { should have_selector('div.pagination') }
-  #       # end
-  #   end
+          it "should have correct layout and display" do
+            expect(page).to have_content("#{user.username} | #{user.score}")
+            expect(page).to have_title(user.username)
+            expect(page).not_to have_link("Settings", href: edit_user_path(user))
+            expect(page).not_to have_link("Messages", href: user_messages_path(user))
+            expect(page).not_to have_button("Stats")
+            expect(page).to have_content("Answered thoughts")
+            expect(page).to have_link(answered_post.content)
+            expect(page).to have_link(user_response.content)
+            expect(page).not_to have_content("Unanswered thoughts")
+            expect(page).not_to have_link(unanswered_post.content)
+          end
+        end
+      end
 
-  #   describe "as the correct user" do
-  #     before do
-  #       wrong_user.subscribe!(answered_post)
-  #       answered_post.answer!
-  #       sign_in user
-  #       visit user_path(user)
-  #     end
+      # describe "pagination" do
+      #   before do
+      #     6.times { FactoryGirl.create(:post, user: user) }
+      #     visit user_path(user)   # necessary to revisit profile page if not using before(:all)
+      #   end
+      #   after(:all)  { Post.delete_all }
 
-  #     it { should have_link("edit settings", href: edit_user_path(user)) }
-  #     it { should have_content(user.responses.count) }
-  #     it { should have_content(user.posts.count) }
-  #     it { should have_content(unanswered_post.content) }
-
-  #     context "counts are correct" do
-  #       it { should have_content('Thoughts posted (3)') }
-  #       it { should have_content('Thoughts responded to (1)') }
-  #     end
-
-  #     # context "answered posts" do
-  #     #   it "with unrated responses are in bold" do
-  #     #     expect(find('#answered_posts').first('li')).to have_selector('strong')
-  #     #   end
-  #     # end
-
-  #     context "posts are ordered newest to oldest" do
-  #       it "within section" do
-  #         expect(find('#personal_posts').first('li')).to have_content(newer_post.content)
-  #       end
-  #     end
-
-  #     context "follower count" do
-  #       it { should have_content("1 follower") }
-  #     end
-
-  #     context "posts(responded to) appear only once" do
-  #       let!(:other_post) { FactoryGirl.create(:post, content: 'other_post') }
-  #       let!(:first_response) { FactoryGirl.create(:response, user_id: user.id, post_id: other_post.id) }
-  #       let!(:second_response) { FactoryGirl.create(:response, user_id: user.id, post_id: other_post.id) }
-  #       before { visit user_path(user) }
-
-  #       it { should have_selector('li', :text => "#{other_post.content}", :count => 1) }
-  #     end
-
-  #     context "messages" do
-  #       it { should have_content(User.find(user_message.receiver_id).username) }
-  #       it { should have_content(received_message.user.username) }
-
-  #       it "unread received are bold" do
-  #         expect(find('#messages').first('li')).to have_selector('strong')
-  #       end
-
-  #       it "after reading, links appear normal" do
-  #         click_link "From: #{wrong_user.username}"
-  #         visit user_path(user)
-  #         expect(find('#messages').first('li')).not_to have_selector('strong')
-  #       end
-
-  #       describe "images" do
-  #         let(:image_post) { FactoryGirl.create(:image_post, user_id: user.id) }
-
-  #         context "with no content" do
-  #           it { should have_selector('img') }
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
+      #   it { should have_selector('div.pagination') }
+      # end
+    end
+  end
 
   describe "signup page" do
     before { visit signup_path }
@@ -262,7 +227,7 @@ describe "UserPages" do
     describe "page" do
       it { should have_content("Update your profile") }
       it { should have_title("Edit profile") }
-      it { should have_link('change', href: 'http://gravatar.com/emails') }
+      it { should have_link('update user image', href: 'http://gravatar.com/emails') }
     end
 
     describe "with invalid information" do

@@ -1,12 +1,6 @@
 @import "../../../vendor/assets/stylesheets/bootstrap/bootstrap.scss";
 
 /* 
-mixins, variables, etc.
-color variables already defined by bootstrap: http://bootstrapdocs.com/v2.0.4/docs/less.html
-@mixin variable { ... }    in CSS:  @include variable;
-*/
- 
-/* 
 yellow-orange
 rgb(246, 225, 167), rgb(244, 204, 93));
 
@@ -27,6 +21,10 @@ rgb(242, 235, 191), rgb(165, 200, 143));
     padding-top: 50px;
     font-family: 'Open Sans', sans-serif;
     background-image: -webkit-radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
+    background-image: -moz-radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
+    background-image: -o-radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
+    background-image: radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
+    background-attachment: fixed;
     height: 100%;
   }
 
@@ -248,11 +246,11 @@ rgb(242, 235, 191), rgb(165, 200, 143));
   }
 
   .footer {
-    color: $gray-light;
     a {
       color: $gray;
       &:hover {
         color: $gray-darker;
+        text-decoration: none;
       }
     }
     small {
@@ -472,6 +470,9 @@ rgb(242, 235, 191), rgb(165, 200, 143));
     .panel-focus {
       .gravatar {
         visibility: hidden;
+      }
+      .badge {
+        color: #333;
       }
     }
     .thought_wrapper {

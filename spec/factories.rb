@@ -31,4 +31,15 @@ FactoryGirl.define do
     user
     association :receiver, factory: :user
   end
+
+  factory :rating do
+    user
+    response
+    value 3
+  end
+
+  factory :subscription do
+    user
+    post
+  end
 end

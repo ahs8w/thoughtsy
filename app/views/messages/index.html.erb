@@ -13,11 +13,19 @@
         <div class="col-md-8 col-md-offset-2">
           <div class="panel-focus">
             <h3>Received</h3>
-            <%= render partial: "message", collection: @received %>
+            <% unless @received.empty? %>
+              <%= render partial: "message", collection: @received %>
+            <% else %>
+              <p class="center lighter">there are no received messages</p>
+            <% end %>
           </div>
           <div class="panel-focus">
             <h3>Sent</h3>
-            <%= render partial: "message", collection: @sent %>
+            <% unless @sent.empty? %>
+              <%= render partial: "message", collection: @sent %>
+            <% else %>
+              <p class="center lighter">there are no sent messages</p>
+            <% end %>
           </div>
         </div>
       </div>

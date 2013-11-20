@@ -140,7 +140,7 @@ describe "Post pages" do
       before { visit post_path(post) }
       
       it "newer response is first" do
-        expect(first('.responses_show li')).to have_content(response.content)
+        expect(first('ul.responses li')).to have_content(response.content)
       end
     end
 

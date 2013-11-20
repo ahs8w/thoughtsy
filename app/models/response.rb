@@ -20,7 +20,6 @@ class Response < ActiveRecord::Base
 
   private
 
-  # Instance methods {
     def image_or_content
       errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
     end
@@ -30,5 +29,9 @@ class Response < ActiveRecord::Base
       self.user.reset_tokens
       UserMailer.response_emails(self)
     end
-  # }
+
+    def self.unrated
+      includes(:ratings).where("ratings.id IS NULL").references(:ratings)
+      # joins('LEFT OUTER JOIN ratings ON ratings.response_id = responses.id WHERE ratings.id IS NULL')
+    end
 end
