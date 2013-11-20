@@ -4,42 +4,42 @@
 
 #title_banner {
   text-align: center;
-  padding: 10% 0;
-  /*border-bottom: lightgray solid 2px;*/
+  padding-top: 10%;
   h1 {
     font-size: 6em;
-    margin: 20px auto 40px;
     font-family: 'Merienda', cursive;
     font-variant: normal;
   }
   p.lead {
     font-size: 2em;
+    margin: 50px auto;
   }
   #signup_button {
-    margin-top: 40px;
     display: block;
     a.btn {
-      padding: 10px 35px;
+      width: 200px;
       margin-bottom: 15px;
     }
   }
 }
 
-#post_form {
-  margin: -30px auto 30px;
-  .new_post {
-    margin-bottom: 0;
-    #submit {
-      padding: 0;
-    }
-    .field_with_errors {
-      text-align: center;
-      display: inline;
-    }
+#post_response_buttons {
+  .btn {
+    width: 100%;
+    padding: 1.10em 0;
+    font-size: 1.5em;
+    @include center-block();
   }
 }
 
-#user_banner {
+#post_form {
+  .field_with_errors {
+    text-align: center;
+    display: inline;
+  }
+}
+
+/*#user_banner {
   position: relative;
   #respond_button {
     position: relative;
@@ -67,10 +67,10 @@
       float: right;
     }
   }
-}
+}*/
 
 /* sidebar */
-
+/*
   .sidebar {
     padding-top: 10px;
     padding-left: 0;
@@ -79,4 +79,4 @@
 
   #notification_area {
     padding-top: 25px;
-  }
+  }*/

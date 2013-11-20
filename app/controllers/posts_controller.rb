@@ -8,6 +8,10 @@ class PostsController < ApplicationController
     @posts = Post.where.not(state: "answered").ascending.paginate(page: params[:page])
   end
 
+  def new
+    @post = Post.new
+  end
+
   def index
     @posts = Post.where(state: "answered").descending.paginate(page: params[:page], :per_page => 20)
   end
@@ -73,5 +77,9 @@ class PostsController < ApplicationController
   private
     def post_params
       params.require(:post).permit(:content, :image, :remote_image_url)
+    end
+
+    def rollback_tokens
+      current_user.reset_tokens if signed_in? && !current_user.timer_valid
     end
 end

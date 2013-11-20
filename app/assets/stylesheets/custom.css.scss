@@ -7,7 +7,41 @@ rgb(246, 225, 167), rgb(244, 204, 93));
 flat-green
 rgb(242, 235, 191), rgb(165, 200, 143));
 
-*/
+blue-yellow
+rgb(237, 255, 143), rgb(50, 118, 177))
+
+Custom buttons
+------------------------------------------- */
+$blue:   rgba(50, 118, 177, .9);
+$panel-blue: rgba(102, 156, 167, .5);
+$yellow:  rgba(233, 255, 118, 1);
+$panel-yellow: rgba(197, 225, 150, .5);
+
+.btn-post,
+.btn-post:hover,
+.btn-post:active {
+  color: #101010;
+  background-color: transparent;
+  border: 1px solid #101010;
+}
+.btn-post:hover {
+  background-color: $blue;
+  border: 1px solid lighten($blue, 5%);
+  color: #fff;
+}
+
+.btn-respond,
+.btn-respond:hover,
+.btn-respond:active {
+  color: #101010;
+  background-color: transparent;
+  border: 1px solid #101010;
+}
+.btn-respond:hover {
+  background-color: $yellow;
+  border: 1px solid darken($yellow, 20%);
+}
+/*------------------------------------------*/
 
 /* universal */
 
@@ -72,6 +106,14 @@ rgb(242, 235, 191), rgb(165, 200, 143));
     @extend .panel;
     background-color: #ddd;
     padding: 10px;
+  }
+
+  .panel-post {
+    background-color: $panel-blue;
+  }
+
+  .panel-response {
+    background-color: $panel-yellow;
   }
 
   .panel-lighter {

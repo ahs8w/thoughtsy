@@ -37,7 +37,7 @@
           <h2 class="center">Answered thoughts and responses</h2>
           <% if @public_posts.each do |post| %>
             <% if post.user == @user %>
-              <div class="panel-focus">
+              <div class="panel-focus panel-post">
                 <% if post.responses.unrated.any? && current_user?(@user) %>
                   <span class="badge pull-right"><%= unrated_count(post) %></span>
                 <% end %>
@@ -48,7 +48,7 @@
             <% post.responses.descending.each do |response| %>
               <% if response.user == @user %>
                 <div class="thought_wrapper">
-                  <div class="panel-focus">
+                  <div class="panel-focus panel-response">
                     <% if response.ratings.any? && current_user?(@user) %>
                       <span class="badge pull-right"><%= average_rating(response) %></span>
                     <% end %>
