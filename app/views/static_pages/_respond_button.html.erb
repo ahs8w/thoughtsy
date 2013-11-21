@@ -1,4 +1,4 @@
-<aside id="respond_button">
+<div id="respond_button">
   <% if @button_class %>
     <%= link_to "Respond!", new_post_response_path(@token_post), 
     class: "btn btn-lg btn-respond", id: "Respond" %>
@@ -6,4 +6,4 @@
   <small id="expiration_message">
     <p class="center"><%= @small_message if @small_message %></p>
   </small>
-</aside>
+</div>

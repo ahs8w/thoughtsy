@@ -1,4 +1,4 @@
-<div id="responder_links" class="clearfix">
+<div id="responder_links">
   <% if @post.followers.include?(current_user) %>
     <span class="pull-right">
       <%= render 'subscriptions/unsubscribe' %>

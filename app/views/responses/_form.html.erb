@@ -1,12 +1,15 @@
 <div id="response_form">
-  <div class="panel-darker">
-    <%= form_for([@post, @response]) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
-      <div class="form-group">
-        <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your response..." %>
-      </div>
-      <div class="col-md-3" id="submit"><%= f.submit "Respond", class: "btn btn-lg btn-primary" %></div>
-      <%= render 'shared/image_fields', f: f %>
-      <%= f.hidden_field :post_id, value: @post.id %>
-    <% end %>
+  <div class="panel-focus">
+    <div class="panel-focus panel-response">
+      <%= form_for([@post, @response]) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+        <div class="form-group">
+          <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your response..." %>
+        </div>
+        <div class="col-md-3" id="submit"><%= f.submit "Respond", class: "btn btn-lg btn-primary" %></div>
+        <%= render 'shared/image_fields', f: f %>
+        <%= f.hidden_field :post_id, value: @post.id %>
+      <% end %>
+    </div>
   </div>
+</div>

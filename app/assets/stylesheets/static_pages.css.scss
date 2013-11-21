@@ -4,7 +4,7 @@
 
 #title_banner {
   text-align: center;
-  padding-top: 10%;
+  margin: -20px auto 50px;
   h1 {
     font-size: 6em;
     font-family: 'Merienda', cursive;
@@ -12,30 +12,42 @@
   }
   p.lead {
     font-size: 2em;
-    margin: 50px auto;
-  }
-  #signup_button {
-    display: block;
-    a.btn {
-      width: 200px;
-      margin-bottom: 15px;
-    }
+    margin: 40px auto 70px;
   }
 }
 
+#signup_button {
+  display: block;
+  a.btn {
+    font-size: 1.5em;
+    padding: 15px 20px;
+    width: 200px;
+    margin-bottom: 15px;
+  }
+}
+
+#absolute_center {
+  width: 100%;
+  display: table;
+  height: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+  
 #post_response_buttons {
+  text-align: center;
+  #respond_button, #post_button {
+    display: inline-block;
+    width: 200px;
+    vertical-align: top;
+    margin-top: 40px;
+  }
   .btn {
-    width: 100%;
-    padding: 1.10em 0;
+    width: 200px;
+    padding: 15px 0;
     font-size: 1.5em;
     @include center-block();
-  }
-}
-
-#post_form {
-  .field_with_errors {
-    text-align: center;
-    display: inline;
   }
 }
 

@@ -4,8 +4,10 @@
   <div class="col-md-10 col-md-offset-1">
     <div class="well">
       <div class="thought_wrapper">
-        <div class="panel-focus panel-post" id="show_post">
-          <%= render partial: "shared/thought", object: @post %>
+        <div class="panel-focus">
+          <div class="panel-post" id="show_post">
+            <%= render partial: "shared/thought", object: @post %>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -14,11 +16,13 @@
             <% @responses.each do |response| %>
               <li>
                 <div class="thought_wrapper">
-                  <div class="panel-focus panel-response">
-                    <%= render partial: "shared/thought", object: response %>
-                    <% if author_or_follower(@post) %>
-                      <%= render partial: 'ratings/form', locals: { response: response } unless current_user.id == response.user.id %>
-                    <% end %>
+                  <div class="panel-focus">
+                    <div class="panel-response">
+                      <%= render partial: "shared/thought", object: response %>
+                      <% if author_or_follower(@post) %>
+                        <%= render partial: 'ratings/form', locals: { response: response } unless current_user.id == response.user.id %>
+                      <% end %>
+                    </div>
                   </div>
                 </div>
               </li>

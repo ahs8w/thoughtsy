@@ -19,7 +19,7 @@
         <h3 class="modal-title" id="messageToUser">Message to <%= @response.user.username %></h3>
       </div>
       <div class="modal-body">
-        <p><%= @response.user.username %> wrote:</p>
+        <strong><%= @response.user.username %> wrote:</strong>
         <p><%= @response.content %></p>
         <%= form_for(@message, remote: true) do |f| %>
           <%= render 'shared/error_messages', object: f.object %>

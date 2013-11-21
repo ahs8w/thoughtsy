@@ -4,16 +4,18 @@
   <div class="well">
     <div class="col-md-10 col-md-offset-1">
       <div class="thought_wrapper">
-        <div class="panel-focus" id="show_post">
-          <%= render partial: "shared/thought", object: @post %>
+        <div class="panel-focus">
+          <div class="panel-post" id="show_post">
+            <%= render partial: "shared/thought", object: @post %>
+          </div>
+          <%= render 'responder_links' %>
         </div>
       </div>
-      <%= render 'responder_links' %>
     </div>
     
     <div class="row">
       <div class="col-md-8 col-md-offset-2" id="time_explanation">
-        <p class="center lighter">
+        <p class="center">
           You have 24 hours to respond to this post.  <%= link_to "why 24 hours?", about_path %>
           Feel free to take your time when crafting a response.  If you need some inspiration browse some of the other <%= link_to "thoughts", posts_path %>.  Ready... Set... Reflect!
         </p>

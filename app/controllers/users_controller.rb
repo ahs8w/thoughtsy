@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @public_posts = public_posts(@user).paginate(page: params[:page], :per_page => 4)
+    @public_posts = public_posts(@user).paginate(page: params[:page], :per_page => 5)
     @personal_posts = @user.posts.personal.descending.paginate(page: params[:page], :per_page => 5)
   end
 

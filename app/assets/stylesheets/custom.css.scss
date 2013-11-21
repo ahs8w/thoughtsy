@@ -13,7 +13,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 Custom buttons
 ------------------------------------------- */
 $blue:   rgba(50, 118, 177, .9);
-$panel-blue: rgba(102, 156, 167, .5);
+$panel-blue: rgba(131, 174, 184, .2);
 $yellow:  rgba(233, 255, 118, 1);
 $panel-yellow: rgba(197, 225, 150, .5);
 
@@ -79,6 +79,9 @@ $panel-yellow: rgba(197, 225, 150, .5);
   }
 
   .wrapper {
+    background: url('/assets/lightbulb-outline-opaque.png') fixed no-repeat;
+    background-color: rgba(255, 255, 255, .2);
+    background-position: center 80%;
     min-height: 100%;
     height: auto !important;
     height: 100%;
@@ -97,7 +100,9 @@ $panel-yellow: rgba(197, 225, 150, .5);
   }
 
   .well {
-    border: 1px solid darken($well-bg, 16%);
+    background-color: rgba(16, 16, 16, .3);
+    height: 100%;
+    border: none;
     margin-top: -55px;
     padding-top: 55px;
   }
@@ -110,10 +115,18 @@ $panel-yellow: rgba(197, 225, 150, .5);
 
   .panel-post {
     background-color: $panel-blue;
+    border: 1px solid lighten($panel-blue, 10%);
+    a {
+      color: #101010;
+    }
+    a:hover {
+      color: #fff;
+    }
   }
 
   .panel-response {
     background-color: $panel-yellow;
+    border: 1px solid darken($panel-yellow, 10%);
   }
 
   .panel-lighter {
@@ -255,11 +268,20 @@ $panel-yellow: rgba(197, 225, 150, .5);
 
   .navbar {
     #logo {
+      margin: 5px auto;
+      margin-left: 40px;
+      height: 40px;
+      width: 40px;
+    }
+    #brand {
       font-size: 2em;
       text-transform: uppercase;
       letter-spacing: -1px;
       font-weight: 300;
-      margin-left: 20px;
+      float: none;
+      position: relative;
+      top: 7px;
+      padding: 0;
     }
     .navbar-right:last-child {
       margin-right: 20px !important;
@@ -399,10 +421,12 @@ $panel-yellow: rgba(197, 225, 150, .5);
       }
     }
 
-/* Response#new */
+/* Response#new Post#new */
 
   #responder_links {
+    @include clearfix();
     margin-top: 5px;
+    padding: 0;
     form {
       display: inline-block;
       margin: 0;
@@ -421,9 +445,13 @@ $panel-yellow: rgba(197, 225, 150, .5);
     margin-bottom: 30px;
   }
   
-  #response_form {
+  #response_form, #post_form {
     margin-top: 30px;
     position: relative;
+    .panel-focus {
+      padding: 10px;
+      margin-bottom: 0;
+    }
     .form-group {
       margin: 0;
       .form-control {
@@ -433,10 +461,14 @@ $panel-yellow: rgba(197, 225, 150, .5);
     #submit {
       padding-left: 0;
     }
+    .field_with_errors {
+      text-align: center;
+      display: inline;
+    }
   }
 
 /* Posts Pages */
-
+ 
   #posts_show {
     img {
       margin-bottom: 10px;
@@ -467,6 +499,9 @@ $panel-yellow: rgba(197, 225, 150, .5);
           margin-bottom: 0;
         }
       }
+    }
+    .modal-content {
+      @include clearfix();
     }
 
     #social_links {
@@ -544,6 +579,7 @@ $panel-yellow: rgba(197, 225, 150, .5);
       .modal-dialog {
         padding: 100px 0;
         .modal-body {
+          text-align: center;
           padding-bottom: 50px;
         }
       }

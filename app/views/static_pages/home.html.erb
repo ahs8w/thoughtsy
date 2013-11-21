@@ -1,26 +1,26 @@
 <div class="row">
-  <div id="title_banner">
-    <h1>Thoughtsy</h1>
-    <p class="lead">thoughtful exchanges with total strangers</p>
+  <div id="absolute_center">
+    <div id="title_banner">
+      <h1>Thoughtsy</h1>
     <% unless signed_in? %>
+      <p class="lead">thoughtful exchanges with total strangers</p>
       <div id="signup_button">
         <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
         <p>Already a user? <%= link_to "Sign in now!", signin_path %></p>
       </div>
-    </div>
+    </div>  
     <% else %>
-    <div class="col-md-6 col-md-offset-3">
-      <i class="icon ion-ios7-lightbulb-outline" style="font-size:150px"></i>
+    </div>
       <div class="row" id="post_response_buttons">
-        <div class="col-md-5">
-          <%= link_to "Post!", new_post_path, class: "btn btn-lg btn-post" %>
+        <div class="col-md-2 col-md-offset-3">
+          <div id="post_button">
+            <%= link_to "Post!", new_post_path, class: "btn btn-lg btn-post" %>
+          </div>
         </div>
-        <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-2 col-md-offset-2">
           <%= render 'static_pages/respond_button' if signed_in? %>
         </div>
       </div>
-    </div>
-    </div>  
     <% end %> 
   </div>
 </div>
