@@ -8,7 +8,7 @@ module UsersHelper
     image_tag(gravatar_url, alt: user.username, class: "gravatar")
   end
 
-  def unrated_responses(user)
+  def unrated_array(user)
     unrated = []
     user.posts.answered.each do |post|
       post.responses.each do |response|
@@ -17,6 +17,11 @@ module UsersHelper
         end
       end
     end
+    return unrated
+  end
+
+  def unrated_responses(user)
+    unrated = unrated_array(user)
     if unrated.count == 1
       link_to("You have 1 unrated response", post_path(unrated.first.post))
     elsif unrated.count > 1

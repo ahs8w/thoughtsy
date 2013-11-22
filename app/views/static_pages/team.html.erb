@@ -4,14 +4,14 @@
   <div class="col-md-6 col-md-offset-3">
     <div class="well">
       <h1>Team</h1>
-      <div class="panel-focus">
-        <h2 class="center">
+      <div class="panel-focus" id="team">
+        <h2>
           <%= gravatar_adam(size: 55) %>
-          Adam
         </h2>
-        <p class="center">There's no I in this team!  Only me...</p>
+        <p>There's no I in this team!  Only me...</p>
+        <p>If you'd like to help out feel free to send me an <%= mail_to "a.h.schiller@gmail.com", "email", subject: "Thoughtsy: Join the team!", target: "_blank" %> or check out the code on <%= link_to "github", "https://github.com/ahs8w/thoughtsy", target: "_blank" %>.
+        </p>
       </div>
-      <p class="center">If you'd like to help out feel free to send me an <%= mail_to "a.h.schiller@gmail.com", "email", subject: "Thoughtsy: Join the team!", target: "_blank" %> or check out the code on <%= link_to "github", "https://github.com/ahs8w/thoughtsy", target: "_blank" %>.</p>
     </div>
   </div>
 </div>

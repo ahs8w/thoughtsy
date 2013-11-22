@@ -8,32 +8,31 @@ module StaticPagesHelper
 
   # no tokens && no available posts
   def output_1
+    @button = false
     @small_message = "There are currently no unanswered posts available.  Get posting!!"
   end
   
   # no tokens && available posts
   def output_2
-    @button_text = "See a new thought" 
-    @button_class = "primary"
+    @button = true
   end
 
   # valid timer
   def output_3
-    @button_text = "Post your response" 
-    @button_class = "warning"
+    @button = true
     @small_message = "#{expiration} until your response expires!"
   end
 
   # timer expired && available posts
   def output_4
-    @button_text = "See a new thought" 
-    @button_class = "danger"
+    @button = true
     @small_message = "Your response expired #{expiration} ago.  
     Click the button to get another thought."
   end
 
   # timer expired && no available posts
   def output_5
+    @button = false
     @small_message = "Your response expired #{expiration} ago.  
     There are currently no unanswered posts available.  Get posting!!"
   end

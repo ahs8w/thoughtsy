@@ -12,35 +12,35 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
 Custom buttons
 ------------------------------------------- */
-$blue:   rgba(50, 118, 177, .9);
-$panel-blue: rgba(131, 174, 184, .2);
-$yellow:  rgba(233, 255, 118, 1);
-$panel-yellow: rgba(197, 225, 150, .5);
+  $blue:   rgba(50, 118, 177, .9);
+  $panel-blue: rgba(131, 174, 184, .2);
+  $yellow:  rgba(233, 255, 118, 1);
+  $panel-yellow: rgba(197, 225, 150, .5);
 
-.btn-post,
-.btn-post:hover,
-.btn-post:active {
-  color: #101010;
-  background-color: transparent;
-  border: 1px solid #101010;
-}
-.btn-post:hover {
-  background-color: $blue;
-  border: 1px solid lighten($blue, 5%);
-  color: #fff;
-}
+  .btn-post,
+  .btn-post:hover,
+  .btn-post:active {
+    color: #101010;
+    background-color: transparent;
+    border: 1px solid #101010;
+  }
+  .btn-post:hover {
+    background-color: $blue;
+    border: 1px solid lighten($blue, 5%);
+    color: #fff;
+  }
 
-.btn-respond,
-.btn-respond:hover,
-.btn-respond:active {
-  color: #101010;
-  background-color: transparent;
-  border: 1px solid #101010;
-}
-.btn-respond:hover {
-  background-color: $yellow;
-  border: 1px solid darken($yellow, 20%);
-}
+  .btn-respond,
+  .btn-respond:hover,
+  .btn-respond:active {
+    color: #101010;
+    background-color: transparent;
+    border: 1px solid #101010;
+  }
+  .btn-respond:hover {
+    background-color: $yellow;
+    border: 1px solid darken($yellow, 20%);
+  }
 /*------------------------------------------*/
 
 /* universal */
@@ -60,6 +60,7 @@ $panel-yellow: rgba(197, 225, 150, .5);
     background-image: radial-gradient(center, circle cover, rgb(237, 255, 143), rgb(50, 118, 177));
     background-attachment: fixed;
     height: 100%;
+    color: #101010;
   }
 
   section {
@@ -97,10 +98,15 @@ $panel-yellow: rgba(197, 225, 150, .5);
       @include center-block();
       margin-bottom: 0;
     }
+    a {
+      img:hover {
+        background-color: lighten(#336287, 20%);
+      }
+    }
   }
 
   .well {
-    background-color: rgba(16, 16, 16, .3);
+    background-color: rgba(16, 16, 16, .5);
     height: 100%;
     border: none;
     margin-top: -55px;
@@ -111,34 +117,23 @@ $panel-yellow: rgba(197, 225, 150, .5);
     @extend .panel;
     background-color: #ddd;
     padding: 10px;
+    a {
+      color: #336287;
+    }
+    a:hover {
+      color: lighten(#336287, 20%);
+      text-decoration: none;
+    }
   }
 
   .panel-post {
     background-color: $panel-blue;
     border: 1px solid lighten($panel-blue, 10%);
-    a {
-      color: #101010;
-    }
-    a:hover {
-      color: #fff;
-    }
   }
 
   .panel-response {
     background-color: $panel-yellow;
     border: 1px solid darken($panel-yellow, 10%);
-  }
-
-  .panel-lighter {
-    @extend .panel;
-    background-color: #eee;
-    border-color: #ddd;
-  }
-
-  .panel-darker {
-    @extend .panel;
-    background-color: #ccc;
-    padding: 15px;
   }
 
   .gravatar {
@@ -174,25 +169,22 @@ $panel-yellow: rgba(197, 225, 150, .5);
     text-align: center;
   }
 
+  .lighter-links {
+    a {
+      color: #ccc;
+    }
+    a:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+
   .lighter {
-    color: $gray-light;
-  }
-
-  .darker {
-    background-color: #ddd;
-  }
-
-  .row {
-    margin: 0;
+    color: #666;
   }
 
   .timestamp {
-    color: $gray-light;
-  }
-
-  h4#password_reset {
-    text-align: center;
-    margin-bottom: 40px;
+    @extend .lighter;
   }
 
 /* sidebar */
@@ -436,13 +428,23 @@ $panel-yellow: rgba(197, 225, 150, .5);
         padding: 0;
         border: 0;
         margin-bottom: 2px;
+        color: #336287;
+      }
+      input:hover {
+        color: lighten(#336287, 20%);
+        text-decoration: none;
       }
     }
   }
 
-  #time_explanation {
+  #spacer {
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 20px
+  }
+
+  #form_hint {
+    @extend .lighter-links;
+    text-align: center;
   }
   
   #response_form, #post_form {
@@ -452,11 +454,8 @@ $panel-yellow: rgba(197, 225, 150, .5);
       padding: 10px;
       margin-bottom: 0;
     }
-    .form-group {
-      margin: 0;
-      .form-control {
-        margin-bottom: 10px;
-      }
+    .form-control {
+      margin-bottom: 10px;
     }
     #submit {
       padding-left: 0;
@@ -493,6 +492,7 @@ $panel-yellow: rgba(197, 225, 150, .5);
     margin-top: -34px;
     .rating_form {
       text-align: center;
+      padding-bottom: 10px;
       form.new_rating {
         display: inline;
         input.btn {
@@ -523,18 +523,30 @@ $panel-yellow: rgba(197, 225, 150, .5);
         padding: 10px 0;
         border-top: 1px solid $gray-lighter;
       }
+      li:first-child {
+        border-top: none;
+      }
     }
   }
 
   .user_stats {
     margin: -10px auto 70px;
+    button {
+      font-size: 20px;
+      a {
+        color: #101010;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+    }
+    button:hover {
+      background-color: darken(#ddd, 10%)
+    }
     .dropdown {
       display: inline-block;
       margin-left: 20px;
       margin-right: 20px;
-      button {
-        font-size: 20px;
-      }
       .dropdown-menu {
         width: 179px;
       }
@@ -542,27 +554,37 @@ $panel-yellow: rgba(197, 225, 150, .5);
   }
 
   #profile {
-    margin-bottom: 70px;
     text-align: center;
+    h2 {
+      margin-bottom: 20px;
+    }
     .panel-focus {
+      position: relative;
       .gravatar {
         visibility: hidden;
       }
+      p {
+        margin-bottom: 0;
+      }
+      .thought_author {
+        padding-top: 0;
+      }
       .badge {
-        color: #333;
+        position: absolute;
+        top: 5px;
+        right: 5px;
       }
     }
-    .thought_wrapper {
+    #profile_response {
       @include center-block();
       width: 80%;
-      a {
-        text-decoration: none;
-      }
     }
   }
 
-  #profile_link {
+  .profile_link {
+    text-align: center;
     margin: -35px 0 50px;
+    @extend .lighter-links;
   }
 
 /* Messages Pages */
@@ -589,13 +611,17 @@ $panel-yellow: rgba(197, 225, 150, .5);
     }
   }
 
-/* About */
+/* About, Team, Password Reset */
 
   #about {
+    .accordion {
+      @extend .lighter-links;
+    }
     p {
       font-size: 1.2em
     }
-    .panel-focus {
+    .explanation {
+      margin-bottom: 40px;
       h4 {
         margin: 30px auto;
         font-size: 1.4em;
@@ -605,4 +631,13 @@ $panel-yellow: rgba(197, 225, 150, .5);
         margin-left: 20px;
       }
     }
+  }
+
+  #team {
+    text-align: center;
+  }
+
+  h4#password_reset {
+    text-align: center;
+    margin-bottom: 40px;
   }

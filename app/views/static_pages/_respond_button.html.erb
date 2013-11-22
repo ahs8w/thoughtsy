@@ -1,5 +1,5 @@
 <div id="respond_button">
-  <% if @button_class %>
+  <% if @button %>
     <%= link_to "Respond!", new_post_response_path(@token_post), 
     class: "btn btn-lg btn-respond", id: "Respond" %>
   <% end %>

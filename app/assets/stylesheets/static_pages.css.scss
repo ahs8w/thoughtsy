@@ -4,19 +4,21 @@
 
 #title_banner {
   text-align: center;
-  margin: -20px auto 50px;
+  margin-top: 10%;
   h1 {
     font-size: 6em;
     font-family: 'Merienda', cursive;
     font-variant: normal;
+    color: #333;
   }
   p.lead {
     font-size: 2em;
-    margin: 40px auto 70px;
+    margin-top: 40px;
   }
 }
 
 #signup_button {
+  margin-top: 70px;
   display: block;
   a.btn {
     font-size: 1.5em;
@@ -26,19 +28,12 @@
   }
 }
 
-#absolute_center {
-  width: 100%;
-  display: table;
-  height: auto;
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-}
-  
 #post_response_buttons {
   text-align: center;
+  margin-top: 70px;
   #respond_button, #post_button {
     display: inline-block;
+    @include center-block();
     width: 200px;
     vertical-align: top;
     margin-top: 40px;
@@ -51,44 +46,12 @@
   }
 }
 
-/*#user_banner {
-  position: relative;
-  #respond_button {
-    position: relative;
-    float: right;
-    max-width: 237px;
-    text-align: center;
-    top: 10px;
-    right: 0;
-    form {
-      margin-bottom: 0;
-      input {
-        padding: 16px 36px;
-      }
-    }
-    #expiration_message {
-      position: absolute;
-      text-align: center;
-      color: $gray-light;
-      top: 65px;
-    }
-    #no_unanswered {
-      color: $gray-light;
-      position: relative;
-      top: 10px;
-      float: right;
-    }
+.notifications {
+  font-size: 40px;
+  a {
+    color: #428bca !important;
   }
-}*/
-
-/* sidebar */
-/*
-  .sidebar {
-    padding-top: 10px;
-    padding-left: 0;
-    position: absolute;
+  a:hover {
+    color: #fff !important;
   }
-
-  #notification_area {
-    padding-top: 25px;
-  }*/
+}

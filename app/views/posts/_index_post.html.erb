@@ -5,6 +5,6 @@
     <div class="image">
       <%= link_to image_tag(index_post.image_url(:thumb)), post_path(index_post) if index_post.image.present? %>
     </div>
-    <span class="label label-default"><%= date_time(index_post) %></span>
+    <span class="label label-default">responded to <%= updated_time(index_post) %></span>
   </h3>
 </div>

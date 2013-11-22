@@ -3,7 +3,7 @@
     <div class="panel-focus panel-post">
       <%= form_for(@post, remote: true) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
-        <%= f.text_area :content, class: "form-control", rows: "3", placeholder: "your thought..." %>
+        <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your thought..." %>
         <div class="col-md-3" id="submit"><%= f.submit "Post a thought", class: "btn btn-lg btn-primary" %></div>
         <%= render 'shared/image_fields', f: f %>
       <% end %>
