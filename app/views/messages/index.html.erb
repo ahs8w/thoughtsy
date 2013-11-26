@@ -34,7 +34,7 @@
 </div>
 
 
-<script>
+<script type="text/javascript">
   $('.collapse').on('show.bs.collapse', function() {
     var $self = $(this).attr("id");
     var id = $self.replace( /^\D+/g, '');
@@ -43,5 +43,6 @@
       type: 'PUT'
     });
     $(this).prev().find('div.strong').removeClass("strong");
+    $('#notification_message').remove();
   });
 </script>

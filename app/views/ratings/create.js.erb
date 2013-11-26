@@ -2,6 +2,8 @@ var flash = $('#js_flash_messages');
 var rating = $('#rating_form_<%= @response.id %>');
 
 <% if @rating.save %>
+  $('#notification_response').replaceWith("<%= escape_javascript(render('layouts/notification_response')) %>");
+  $('#notification_response').tooltip();
   <% if @rating.value == 1 && !post_follower(@response.post) %>
     rating.html("<%= escape_javascript(render('ratings/repost')) %>");
   <% elsif @rating.value >= 3 %>

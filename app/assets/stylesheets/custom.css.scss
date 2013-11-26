@@ -9,9 +9,10 @@ rgb(242, 235, 191), rgb(165, 200, 143));
 
 blue-yellow
 rgb(237, 255, 143), rgb(50, 118, 177))
+*/
 
-Custom buttons
-------------------------------------------- */
+/* Custom buttons */
+
   $blue:   rgba(50, 118, 177, .9);
   $panel-blue: rgba(131, 174, 184, .2);
   $yellow:  rgba(233, 255, 118, 1);
@@ -41,7 +42,6 @@ Custom buttons
     background-color: $yellow;
     border: 1px solid darken($yellow, 20%);
   }
-/*------------------------------------------*/
 
 /* universal */
 
@@ -234,7 +234,7 @@ Custom buttons
 
   #error_explanation {
     margin-top: -20px;
-    color: #f00;
+    color: #7f2626;
     text-align: center;
   }
 
@@ -259,21 +259,12 @@ Custom buttons
 /* header */
 
   .navbar {
-    #logo {
-      margin: 5px auto;
-      margin-left: 40px;
-      height: 40px;
-      width: 40px;
-    }
     #brand {
       font-size: 2em;
       text-transform: uppercase;
       letter-spacing: -1px;
       font-weight: 300;
-      float: none;
-      position: relative;
-      top: 7px;
-      padding: 0;
+      margin-left: 30px;
     }
     .navbar-right:last-child {
       margin-right: 20px !important;
@@ -551,6 +542,9 @@ Custom buttons
         width: 179px;
       }
     }
+    .badge {
+      background-color: #428bca;
+    }
   }
 
   #profile {
@@ -573,6 +567,7 @@ Custom buttons
         position: absolute;
         top: 5px;
         right: 5px;
+        background-color: #428bca;
       }
     }
     #profile_response {

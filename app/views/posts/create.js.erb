@@ -14,6 +14,6 @@ $('#error_explanation').remove();
   flash.html("<%= escape_javascript(render('shared/flash_messages')) %>");
   flash.fadeOut(5000);
   el[0].reset();
-  $('#post_count').html("<%= pluralize(current_user.posts.count, 'post') %>");
+  // $('#post_count').html("<%= pluralize(current_user.posts.count, 'post') %>");
 
 <% end %>

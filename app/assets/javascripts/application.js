@@ -18,8 +18,17 @@
 //= require_tree .
 
 ready = function () {
+  $('#notification_response').tooltip();
+  $('#notification_message').tooltip();
   $('div.alert').delay(2000).fadeOut(5000);
 };
 
+// tooltips = function () {
+//   $('#response_tooltip').tooltip();
+//   $('#message_tooltip').tooltip();
+// };
+
 $(document).ready(ready)
-$(window).bind("page:change", ready)
+$(document).on('page:load', ready)
+// $(window).bind("page:change", ready, tooltips)
+

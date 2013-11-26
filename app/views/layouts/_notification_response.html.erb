@@ -1,0 +1,5 @@
+<% if unrated_array(current_user).any? %>
+  <li class="notifications" id="notification_response" data-toggle="tooltip" data-placement="bottom" title data-original-title="You have <%= unrated_response_text(current_user) %>">
+    <%= link_to('', unrated_response_path(current_user), class: "ion ion-chatbubbles") %>
+  </li>
+<% end %>
