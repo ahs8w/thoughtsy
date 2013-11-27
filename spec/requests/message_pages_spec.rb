@@ -12,11 +12,8 @@ describe "Message Pages" do
     let!(:message) { FactoryGirl.create(:message, user_id: sender.id, receiver_id: user.id) }
 
     describe "as message receiver" do
-      before do
-        visit root_path
-        click_link("You have 1 unread message")
-      end
-          
+      before { visit user_messages_path(user) }
+      
       it { should have_title("Messages") }
       it { should have_link("From: #{sender.username}") }
       it { should have_selector("div.strong") }

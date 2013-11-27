@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "StaticPages" do
+  let(:user) { FactoryGirl.create(:user) }
+  let!(:post) { FactoryGirl.create(:post, user: user) }
 
   subject { page }
 
@@ -18,53 +20,49 @@ describe "StaticPages" do
 
     describe "when not signed in" do
       it { should_not have_link("Users") }
-      it { should_not have_button("Post") }
-      it { should_not have_button("Respond to a thought") }
-      it { should_not have_link("view my profile") }
+      it { should_not have_link("Post!") }
+      it { should_not have_link("Respond") }
+      it { should_not have_link(user.username) }
       it { should have_link("Sign up now!") }
       it { should have_link("Sign in") }
     end
 
     describe "when signed in" do
-      let(:user) { FactoryGirl.create(:user) }
       before do
-        FactoryGirl.create(:post, user: user)
         sign_in user
         visit root_path
       end
 
-      it { should have_button("Post") }
+      it { should have_link("Post!") }
       it { should_not have_link('Sign up now!', href: signup_path) }
       it { should_not have_link('Sign in',      href: signin_path) }
-      it { should have_link("#{user.username}") }
+      it { should have_link(user.username) }
       it { should have_link('Thoughts') }
 
-      describe "the sidebar" do
+      # describe "the sidebar" do
 
-        it "should singularize one post correctly" do
-          expect(page).to have_content("1 post")
-        end
+      #   it "should singularize one post correctly" do
+      #     expect(page).to have_content("1 post")
+      #   end
 
-        describe "with multiple posts" do
-          before do
-            FactoryGirl.create(:post, user: user)
-            FactoryGirl.create(:post, user: user)            
-            sign_in user
-            visit root_path
-          end
+      #   describe "with multiple posts" do
+      #     before do
+      #       FactoryGirl.create(:post, user: user)
+      #       FactoryGirl.create(:post, user: user)            
+      #       sign_in user
+      #       visit root_path
+      #     end
 
-          it "should pluralize correctly" do
-            expect(page).to have_content("3 posts")
-          end
-        end
-      end
+      #     it "should pluralize correctly" do
+      #       expect(page).to have_content("3 posts")
+      #     end
+      #   end
+      # end
     end
 
     ## views/shared/_respond_button ##
     describe "Response button behavior" do
-      let(:user) { FactoryGirl.create(:user) }
       before do
-        FactoryGirl.create(:post, user: user)
         sign_in user
         visit root_path
       end
@@ -73,7 +71,7 @@ describe "StaticPages" do
 
         context "and no available posts" do
 
-          it { should_not have_button("Respond") }
+          it { should_not have_link("Respond") }
           it { should have_content("currently no unanswered posts available") }
         end
 
@@ -81,7 +79,7 @@ describe "StaticPages" do
           let!(:available) { FactoryGirl.create(:post) }
           before { visit root_path }
 
-          it { should have_button("Respond") }
+          it { should have_link("Respond") }
         end
       end
 
@@ -94,7 +92,7 @@ describe "StaticPages" do
           visit root_path
         end
 
-        it { should have_button("Respond") }
+        it { should have_link("Respond") }
         it { should have_content("until your response expires!") }
       end
 
@@ -119,13 +117,13 @@ describe "StaticPages" do
 
         context "and no available posts" do
           it { should have_content("Your response expired") }
-          it { should_not have_button("Respond") }
+          it { should_not have_link("Respond") }
         end
       end
 
       describe "and an available post" do
-        let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
-        let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
+        let!(:available) { FactoryGirl.create(:post, state: 'unanswered', updated_at: 2.hours.ago) }
+        let!(:token_response) { FactoryGirl.create(:post, state: 'pending', updated_at: 2.days.ago) }
         before do
           user.token_timer = 25.hours.ago
           user.token_id = token_response.id
@@ -134,46 +132,49 @@ describe "StaticPages" do
         end
         
         it { should have_content("Click the button to get another thought.") }
-        it { should have_button("See a new thought") }
+        it { should have_link("Respond") }
+
+        context "after clicking respond" do
+          before { click_link('Respond') }
+
+          it "does not display the user's previous thought" do
+            expect(page).not_to have_content(token_response.content)
+          end
+        end
       end
     end
   end
 
   describe "Notification Area" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
     before do
       sign_in user
       visit root_path
     end
 
     context "with no notices" do
-      it { should_not have_link("unread message") }
-      it { should_not have_link("unrated response") }
+      it { should_not have_link("notification_message") }
+      it { should_not have_link("notification_response") }
     end
 
-    context "with notices" do
+    context "with notices" do   # tooltips need to be tested with JS
       let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
       let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
       before do
-        post.subscribe!   # testing subscribed responses as well
         post.answer!
         visit root_path
       end
 
       it "has links to appropriate pages" do
-        expect(page).to have_link("1 unread message", href: user_message_path(user, message))
-        expect(page).to have_link("1 unrated response", href: post_path(post))
+        expect(page).to have_link("", href: user_messages_path(user))
+        expect(page).to have_link("", href: post_path(post))
       end
 
-      context "with multiple notices" do
-        let!(:message2) { FactoryGirl.create(:message, receiver_id: user.id) }
+      context "with multiple responses" do
         let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
         before { visit root_path }
 
         it "pluralizes and links to profile" do
-          expect(page).to have_link("2 unread messages", href: user_path(user))
-          expect(page).to have_link("2 unrated responses", href: user_path(user))
+          expect(page).to have_link("", href: user_path(user))
         end
       end
     end
@@ -204,7 +205,7 @@ describe "StaticPages" do
 
   it "should have the correct links in the layout" do
     visit root_path
-    click_link "How it works"
+    click_link "About"
     expect(page).to have_title(full_title("About"))
     click_link "Thoughtsy"
     expect(page).to have_title(full_title(""))

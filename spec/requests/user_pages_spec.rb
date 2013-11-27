@@ -79,9 +79,7 @@ describe "UserPages" do
         expect(page).to have_link("Settings", href: edit_user_path(user))
         expect(page).to have_link("Messages", href: user_messages_path(user))
         expect(page).to have_button("Stats")
-        expect(page).to have_content("Answered thoughts")
         expect(page).to have_content("no answered thoughts")
-        expect(page).to have_content("Unanswered thoughts")
         expect(page).to have_content("no unanswered thoughts")
       end
 
@@ -208,7 +206,7 @@ describe "UserPages" do
         before { click_button submit }
         let(:user) { User.find_by(email: 'user@example.com') }
 
-        it { should have_button("Post a thought") }
+        it { should have_link("Post") }
         it { should have_success_message('Welcome') }
         it { should have_link('Sign out') }
       end

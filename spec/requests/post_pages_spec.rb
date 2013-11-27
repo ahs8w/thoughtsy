@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe "Post pages" do
-  subject { page }
-
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
+
+  subject { page }
 
   describe "Queue page" do
     let(:admin) { FactoryGirl.create(:admin) }
@@ -93,10 +93,7 @@ describe "Post pages" do
   describe "Index page" do
     let(:user) { FactoryGirl.create(:user) }
     let!(:post) { FactoryGirl.create(:post, updated_at: 1.hour.ago, state: 'answered') }
-    before do
-      sign_in user
-      visit posts_path
-    end
+    before { visit posts_path }
 
     it { should have_title("Thoughts") }
     # it { should have_content(post.user.username) }
@@ -189,13 +186,62 @@ describe "Post pages" do
     end
   end
 
+  describe "New page" do
+    before do
+      visit root_path
+      click_link "Post"
+    end
+
+    it { should have_selector('#post_form') }
+
+    context "with invalid information" do
+      before { click_button "Post" }
+
+      it "does not create a post" do
+        expect(Post.count).not_to eq 1
+      end
+
+      it "should have error message", focus:true do
+        expect('#post_form').to have_selector('#error_explanation')
+      end
+    end
+
+    context "with valid information" do
+
+      before { fill_in 'post_content', with: "Lorem ipsum" }
+      it "should create a post" do
+        expect { click_button "Post" }.to change(Post, :count).by(1)
+      end
+    end
+
+    context "as an image" do
+
+      context "through direct file upload link" do
+        before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
+
+        it "saves post" do
+          expect{ click_button "Post" }.to change(Post, :count).by(1)
+          expect(page).to have_success_message("Post created!")
+        end
+      end
+
+      context "through image url field" do
+        before { fill_in 'post[remote_image_url]', with: 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Marmaraytwotunnel.JPG/800px-Marmaraytwotunnel.JPG' }
+
+        it "saves post" do
+          expect { click_button "Post" }.to change(Post, :count).by(1)
+        end
+      end
+    end
+  end
+
 ## Response#New ##
   describe "Flag action" do
     let!(:post) { FactoryGirl.create(:post) }
     let!(:token_post) { FactoryGirl.create(:post) }
     before do
       visit root_path
-      click_button "Respond"
+      click_link "Respond"
       click_link "offensive or inappropriate?"
     end
 
@@ -229,7 +275,7 @@ describe "Post pages" do
     let!(:post) { FactoryGirl.create(:post, updated_at: 1.minute.ago) }
     before do
       visit root_path
-      click_button "Respond"
+      click_link "Respond"
     end
 
     describe "with an earlier post in existence" do
@@ -237,7 +283,7 @@ describe "Post pages" do
 
       it "the same post persists upon returning to page" do
         visit root_path
-        click_button "Respond"
+        click_link "Respond"
         expect(page).to have_content(post.content)
       end
     end
@@ -248,7 +294,7 @@ describe "Post pages" do
         user.token_timer = 25.hours.ago
         user.save
         visit root_path
-        click_button "Respond"
+        click_link "Respond"
       end
 
       it "the same post does not persist" do
@@ -278,13 +324,13 @@ describe "Post pages" do
 
     it "updates the state to 'pending'" do
       expect(post).to be_unanswered
-      click_button "Respond"
+      click_link "Respond"
       post.reload
       expect(post).to be_pending
     end
 
     describe "response creation" do
-      before { click_button "Respond" }
+      before { click_link "Respond" }
 
       context "with invalid information" do
 
@@ -302,51 +348,6 @@ describe "Post pages" do
           click_button "Respond"
           post.reload
           expect(post).to be_answered
-        end
-      end
-    end
-  end
- 
-  ## 'Post_a_thought' ##
-  describe "Post#Create" do
-    before { visit root_path }
-
-    context "with invalid information" do
-
-      it "does not create a post" do
-        expect { click_button "Post a thought" }.not_to change(Post, :count)
-      end
-
-      describe "error messages" do
-        before { click_button "Post a thought" }
-        it { should have_content("* Post must include either an image or content") }
-      end
-    end
-
-    context "with valid information" do
-
-      before { fill_in 'post_content', with: "Lorem ipsum" }
-      it "should create a post" do
-        expect { click_button "Post" }.to change(Post, :count).by(1)
-      end
-    end
-
-    context "as an image" do
-
-      context "through direct file upload link" do
-        before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
-
-        it "saves post" do
-          expect{ click_button "Post" }.to change(Post, :count).by(1)
-          expect(page).to have_success_message("Post created!")
-        end
-      end
-
-      context "through image url field" do
-        before { fill_in 'post[remote_image_url]', with: 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Marmaraytwotunnel.JPG/800px-Marmaraytwotunnel.JPG' }
-
-        it "saves post" do
-          expect { click_button "Post" }.to change(Post, :count).by(1)
         end
       end
     end

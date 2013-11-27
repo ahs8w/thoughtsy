@@ -11,7 +11,7 @@ describe "Subscription" do
   end
 
   describe "Response#New page" do
-    before { click_button "Respond" }
+    before { click_link "Respond" }
 
     it "post state is 'pending'" do
       post.reload
@@ -41,7 +41,7 @@ describe "Subscription" do
 
         it "click respond again does not yield the same post" do
           visit root_path
-          click_button "Respond"
+          click_link "Respond"
           expect(page).not_to have_content("#{post.content}")
         end
 
@@ -51,7 +51,7 @@ describe "Subscription" do
 
           it "clicking respond does not yield the answered post" do
             visit root_path
-            click_button "Respond"
+            click_link "Respond"
             expect(page).not_to have_content("#{post.content}")
           end
         end

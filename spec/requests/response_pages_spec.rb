@@ -12,12 +12,12 @@ describe "ResponsePages" do
     let!(:user_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
     before do
       visit root_path
-      click_button "Respond"
+      click_link "Respond"
     end
 
     it { should_not have_content(user_post.content) }
     it { should have_content(post.content) }
-    it { should have_selector('#time_explanation') }
+    it { should have_selector('#form_hint') }
     it { should have_link("offensive or inappropriate?") }
     it { should have_button("Repost") }
     it { should have_selector('#new_response') }
@@ -26,7 +26,7 @@ describe "ResponsePages" do
   describe "create action" do
     before do
       visit root_path
-      click_button "Respond"
+      click_link "Respond"
     end
 
     describe "with invalid information" do
