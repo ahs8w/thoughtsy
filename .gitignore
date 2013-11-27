@@ -13,7 +13,7 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
-/tmp
+/tmp/*
 /public/uploads
 
 # Ignore other unneeded files.

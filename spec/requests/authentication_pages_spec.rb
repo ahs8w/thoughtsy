@@ -29,7 +29,7 @@ describe "Authentication  : " do
       before { sign_in user }
 
       ## PROFILE page (redirected after sign_in)
-      it { should have_button("Post a thought") }
+      it { should have_link("Post") }
       it { should have_success_message('signed in') }
       it { should have_link('Users',            href: users_path) }
       it { should have_link('Thoughts',         href: posts_path) }
@@ -72,7 +72,7 @@ describe "Authentication  : " do
           # direct HTTP reqests: grants access to 'response' object which can verify the server response (e.g redirection)
         end
 
-        describe "when attempting to visit a protected page" do
+        describe "attempting to visit a protected page" do
           before do
             visit edit_user_path(user) # expect redirect to '/signin'
             sign_in user
@@ -84,14 +84,14 @@ describe "Authentication  : " do
               expect(page).to have_title('Edit profile')
             end
 
-            describe "when signing in again" do
+            describe "the second time" do
               before do
                 delete signout_path
                 sign_in user
               end
 
-              it "should render the default (home) page" do
-                expect(page).to have_button("Post a thought")
+              it "renders the default (home) page" do
+                expect(page).to have_link("Post")
               end
             end
           end

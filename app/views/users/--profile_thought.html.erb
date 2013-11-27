@@ -1,9 +1,0 @@
-<ul class="profile">
-  <% if profile_thought.each do |item| %>
-    <li>
-      <%= render partial: 'post', object: item %>
-    </li>
-  <% end.empty? %>
-    <p class="center lighter">There are no <%= message %></p>
-  <% end %>
-</ul>

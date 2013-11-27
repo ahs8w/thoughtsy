@@ -8,13 +8,13 @@
           <div class="row" id="about">
             <h1>How it works</h1>
             <div class="explanation">
-              <h4>Post a thought, question, statement, haiku, photo, idea...</h4>
-              <p>Your thought will be contemplated, possibly discussed amongst friends, re-read, and a thoughtful response will be returned to you.</p>
-              <p>The response may be funny or wise.  It might be thought provoking.  But it will be crafted with care by another human being.</p>
-              <h4>Responding to a thought</h4>
+              <h4>Post</h4>
+              <p>A thought, question, statement, poem, photo, idea...</p>
+              <p>Your post will be read, contemplated, possibly discussed amongst friends, and a response will be returned to you.</p>
+              <p>That response might be funny or wise.  It may or may not be thought provoking.  But it will be crafted with care by another human being.</p>
+              <h4>Respond</h4>
               <p>Be prepared to respond to anything.  Feel free to respond in any format.</p>
-              <p>You have 24 hours to send a response once you have clicked the 'Respond' button.</p>
-              <p>It is not necessary to be clever or wise.  The only requirement is thoughtfulness.</p>
+              <p>Wit and wisdom are welcome but not required.</p>
             </div>
 
             <h1>Faqs</h1>
@@ -22,11 +22,11 @@
 
               <div class="accordion-group">
                 <a class="accordion-toggle" data-toggle="collapse" href="#collapseOne">
-                  <p>So this is like a pen-pal thing?</p>
+                  <p>Is this like a pen-pal thing?</p>
                 </a>
                 <div id="collapseOne" class="collapse">
                   <p>
-                    No.  For starters, we're not 10 years old.  Secondly, this is not a long correspondence which fizzles out over time.  It's more like a firecracker.  A burst of energy which (hopefully) leaves your head spinning for some time afterwards.
+                    No.  In fact it's quite the opposite.  A brief exchange without any other obligations.  It's an anti-social correspondence.
                   </p>
                 </div>
               </div>
@@ -36,7 +36,7 @@
                   <p>What's with the 24 hour time limit?</p>
                 </a>
                 <div id="collapseTwo" class="accordion-body collapse">
-                  <p>The timer is to allow time for contemplation while ensuring that a thought be responded to within a reasonable amount of time.  If you fail to respond to an accepted thought within the 24 hour period that thought will be re-entered into the queue and your karma will suffer.</p>
+                  <p>The time limit is to allow time for contemplation while ensuring that a thought be responded to within a reasonable amount of time.  If a response is not posted within 24 hours after viewing a thought, the thought will be made available to other users and the responder's karma will suffer.</p>
                 </div>
               </div>
 
@@ -63,10 +63,18 @@
                   <p>How do the ratings and user karma work?</p>
                 </a>
                 <div id="collapseFive" class="accordion-body collapse">
-                  <p>The author or reposter of a thought has the ability to rate a response to that thought.  Response ratings are among the factors which determine a user's karma.</p>
+                  <p>The author and any reposters of a thought can rate a response to that thought.  With respect to karma, effort and thoughtfulness are rewarded.</p>
                 </div>
               </div>
 
+              <div class="accordion-group">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseSix">
+                  <p>What is that picture next to my name and how do I change it?</p>
+                </a>
+                <div id="collapseSix" class="accordion-body collapse">
+                  <p>Thats your user image and Thoughtsy uses <%= link_to 'Gravatar', "http://gravatar.com/emails", target: "_blank" %> for user images.  To personalize your image follow the link above or you can also change it via the <%= settings_link %>.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -409,7 +409,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   #responder_links {
     @include clearfix();
     margin-top: 5px;
-    padding: 0;
     form {
       display: inline-block;
       margin: 0;
@@ -547,6 +546,12 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     }
   }
 
+  .empty {
+    text-align: center;
+    color: $gray-light;
+    margin: 0 0 40px;
+  }
+
   #profile {
     text-align: center;
     h2 {
@@ -580,6 +585,62 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     text-align: center;
     margin: -35px 0 50px;
     @extend .lighter-links;
+  }
+
+/* Home page */
+
+  #title_banner {
+    text-align: center;
+    margin-top: 10%;
+    h1 {
+      font-size: 6em;
+      font-family: 'Merienda', cursive;
+      font-variant: normal;
+      color: #333;
+    }
+    p.lead {
+      font-size: 2em;
+      margin-top: 40px;
+    }
+  }
+
+  #signup_button {
+    margin-top: 70px;
+    display: block;
+    a.btn {
+      font-size: 1.5em;
+      padding: 15px 20px;
+      width: 200px;
+      margin-bottom: 15px;
+    }
+  }
+
+  #post_response_buttons {
+    text-align: center;
+    margin-top: 70px;
+    #respond_button, #post_button {
+      display: inline-block;
+      @include center-block();
+      width: 200px;
+      vertical-align: top;
+      margin-top: 40px;
+    }
+    .btn {
+      width: 200px;
+      padding: 15px 0;
+      font-size: 1.5em;
+      @include center-block();
+    }
+  }
+
+  .notifications {
+    font-size: 40px;
+    a {
+      color: #428bca !important;
+    }
+    a:hover {
+      color: #fff !important;
+    }
   }
 
 /* Messages Pages */

@@ -39,4 +39,12 @@ module ProfileHelper
     posts = user.posts.answered + user.posts_responded_to.uniq
     posts.sort_by { |post| post[:updated_at] }.reverse!   # posts sorted by most recent update/responses
   end
+
+  def settings_link
+    if signed_in?
+      link_to "user settings page", edit_user_path(current_user)
+    else
+      "user settings page when signed in"
+    end
+  end
 end

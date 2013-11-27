@@ -194,42 +194,45 @@ describe "Post pages" do
 
     it { should have_selector('#post_form') }
 
-    context "with invalid information" do
-      before { click_button "Post" }
+    describe "Post Creation" do
 
-      it "does not create a post" do
-        expect(Post.count).not_to eq 1
+      context "with invalid information" do
+        before { click_button "Post" }
+
+        it "does not create a post" do
+          expect(Post.count).not_to eq 1
+        end
+
+        # it "should have error message", js:true do
+        #   expect(page).to have_selector('#error_explanation')
+        # end
       end
 
-      it "should have error message", focus:true do
-        expect('#post_form').to have_selector('#error_explanation')
-      end
-    end
+      context "with valid information" do
 
-    context "with valid information" do
-
-      before { fill_in 'post_content', with: "Lorem ipsum" }
-      it "should create a post" do
-        expect { click_button "Post" }.to change(Post, :count).by(1)
-      end
-    end
-
-    context "as an image" do
-
-      context "through direct file upload link" do
-        before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
-
-        it "saves post" do
-          expect{ click_button "Post" }.to change(Post, :count).by(1)
-          expect(page).to have_success_message("Post created!")
+        before { fill_in 'post_content', with: "Lorem ipsum" }
+        it "should create a post" do
+          expect { click_button "Post" }.to change(Post, :count).by(1)
         end
       end
 
-      context "through image url field" do
-        before { fill_in 'post[remote_image_url]', with: 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Marmaraytwotunnel.JPG/800px-Marmaraytwotunnel.JPG' }
+      context "as an image" do
 
-        it "saves post" do
-          expect { click_button "Post" }.to change(Post, :count).by(1)
+        context "through direct file upload link" do
+          before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
+
+          it "saves post" do
+            expect{ click_button "Post" }.to change(Post, :count).by(1)
+            expect(page).to have_success_message("Post created!")
+          end
+        end
+
+        context "through image url field" do
+          before { fill_in 'post[remote_image_url]', with: 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Marmaraytwotunnel.JPG/800px-Marmaraytwotunnel.JPG' }
+
+          it "saves post" do
+            expect { click_button "Post" }.to change(Post, :count).by(1)
+          end
         end
       end
     end

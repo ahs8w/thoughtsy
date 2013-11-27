@@ -5,6 +5,11 @@
     <div class="well">
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
+          <% if @posts.any? %>
+            <h1>Answered Thoughts</h1>
+          <% else %>
+            <h3 class="empty">There are no answered thoughts</h3>
+          <% end %>
           <% @posts.each do |post| %>
             <div class="panel-focus">
               <div class="panel-post">
