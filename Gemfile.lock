@@ -67,6 +67,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    daemon_controller (1.1.7)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
     delayed_job (4.0.0)
@@ -127,6 +128,10 @@ GEM
     multi_json (1.8.1)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
+    passenger (4.0.25)
+      daemon_controller (>= 1.1.0)
+      rack
+      rake (>= 0.8.1)
     pg (0.17.0)
     polyglot (0.3.3)
     pry (0.9.12.2)
@@ -247,6 +252,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   libnotify
+  passenger
   pg
   rails (= 4.0.0)
   rails_12factor

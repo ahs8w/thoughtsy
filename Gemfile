@@ -12,6 +12,8 @@ gem 'rmagick'
 gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
 
+gem 'passenger'
+
 # Use sqlite3 as the database for Active Record
 group :development, :test do
   gem 'sqlite3'
