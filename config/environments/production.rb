@@ -77,4 +77,9 @@ Thoughtsy::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Workless gem
+  config.after_initialize do
+    Delayed::Job.scaler = :heroku_cedar
+  end
 end
