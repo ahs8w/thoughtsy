@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "messages", force: true do |t|
     t.text     "content"
@@ -48,9 +48,9 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.datetime "token_timer"
   end
 
-  add_index "posts", ["created_at"], name: "index_posts_on_created_at"
-  add_index "posts", ["state"], name: "index_posts_on_state"
-  add_index "posts", ["user_id"], name: "index_posts_on_user_id"
+  add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree
+  add_index "posts", ["state"], name: "index_posts_on_state", using: :btree
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "ratings", force: true do |t|
     t.integer  "user_id"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.integer  "response_id"
   end
 
-  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id"
+  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "responses", force: true do |t|
     t.text     "content"
@@ -71,9 +71,9 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.string   "image"
   end
 
-  add_index "responses", ["created_at"], name: "index_responses_on_created_at"
-  add_index "responses", ["post_id"], name: "index_responses_on_post_id"
-  add_index "responses", ["user_id"], name: "index_responses_on_user_id"
+  add_index "responses", ["created_at"], name: "index_responses_on_created_at", using: :btree
+  add_index "responses", ["post_id"], name: "index_responses_on_post_id", using: :btree
+  add_index "responses", ["user_id"], name: "index_responses_on_user_id", using: :btree
 
   create_table "subscriptions", force: true do |t|
     t.integer  "user_id"
@@ -82,9 +82,9 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.datetime "updated_at"
   end
 
-  add_index "subscriptions", ["post_id", "user_id"], name: "index_subscriptions_on_post_id_and_user_id", unique: true
-  add_index "subscriptions", ["post_id"], name: "index_subscriptions_on_post_id"
-  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id"
+  add_index "subscriptions", ["post_id", "user_id"], name: "index_subscriptions_on_post_id_and_user_id", unique: true, using: :btree
+  add_index "subscriptions", ["post_id"], name: "index_subscriptions_on_post_id", using: :btree
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username"
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 20131116083915) do
     t.integer  "responses_count",        default: 0,     null: false
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["remember_token"], name: "index_users_on_remember_token"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end

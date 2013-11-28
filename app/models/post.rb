@@ -15,10 +15,10 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('updated_at ASC') }
   scope :descending,  -> { order('updated_at DESC') }
-  scope :available,   ->(user) { where("(state == ? OR state == ?) AND posts.user_id != ?",
-                                       'unanswered', 'reposted', user.id) }
-  scope :answered,    -> { where("state == ? OR state == ?", 'answered', 'reposted') }
-  scope :personal,    -> { where.not("state == ? OR state == ?", 'answered', 'reposted') }
+  scope :available,   ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
+                                       "unanswered", "reposted", user.id) }
+  scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
+  scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
 
 
   after_create do |post|

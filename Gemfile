@@ -13,10 +13,11 @@ gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
 
 gem 'passenger'
+gem 'pg'
+
 
 # Use sqlite3 as the database for Active Record
 group :development, :test do
-  gem 'sqlite3'
   gem 'guard-rspec'
   # gem 'guard-livereload', require: false
   gem 'spork-rails', github: 'sporkrb/spork-rails'
@@ -65,7 +66,6 @@ group :doc do
 end
 
 group :production do
-  gem 'pg'
   gem 'rails_12factor'
   gem 'workless'
 end
