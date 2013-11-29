@@ -80,7 +80,9 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   }
 
   .wrapper {
-    background: image-url('lightbulb-outline-opaque.png') fixed no-repeat;
+    background-image: url(image_path('lightbulb-outline-opaque.png'));
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     background-color: rgba(255, 255, 255, .2);
     background-position: center 80%;
     min-height: 100%;

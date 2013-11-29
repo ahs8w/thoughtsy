@@ -5075,7 +5075,7 @@ ul {
   padding-left: 0; }
 
 .wrapper {
-  background: url("/assets/lightbulb-outline-opaque.png") fixed no-repeat;
+  background: url(/assets/lightbulb-outline-opaque.png) fixed no-repeat;
   background-color: rgba(255, 255, 255, 0.2);
   background-position: center 80%;
   min-height: 100%;
