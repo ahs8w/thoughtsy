@@ -37,7 +37,7 @@ describe "Rating Creation" do
 
     it "does not send an email to admin" do
       Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).not_to include ('admin@thoughtsy.com')
+      expect(last_email.to).not_to include ('adam@thoughtsy.com')
     end
   end
 
@@ -52,7 +52,7 @@ describe "Rating Creation" do
 
     it "sends an email to admin" do
       Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).to include ('admin@thoughtsy.com')
+      expect(last_email.to).to include ('adam@thoughtsy.com')
     end
 
     describe "reloading the page" do

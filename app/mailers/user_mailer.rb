@@ -1,7 +1,7 @@
 include PostsHelper
 
 class UserMailer < ActionMailer::Base
-  default from: "admin@thoughtsy.com"      #hash of default values for emails sent from this mailer
+  default from: "adam@thoughtsy.com"      #hash of default values for emails sent from this mailer
 
   def password_reset(user)
     @user = user
@@ -47,12 +47,12 @@ class UserMailer < ActionMailer::Base
 
   def flag_email(post)
     @post = post
-    mail to: 'admin@thoughtsy.com', subject: "Thoughtsy: post flagged"
+    mail to: 'adam@thoughtsy.com', subject: "Thoughtsy: post flagged"
   end
 
   def brilliant_email(response)
     @response = response
     @post = @response.post
-    mail to: 'admin@thoughtsy.com', subject: "Thoughtsy: response rated 'brilliant'"
+    mail to: 'adam@thoughtsy.com', subject: "Thoughtsy: response rated 'brilliant'"
   end
 end

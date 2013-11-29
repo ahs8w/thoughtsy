@@ -29,7 +29,7 @@ module Thoughtsy
     # configuring an external font
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
-    # necessary for heroku to serve background image file
+    # necessary for heroku to serve background image file (Do not precompile assets!)
     config.assets.initialize_on_precompile = false
 
     # For securing sensitive information, put it in application.yml (don't forget to gitignore it)

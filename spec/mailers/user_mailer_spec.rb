@@ -8,7 +8,7 @@ describe UserMailer do
     it "sends user password reset url" do
       expect(mail.subject).to eq("Password reset")
       expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["admin@thoughtsy.com"])
+      expect(mail.from).to eq(["adam@thoughtsy.com"])
     end
 
     it "renders the email body" do
@@ -23,7 +23,7 @@ describe UserMailer do
     it "sends inactive_user_email to user" do
       expect(mail.subject).to eq("Thoughtsy needs you!")
       expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["admin@thoughtsy.com"])
+      expect(mail.from).to eq(["adam@thoughtsy.com"])
     end
 
     it "renders the email body" do
@@ -44,7 +44,7 @@ describe UserMailer do
       it "sends correct mail" do
         expect(mail.subject).to eq("Someone has responded to your thought!")
         expect(mail.to).to eq([user.email])
-        expect(mail.from).to eq(["admin@thoughtsy.com"])
+        expect(mail.from).to eq(["adam@thoughtsy.com"])
       end
 
       it "renders the email body" do
@@ -62,7 +62,7 @@ describe UserMailer do
         mail = UserMailer.follower_email(follower, response)
         expect(mail.subject).to eq("Your followed post has a new response!")
         expect(mail.to).to eq([follower.email])
-        expect(mail.from).to eq (["admin@thoughtsy.com"])
+        expect(mail.from).to eq (["adam@thoughtsy.com"])
         expect(mail.body.encoded).to match(post_path(post))
       end
 
@@ -87,7 +87,7 @@ describe UserMailer do
     it "sends message_email to receiver" do
       expect(mail.subject).to eq("#{sender.username} sent you a personal message.")
       expect(mail.to).to eq([receiver.email])
-      expect(mail.from).to eq(["admin@thoughtsy.com"])
+      expect(mail.from).to eq(["adam@thoughtsy.com"])
     end
 
     it "renders the email body" do
@@ -101,8 +101,8 @@ describe UserMailer do
 
     it "sends flag_email to admin" do
       expect(mail.subject).to eq("Thoughtsy: post flagged")
-      expect(mail.to).to eq(['admin@thoughtsy.com'])
-      expect(mail.from).to eq(["admin@thoughtsy.com"])
+      expect(mail.to).to eq(['adam@thoughtsy.com'])
+      expect(mail.from).to eq(["adam@thoughtsy.com"])
     end
 
     it "renders the email body" do
@@ -116,8 +116,8 @@ describe UserMailer do
 
     it "sends brilliant_email to admin" do
       expect(mail.subject).to eq("Thoughtsy: response rated 'brilliant'")
-      expect(mail.to).to eq(['admin@thoughtsy.com'])
-      expect(mail.from).to eq(["admin@thoughtsy.com"])
+      expect(mail.to).to eq(['adam@thoughtsy.com'])
+      expect(mail.from).to eq(["adam@thoughtsy.com"])
     end
 
     it "renders the email body" do

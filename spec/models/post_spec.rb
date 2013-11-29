@@ -209,7 +209,7 @@ describe Post do
 
       it "sends an email to admin" do
         Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-        expect(last_email.to).to include 'admin@thoughtsy.com'
+        expect(last_email.to).to include 'adam@thoughtsy.com'
       end
 
       it "updates post author score" do
