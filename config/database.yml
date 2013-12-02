@@ -16,10 +16,10 @@ test:
   password: password1
 
 # only to provide dummy variables for precompiling assets on heroku
-test:
-  adapter: postgresql
-  encoding: unicode
-  database: thoughtsy_production
-  pool: 5
-  username: adam
-  password: password1
+# test:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: thoughtsy_production
+#   pool: 5
+#   username: adam
+#   password: password1

@@ -10,7 +10,7 @@ if Rails.env.production?
   }
 
   ActionMailer::Base.default_url_options = { host: "thoughtsy.com" }
-elsif Rails.env.development?
+else
   ActionMailer::Base.smtp_settings = {
     :address              => "smtp.gmail.com",
     :port                 => 587,
@@ -23,5 +23,5 @@ elsif Rails.env.development?
 
   ActionMailer::Base.default_url_options = { host: "localhost:3000" }
   require 'development_mail_interceptor'
-  ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor)
+  ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development?
 end

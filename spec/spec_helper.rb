@@ -63,7 +63,8 @@ Spork.prefork do
     # carrierwave test clean-up
     config.after(:each) do
       if Rails.env.test?
-        FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
+        FileUtils.rm_rf(Dir["#{Rails.root}/tmp/uploads/test"])
+        FileUtils.rm_rf(Dir["#{Rails.root}/uploads/test"])
       end
     end
   end
