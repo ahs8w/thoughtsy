@@ -10,6 +10,8 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+    # @uploader = Post.new.image
+    # @uploader.success_action_redirect = new_post_url
   end
 
   def index
