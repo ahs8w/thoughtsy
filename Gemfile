@@ -41,6 +41,7 @@ group :test do
   gem 'timecop'
 end
 
+gem 'asset_sync'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

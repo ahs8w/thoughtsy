@@ -35,6 +35,9 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
     arel (4.0.0)
+    asset_sync (1.0.0)
+      activemodel
+      fog (>= 1.8.0)
     atomic (1.1.14)
     bcrypt-ruby (3.0.1)
     better_errors (1.0.1)
@@ -262,6 +265,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  asset_sync
   bcrypt-ruby (~> 3.0.1)
   better_errors
   binding_of_caller
