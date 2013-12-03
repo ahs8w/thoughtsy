@@ -459,6 +459,16 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   }
 
 /* Posts Pages */
+
+  #posts_index {
+    .panel-post {
+      position: relative;
+      .gravatar {
+        position: absolute;
+        left: 10px;
+      }
+    }
+  }
  
   #posts_show {
     img {
