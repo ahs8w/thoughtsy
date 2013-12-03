@@ -469,8 +469,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     .panel-post {
       position: relative;
       .gravatar {
-        position: absolute;
-        left: 10px;
+        float: left;
       }
     }
   }
