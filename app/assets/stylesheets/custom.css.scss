@@ -167,6 +167,11 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     line-height: 1.7em;
   }
 
+  .thoughtsy {
+    font-family: 'Merienda', cursive;
+    font-variant: normal;
+  }
+
   .center {
     text-align: center;
   }
@@ -606,8 +611,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     margin-top: 10%;
     h1 {
       font-size: 6em;
-      font-family: 'Merienda', cursive;
-      font-variant: normal;
+      @extend .thoughtsy;
       color: #333;
     }
     p.lead {
@@ -682,22 +686,15 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 /* About, Team, Password Reset */
 
   #about {
+    text-align: center;
     .accordion {
       @extend .lighter-links;
     }
     p {
-      font-size: 1.2em
+      font-size: 1.2em;
     }
-    .explanation {
+    .explanation, .btn {
       margin-bottom: 40px;
-      h4 {
-        margin: 30px auto;
-        font-size: 1.4em;
-        font-weight: 600;
-      }
-      p {
-        margin-left: 20px;
-      }
     }
   }
 

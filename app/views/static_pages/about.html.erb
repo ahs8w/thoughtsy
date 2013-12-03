@@ -6,16 +6,19 @@
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <div class="row" id="about">
-            <h1>How it works</h1>
+            <h1>About</h1>
             <div class="explanation">
-              <h4>Post</h4>
-              <p>A thought, question, statement, poem, photo, idea...</p>
-              <p>Your post will be read, contemplated, possibly discussed amongst friends, and a response will be returned to you.</p>
-              <p>That response might be funny or wise.  It may or may not be thought provoking.  But it will be crafted with care by another human being.</p>
-              <h4>Respond</h4>
-              <p>Be prepared to respond to anything.  Feel free to respond in any format.</p>
+              <p><span class="thoughtsy">Thoughtsy</span> is a thought exchange.<p>
+              <p>A place to share what's on your mind and reflect on the thoughts of others.</p>
+              <p>Ask for some specific advice or wax poetic on a topic of your choice.</p>
+              <p>Be as serious or as silly as you want.</p>
               <p>Wit and wisdom are welcome but not required.</p>
             </div>
+            <% if signed_in? %>
+              <%= link_to "Share something!", new_post_path, class: "btn btn-lg btn-primary" %>
+            <% else %>
+              <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
+            <% end %>
 
             <h1>Faqs</h1>
             <div class="accordion center">
@@ -72,7 +75,7 @@
                   <p>What is that picture next to my name and how do I change it?</p>
                 </a>
                 <div id="collapseSix" class="accordion-body collapse">
-                  <p>Thats your user image and Thoughtsy uses <%= link_to 'Gravatar', "http://gravatar.com/emails", target: "_blank" %> for user images.  To personalize your image follow the link above or you can change it via the <%= settings_link %>.</p>
+                  <p>Thats your user image and <span class="thoughtsy">Thoughtsy</span> uses <%= link_to 'Gravatar', "http://gravatar.com/emails", target: "_blank" %> for user images.  To personalize your image follow the link above or you can change it via the <%= settings_link %>.</p>
                 </div>
               </div>
             </div>
