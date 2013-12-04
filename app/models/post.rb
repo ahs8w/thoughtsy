@@ -15,8 +15,9 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('updated_at ASC') }
   scope :descending,  -> { order('updated_at DESC') }
-  scope :available,   ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
+  scope :unanswered,  ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
                                        "unanswered", "reposted", user.id) }
+  scope :available,   ->(user) { unanswered(user).where.not("? = ANY (unavailable_users)", user.id) }
   scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
   scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
 
@@ -90,6 +91,16 @@ class Post < ActiveRecord::Base
   def reset_token_timer
     self.update_attribute(:token_timer, nil)
   end
+
+  def add_unavailable_users(user)
+    unavailable_users_will_change!
+    self.update_attribute(:unavailable_users, unavailable_users.push(user.id))
+  end
+  
+  def remove_unavailable_users(user)
+    unavailable_users_will_change!
+    self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
+  end                                         # delete returns deleted value rather than the array...
 
   private
   

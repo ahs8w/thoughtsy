@@ -103,8 +103,8 @@ describe "ResponsePages" do
         click_button "Respond"
         post.reload
         expect(post.state).to eq 'reposted'
-        expect(other_user.oldest_available_post).to eq post
-        expect(user.oldest_available_post).not_to eq post
+        expect(Post.available(other_user).first).to eq post
+        expect(Post.available(user).first).not_to eq post
       end
 
       ## Should be in Mailer Spec? ##

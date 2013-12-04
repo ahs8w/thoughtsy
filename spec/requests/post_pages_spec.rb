@@ -289,6 +289,7 @@ describe "Post pages" do
         it "displays flash and redirects to home page" do
           expect(page).to have_content "Thought reposted."
           expect(page).to have_link "Post!"
+          expect(page).to have_content "currently no unanswered posts"
         end
 
         it "resets post state and user tokens" do

@@ -30,6 +30,7 @@ describe "Subscription" do
         expect(post.followers).to include user
         expect(post.state).to eq 'subscribed'
         expect(post.user.score).to be 4     # (1 + 3)
+        expect(post.unavailable_users).to include user.id
       end
 
       describe "after answering followed post" do
@@ -66,6 +67,7 @@ describe "Subscription" do
           post.reload
           expect(post.followers).not_to include user
           expect(post.state).to eq 'pending'
+          expect(post.unavailable_users).not_to include user.id
         end
 
         it "updates post author's score" do

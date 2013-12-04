@@ -51,14 +51,15 @@ class PostsController < ApplicationController
     end
   end
 
-# Response#Show #
+# Ratings (value=1) #
   def repost
     @post = Post.find(params[:id])
     @post.repost!
     flash[:info] = "Thought reposted."
     redirect_to root_url
   end
-
+#
+# Response#New #
   def flag
     @post = Post.find(params[:id])
     @token_post = Post.available(current_user).ascending.first
@@ -72,6 +73,20 @@ class PostsController < ApplicationController
     end
   end
 
+  def language
+    @post = Post.find(params[:id])
+    @post.add_unavailable_users(current_user)
+    @token_post = Post.available(current_user).ascending.first
+    @post.unanswer!
+    current_user.reset_tokens
+    flash[:info] = "Thought reposted."
+    if @token_post
+      redirect_to new_post_response_path(@token_post)
+    else
+      redirect_to root_url
+    end
+  end
+#
   private
     def post_params
       params.require(:post).permit(:content, :image, :remote_image_url)

@@ -89,26 +89,28 @@ class User < ActiveRecord::Base
     Post.available(self).size > 0
   end
 
-  def oldest_available_post  # also means unsubscribed
-    posts = Post.available(self).ascending.includes(:subscriptions).limit(10)
-    a = []
-    posts.each do |post|
-      unless post.followers.include?(self)
-        a << post
-      end
-    end
-    a.first
-  end
+  # def oldest_available_post  # also means unsubscribed
+  #   posts = Post.available(self).ascending.includes(:subscriptions).limit(10)
+  #   a = []
+  #   posts.each do |post|
+  #     unless post.followers.include?(self)
+  #       a << post
+  #     end
+  #   end
+  #   a.first
+  # end
 
 # Subscriptions
   def subscribe!(post)
     self.subscriptions.create!(post_id: post.id)
     post.subscribe!     #subscribed
+    post.add_unavailable_users(self)
   end
 
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
     post.unsubscribe!    #pending
+    post.remove_unavailable_users(self)
   end
 
 # Reputation
