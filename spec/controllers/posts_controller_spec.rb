@@ -66,7 +66,7 @@ describe PostsController do
 
     it "shows flash and changes post state" do
       get :flag, id: post.id
-      expect(flash[:warning]).to eq "Post flagged."
+      expect(flash[:warning]).to eq "Thought flagged."
       post.reload
       expect(post.state).to eq 'flagged'
     end

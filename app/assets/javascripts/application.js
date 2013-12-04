@@ -23,12 +23,6 @@ ready = function () {
   $('div.alert').delay(2000).fadeOut(5000);
 };
 
-// tooltips = function () {
-//   $('#response_tooltip').tooltip();
-//   $('#message_tooltip').tooltip();
-// };
-
 $(document).ready(ready)
 $(document).on('page:load', ready)
-// $(window).bind("page:change", ready, tooltips)
 

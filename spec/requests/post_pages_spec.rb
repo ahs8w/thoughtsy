@@ -239,30 +239,76 @@ describe "Post pages" do
   end
 
 ## Response#New ##
-  describe "Flag action" do
+  describe "Response Page actions" do
     let!(:post) { FactoryGirl.create(:post) }
-    let!(:token_post) { FactoryGirl.create(:post) }
     before do
       visit root_path
       click_link "Respond"
-      click_link "offensive or inappropriate?"
     end
 
-    it "displays flash, and changes post state" do
-      expect(page).to have_content "Post flagged."
-      post.reload
-      expect(post).to be_flagged
+    describe "Flag action" do
+
+      context "with no available posts" do
+        before { click_link "offensive or inappropriate?" }
+
+        it "displays flash and redirects to home page" do
+          expect(page).to have_content "Thought flagged."
+          expect(page).to have_link "Post!"
+        end
+
+        it "resets post state and user tokens" do
+          post.reload
+          expect(post).to be_flagged
+          user.reload
+          expect(user.token_id).to be nil
+        end
+
+        it "sends an email to admin" do
+          Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+          expect(last_email.to).to include('adam@thoughtsy.com')
+        end
+      end
+
+      context "with available post" do
+        let!(:token_post) { FactoryGirl.create(:post) }
+        before { click_link "offensive or inappropriate?" }
+
+        it "gets a new post and sets states" do
+          expect(page).to have_content(token_post.content)
+          user.reload
+          expect(user.token_id).to eq token_post.id
+        end
+      end
     end
 
-    it "gets a new post and sets states" do
-      expect(page).to have_content(token_post.content)
-      user.reload
-      expect(user.token_id).to eq token_post.id
-    end
+    describe "Language action" do
 
-    it "sends an email to admin" do
-      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).to include('adam@thoughtsy.com')
+      context "with no available posts" do
+        before { click_link "not your language?" }
+
+        it "displays flash and redirects to home page" do
+          expect(page).to have_content "Thought reposted."
+          expect(page).to have_link "Post!"
+        end
+
+        it "resets post state and user tokens" do
+          post.reload
+          expect(post).to be_unanswered
+          user.reload
+          expect(user.token_id).to be nil
+        end
+      end
+
+      context "with available post" do
+        let!(:token_post) { FactoryGirl.create(:post) }
+        before { click_link "not your language?" }
+
+        it "gets a new post and sets states" do
+          expect(page).to have_content(token_post.content)
+          user.reload
+          expect(user.token_id).to eq token_post.id
+        end
+      end
     end
   end
 

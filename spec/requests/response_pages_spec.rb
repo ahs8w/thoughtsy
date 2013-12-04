@@ -21,6 +21,7 @@ describe "ResponsePages" do
     it { should have_link("offensive or inappropriate?") }
     it { should have_button("Repost") }
     it { should have_selector('#new_response') }
+    it { should have_link("not your language?") }
   end
 
   describe "create action" do

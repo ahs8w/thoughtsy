@@ -64,16 +64,12 @@ class PostsController < ApplicationController
     @token_post = Post.available(current_user).ascending.first
     @post.flag!       # sends flag_email on transition
     current_user.reset_tokens
-    flash[:warning] = "Post flagged."
-    redirect_to new_post_response_path(@token_post)
-
-    # respond_to do |format|
-    #   format.html do
-    #     flash[:warning] = "Post flagged."
-    #     redirect_to new_post_response_path(@token_post)
-    #   end
-    #   format.js { flash.now[:warning] = "Post flagged." }
-    # end
+    flash[:warning] = "Thought flagged."
+    if @token_post
+      redirect_to new_post_response_path(@token_post)
+    else
+      redirect_to root_url
+    end
   end
 
   private

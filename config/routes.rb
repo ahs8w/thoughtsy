@@ -9,6 +9,7 @@ Thoughtsy::Application.routes.draw do
     member do
       get 'repost'
       get 'flag'
+      get 'language'
     end
     get 'queue', on: :collection
   end
