@@ -104,13 +104,11 @@ class User < ActiveRecord::Base
   def subscribe!(post)
     self.subscriptions.create!(post_id: post.id)
     post.subscribe!     #subscribed
-    post.add_unavailable_users(self)
   end
 
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
-    post.unsubscribe!    #pending
-    post.remove_unavailable_users(self)
+    # post.unsubscribe!    #pending
   end
 
 # Reputation

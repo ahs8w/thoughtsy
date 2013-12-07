@@ -416,22 +416,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   #responder_links {
     @include clearfix();
     margin-top: 5px;
-    form {
-      display: inline-block;
-      margin: 0;
-      input {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 99%;
-        padding: 0;
-        border: 0;
-        margin-bottom: 2px;
-        color: #336287;
-      }
-      input:hover {
-        color: lighten(#336287, 20%);
-        text-decoration: none;
-      }
-    }
   }
 
   #spacer {
@@ -442,6 +426,27 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   #form_hint {
     @extend .lighter-links;
     text-align: center;
+  }
+
+  #subscribe {
+    text-align: center;
+    @extend .lighter-links;
+    form {
+      display: inline-block;
+      margin: 0;
+      input {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 99%;
+        padding: 0;
+        border: 0;
+        margin-bottom: 2px;
+        color: #ccc;
+      }
+      input:hover {
+        color: #fff;
+        text-decoration: none;
+      }
+    }
   }
   
   #response_form, #post_form {

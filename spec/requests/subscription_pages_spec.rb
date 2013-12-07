@@ -5,75 +5,39 @@ describe "Subscription" do
 
   let(:user) { FactoryGirl.create(:user) }
   let!(:post) { FactoryGirl.create(:post, created_at: 5.minutes.ago) }
+  let!(:response) { FactoryGirl.create(:response, post_id: post.id, user_id: user.id) }
   before do
     sign_in user
-    visit root_path
+    visit post_path(post)
   end
 
-  describe "Response#New page" do
-    before { click_link "Respond" }
+  describe "subscribing" do
+    before { click_button "Repost" }
 
-    it "post state is 'pending'" do
+    it { should have_info_message("Thought followed.") }
+    it { should have_content("You are following this post.") }
+    it { should have_link("Unfollow") }
+
+    it "updates follower attributes, post state, and user score" do
       post.reload
-      expect(post.state).to eq 'pending'
+      expect(post.followers).to include user
+      expect(post.state).to eq 'reposted'
+      expect(post.user.score).to be 4     # (1 + 3)
     end
 
-    describe "following (clicking repost)" do
-      before { click_button "Repost" }
+    describe "clicking unfollow (unsubscribing)" do
+      before { click_link "Unfollow" }
 
-      it { should have_info_message("Thought followed.") }
-      it { should have_content("You are following this post.") }
-      it { should have_link("unfollow") }
+      it { should have_info_message("Thought unfollowed.") }
 
-      it "updates follower attributes, post state, and user score" do
+      it "updates follower attribute and post state" do
         post.reload
-        expect(post.followers).to include user
-        expect(post.state).to eq 'subscribed'
-        expect(post.user.score).to be 4     # (1 + 3)
-        expect(post.unavailable_users).to include user.id
+        expect(post.followers).not_to include user
       end
 
-      describe "after answering followed post" do
-        let!(:newer_post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
-        before do
-          fill_in 'response_content', with: "Lorem Ipsum"
-          click_button "Respond"
-        end
-
-        it "click respond again does not yield the same post" do
-          visit root_path
-          click_link "Respond"
-          expect(page).not_to have_content("#{post.content}")
-        end
-
-        describe "as a different user" do
-          let(:new_user) { FactoryGirl.create(:user) }
-          before { sign_in new_user }
-
-          it "clicking respond does not yield the answered post" do
-            visit root_path
-            click_link "Respond"
-            expect(page).not_to have_content("#{post.content}")
-          end
-        end
-      end
-
-      describe "clicking unfollow (unsubscribing)" do
-        before { click_link "unfollow" }
-
-        it { should have_info_message("Thought unfollowed.") }
-
-        it "updates follower attribute and post state" do
-          post.reload
-          expect(post.followers).not_to include user
-          expect(post.state).to eq 'pending'
-          expect(post.unavailable_users).not_to include user.id
-        end
-
-        it "updates post author's score" do
-          post.user.reload
-          expect(post.user.score).to be 1
-        end
+      it "updates post author's score" do
+        post.user.reload
+        expect(post.user.score).to be 1
       end
     end
   end

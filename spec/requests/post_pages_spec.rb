@@ -148,7 +148,7 @@ describe "Post pages" do
       it { should have_selector('img') }
     end
 
-    describe "rating form access" do
+    describe "user specific behavior" do
 
       context "as post author" do
         it { should have_selector("div.rating_form") }
@@ -177,11 +177,20 @@ describe "Post pages" do
       context "as response author" do
         before do
           sign_in response.user
-          response.user.subscribe!(post)
           visit post_path(post)
         end
 
         it { should_not have_selector("div.rating_form") }
+        it { should have_button("Repost") }
+
+        context "as follower" do
+          before do
+            response.user.subscribe!(post)
+            visit post_path(post)
+          end
+
+          it { should_not have_button("Repost") }
+        end
       end
     end
   end
@@ -284,7 +293,7 @@ describe "Post pages" do
     describe "Language action" do
 
       context "with no available posts" do
-        before { click_link "not your language?" }
+        before { click_link "don't understand?" }
 
         it "displays flash and redirects to home page" do
           expect(page).to have_content "Thought reposted."
@@ -302,7 +311,7 @@ describe "Post pages" do
 
       context "with available post" do
         let!(:token_post) { FactoryGirl.create(:post) }
-        before { click_link "not your language?" }
+        before { click_link "don't understand?" }
 
         it "gets a new post and sets states" do
           expect(page).to have_content(token_post.content)

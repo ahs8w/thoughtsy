@@ -1,17 +1,8 @@
 <div id="responder_links">
-  <% if @post.followers.include?(current_user) %>
-    <span class="pull-right">
-      <%= render 'subscriptions/unsubscribe' %>
-    </span>
-  <% else %>
-    <span class="pull-left">
-      <small>
-        <%= link_to "offensive or inappropriate?", flag_post_path(@post.id) %>
-        | <%= link_to "not your language?", language_post_path(@post.id) %>
-      </small>
-    </span>
-    <span class="pull-right">
-      <small>Like this thought? <%= render 'subscriptions/subscribe' %> to see what others have to say about it.</small>
-    </span>
-  <% end %>
+  <span class="pull-left">
+    <small><%= link_to "offensive or inappropriate?", flag_post_path(@post.id) %></small>
+  </span>
+  <span class="pull-right">
+    <small><%= link_to "don't understand?", language_post_path(@post.id) %></small>
+  </span>
 </div>

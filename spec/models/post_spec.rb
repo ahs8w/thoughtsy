@@ -24,6 +24,7 @@ describe Post do
   it { should respond_to(:image) }
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
+  it { should respond_to(:responders) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
   its(:token_timer) { should be_nil }
@@ -45,6 +46,17 @@ describe Post do
     context "and an image" do
       before { @post.image = File.open(File.join(Rails.root, "spec/support/test.png")) }
       it { should be_valid }
+    end
+  end
+
+  describe "#responders" do
+    let(:response) { FactoryGirl.create(:response, post_id: @post.id) }
+    let(:second_response) { FactoryGirl.create(:response, post_id: @post.id) }
+    before { @post.save }
+
+    it "displays users who have responded to a post" do
+      expect(@post.responders).to include second_response.user
+      expect(@post.responders).to include response.user
     end
   end
 
@@ -100,11 +112,11 @@ describe Post do
 
       context "when state is 'answered' or 'reposted'" do
         before do
-          user.subscribe!(@post)
           @post.answer!
+          user.subscribe!(@post)
         end
 
-        it "worker runs but does nothing" do
+        it "post state remains unchanged" do
           expect(Delayed::Worker.new.work_off).to eq [1, 0]
           @post.reload
           expect(@post.state).to eq 'reposted'
@@ -159,9 +171,7 @@ describe Post do
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
     let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', updated_at: 5.minutes.ago) }
-    let!(:subscribed) { FactoryGirl.create(:post, updated_at: 10.minutes.ago) }
     let!(:no_state) { FactoryGirl.create(:post) }
-    before { user.subscribe!(subscribed) }
 
     it ".available" do
       expect(Post.available(user)).not_to include(user_post, answered_post, pending_post, unavailable_users_post)
@@ -169,7 +179,6 @@ describe Post do
     end
 
     it ".answered" do
-      subscribed.answer!
       expect(Post.answered).not_to include(user_post, pending_post, unanswered)
       expect(Post.answered).to include(answered_post, reposted)
     end
@@ -247,24 +256,6 @@ describe Post do
       end
     end
 
-    describe ":subscribed" do
-      before { @post.subscribe! }
-
-      it "changes to :subscribed on #subscribe" do
-        expect(@post).to be_subscribed
-      end
-
-      it "changes to :reposted on #answer" do
-        @post.answer!
-        expect(@post).to be_reposted
-      end
-
-      it "changes to :pending on #unsubscribe" do
-        @post.unsubscribe!
-        expect(@post).to be_pending
-      end
-    end
-
     describe ":answered" do
       before { @post.answer! }
 
@@ -275,7 +266,7 @@ describe Post do
 
       it "should change to :subscribed on #subscribe" do
         @post.subscribe!
-        expect(@post).to be_subscribed
+        expect(@post).to be_reposted
       end
 
       describe "#repost!" do

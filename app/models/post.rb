@@ -3,6 +3,8 @@ class Post < ActiveRecord::Base
   has_many :responses
   has_many :ratings, through: :responses
 
+  has_many :responders, through: :responses, source: :user
+
   has_many :subscriptions
   has_many :followers, through: :subscriptions, source: :user
     # returns users which are following the post
@@ -51,7 +53,6 @@ class Post < ActiveRecord::Base
     end
 
     event :answer do
-      transition :subscribed => :reposted
       transition any => :answered
     end
 
@@ -60,12 +61,12 @@ class Post < ActiveRecord::Base
     end
 
     event :subscribe do
-      transition any => :subscribed
+      transition :answered => :reposted
     end
 
-    event :unsubscribe do
-      transition :subscribed => :pending
-    end
+    # event :unsubscribe do
+    #   transition :reposted => :pending
+    # end
 
     event :flag do
       transition any => :flagged

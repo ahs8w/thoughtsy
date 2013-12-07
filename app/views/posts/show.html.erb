@@ -10,6 +10,11 @@
           </div>
         </div>
       </div>
+
+      <% if @post.responders.include?(current_user) %>
+        <%= render 'subscriptions/link' %>
+      <% end %>
+
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <ul class="responses">
