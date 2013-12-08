@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts = Post.where(state: "answered").descending.paginate(page: params[:page], :per_page => 20)
+    @posts = Post.answered.descending.paginate(page: params[:page], :per_page => 20)
   end
 
   def show

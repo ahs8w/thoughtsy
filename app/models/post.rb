@@ -61,7 +61,7 @@ class Post < ActiveRecord::Base
     end
 
     event :subscribe do
-      transition :answered => :reposted
+      transition any => :reposted
     end
 
     # event :unsubscribe do

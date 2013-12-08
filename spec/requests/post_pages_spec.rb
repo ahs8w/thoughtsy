@@ -108,15 +108,19 @@ describe "Post pages" do
       end
     end
 
-    describe "includes only answered posts" do
+    describe "includes only .answered posts" do
       let(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
       let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
       let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
+      let!(:reposted) { FactoryGirl.create(:post, state: 'reposted') }
+      let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
       before { visit posts_path }
 
       it { should_not have_content(unanswered.content) }
       it { should_not have_content(pending.content) }
       it { should_not have_content(flagged.content) }
+      it { should have_content(reposted.content) }
+      it { should have_content(answered.content) }
     end
   end
 
