@@ -149,6 +149,18 @@ describe "UserPages" do
         end
       end
 
+      describe "profile links" do
+        it "clicking settings directs to settings page" do
+          find('.user_stats').click_link "Settings"
+          expect(page).to have_content "Update your profile"
+        end
+
+        it "clicking messages directs to messages page" do
+          find('.user_stats').click_link "Messages"
+          expect(page).to have_content "Personal Messages"
+        end
+      end
+
       # describe "pagination" do
       #   before do
       #     6.times { FactoryGirl.create(:post, user: user) }
