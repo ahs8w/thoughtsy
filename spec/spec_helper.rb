@@ -64,7 +64,7 @@ Spork.prefork do
     config.after(:each) do
       if Rails.env.test?
         FileUtils.rm_rf(Dir["#{Rails.root}/tmp/uploads/test"])
-        FileUtils.rm_rf(Dir["#{Rails.root}/uploads/test"])
+        FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/test"])
       end
     end
   end
