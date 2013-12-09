@@ -31,6 +31,9 @@ module Thoughtsy
     # configuring an external font
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
+    # for font_asset gem and cloudfront cdn
+    config.assets.version
+
     # necessary for heroku to serve background image file (Do not precompile assets!)
     config.assets.initialize_on_precompile = false
 
