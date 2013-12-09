@@ -6,11 +6,11 @@
 */
 @font-face {
   font-family: "Ionicons";
-  src: url(asset-path('ionicons.eot'));
-  src: url(asset-path('ionicons.eot') + '#iefix') format("embedded-opentype"), 
-       url(asset-path('ionicons.ttf')) format("truetype"), 
-       url(asset-path('ionicons.woff')) format("woff"), 
-       url(asset-path('ionicons.svg') + '#Ionicons') format("svg");
+  src: url(font-path('ionicons.eot'));
+  src: url(font-path('ionicons.eot') + '#iefix') format("embedded-opentype"), 
+       url(font-path('ionicons.ttf')) format("truetype"), 
+       url(font-path('ionicons.woff')) format("woff"), 
+       url(font-path('ionicons.svg') + '#Ionicons') format("svg");
   font-weight: normal;
   font-style: normal;
 }
