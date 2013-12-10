@@ -26,11 +26,11 @@ module Thoughtsy
     # config.i18n.default_locale = :de
     I18n.enforce_available_locales = false
 
-    #make bootstrap-sass compatible to asset pipeline && with custom font files
-    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif .svg .eot .woff .ttf)
+    #make bootstrap-sass compatible to asset pipeline
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
     # configuring an external font
-    config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
     # necessary for heroku to serve background image file (Do not precompile assets!)
     config.assets.initialize_on_precompile = false
