@@ -26,7 +26,7 @@ module Thoughtsy
     # config.i18n.default_locale = :de
     I18n.enforce_available_locales = false
 
-    #make bootstrap-sass compatible to asset pipeline | with custom font files
+    #make bootstrap-sass compatible to asset pipeline && with custom font files
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif .svg .eot .woff .ttf)
 
     # configuring an external font
