@@ -14,11 +14,9 @@ gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
 gem 'fog'
 # gem 'carrierwave_direct'
-gem 'rack-cors', :require => 'rack/cors'
 
 gem 'passenger'
 gem 'pg'
-
 
 # Use sqlite3 as the database for Active Record
 group :development, :test do
