@@ -57,7 +57,8 @@ Thoughtsy::Application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "//d17wnm2x9v5s96.cloudfront.net"
-  config.action_controller.asset_host = "//#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com"
+  # config.action_controller.asset_host = "//#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com"
+  config.action_controller.asset_host = "//asset%d.thoughtsy.com"
   # config.font_assets.origin = "https://thoughtsy.com"
 
   # Precompile additional assets.
