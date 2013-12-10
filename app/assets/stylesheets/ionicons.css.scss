@@ -6,25 +6,11 @@
 */
 @font-face {
   font-family: "Ionicons";
-<<<<<<< HEAD
-  src: url(font-path('ionicons.eot'));
-  src: url(font-path('ionicons.eot') + '#iefix') format("embedded-opentype"), 
-       url(font-path('ionicons.ttf')) format("truetype"), 
-       url(font-path('ionicons.woff')) format("woff"), 
-       url(font-path('ionicons.svg') + '#Ionicons') format("svg");
-||||||| merged common ancestors
-  src: url(asset-path('ionicons.eot?v=1.3.3'));
-  src: url(asset-path('ionicons.eot?v=1.3.3') + '#iefix') format("embedded-opentype"), 
-       url(asset-path('ionicons.ttf?v=1.3.3')) format("truetype"), 
-       url(asset-path('ionicons.woff?v=1.3.3')) format("woff"), 
-       url(asset-path('ionicons.svg?v=1.3.3') + '#Ionicons') format("svg");
-=======
   src: url(asset-path('ionicons.eot'));
-  src: url(asset-path('ionicons.eot') + '#iefix') format("embedded-opentype"), 
-       url(asset-path('ionicons.ttf')) format("truetype"), 
-       url(asset-path('ionicons.woff')) format("woff"), 
+  src: url(asset-path('ionicons.eot') + '#iefix') format("embedded-opentype"),
+       url(asset-path('ionicons.ttf')) format("truetype"),
+       url(asset-path('ionicons.woff')) format("woff"),
        url(asset-path('ionicons.svg') + '#Ionicons') format("svg");
->>>>>>> pre_ff_bug
   font-weight: normal;
   font-style: normal;
 }
