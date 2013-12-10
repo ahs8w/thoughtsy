@@ -31,10 +31,9 @@ Thoughtsy::Application.configure do
 
   # Generate digests for assets URLs.
   config.assets.digest = true
-  config.assets.enabled = true
 
   # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.1'
+  config.assets.version = '1.0'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
@@ -56,9 +55,7 @@ Thoughtsy::Application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = "//d17wnm2x9v5s96.cloudfront.net"
-  # config.action_controller.asset_host = "//#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com"
-  # config.font_assets.origin = "https://thoughtsy.com"
+  config.action_controller.asset_host = "d17wnm2x9v5s96.cloudfront.net"
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
