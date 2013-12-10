@@ -34,6 +34,12 @@ module Thoughtsy
     # necessary for heroku to serve background image file (Do not precompile assets!)
     config.assets.initialize_on_precompile = false
 
+    # CORS policy for firefox and custom font files on S3 over CloudFront
+    config.action_dispatch.default_headers = {
+     'Access-Control-Allow-Origin' => '*',
+     'Access-Control-Request-Method' => '*'
+    }
+
     # For securing sensitive information, put it in application.yml (don't forget to gitignore it)
     # Load application.yml in dev environment
     # Will need to be set manually on the command-line for production(Heroku)!!!
