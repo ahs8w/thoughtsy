@@ -14,7 +14,8 @@ gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
 gem 'fog'
 # gem 'carrierwave_direct'
-gem 'font_assets'
+gem 'rack-cors', :require => 'rack/cors'
+
 gem 'passenger'
 gem 'pg'
 
