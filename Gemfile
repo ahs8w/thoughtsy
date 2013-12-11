@@ -13,9 +13,9 @@ gem 'mini_magick'
 gem 'carrierwave'
 gem 'remotipart', '~> 1.2'
 gem 'fog'
-# gem 'carrierwave_direct'
-gem 'font_assets'
+gem 'carrierwave_direct'
 
+gem 'font_assets'
 gem 'passenger'
 gem 'pg'
 
