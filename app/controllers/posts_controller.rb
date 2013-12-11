@@ -9,9 +9,9 @@ class PostsController < ApplicationController
   end
 
   def new
-    @post = Post.new
-    # @uploader = Post.new.image
-    # @uploader.success_action_redirect = new_post_url
+    @post = Post.new(key: params[:key])
+    @uploader = Post.new.image
+    @uploader.success_action_redirect = new_post_url
   end
 
   def index
@@ -28,17 +28,27 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params)
     if @post.save
       flash[:success] = "Post created!"
-      respond_to do |format|
-        format.html { redirect_to root_url }
-        format.js { flash.now[:success] = "Post created!" }
-      end
+      redirect_to root_url
     else
-      respond_to do |format|
-        format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
-        format.js
-      end
+      render 'new'
     end
   end
+
+  # def create
+  #   @post = current_user.posts.build(post_params)
+  #   if @post.save
+  #     flash[:success] = "Post created!"
+  #     respond_to do |format|
+  #       format.html { redirect_to root_url }
+  #       format.js { flash.now[:success] = "Post created!" }
+  #     end
+  #   else
+  #     respond_to do |format|
+  #       format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
+  #       format.js
+  #     end
+  #   end
+  # end
 
   def destroy
     @post = Post.find(params[:id])
@@ -89,7 +99,7 @@ class PostsController < ApplicationController
 #
   private
     def post_params
-      params.require(:post).permit(:content, :image, :remote_image_url)
+      params.require(:post).permit(:content, :image, :key)
     end
 
     def rollback_tokens

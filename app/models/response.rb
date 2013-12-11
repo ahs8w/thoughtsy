@@ -18,6 +18,12 @@ class Response < ActiveRecord::Base
   scope :ascending,  -> { order('created_at ASC') }
 # }
 
+  # Carrierwave-direct image upload helper
+  def image_name
+    File.basename(image.path || image.filename) if image
+  end
+
+  
   private
 
     def image_or_content

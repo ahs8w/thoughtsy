@@ -7,6 +7,8 @@ class ResponsesController < ApplicationController
     @post = Post.find(params[:post_id])
     @post.accept!
     @response = @post.responses.new
+    @uploader = Response.new.image
+    @uploader.success_action_redirect = new_post_response_url(@post)
   end
 
   def show
@@ -30,7 +32,7 @@ class ResponsesController < ApplicationController
 
   private
     def response_params
-      params.require(:response).permit(:content, :post_id, :image, :remote_image_url)
+      params.require(:response).permit(:content, :post_id, :image)
     end
 
     def set_user_tokens

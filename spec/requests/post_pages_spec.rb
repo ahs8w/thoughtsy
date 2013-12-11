@@ -231,22 +231,14 @@ describe "Post pages" do
 
       context "as an image" do
 
-        context "through direct file upload link" do
-          before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
+        # context "through direct file upload link" do
+        #   before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
 
-          it "saves post" do
-            expect{ click_button "Post" }.to change(Post, :count).by(1)
-            expect(page).to have_success_message("Post created!")
-          end
-        end
-
-        context "through image url field" do
-          before { fill_in 'post[remote_image_url]', with: 'http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Marmaraytwotunnel.JPG/800px-Marmaraytwotunnel.JPG' }
-
-          it "saves post" do
-            expect { click_button "Post" }.to change(Post, :count).by(1)
-          end
-        end
+        #   it "saves post" do
+        #     expect{ click_button "Post" }.to change(Post, :count).by(1)
+        #     expect(page).to have_success_message("Post created!")
+        #   end
+        # end
       end
     end
   end

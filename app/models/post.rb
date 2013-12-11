@@ -89,6 +89,11 @@ class Post < ActiveRecord::Base
     self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
   end                                         # delete returns deleted value rather than the array...
 
+  # Carrierwave-direct image upload helper
+  def image_name
+    File.basename(image.path || image.filename) if image
+  end
+
   ############# Heroku Scheduler ##############
   def Post.check_expirations
     posts = Post.where(state: 'pending')
