@@ -17,7 +17,6 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
-  it { should respond_to(:subscribed?) }
   it { should respond_to(:reposted?) }
   it { should respond_to(:subscriptions) }
   it { should respond_to(:followers) }
@@ -88,23 +87,30 @@ describe Post do
     end
   end
 
-  describe "#set_expiration_timer" do
+  describe "::check_expirations" do
     before do
       @post.save
       @post.accept!
     end
 
-    it "enqueues a delayed job" do
-      expect(Delayed::Job.count).to eq 1
+    describe "before 24 hours" do
+      before { Timecop.freeze(Time.now + 23.hours) }
+
+      it "post state is unchanged" do
+        Post.check_expirations
+        @post.reload
+        expect(@post.state).to eq 'pending'
+      end
+
     end
 
-    describe "after 25 hours" do
-      before { Timecop.freeze(Time.now + 25.hours) }
+    describe "after 24 hours" do
+      before { Timecop.freeze(Time.now + 24.hours) }
 
       context "when post has not been answered" do
         
         it "post state is reset to 'unanswered'" do
-          expect(Delayed::Worker.new.work_off).to eq [1, 0]
+          Post.check_expirations
           @post.reload
           expect(@post.state).to eq 'unanswered'
         end
@@ -117,7 +123,7 @@ describe Post do
         end
 
         it "post state remains unchanged" do
-          expect(Delayed::Worker.new.work_off).to eq [1, 0]
+          Post.check_expirations
           @post.reload
           expect(@post.state).to eq 'reposted'
         end
@@ -214,10 +220,6 @@ describe Post do
 
       it "#sets token_timer" do
         expect(@post.token_timer).not_to be_nil
-      end
-
-      it "#sets expiration_timer" do
-        expect(Delayed::Job.count).to eq 1
       end
 
       describe "#expire!" do

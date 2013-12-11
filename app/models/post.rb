@@ -37,14 +37,12 @@ class Post < ActiveRecord::Base
 
     after_transition on: :accept do |post, transition|
       post.set_token_timer
-      post.set_expiration_timer
     end
 
     after_transition on: :expire, do: :reset_token_timer
 
 
     event :accept do
-      transition :subscribed => same
       transition any => :pending
     end
 
@@ -64,10 +62,6 @@ class Post < ActiveRecord::Base
       transition any => :reposted
     end
 
-    # event :unsubscribe do
-    #   transition :reposted => :pending
-    # end
-
     event :flag do
       transition any => :flagged
     end
@@ -76,14 +70,6 @@ class Post < ActiveRecord::Base
       transition any => :reposted
     end
   end
-
-
-  def set_expiration_timer
-    if token_timer? && token_timer < 24.hours.ago
-      expire! unless answered? || reposted?
-    end
-  end
-  handle_asynchronously :set_expiration_timer, :run_at => Proc.new { 25.hours.from_now }
 
   def set_token_timer
     self.update_attribute(:token_timer, Time.zone.now) unless self.token_timer
@@ -102,6 +88,21 @@ class Post < ActiveRecord::Base
     unavailable_users_will_change!
     self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
   end                                         # delete returns deleted value rather than the array...
+
+  ############# Heroku Scheduler ##############
+  def Post.check_expirations
+    posts = Post.where(state: 'pending')
+    posts.each do |post|
+      post.check_expiration
+    end
+  end
+
+  def check_expiration
+    if token_timer? && token_timer < 24.hours.ago
+      expire! unless answered? || reposted?
+    end
+  end
+  ###############################################
 
   private
   
