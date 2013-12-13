@@ -10,8 +10,10 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new(key: params[:key])
-    @uploader = Post.new.image
-    @uploader.success_action_redirect = new_post_url
+    unless @post.filename_valid?
+      flash[:danger] = @post.errors.full_messages.to_sentence
+      redirect_to 'new'
+    end
   end
 
   def index
@@ -34,21 +36,10 @@ class PostsController < ApplicationController
     end
   end
 
-  # def create
-  #   @post = current_user.posts.build(post_params)
-  #   if @post.save
-  #     flash[:success] = "Post created!"
-  #     respond_to do |format|
-  #       format.html { redirect_to root_url }
-  #       format.js { flash.now[:success] = "Post created!" }
-  #     end
+  # if @post.save_and_process_image             necessary?!
+  #     flash[:notice] = "User being created"
+  #     redirect_to :action => :index
   #   else
-  #     respond_to do |format|
-  #       format.html { render 'static_pages/home' }    # render root_url doesn't work -> template missing!!!!!!
-  #       format.js
-  #     end
-  #   end
-  # end
 
   def destroy
     @post = Post.find(params[:id])
@@ -97,6 +88,7 @@ class PostsController < ApplicationController
     end
   end
 #
+
   private
     def post_params
       params.require(:post).permit(:content, :image, :key)

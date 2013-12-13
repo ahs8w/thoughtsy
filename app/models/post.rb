@@ -14,6 +14,12 @@ class Post < ActiveRecord::Base
   validates_presence_of :user_id
   validate :image_or_content
 
+  after_save :enqueue_image
+
+  after_create do |post|
+    post.user.update_score!(1)
+  end
+
 
   scope :ascending,   -> { order('updated_at ASC') }
   scope :descending,  -> { order('updated_at DESC') }
@@ -23,10 +29,6 @@ class Post < ActiveRecord::Base
   scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
   scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
 
-
-  after_create do |post|
-    post.user.update_score!(1)
-  end
 
   state_machine :state, initial: :unanswered do
 
@@ -112,8 +114,14 @@ class Post < ActiveRecord::Base
   private
   
   def image_or_content
-    errors.add(:base, "Post must include either an image or content") unless content.present? || image.present?
+    errors.add(:base, "Post must include either an image or content") unless content.present? || has_image_upload?
   end
+
+  def enqueue_image
+    ImageWorker.perform(id, key, 'post') if has_image_upload?
+  end
+  handle_asynchronously :enqueue_image
+  
 end
 
 

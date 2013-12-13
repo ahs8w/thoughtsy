@@ -21,7 +21,9 @@ Thoughtsy::Application.routes.draw do
   end
   resources :subscriptions, only: [:create, :destroy]
 
-  resources :images, only: [:new]
+  resources :images, only: [:new] do
+    get 'remove', on: :collection
+  end
 
 
   root 'static_pages#home'

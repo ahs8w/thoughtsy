@@ -131,6 +131,10 @@ describe Post do
     end
   end
 
+  # describe "::enqueue_image" do
+
+  # end
+
   describe "#set_token_timer" do
     before do
       Timecop.freeze

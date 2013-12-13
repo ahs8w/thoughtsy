@@ -18,6 +18,7 @@ gem 'carrierwave_direct'
 gem 'font_assets'
 gem 'passenger'
 gem 'pg'
+gem 'aws-sdk'
 
 # Use sqlite3 as the database for Active Record
 group :development, :test do

@@ -6,9 +6,11 @@ class ResponsesController < ApplicationController
   def new 
     @post = Post.find(params[:post_id])
     @post.accept!
-    @response = @post.responses.new
-    @uploader = Response.new.image
-    @uploader.success_action_redirect = new_post_response_url(@post)
+    @response = @post.responses.new(key: params[:key])
+    unless @response.filename_valid?
+      flash[:danger] = @response.errors.full_messages.to_sentence
+      redirect_to 'new'
+    end
   end
 
   def show

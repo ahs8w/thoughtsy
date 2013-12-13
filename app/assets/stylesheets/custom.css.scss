@@ -335,12 +335,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     margin-bottom: 10px;
   }
 
-  #image_fields_container {
-    text-align: right;
-    margin-top: 6px;
-    padding: 0;
-  }
-
   #imageModal {
     #input_button {
       position:relative;
@@ -370,6 +364,11 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     button.close {
       margin-top: 4px;
       font-size: 26px;
+    }
+    #image_filename {
+      p {
+        margin: 10px 0 0;
+      }
     }
   }
 
@@ -463,6 +462,11 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         margin-bottom: 0;
         font-size: 16px;
         padding: 6px 16px;
+      }
+      .pull-right {
+        text-align: right;
+        margin-top: 6px;
+        padding: 0;
       }
     }
     .field_with_errors {

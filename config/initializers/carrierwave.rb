@@ -16,4 +16,7 @@ CarrierWave.configure do |config|
   config.cache_dir = "#{Rails.root}/tmp/uploads/#{Rails.env}"     # allows carrierwave to work on heroku
   config.fog_directory  = ENV['FOG_DIRECTORY']                    # required
   config.fog_attributes = {'Cache-Control'=>'max-age=315576000'}  # optional, defaults to {}
+  config.min_file_size             = 5.kilobytes                  # defaults to 1.byte
+  # config.max_file_size             = 3.megabytes                  # defaults to 5.megabytes
+  config.upload_expiration         = 1.hour                       # defaults to 10.hours
 end

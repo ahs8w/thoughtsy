@@ -216,9 +216,9 @@ describe "Post pages" do
           expect(Post.count).not_to eq 1
         end
 
-        # it "should have error message", js:true do
-        #   expect(page).to have_selector('#error_explanation')
-        # end
+        it "should have error message" do
+          expect(page).to have_selector('#error_explanation')
+        end
       end
 
       context "with valid information" do
@@ -229,17 +229,27 @@ describe "Post pages" do
         end
       end
 
-      context "as an image" do
+      # context "as an image", js:true do
+      #   before { click_link "Upload an image" }
 
-        # context "through direct file upload link" do
-        #   before { attach_file('post[image]', "#{Rails.root}/spec/support/test.png") }
+      #   describe "with an invalid filetype" do
+      #     before { attach_file_for_direct_upload("#{Rails.root}/spec/support/fake.svg") }
 
-        #   it "saves post" do
-        #     expect{ click_button "Post" }.to change(Post, :count).by(1)
-        #     expect(page).to have_success_message("Post created!")
-        #   end
-        # end
-      end
+      #     it "raises an error" do
+      #       expect{ click_button "Upload" }.not_to change(Post, :count)
+      #       expect(page).to have_error_message
+      #     end
+      #   end
+
+      #   describe "with a valid filetype" do
+      #     before { attach_file_for_direct_upload("#{Rails.root}/spec/support/test.png") }
+
+      #     it "saves post" do
+      #       expect{ click_button "Post" }.to change(Post, :count).by(1)
+      #       expect(page).to have_success_message("Post created!")
+      #     end
+      #   end
+      # end
     end
   end
 
