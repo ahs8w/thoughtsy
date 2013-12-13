@@ -4,14 +4,20 @@
   <div class="thought_content">
     <% if profile %>
       <% if thought.instance_of?(Response) %>
-        <%= link_to image_tag(thought.image_url(:thumb)), post_path(thought.post) if thought.image.present? %>
+        <%= render partial: 'shared/thumb', object: thought %>
         <%= link_to custom_format(thought.content), post_path(thought.post) unless thought.content.nil? %>
       <% else %>
-        <%= link_to image_tag(thought.image_url(:thumb)), post_path(thought) if thought.image.present? %>
+        <%= render partial: 'shared/thumb', object: thought %>
         <%= link_to custom_format(thought.content), post_path(thought) unless thought.content.nil? %>
       <% end %>
     <% else %>
-      <%= image_tag thought.image_url, class: "img-responsive" if thought.image.present? %>
+      <% if thought.image.present? %>
+        <% if thought.image_processed? %>
+          <%= image_tag thought.image_url, class: "img-responsive" %>
+        <% else %>
+          <em>Processing...</em>
+        <% end %>
+      <% end %>
       <%= custom_format(thought.content) unless thought.content.nil? %>
     <% end %>
   </div>

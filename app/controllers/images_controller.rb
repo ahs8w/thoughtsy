@@ -2,8 +2,14 @@ class ImagesController < ApplicationController
   include ImagesHelper
   
   def new
-    @uploader = Post.new.image
-    @uploader.success_action_redirect = new_post_url
+    if params[:post_id]                       # -> Response
+      @post = Post.find(params[:post_id])
+      @uploader = Response.new.image
+      @uploader.success_action_redirect = new_post_response_url(@post)
+    else
+      @uploader = Post.new.image
+      @uploader.success_action_redirect = new_post_url
+    end
     respond_to do |format|
       format.js
       format.html
@@ -13,6 +19,10 @@ class ImagesController < ApplicationController
   def remove
     @key = params[:key]
     remove_image_s3(@key)
-    redirect_to new_post_url
+    if params[:post_id]                       # -> Response
+      redirect_to new_post_response_url(params[:post_id])
+    else
+      redirect_to new_post_url
+    end
   end
 end

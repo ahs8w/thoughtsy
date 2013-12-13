@@ -91,11 +91,6 @@ class Post < ActiveRecord::Base
     self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
   end                                         # delete returns deleted value rather than the array...
 
-  # Carrierwave-direct image upload helper
-  def image_name
-    File.basename(image.path || image.filename) if image
-  end
-
   ############# Heroku Scheduler ##############
   def Post.check_expirations
     posts = Post.where(state: 'pending')
@@ -109,18 +104,30 @@ class Post < ActiveRecord::Base
       expire! unless answered? || reposted?
     end
   end
-  ###############################################
 
-  private
-  
-  def image_or_content
-    errors.add(:base, "Post must include either an image or content") unless content.present? || has_image_upload?
+
+  ### Carrierwave-direct image upload helpers ###
+  def image_name
+    File.basename(image.path || image.filename) if image
   end
 
   def enqueue_image
-    ImageWorker.perform(id, key, 'post') if has_image_upload?
+    if has_image_upload? && !image_processed
+      self.delay.process_image
+    end
   end
-  handle_asynchronously :enqueue_image
+
+  def process_image
+    self.remote_image_url = image.direct_fog_url(with_path: true)
+    self.update_column(:image_processed, true)
+    save
+  end
+
+private
+
+  def image_or_content
+    errors.add(:base, "Post must include either an image or content") unless content.present? || has_image_upload?
+  end
   
 end
 

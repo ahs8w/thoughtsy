@@ -230,9 +230,10 @@ describe "Post pages" do
       end
 
       # context "as an image", js:true do
+      #   include CarrierWaveDirect::Test::CapybaraHelpers
       #   before { click_link "Upload an image" }
 
-      #   describe "with an invalid filetype" do
+      #   describe "with an invalid filetype", focus:true do
       #     before { attach_file_for_direct_upload("#{Rails.root}/spec/support/fake.svg") }
 
       #     it "raises an error" do

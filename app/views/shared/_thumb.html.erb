@@ -1,0 +1,8 @@
+<% if thumb.image.present? %>
+  <% if thumb.image_processed? %>
+    <%= link_to image_tag(thumb.image_url(:thumb)), post_path(thumb.post) if thumb.instance_of?(Response) %>
+    <%= link_to image_tag(thumb.image_url(:thumb)), post_path(thumb) if thumb.instance_of?(Post) %>
+  <% else %>
+    <em>Processing...</em>
+  <% end %>
+<% end %>

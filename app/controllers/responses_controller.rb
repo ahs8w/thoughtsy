@@ -27,14 +27,13 @@ class ResponsesController < ApplicationController
       flash[:success] = "Response sent!"
       redirect_to post_path(@post)
     else
-      @post = Post.find(params[:post_id])
       render 'new'
     end
   end
 
   private
     def response_params
-      params.require(:response).permit(:content, :post_id, :image)
+      params.require(:response).permit(:content, :post_id, :image, :key)
     end
 
     def set_user_tokens

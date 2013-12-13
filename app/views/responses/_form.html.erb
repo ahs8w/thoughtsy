@@ -4,10 +4,21 @@
       <%= form_for([@post, @response]) do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your response..." %>
-        <div class="col-md-3" id="submit"><%= f.submit "Respond", class: "btn btn-lg btn-primary" %></div>
-        <%= render 'shared/image_fields', f: f %>
+        <%= f.submit "Respond", class: "btn btn-primary" %>
         <%= f.hidden_field :post_id, value: @post.id %>
+        <%= f.hidden_field :key %>
+        <span class="pull-right">
+          <% unless @response.has_image_upload? %>
+            <%= link_to("Upload an image", new_image_path(post_id: @post.id), :remote => true) %>
+          <% else %>
+            <strong>Image: </strong><%= @response.image_name %>
+            | <%= link_to("remove", remove_images_path(key: params[:key], post_id: @post.id)) %>
+          <% end %>
+        </span>
       <% end %>
     </div>
   </div>
+</div>
+
+<div class="modal" id="imageModal" style="display:none;">
 </div>

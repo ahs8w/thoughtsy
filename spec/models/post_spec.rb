@@ -1,5 +1,5 @@
 require 'spec_helper'
-Delayed::Worker.delay_jobs = true   # test that DJ jobs are created and timing is correct
+# Delayed::Worker.delay_jobs = true   # test that DJ jobs are created and timing is correct
 
 describe Post do
   
@@ -131,10 +131,6 @@ describe Post do
     end
   end
 
-  # describe "::enqueue_image" do
-
-  # end
-
   describe "#set_token_timer" do
     before do
       Timecop.freeze
@@ -150,6 +146,28 @@ describe Post do
     end
   end
 
+## Callbacks ##
+  # describe "::after_save" do
+
+  #   context "with an uploaded image", focus:true do
+  #     include CarrierWaveDirect::Test::Helpers
+
+  #     before do
+  #       @post.key = sample_key(ImageUploader.new)
+  #     end
+
+  #     it "queues up a worker" do
+  #       @post.save
+  #       expect(Delayed::Job.count).to eq 1
+  #     end
+  #     # Delayed::Worker
+  #     # Delayed::Worker.new.work_off.should == [1, 0]
+  #     # Delayed::Job.count
+  #     # Delayed::Worker.new.work_off
+  #   end
+
+  # end
+
   describe "::after_create" do
     before { @post.save }
 
@@ -158,6 +176,7 @@ describe Post do
       expect(user.score).to eq 1
     end
   end
+## 
 
 ## Post Scopes ##
   describe "ordered scopes" do
