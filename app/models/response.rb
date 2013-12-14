@@ -5,8 +5,6 @@ class Response < ActiveRecord::Base
   has_many :ratings, dependent: :destroy
   has_many :raters, through: :ratings, source: :user
 
-  after_save :update_all, :enqueue_image
-
   mount_uploader :image, ImageUploader
 
   validates_presence_of :user_id, :post_id
@@ -24,25 +22,41 @@ class Response < ActiveRecord::Base
 
   def enqueue_image
     if has_image_upload? && !image_processed
-      self.process_image
+      Delayed::Job.enqueue ImageProcessor.new(id, key)
     end
   end
-  def process_image
-    self.remote_image_url = image.direct_fog_url(with_path: true)
-    self.update_column(:image_processed, true)
-    save
+
+  class ImageProcessor < Struct.new(:id, :key)
+    def perform
+      response = Response.find(id)
+      response.key = key
+      response.image_processed = true
+      response.remote_image_url = response.image.direct_fog_url(with_path: true)
+      response.save!
+    end
+  end
+
+  # def enqueue_image
+  #   if has_image_upload? && !image_processed
+  #     self.process_image
+  #   end
+  # end
+  # def process_image
+  #   self.remote_image_url = image.direct_fog_url(with_path: true)
+  #   self.update_column(:image_processed, true)
+  #   save
+  # end
+
+  def update_all
+    self.post.answer!
+    self.user.reset_tokens
+    UserMailer.response_emails(self)
   end
   
 private
 
   def image_or_content
     errors.add(:base, "Response must include either an image or content") unless content.present? || has_image_upload?
-  end
-
-  def update_all
-    self.post.answer!
-    self.user.reset_tokens
-    UserMailer.response_emails(self)
   end
 
   def self.unrated

@@ -10,10 +10,6 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new(key: params[:key])
-    unless @post.filename_valid?
-      flash[:danger] = @post.errors.full_messages.to_sentence
-      redirect_to 'new'
-    end
   end
 
   def index
@@ -29,6 +25,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
+      @post.enqueue_image
       flash[:success] = "Post created!"
       redirect_to root_url
     else

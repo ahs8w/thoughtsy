@@ -7,10 +7,6 @@ class ResponsesController < ApplicationController
     @post = Post.find(params[:post_id])
     @post.accept!
     @response = @post.responses.new(key: params[:key])
-    unless @response.filename_valid?
-      flash[:danger] = @response.errors.full_messages.to_sentence
-      redirect_to 'new'
-    end
   end
 
   def show
@@ -22,10 +18,11 @@ class ResponsesController < ApplicationController
 
   def create
     @response = current_user.responses.build(response_params)
-    @post = @response.post
     if @response.save
+      @response.enqueue_image
+      @response.update_all
       flash[:success] = "Response sent!"
-      redirect_to post_path(@post)
+      redirect_to posts_path
     else
       render 'new'
     end

@@ -14,8 +14,6 @@ class Post < ActiveRecord::Base
   validates_presence_of :user_id
   validate :image_or_content
 
-  after_save :enqueue_image
-
   after_create do |post|
     post.user.update_score!(1)
   end
@@ -113,15 +111,24 @@ class Post < ActiveRecord::Base
 
   def enqueue_image
     if has_image_upload? && !image_processed
-      self.delay.process_image
+      Delayed::Job.enqueue ImageProcessor.new(id, key)
     end
   end
 
-  def process_image
-    self.remote_image_url = image.direct_fog_url(with_path: true)
-    self.update_column(:image_processed, true)
-    save
+  class ImageProcessor < Struct.new(:id, :key)
+    def perform
+      post = Post.find(id)
+      post.key = key
+      post.remote_image_url = post.image.direct_fog_url(with_path: true)
+      post.update_column(:image_processed, true)
+      post.save!
+    end
   end
+  # def process_image
+  #   self.remote_image_url = image.direct_fog_url(with_path: true)
+  #   self.update_column(:image_processed, true)
+  #   save
+  # end
 
 private
 

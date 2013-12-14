@@ -158,10 +158,9 @@ describe Post do
 
   #     it "queues up a worker" do
   #       @post.save
-  #       expect(Delayed::Job.count).to eq 1
+  #       Delayed::Worker.new.work_off.should == [1, 0]
   #     end
   #     # Delayed::Worker
-  #     # Delayed::Worker.new.work_off.should == [1, 0]
   #     # Delayed::Job.count
   #     # Delayed::Worker.new.work_off
   #   end
