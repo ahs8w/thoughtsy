@@ -6,7 +6,7 @@
           <%= render 'shared/error_messages', object: f.object %>
           <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your thought..." %>
           <%= f.hidden_field :key %>
-          <%= f.submit "Post", class: "btn btn-primary" %>
+          <%= button_tag "Post", class: "btn btn-primary", id: "post_button", data: { 'loading-text' => "Posting..." } %>
           <span class="pull-right">
             <% unless @post.has_image_upload? %>
               <%= link_to("Upload an image", new_image_path, :remote => true) %>
@@ -21,7 +21,7 @@
           <%= render 'shared/error_messages', object: f.object %>
           <%= f.text_area :content, class: "form-control", rows: "5", placeholder: "your thought..." %>
           <%= f.hidden_field :key %>
-          <%= f.submit "Respond", class: "btn btn-primary" %>
+          <%= button_tag "Respond", class: "btn btn-primary", id: "post_button", data: { 'loading-text' => "Responding..." } %>
           <%= f.hidden_field :post_id, value: @post.id %>
           <span class="pull-right">
             <% unless @response.has_image_upload? %>
@@ -39,3 +39,9 @@
 
 <div class="modal" id="imageModal" style="display:none;">
 </div>
+
+<script>
+  $('#post_button').click(function(){
+    $(this).button('loading');
+  });
+</script>
