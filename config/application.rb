@@ -45,7 +45,8 @@ module Thoughtsy
     # Will need to be set manually on the command-line for production(Heroku)!!!
 
     # see:  http://strandcode.com/2013/08/11/security-is-a-feature-9-newb-friendly-steps-to-secure-your-rails-apps/
-    if Rails.env.development?
+    # needed to add all environments for testing of carrierwave_direct!!!
+    unless Rails.env.production?
       ENV.update YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
     end
   end

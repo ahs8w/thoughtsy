@@ -34,11 +34,6 @@ describe "Rating Creation" do
     before { click_button 'thought provoking' }
 
     it { should have_content("You rated this article: thought provoking") }
-
-    it "does not send an email to admin" do
-      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).not_to include ('adam@thoughtsy.com')
-    end
   end
 
   describe "clicking 'brilliant'" do

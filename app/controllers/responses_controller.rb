@@ -18,12 +18,14 @@ class ResponsesController < ApplicationController
 
   def create
     @response = current_user.responses.build(response_params)
+    @post = Post.find(params[:post_id])
     if @response.save
       @response.enqueue_image
       @response.update_all
       flash[:success] = "Response sent!"
       redirect_to posts_path
     else
+      @post
       render 'new'
     end
   end

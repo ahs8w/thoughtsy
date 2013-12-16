@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
   include ImagesHelper
-  
+    
   def new
     if params[:post_id]                       # -> Response
       @post = Post.find(params[:post_id])

@@ -23,7 +23,7 @@
   </div>
 
   <div class="thought_author">
-    <% if !profile %>
+    <% unless profile %>
       <%= link_to "#{thought.user.username}", user_path(thought.user) %>
       <span class="lighter"> | <%= thought.user.score %></span>
     <% end %>

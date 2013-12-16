@@ -16,7 +16,9 @@ FactoryGirl.define do
 
     factory :image_post do
       content ""
-      image { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'test.png')) }
+      image 'test.png'
+      key sample_key(ImageUploader.new)
+      image_processed true
     end
   end
 

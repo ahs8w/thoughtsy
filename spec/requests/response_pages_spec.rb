@@ -40,11 +40,8 @@ describe "ResponsePages" do
 
       it "does not create a response" do
         expect { click_button "Respond" }.not_to change(Response, :count)
-      end
 
-      it "has an error message" do
-        click_button "Respond"
-        expect(page).to have_content("* Post must include either an image or content")
+        expect(page).to have_content("* Response must include either an image or content")
       end
     end
 
@@ -55,18 +52,17 @@ describe "ResponsePages" do
 
       it "creates a response" do
         expect { click_button "Respond" }.to change(Response, :count).by(1)
-        expect(page).to have_title("Thoughtsy")
-        expect(page).to have_button("Repost")
+        expect(page).to have_content(post.content)
       end
     end
 
-    describe "with image" do
-      before { attach_file('response[image]', "#{Rails.root}/spec/support/test.png") }
+    # describe "with image" do
+    #   before { attach_file('response[image]', "#{Rails.root}/spec/support/test.png") }
 
-      it "creates a response" do
-        expect { click_button "Respond" }.to change(Response, :count).by(1)
-        expect(page).to have_title("Thoughtsy")
-      end
-    end
+    #   it "creates a response" do
+    #     expect { click_button "Respond" }.to change(Response, :count).by(1)
+    #     expect(page).to have_title("Thoughtsy")
+    #   end
+    # end
   end
 end

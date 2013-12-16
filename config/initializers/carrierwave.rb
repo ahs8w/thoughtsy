@@ -1,5 +1,5 @@
 CarrierWave.configure do |config|
-  Fog.credentials_path = Rails.root.join('config/fog_credentials.yml')
+  # Fog.credentials_path = Rails.root.join('config/fog_credentials.yml')
 
   config.fog_credentials = {
     :provider               => 'AWS',                           # required
@@ -8,10 +8,10 @@ CarrierWave.configure do |config|
     :region                 => 'us-east-1'
   }
 
-  config.fog_directory  = "thoughtsy-aws-s3"
+  config.fog_directory  = ENV['FOG_DIRECTORY']
   
   if Rails.env.test?
-    config.storage = :file
+    # config.storage = :file
     config.enable_processing = false
   # autoload image uploader
     ImageUploader

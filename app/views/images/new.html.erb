@@ -1,8 +1,20 @@
-<%= direct_upload_form_for @uploader do |f| %>
-  <span id="input_button">
-    <button class="btn btn-primary" id="image_button">Choose an image</button>
-    <%= f.file_field :image, id: "picture" %>
-  </span>
-  <%= f.submit 'Upload', class: "btn btn-primary" %>
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-<% end %>
+<% provide(:page_title, "Image Upload") %>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well">
+      <h1>Upload an image</h1>
+
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div id="new_image">
+            <%= direct_upload_form_for @uploader do |f| %>
+              <%= f.file_field :image, id: "picture" %>
+              <%= f.submit 'Upload', class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

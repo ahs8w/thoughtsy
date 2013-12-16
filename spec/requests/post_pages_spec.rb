@@ -205,7 +205,7 @@ describe "Post pages" do
       click_link "Post"
     end
 
-    it { should have_selector('#post_form') }
+    it { should have_selector('#thought_form') }
 
     describe "Post Creation" do
 
@@ -228,29 +228,6 @@ describe "Post pages" do
           expect { click_button "Post" }.to change(Post, :count).by(1)
         end
       end
-
-      # context "as an image", js:true do
-      #   include CarrierWaveDirect::Test::CapybaraHelpers
-      #   before { click_link "Upload an image" }
-
-      #   describe "with an invalid filetype", focus:true do
-      #     before { attach_file_for_direct_upload("#{Rails.root}/spec/support/fake.svg") }
-
-      #     it "raises an error" do
-      #       expect{ click_button "Upload" }.not_to change(Post, :count)
-      #       expect(page).to have_error_message
-      #     end
-      #   end
-
-      #   describe "with a valid filetype" do
-      #     before { attach_file_for_direct_upload("#{Rails.root}/spec/support/test.png") }
-
-      #     it "saves post" do
-      #       expect{ click_button "Post" }.to change(Post, :count).by(1)
-      #       expect(page).to have_success_message("Post created!")
-      #     end
-      #   end
-      # end
     end
   end
 

@@ -28,11 +28,6 @@ describe PostsController do
         end.to change(Post, :count).by(1)
       end
 
-      it "should respond with success message" do
-        xhr :post, :create, post: { user: user, content: 'content' }
-        expect(response).to be_success
-      end
-
       it "should show the correct flash message" do
         xhr :post, :create, post: { user: user, content: 'content' }
         expect(flash[:success]).to eq "Post created!"
