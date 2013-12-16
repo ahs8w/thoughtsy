@@ -43,7 +43,7 @@ describe Post do
     end
 
     context "and an image" do
-      before { @post.image = File.open(File.join(Rails.root, "spec/support/test.png")) }
+      before { @post.key = sample_key(ImageUploader.new) }
       it { should be_valid }
     end
   end
@@ -146,27 +146,29 @@ describe Post do
     end
   end
 
+  describe "#enqueue_image" do
+    Delayed::Worker.delay_jobs = true
+
+    before do
+      @post.key = sample_key(ImageUploader.new)
+      @post.image = 'image.jpg'
+      @post.save
+    end
+
+    it "queues up a worker" do
+      @post.enqueue_image
+      expect(Delayed::Job.count).to eq 1
+    end
+
+    # it "processes image and changes column" do          # too slow to run regularly
+    #   @post.enqueue_image
+    #   Delayed::Worker.new.work_off
+    #   @post.reload
+    #   expect(@post.image_processed).to eq true
+    # end
+  end
+
 ## Callbacks ##
-  # describe "::after_save" do
-
-  #   context "with an uploaded image", focus:true do
-  #     include CarrierWaveDirect::Test::Helpers
-
-  #     before do
-  #       @post.key = sample_key(ImageUploader.new)
-  #     end
-
-  #     it "queues up a worker" do
-  #       @post.save
-  #       Delayed::Worker.new.work_off.should == [1, 0]
-  #     end
-  #     # Delayed::Worker
-  #     # Delayed::Job.count
-  #     # Delayed::Worker.new.work_off
-  #   end
-
-  # end
-
   describe "::after_create" do
     before { @post.save }
 

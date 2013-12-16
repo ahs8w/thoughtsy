@@ -124,11 +124,6 @@ class Post < ActiveRecord::Base
       post.save!
     end
   end
-  # def process_image
-  #   self.remote_image_url = image.direct_fog_url(with_path: true)
-  #   self.update_column(:image_processed, true)
-  #   save
-  # end
 
 private
 

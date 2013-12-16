@@ -30,8 +30,9 @@ class Response < ActiveRecord::Base
     def perform
       response = Response.find(id)
       response.key = key
-      response.image_processed = true
+      # response.image_processed = true
       response.remote_image_url = response.image.direct_fog_url(with_path: true)
+      response.update_column(:image_processed, true)
       response.save!
     end
   end

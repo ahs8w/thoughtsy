@@ -19,6 +19,7 @@
 # Ignore other unneeded files.
 database.yml
 application.yml
+fog_credentials.yml
 doc/
 *.swp
 *~
