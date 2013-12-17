@@ -26,8 +26,12 @@ module Thoughtsy
     # config.i18n.default_locale = :de
     I18n.enforce_available_locales = false
 
-    #make bootstrap-sass compatible to asset pipeline
+    # make bootstrap-sass compatible to asset pipeline
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+    config.assets.digest = true
 
     # configuring an external font
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')

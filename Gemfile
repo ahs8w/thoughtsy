@@ -15,6 +15,7 @@ gem 'remotipart', '~> 1.2'
 gem 'fog'
 gem 'carrierwave_direct'
 
+gem 'asset_sync'
 gem 'font_assets'
 gem 'passenger'
 gem 'pg'

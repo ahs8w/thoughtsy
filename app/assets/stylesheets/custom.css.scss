@@ -196,29 +196,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
 /* sidebar */
 
-  aside {
-    section {
-      border: 0;
-      padding-top: 0;
-      .gravatar {
-        float: left;
-        margin-right: 10px;
-      }
-      span {
-        display: block;
-        margin-bottom: 3px;
-        line-height: 1;
-      }
-      h3 {
-        font-size: 1.4em;
-        text-align: left;
-        letter-spacing: -1px;
-        margin-bottom: 3px;
-        margin-top: 0px;
-        font-variant: small-caps;
-      }
-    }
-  }
+  
 
 /* flash/error messages */
 
@@ -407,6 +385,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   }
 
   #imageModal {
+    overflow-y: auto;
     #input_button {
       position:relative;
       width: 100px;
@@ -416,17 +395,17 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         display: inline-block;
       }
       #picture {
-        font-size: 16px;
+        font-size: 22px;
         opacity: 0;
         filter: alpha(opacity=0);
         position: absolute;
         z-index: 1;
-        top: -4px;
-        right: 4px;
+        top: -6px;
+        right: 0;
         padding:0;
         margin: 0;
         cursor: pointer;
-        width: 140px;
+        width: 265px;
       }
     }
     #upload_button {
@@ -441,6 +420,10 @@ rgb(237, 255, 143), rgb(50, 118, 177))
       p {
         margin: 10px 0 0;
       }
+    }
+    p.center {
+      font-size: 12px;
+      margin: 10px 0 -10px;
     }
   }
 
@@ -548,6 +531,29 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         overflow: auto;
         padding: 10px 0;
         border-top: 1px solid $gray-lighter;
+        aside {
+          section {
+            border: 0;
+            padding-top: 0;
+            .gravatar {
+              float: left;
+              margin-right: 10px;
+            }
+            span {
+              display: block;
+              margin-bottom: 3px;
+              line-height: 1;
+            }
+            h3 {
+              font-size: 1.4em;
+              text-align: left;
+              letter-spacing: -1px;
+              margin-bottom: 3px;
+              margin-top: 0px;
+              font-variant: small-caps;
+            }
+          }
+        }
       }
       li:first-child {
         border-top: none;

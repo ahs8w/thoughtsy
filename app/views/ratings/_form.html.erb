@@ -9,30 +9,37 @@
         <%= form_for(@rating, remote: true) do |f| %>
           <%= f.hidden_field(:response_id, :value => response.id) %>
           <%= f.hidden_field(:value, :value => '1') %>
-          <%= f.submit "weak", class: "btn btn-xs btn-primary" %>
+          <%= button_tag "weak", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="2">
         <%= form_for(@rating, remote: true) do |f| %>
           <%= f.hidden_field(:response_id, :value => response.id) %>
           <%= f.hidden_field(:value, :value => '2') %>
-          <%= f.submit "average", class: "btn btn-xs btn-primary" %>
+          <%= button_tag "average", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="3">
         <%= form_for(@rating, remote: true) do |f| %>
           <%= f.hidden_field(:response_id, :value => response.id) %>
           <%= f.hidden_field(:value, :value => '3') %>
-          <%= f.submit "thought provoking", class: "btn btn-xs btn-primary" %>
+          <%= button_tag "thought provoking", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="4">
         <%= form_for(@rating, remote: true) do |f| %>
           <%= f.hidden_field(:response_id, :value => response.id) %>
           <%= f.hidden_field(:value, :value => '5') %>
-          <%= f.submit "brilliant!", class: "btn btn-xs btn-primary" %>
+          <%= button_tag "brilliant!", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
     </div>
   <% end %>
 </div>
+
+
+<script>
+  $('#rating_button').click(function(){
+    $(this).button('loading');
+  });
+</script>

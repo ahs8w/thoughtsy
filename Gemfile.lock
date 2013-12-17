@@ -35,6 +35,9 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
     arel (4.0.0)
+    asset_sync (1.0.0)
+      activemodel
+      fog (>= 1.8.0)
     atomic (1.1.14)
     aws-sdk (1.29.0)
       json (~> 1.4)
@@ -273,6 +276,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  asset_sync
   aws-sdk
   bcrypt-ruby (~> 3.0.1)
   better_errors

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Response do
+  include CarrierWaveDirect::Test::Helpers
   
   let(:user) { FactoryGirl.create(:user) }
   let(:poster) { FactoryGirl.create(:user) }

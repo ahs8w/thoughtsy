@@ -38,29 +38,9 @@ describe "StaticPages" do
       it { should_not have_link('Sign in',      href: signin_path) }
       it { should have_link(user.username) }
       it { should have_link('Thoughts') }
-
-      # describe "the sidebar" do
-
-      #   it "should singularize one post correctly" do
-      #     expect(page).to have_content("1 post")
-      #   end
-
-      #   describe "with multiple posts" do
-      #     before do
-      #       FactoryGirl.create(:post, user: user)
-      #       FactoryGirl.create(:post, user: user)            
-      #       sign_in user
-      #       visit root_path
-      #     end
-
-      #     it "should pluralize correctly" do
-      #       expect(page).to have_content("3 posts")
-      #     end
-      #   end
-      # end
     end
 
-    ## views/shared/_respond_button ##
+  ## views/shared/_respond_button ##
     describe "Response button behavior" do
       before do
         sign_in user

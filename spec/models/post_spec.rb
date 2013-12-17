@@ -2,6 +2,7 @@ require 'spec_helper'
 # Delayed::Worker.delay_jobs = true   # test that DJ jobs are created and timing is correct
 
 describe Post do
+  include CarrierWaveDirect::Test::Helpers
   
   let(:user) { FactoryGirl.create(:user) }
   before { @post = user.posts.build(content: "Lorem Ipsum") }

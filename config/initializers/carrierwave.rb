@@ -2,7 +2,7 @@ CarrierWave.configure do |config|
   # Fog.credentials_path = Rails.root.join('config/fog_credentials.yml')
 
   config.fog_credentials = {
-    :provider               => 'AWS',                           # required
+    :provider               => ENV['FOG_PROVIDER'],             # required
     :aws_access_key_id      => ENV['AWS_ACCESS_KEY_ID'],        # required
     :aws_secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY'],    # required
     :region                 => 'us-east-1'
