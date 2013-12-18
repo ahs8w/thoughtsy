@@ -9,7 +9,10 @@ require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env)
+# Bundler.require(:default, Rails.env)
+# *Changed to add :asset group ~> http://www.stormconsultancy.co.uk/blog/development/
+# how-to-get-more-bang-for-your-heroku-buck-while-making-your-rails-site-super-snappy-redux/
+Bundler.require(*Rails.groups(:assets => %w(development test)))
 
 module Thoughtsy
   class Application < Rails::Application
@@ -31,7 +34,6 @@ module Thoughtsy
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    config.assets.digest = true
 
     # configuring an external font
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
@@ -42,7 +44,7 @@ module Thoughtsy
     # }
 
     # necessary for heroku to serve background image file (Do not precompile assets!)
-    config.assets.initialize_on_precompile = true
+    config.assets.initialize_on_precompile = false
 
     # For securing sensitive information, put it in application.yml (don't forget to gitignore it)
     # Load application.yml in dev environment
