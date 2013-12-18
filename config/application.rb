@@ -36,10 +36,10 @@ module Thoughtsy
     # configuring an external font
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
-    config.action_dispatch.default_headers = {
-      'Access-Control-Allow-Origin' => 'thoughtsy.com',
-      'Access-Control-Request-Method' => '*'
-    }
+    # config.action_dispatch.default_headers = {
+    #   'Access-Control-Allow-Origin' => 'thoughtsy.com',
+    #   'Access-Control-Request-Method' => '*'
+    # }
 
     # necessary for heroku to serve background image file (Do not precompile assets!)
     config.assets.initialize_on_precompile = false
