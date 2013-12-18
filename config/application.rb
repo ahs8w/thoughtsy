@@ -42,7 +42,7 @@ module Thoughtsy
     # }
 
     # necessary for heroku to serve background image file (Do not precompile assets!)
-    config.assets.initialize_on_precompile = false
+    config.assets.initialize_on_precompile = true
 
     # For securing sensitive information, put it in application.yml (don't forget to gitignore it)
     # Load application.yml in dev environment
