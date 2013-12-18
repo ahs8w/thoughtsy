@@ -1,4 +1,6 @@
 include ApplicationHelper
+include CarrierWaveDirect::Test::Helpers
+include CarrierWaveDirect::Test::CapybaraHelpers
 
 def sign_in(user, options={})
   if options[:no_capybara]

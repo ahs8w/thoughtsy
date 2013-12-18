@@ -55,7 +55,6 @@ Thoughtsy::Application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = "d3l0juzl7xkuyy.cloudfront.net"
   config.action_controller.asset_host = "d17wnm2x9v5s96.cloudfront.net"
 
   # Precompile additional assets.

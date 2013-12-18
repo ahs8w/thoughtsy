@@ -1,3 +1,5 @@
+include CarrierWaveDirect::Test::Helpers
+
 FactoryGirl.define do
   factory :user do
     sequence(:username) { |n| "Person #{n}" }

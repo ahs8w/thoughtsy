@@ -14,4 +14,4 @@ connection.directories.create(:key => fog_directory)
 
 # Fog.credentials_path = Rails.root.join('config/fog_credentials.yml')
 # connection = Fog::Storage.new(:provider => 'AWS')
-# connection.directories.create(:key => "https://thoughtsy-aws-s3")
+# connection.directories.create(:key => "https://thoughtsy-production")
