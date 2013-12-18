@@ -15,10 +15,10 @@ test:
   username: adam
   password: password1
 
-staging:
-  adapter: postgresql
-  encoding: unicode
-  database: thoughtsy_production
-  pool: 5
-  username: adam
-  password: password1
+# staging:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: thoughtsy_staging
+#   pool: 5
+#   username: adam
+#   password: password1

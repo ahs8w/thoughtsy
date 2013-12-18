@@ -12,7 +12,7 @@ require "sprockets/railtie"
 # Bundler.require(:default, Rails.env)
 # *Changed to add :asset group ~> http://www.stormconsultancy.co.uk/blog/development/
 # how-to-get-more-bang-for-your-heroku-buck-while-making-your-rails-site-super-snappy-redux/
-Bundler.require(*Rails.groups(:assets => %w(development test)))
+Bundler.require(*Rails.groups(:assets => %w(development test), :production => %w(production staging)))
 
 module Thoughtsy
   class Application < Rails::Application
