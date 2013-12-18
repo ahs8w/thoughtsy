@@ -50,7 +50,7 @@ module Thoughtsy
 
     # see:  http://strandcode.com/2013/08/11/security-is-a-feature-9-newb-friendly-steps-to-secure-your-rails-apps/
     # needed to add all environments for testing of carrierwave_direct!!!
-    unless Rails.env.production?
+    unless Rails.env.production? || Rails.env.staging?
       ENV.update YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))
     end
   end
