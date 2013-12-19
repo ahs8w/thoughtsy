@@ -11,6 +11,7 @@ blue-yellow
 rgb(237, 255, 143), rgb(50, 118, 177))
 */
 
+
 /* Custom buttons */
 
   $blue:   rgba(50, 118, 177, .9);
@@ -194,10 +195,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     @extend .lighter;
   }
 
-/* sidebar */
-
-  
-
 /* flash/error messages */
 
   #js_flash_messages {
@@ -247,7 +244,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
       a {
         display: inline-block;
       }
-      .ion {
+      .fa {
         float: right;
         padding-top: 5px;
         padding-right: 10%;
