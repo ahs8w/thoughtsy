@@ -12,10 +12,9 @@ if Rails.env.production?
   ActionMailer::Base.default_url_options = { host: "thoughtsy.com" }
 elsif Rails.env.staging?
   ActionMailer::Base.default_url_options = { host: "thoughtsy-staging.herokuapp.com" }
-  require 'development_mail_interceptor'
-  ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor)
 else
-  ActionMailer::Base.default_url_options = { host: "localhost:3000" }
-  require 'development_mail_interceptor'
-  ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development?
+  ActionMailer::Base.default_url_options = { host: "localhost:3000" } 
 end
+
+require 'development_mail_interceptor'
+ActionMailer::Base.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development? || Rails.env.staging?

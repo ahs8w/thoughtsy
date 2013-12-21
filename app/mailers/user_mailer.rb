@@ -1,7 +1,7 @@
 include PostsHelper
 
 class UserMailer < ActionMailer::Base
-  default from: "adam@thoughtsy.com"      #hash of default values for emails sent from this mailer
+  default from: "Thoughtsy@thoughtsy.com"      #hash of default values for emails sent from this mailer
 
   def password_reset(user)
     @user = user
