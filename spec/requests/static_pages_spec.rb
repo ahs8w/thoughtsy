@@ -63,45 +63,56 @@ describe "StaticPages" do
         end
       end
 
-      describe "with valid token_timer" do
-        let!(:token_response) { FactoryGirl.create(:post) }
-        before do
-          user.token_timer = 12.hours.ago
-          user.token_id = token_response.id
-          user.save
-          visit root_path
+      describe "with token_timer" do
+        let!(:token_response) { FactoryGirl.create(:post, state: 'pending', updated_at: 2.days.ago) }
+        before { user.update_attribute(:token_id, token_response.id) }
+
+        context "unexpired" do
+          before do
+            user.update_attribute(:token_timer, 12.hours.ago)
+            visit root_path
+          end
+
+          it { should have_link("Respond") }
+          it { should have_content("until your response expires!") }
+
+          it "respond button yields token_response" do
+            click_link "Respond"
+            expect(page).to have_content(token_response.content)
+          end
         end
 
-        it { should have_link("Respond") }
-        it { should have_content("until your response expires!") }
+        context "expired" do
+          before do
+            user.update_attribute(:token_timer, 25.hours.ago)
+            visit root_path
+          end
+
+          it "post form does not have an error message" do
+            expect(page).not_to have_content("* Post must include either an image or content")
+          end
+
+          it "updates user tokens and score" do
+            user.reload
+            expect(user.token_timer).to be_nil
+            expect(user.token_id).to be_nil
+            expect(user.score).to eq -2
+          end
+
+          # it "updates post.unavailable_users" do
+          #   post.reload
+          #   expect(post.unavailable_users).to include user
+          # end
+
+          context "with no available posts" do
+            it { should have_content("Your response expired") }
+            it { should have_content("There are currently no unanswered posts available.") }
+            it { should_not have_link("Respond") }
+          end
+        end
       end
 
-      describe "with expired token_timer" do
-        let!(:token_response) { FactoryGirl.create(:post, state: 'pending') }
-        before do
-          user.update_attribute(:token_timer, 25.hours.ago)
-          user.update_attribute(:token_id, token_response.id)
-          visit root_path
-        end
-
-        it "post form does not have an error message" do
-          expect(page).not_to have_content("* Post must include either an image or content")
-        end
-
-        it "updates user tokens and score" do
-          user.reload
-          expect(user.token_timer).to be_nil
-          expect(user.token_id).to be_nil
-          expect(user.score).to eq -2
-        end
-
-        context "and no available posts" do
-          it { should have_content("Your response expired") }
-          it { should_not have_link("Respond") }
-        end
-      end
-
-      describe "and an available post" do
+      describe "with an available post" do        # must be a new visit because tokens all reset after first
         let!(:available) { FactoryGirl.create(:post, state: 'unanswered', updated_at: 2.hours.ago) }
         let!(:token_response) { FactoryGirl.create(:post, state: 'pending', updated_at: 2.days.ago) }
         before do
@@ -114,11 +125,11 @@ describe "StaticPages" do
         it { should have_content("Click the button to get another thought.") }
         it { should have_link("Respond") }
 
-        context "after clicking respond" do
+        describe "after clicking respond" do
           before { click_link('Respond') }
 
           it "does not display the user's previous thought" do
-            expect(page).not_to have_content(token_response.content)
+            expect(page).to have_content(available.content)
           end
         end
       end

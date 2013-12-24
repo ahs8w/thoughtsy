@@ -108,16 +108,34 @@ describe Post do
     describe "after 24 hours" do
       before { Timecop.freeze(Time.now + 24.hours) }
 
-      context "when post has not been answered" do
+      context "without a response" do
         
-        it "post state is reset to 'unanswered'" do
+        it "resets post state to 'unanswered'" do
           Post.check_expirations
           @post.reload
           expect(@post.state).to eq 'unanswered'
         end
+
+        context "with followed post" do
+          before do
+            user.subscribe!(@post)
+            @timestamp = @post.updated_at.day
+            Post.check_expirations
+          end
+
+          it "resets post state back to 'reposted'" do
+            @post.reload
+            expect(@post.state).to eq 'reposted'
+          end
+
+          it "does not touch update_at column" do
+            @post.reload
+            expect(@post.updated_at.day).to eq @timestamp
+          end
+        end
       end
 
-      context "when state is 'answered' or 'reposted'" do
+      context "with a response" do
         before do
           @post.answer!
           user.subscribe!(@post)
@@ -274,7 +292,7 @@ describe Post do
 
       it "sends an email to admin" do
         Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-        expect(last_email.to).to include 'adam@thoughtsy.com'
+        expect(last_email.to).to include 'a.h.schiller@gmail.com'
       end
 
       it "updates post author score" do

@@ -47,6 +47,7 @@ class Post < ActiveRecord::Base
     end
 
     event :expire do
+      transition :reposted => same
       transition any => :unanswered
     end
 
@@ -89,17 +90,26 @@ class Post < ActiveRecord::Base
     self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
   end                                         # delete returns deleted value rather than the array...
 
+  def repost_or_expire
+    if followers.any?
+      update_column(:state, 'reposted')     # update_column does not 'touch' timestamp 'updated_at'
+      update_column(:token_timer, nil)
+    else
+      expire!
+    end
+  end
+
   ############# Heroku Scheduler ##############
   def Post.check_expirations
-    posts = Post.where(state: 'pending')
-    posts.each do |post|
+    pending_posts = Post.where(state: 'pending')
+    pending_posts.each do |post|
       post.check_expiration
     end
   end
 
   def check_expiration
     if token_timer? && token_timer < 24.hours.ago
-      expire! unless answered? || reposted?
+      repost_or_expire unless answered? || reposted?
     end
   end
 

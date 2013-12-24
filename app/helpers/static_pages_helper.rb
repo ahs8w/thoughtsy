@@ -26,7 +26,7 @@ module StaticPagesHelper
   # timer expired && available posts
   def output_4
     @button = true
-    @small_message = "Your response expired #{expiration} ago.  
+    @small_message = "Your response expired #{expiration} ago.
     Click the button to get another thought."
   end
 

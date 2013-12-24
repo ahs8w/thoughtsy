@@ -38,18 +38,19 @@ describe Message do
     specify { expect(@message.viewed?).to eq true }
   end
 
-  describe "::after_save" do
-    before { @message.save }
-
-    context "scope" do
-      it ".unread" do
-        expect(Message.unread).to include @message
-        @message.set_viewed?
-        @message.reload
-        expect(Message.unread).not_to include @message
-      end
+  describe "scope" do
+    it ".unread" do
+      @message.save
+      expect(Message.unread).to include @message
+      @message.set_viewed?
+      @message.reload
+      expect(Message.unread).not_to include @message
     end
+  end
 
+  describe "#send_email" do
+    before { @message.send_email }
+    
     it "sends email to message receiver" do
       Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
       expect(last_email.to).to eq([receiver.email])

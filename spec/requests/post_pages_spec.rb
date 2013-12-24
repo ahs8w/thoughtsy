@@ -258,7 +258,7 @@ describe "Post pages" do
 
         it "sends an email to admin" do
           Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-          expect(last_email.to).to include('adam@thoughtsy.com')
+          expect(last_email.to).to include('a.h.schiller@gmail.com')
         end
       end
 
