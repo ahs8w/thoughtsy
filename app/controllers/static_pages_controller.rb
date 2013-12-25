@@ -41,10 +41,9 @@ class StaticPagesController < ApplicationController
   def contact
   end
 
-  private
-    def rollback_tokens
-      current_user.reset_tokens if signed_in? && !current_user.timer_valid
-    end
-
-    # Post.available(current_user).ascending.first
+private
+  def rollback_tokens
+    current_user.reset_tokens if signed_in? && !current_user.timer_valid
+    @oldpost.add_unavailable_users(current_user) if @oldpost
+  end
 end
