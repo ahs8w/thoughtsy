@@ -9,8 +9,4 @@ class Message < ActiveRecord::Base
   def set_viewed?
     self.update_attribute(:viewed?, true)
   end
-
-  def send_email
-    UserMailer.delay.message_email(self)
-  end
 end

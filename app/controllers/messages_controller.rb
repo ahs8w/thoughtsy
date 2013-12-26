@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
   def create
     @message = current_user.messages.build(message_params)
     if @message.save
-      @message.send_email
+      UserMailer.delay.message_email(@message)
       respond_to do |format|
         format.html do
           redirect_to user_messages_path(current_user)

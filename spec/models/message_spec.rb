@@ -47,13 +47,4 @@ describe Message do
       expect(Message.unread).not_to include @message
     end
   end
-
-  describe "#send_email" do
-    before { @message.send_email }
-    
-    it "sends email to message receiver" do
-      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).to eq([receiver.email])
-    end
-  end
 end
