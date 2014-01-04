@@ -33,7 +33,7 @@ describe "Post pages" do
 
       context "after expiring", focus:true do
         before do
-          older_post.answer!
+          older_post.accept!
           older_post.expire!
           visit queue_path
         end

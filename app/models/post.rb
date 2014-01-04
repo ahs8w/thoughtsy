@@ -16,14 +16,16 @@ class Post < ActiveRecord::Base
 
   after_create do |post|
     post.user.update_score!(1)
+    post.add_unavailable_users(post.user)
   end
 
 
   scope :ascending,   -> { order('updated_at ASC') }
   scope :descending,  -> { order('updated_at DESC') }
-  scope :unanswered,  ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
-                                       "unanswered", "reposted", user.id) }
-  scope :available,   ->(user) { unanswered(user).where.not("? = ANY (unavailable_users)", user.id) }
+  # scope :unanswered,  ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
+  #                                      "unanswered", "reposted", user.id) }
+  scope :queued,    -> { where("state = ? OR state = ?", "unanswered", "reposted") }
+  scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
   scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
   scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
 

@@ -66,11 +66,11 @@ describe Post do
     before { @post.save }
 
     it "adds a user to the array" do
-      expect(@post.unavailable_users).to eq []
+      expect(@post.unavailable_users).to eq [user.id]
       @post.add_unavailable_users(user2)
-      expect(@post.unavailable_users).to eq [user2.id]
-      @post.add_unavailable_users(user)
-      expect(@post.unavailable_users).to eq [user2.id, user.id]
+      expect(@post.unavailable_users).to eq [user.id, user2.id]
+      # @post.add_unavailable_users(user)
+      # expect(@post.unavailable_users).to eq [user2.id, user.id]
     end
   end
 
@@ -79,11 +79,11 @@ describe Post do
     before do
       @post.save
       @post.add_unavailable_users(user2)
-      @post.add_unavailable_users(user)
+      # @post.add_unavailable_users(user)
     end
 
     it "removes user from the array" do
-      expect(@post.unavailable_users).to eq [user2.id, user.id]
+      expect(@post.unavailable_users).to eq [user.id, user2.id]
       @post.remove_unavailable_users(user2)
       expect(@post.unavailable_users).to eq [user.id]
     end
@@ -196,6 +196,10 @@ describe Post do
       user.reload
       expect(user.score).to eq 1
     end
+
+    it "adds author to unavailable_users" do
+      expect(@post.unavailable_users).to include(user.id)
+    end
   end
 ## 
 
@@ -214,34 +218,32 @@ describe Post do
   end
 
   describe "state scopes" do
-    let!(:unavailable_users_post) { FactoryGirl.create(:post, state: 'unanswered', unavailable_users: [user.id]) }
     let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
-    let!(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
-    let!(:pending_post) { FactoryGirl.create(:post, state: 'pending') }
+    let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
+    let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
     let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', updated_at: 5.minutes.ago) }
-    let!(:no_state) { FactoryGirl.create(:post) }
 
-    it ".available" do
-      expect(Post.available(user)).not_to include(user_post, answered_post, pending_post, unavailable_users_post)
-      expect(Post.available(user)).to include(unanswered, reposted)
+    it ".answerable" do
+      expect(Post.answerable(user)).not_to include(user_post, answered, pending)
+      expect(Post.answerable(user)).to include(unanswered, reposted)
+    end
+
+    it "queued" do
+      expect(Post.queued).not_to include(answered, pending, flagged)
+      expect(Post.queued).to include(user_post, unanswered, reposted)
     end
 
     it ".answered" do
-      expect(Post.answered).not_to include(user_post, pending_post, unanswered)
-      expect(Post.answered).to include(answered_post, reposted)
+      expect(Post.answered).not_to include(user_post, pending, unanswered)
+      expect(Post.answered).to include(answered, reposted)
     end
 
     it ".personal" do
-      expect(Post.personal).not_to include(answered_post, reposted)
-      expect(Post.personal).to include(flagged, pending_post, unanswered, no_state)
+      expect(Post.personal).not_to include(answered, reposted)
+      expect(Post.personal).to include(flagged, pending, unanswered)
     end
-
-    #user model method
-    # it "#oldest_available_post" do
-    #   expect(user.oldest_available_post).to eq reposted
-    # end
   end
 
 ## Post State ##
