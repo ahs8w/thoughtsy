@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131213165919) do
+ActiveRecord::Schema.define(version: 20140104162354) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20131213165919) do
     t.datetime "token_timer"
     t.integer  "unavailable_users", default: [], array: true
     t.boolean  "image_processed"
+    t.datetime "answered_at"
   end
 
   add_index "posts", ["created_at"], name: "index_posts_on_created_at", using: :btree

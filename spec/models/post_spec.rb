@@ -25,6 +25,7 @@ describe Post do
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
   it { should respond_to(:responders) }
+  it { should respond_to(:answered_at) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
   its(:token_timer) { should be_nil }
@@ -301,8 +302,32 @@ describe Post do
       end
     end
 
+    describe ":reposted" do
+      before { @post.subscribe! }
+
+      it "changes to :reposted on #subscribe" do
+        expect(@post).to be_reposted
+      end
+
+      it "does not change on #expire" do
+        @post.expire!
+        expect(@post).to be_reposted
+      end
+    end
+
     describe ":answered" do
-      before { @post.answer! }
+      before do
+        Timecop.freeze
+        @post.answer!
+      end
+
+      it "changes to :answered on #answer" do
+        expect(@post).to be_answered
+      end
+
+      it "updates answered_at column" do
+        expect(@post.answered_at).to eq Time.zone.now
+      end
 
       it "should change to :unanswered on #unanswer" do
         @post.unanswer!

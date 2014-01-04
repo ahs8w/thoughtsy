@@ -40,7 +40,7 @@ class Post < ActiveRecord::Base
     end
 
     after_transition on: :expire, do: :reset_token_timer
-
+    after_transition on: :answer, do: :set_answered_at
 
     event :accept do
       transition any => :pending
@@ -78,6 +78,10 @@ class Post < ActiveRecord::Base
 
   def reset_token_timer
     self.update_attribute(:token_timer, nil)
+  end
+
+  def set_answered_at
+    self.update_attribute(:answered_at, Time.zone.now)
   end
 
   def add_unavailable_users(user)

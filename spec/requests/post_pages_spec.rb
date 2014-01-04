@@ -16,9 +16,11 @@ describe "Post pages" do
 
     it { should have_content("Queue") }
     it { should have_title("Queue") }
+    it { should have_content(post.created_at) }
     it { should have_content(post.updated_at) }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }
+    it { should_not have_content("[image]") }
     it { should have_content(post.state) }
 
     describe "order of posts" do
@@ -27,6 +29,18 @@ describe "Post pages" do
 
       it "oldest post is first" do
         expect(first('tr')).to have_content(older_post.content)
+      end
+
+      context "after expiring", focus:true do
+        before do
+          older_post.answer!
+          older_post.expire!
+          visit queue_path
+        end
+
+        it "does not change order" do
+          expect(first('tr')).to have_content(older_post.content)
+        end
       end
     end
 
