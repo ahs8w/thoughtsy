@@ -34,38 +34,40 @@
 
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-          <% if @public_posts.empty? %>
-            <h3 class="empty">no answered thoughts or responses</h3>
-          <% else %>
-            <h2>Answered thoughts and responses</h2>
-            <% @public_posts.each do |post| %>
-              <% if post.user == @user %>
-                <div class="panel-focus">
-                  <div class="panel-post">
-                    <% if post.responses.unrated.any? && current_user?(@user) %>
-                      <span class="badge"><%= unrated_count(post) %></span>
-                    <% end %>
-                    <%= render partial: 'posts/index_post', object: post %>
-                  </div>
-                </div>
-              <% end %>
-          
-              <% post.responses.descending.each do |response| %>
-                <% if response.user == @user %>
-                  <div class="thought_wrapper" id="profile_response">
-                    <div class="panel-focus">
-                      <div class="panel-response">
-                        <% if response.ratings.any? && current_user?(@user) %>
-                          <span class="badge">rated: <%= average_rating(response) %></span>
-                        <% end %>
-                        <%= render partial: 'shared/thought', object: response, locals: { profile: true } %>
-                      </div>
+          <div class="public_posts">
+            <% if @public_posts.empty? %>
+              <h3 class="empty">no answered thoughts or responses</h3>
+            <% else %>
+              <h2>Answered thoughts and responses</h2>
+              <% @public_posts.each do |post| %>
+                <% if post.user == @user %>
+                  <div class="panel-focus">
+                    <div class="panel-post">
+                      <% if post.responses.unrated.any? && current_user?(@user) %>
+                        <span class="badge"><%= unrated_count(post) %></span>
+                      <% end %>
+                      <%= render partial: 'posts/index_post', object: post %>
                     </div>
                   </div>
                 <% end %>
+            
+                <% post.responses.descending.each do |response| %>
+                  <% if response.user == @user %>
+                    <div class="thought_wrapper" id="profile_response">
+                      <div class="panel-focus">
+                        <div class="panel-response">
+                          <% if response.ratings.any? && current_user?(@user) %>
+                            <span class="badge">rated: <%= average_rating(response) %></span>
+                          <% end %>
+                          <%= render partial: 'shared/thought', object: response, locals: { profile: true } %>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
               <% end %>
-            <% end %>
-            <%= will_paginate @public_posts %>
+              <%= will_paginate @public_posts %>
+            </div>
           <% end %>
 
           <% if current_user?(@user) %>

@@ -74,10 +74,4 @@ module SessionsHelper
   def store_location                          # used in 'signed_in_user' before filter
     session[:return_to] = request.url         # stores desired page in session hash
   end
-
-## Profile ##
-  def public_posts(user)
-    posts = user.posts.answered + user.posts_responded_to.uniq
-    posts.sort_by { |post| post[:updated_at] }.reverse!   # posts sorted by most recent update/responses
-  end
 end

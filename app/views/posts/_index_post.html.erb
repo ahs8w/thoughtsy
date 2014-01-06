@@ -5,6 +5,6 @@
     <div class="image">
       <%= render partial: 'shared/thumb', object: index_post, locals: { path: 'post_path(index_post)' } %>
     </div>
-    <span class="label label-default">responded to <%= updated_time(index_post) %></span>
+    <span class="label label-default">responded to <%= responded_time(index_post) %></span>
   </h3>
 </div>

@@ -17,11 +17,11 @@ module PostsHelper
     # allows for n/ entered into content to be maintained in display
     # doesn't function properly when truncated
 
-  def updated_time(thought)
-    if thought.updated_at < 10.days.ago
-      thought.updated_at.to_formatted_s(:short_ordinal)
+  def responded_time(thought)
+    if thought.sort_date < 10.days.ago
+      thought.sort_date.to_formatted_s(:short_ordinal)
     else
-      "#{time_ago_in_words(thought.updated_at)} ago"
+      "#{time_ago_in_words(thought.sort_date)} ago"
     end
   end
 

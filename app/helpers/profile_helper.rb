@@ -37,7 +37,7 @@ module ProfileHelper
 
   def public_posts(user)
     posts = user.posts.answered + user.posts_responded_to.uniq
-    posts.sort_by { |post| post[:updated_at] }.reverse!   # posts sorted by most recent update/responses
+    posts.sort_by { |post| post[:sort_date] }.reverse!   # posts sorted by most recent update/responses
   end
 
   def settings_link

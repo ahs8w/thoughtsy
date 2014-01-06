@@ -120,12 +120,16 @@ describe "Post pages" do
   end
 
   describe "Index page" do
-    let(:user) { FactoryGirl.create(:user) }
+    include ActionView::Helpers::DateHelper
+    
     let!(:post) { FactoryGirl.create(:post, state: 'answered') }
+    let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+
     before { visit posts_path }
 
     it { should have_title("Thoughts") }
     it { should have_link(post.content) }
+    it { should have_content(time_ago_in_words(response.created_at)) }
 
     describe "order of posts" do
       let!(:post2) { FactoryGirl.create(:post, state: 'answered') }

@@ -4,7 +4,7 @@ describe "UserPages" do
   
   subject { page }
 
-  describe "index" do
+  describe "Index page" do
 
     let(:user) { FactoryGirl.create(:user) }
 
@@ -63,7 +63,7 @@ describe "UserPages" do
     end
   end
 
-  describe "profile page" do
+  describe "Profile page" do
     let(:user) { FactoryGirl.create(:user) }
     
     context "as correct user" do
@@ -84,28 +84,44 @@ describe "UserPages" do
       end
 
       describe "with content" do
-        let!(:answered_post) { FactoryGirl.create(:post, user: user, content: "Answered", 
-                                                  state: 'answered', updated_at: 4.hours.ago) }
-        let!(:unanswered_post) { FactoryGirl.create(:post, user: user, content: "Unanswered", 
-                                                    updated_at: 3.hours.ago) }
-
         let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
-        before { visit user_path(user) }
+        let!(:answered) { FactoryGirl.create(:post, user: user, state: 'answered') }
+        let!(:unanswered) { FactoryGirl.create(:post, user: user) }
+        before do
+          visit user_path(user)
+        end
 
         describe "display" do
           it "has content of thoughts" do
-            expect(page).to have_link(answered_post.content)
-            expect(page).to have_link(unanswered_post.content)
+            expect(page).to have_link(answered.content)
+            expect(page).to have_link(unanswered.content)
             expect(page).to have_link(user_response.content)
           end
         end
 
-        describe "post order" do
-          let!(:newer_post) { FactoryGirl.create(:post, user: user, content: "Newer", updated_at: 3.minutes.ago) }
-          before { visit user_path(user) }
+        describe "order" do
+          context "public posts" do
+            before do
+              answered.update_column(:sort_date, 4.hours.ago)
+              visit user_path(user)
+            end
 
-          it "is newest to oldest(updated_at)" do
-            expect(find('.personal_posts').first('.thought')).to have_content(newer_post.content)
+            it "newest is first" do
+              expect(find('.public_posts').first('.panel-focus')).to have_content(user_response.content)
+            end
+          end
+
+          context "personal posts" do
+            let!(:older_unanswered) { FactoryGirl.create(:post, user: user) }
+            before do
+              unanswered.update_column(:sort_date, 2.hours.ago)
+              older_unanswered.update_column(:sort_date, 3.hours.ago)
+              visit user_path(user)
+            end
+
+            it "newest is first" do
+              expect(find('.personal_posts').first('.thought')).to have_content(unanswered.content)
+            end
           end
         end
 
@@ -141,10 +157,10 @@ describe "UserPages" do
             expect(page).not_to have_link("Messages", href: user_messages_path(user))
             expect(page).not_to have_button("Stats")
             expect(page).to have_content("Answered thoughts")
-            expect(page).to have_link(answered_post.content)
+            expect(page).to have_link(answered.content)
             expect(page).to have_link(user_response.content)
             expect(page).not_to have_content("Unanswered thoughts")
-            expect(page).not_to have_link(unanswered_post.content)
+            expect(page).not_to have_link(unanswered.content)
           end
         end
       end
@@ -173,14 +189,14 @@ describe "UserPages" do
     end
   end
 
-  describe "signup page" do
+  describe "Signup page" do
     before { visit signup_path }
 
     it { should have_content('Sign up') }
     it { should have_title(full_title('Sign up')) }
   end
 
-  describe "signup" do
+  describe "Signup" do
     before { visit signup_path }
 
     let(:submit) { "Create my account" }
@@ -225,7 +241,7 @@ describe "UserPages" do
     end
   end
 
-  describe "edit" do
+  describe "Edit page" do
     let(:user) { FactoryGirl.create(:user) }
     before do
       sign_in user
@@ -233,12 +249,9 @@ describe "UserPages" do
       click_link "Settings"
     end
 
-
-    describe "page" do
-      it { should have_content("Update your profile") }
-      it { should have_title("Edit profile") }
-      it { should have_link('update user image', href: 'http://gravatar.com/emails') }
-    end
+    it { should have_content("Update your profile") }
+    it { should have_title("Edit profile") }
+    it { should have_link('update user image', href: 'http://gravatar.com/emails') }
 
     describe "with invalid information" do
       before { click_button "Save changes" }
