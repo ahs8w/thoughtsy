@@ -94,7 +94,7 @@ describe Post do
     end
   end
 
-  describe "::check_expirations" do
+  describe "[Heroku Scheduler] ::check_expirations" do
     before do
       @post.save
       @post.accept!
@@ -106,51 +106,43 @@ describe Post do
       it "post state is unchanged" do
         Post.check_expirations
         @post.reload
-        expect(@post.state).to eq 'pending'
+        expect(@post).to be_pending
       end
-
     end
 
     describe "after 24 hours" do
       before { Timecop.freeze(Time.now + 24.hours) }
 
-      context "without a response" do
+      context "unanswered" do
         
         it "resets post state to 'unanswered'" do
           Post.check_expirations
           @post.reload
-          expect(@post.state).to eq 'unanswered'
+          expect(@post).to be_unanswered
+          expect(@post.token_timer).to be_nil
         end
+      end
 
-        context "with followed post" do
-          before do
-            user.subscribe!(@post)
-            @timestamp = @post.updated_at.day
-            Post.check_expirations
-          end
+      context "unanswered with subscription" do
+        before { FactoryGirl.create(:subscription, post_id: @post.id) }
 
-          it "resets post state back to 'reposted'" do
-            @post.reload
-            expect(@post.state).to eq 'reposted'
-          end
-
-          it "does not touch update_at column" do
-            @post.reload
-            expect(@post.updated_at.day).to eq @timestamp
-          end
+        it "resets post state to 'reposted'" do
+          Post.check_expirations
+          @post.reload
+          expect(@post).to be_reposted
+          expect(@post.token_timer).to be_nil
         end
       end
 
       context "with a response" do
         before do
           @post.answer!
-          user.subscribe!(@post)
         end
 
         it "post state remains unchanged" do
           Post.check_expirations
           @post.reload
-          expect(@post.state).to eq 'reposted'
+          expect(@post).to be_answered
         end
       end
     end
@@ -291,45 +283,50 @@ describe Post do
           expect(@post.token_timer).to be_nil
         end
       end
+    end
 
-      describe "#answer!" do
+    describe "#answer!" do
+      before do
+        Timecop.freeze
+        @post.answer!
+      end
+      
+      it "changes state to :answered" do
+        expect(@post).to be_answered
+      end
+
+      it "sets sort_date" do
+        expect(@post.sort_date).to eq Time.zone.now
+      end
+
+      describe "#unanswer!" do
+        before { @post.unanswer! }
+
+        it "changes state to :unanswered" do
+          expect(@post).to be_unanswered
+        end
+      end
+    end
+
+    describe "#repost!" do
+      before do
+        @post.save
+        FactoryGirl.create(:subscription, post_id: @post.id)
+        @post.repost!
+      end
+
+      it "changes state to :reposted" do
+        expect(@post).to be_reposted
+      end
+
+      describe "#expire!" do
         before do
-          Timecop.freeze
-          @post.answer!
-        end
-        
-        it "changes state to :answered" do
-          expect(@post).to be_answered
+          @post.accept!
+          @post.expire!
         end
 
-        it "sets sort_date" do
-          expect(@post.sort_date).to eq Time.zone.now
-        end
-
-        describe "#unanswer!" do
-          before { @post.unanswer! }
-
-          it "changes state to :unanswered" do
-            expect(@post).to be_unanswered
-          end
-        end
-
-        describe "#repost!" do
-          before { @post.repost! }
-
-          it "changes state to :reposted" do
-            expect(@post).to be_reposted
-          end
-
-          describe "#expire!" do
-            before do
-              @post.expire!
-            end
-
-            it "state remains reposted" do
-              expect(@post).to be_reposted
-            end
-          end
+        it "state remains reposted" do
+          expect(@post).to be_reposted
         end
       end
     end
@@ -350,21 +347,6 @@ describe Post do
         user.reload
         expect(user.score).to eq -2
       end
-    end
-  end
-
-  describe "#expire_check" do
-    before do
-      @post.save
-      FactoryGirl.create(:subscription, post_id: @post.id)
-      @post.accept!
-    end
-
-    it { should be_pending }
-
-    it "returns state back to reposted" do
-      @post.expire_check
-      expect(@post).to be_reposted
     end
   end
 end

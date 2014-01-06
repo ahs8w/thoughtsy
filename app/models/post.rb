@@ -23,8 +23,6 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('sort_date ASC') }
   scope :descending,  -> { order('sort_date DESC') }
-  # scope :unanswered,  ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
-  #                                      "unanswered", "reposted", user.id) }
   scope :queued,    -> { where("state = ? OR state = ?", "unanswered", "reposted") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
   scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
@@ -49,9 +47,9 @@ class Post < ActiveRecord::Base
       transition any => :pending
     end
 
-    event :expire do    # use expire_check instead of expire!
-      transition :reposted => same
-      transition any => :unanswered
+    event :expire do
+      transition :pending => :reposted, :if => lambda {|post| post.subscriptions.any?}
+      transition :pending => :unanswered
     end
 
     event :answer do
@@ -69,11 +67,6 @@ class Post < ActiveRecord::Base
     event :repost do
       transition any => :reposted
     end
-  end
-
-  def expire_check
-    self.update_column(:state, 'reposted') if self.subscriptions.any?
-    self.expire!
   end
 
   def set_token_timer
@@ -102,16 +95,9 @@ class Post < ActiveRecord::Base
   def Post.check_expirations
     pending_posts = Post.where(state: 'pending')
     pending_posts.each do |post|
-      post.check_expiration
+      post.expire! if post.token_timer? && post.token_timer < 24.hours.ago
     end
   end
-
-  def check_expiration
-    if token_timer? && token_timer < 24.hours.ago
-      expire! unless answered? || reposted?
-    end
-  end
-    ## need test to make this fail -> expire_check
 
   ### Carrierwave-direct image upload helpers ###
   def image_name
@@ -139,15 +125,4 @@ private
   def image_or_content
     errors.add(:base, "Post must include either an image or content") unless content.present? || has_image_upload?
   end
-
 end
-
-## keep for reference!!  pass in arguments to the transition callback  
-  # after_transition on: :accept do |post, transition|
-  #   post.set_responder_token(transition.args.first)
-  # end
-
-  # def set_responder_token(id)
-  #   self.responder_token = id
-  #   save!
-  # end

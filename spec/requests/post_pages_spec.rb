@@ -140,6 +140,7 @@ describe "Post pages" do
 
       describe "after reposted" do
         before do
+          FactoryGirl.create(:subscription, post_id: post2.id)
           post2.repost!
         end
 
@@ -161,6 +162,7 @@ describe "Post pages" do
         context "and expired" do
           before do
             #repost_and_expire -> changes state from pending back to reposted
+            post2.accept!
             post2.expire!
             visit posts_path
           end

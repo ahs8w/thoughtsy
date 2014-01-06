@@ -1,6 +1,5 @@
 class StaticPagesController < ApplicationController
   include StaticPagesHelper
-  # after_action :rollback_tokens, only: :home
 
   def home
     if signed_in?
@@ -18,7 +17,8 @@ class StaticPagesController < ApplicationController
           @oldpost = Post.find(current_user.token_id)
           # can't reset_tokens here because it sets off Post validation error
           @token_post = Post.answerable(current_user).ascending.first
-          expiration_effects
+          @oldpost.expire!
+          user_expire_effects
         end
       else                                                        # no token_id
         @token_post = Post.answerable(current_user).ascending.first
@@ -41,10 +41,9 @@ class StaticPagesController < ApplicationController
   end
 
 private
-  def expiration_effects
+  def user_expire_effects
     current_user.reset_tokens
     current_user.update_score!(-3)
-    @oldpost.expire_check
     @oldpost.add_unavailable_users(current_user)
   end
 end
