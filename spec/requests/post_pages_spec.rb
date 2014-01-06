@@ -8,7 +8,7 @@ describe "Post pages" do
 
   describe "Queue page" do
     let(:admin) { FactoryGirl.create(:admin) }
-    let!(:post) { FactoryGirl.create(:post, updated_at: 1.minute.ago) }
+    let!(:post) { FactoryGirl.create(:post) }
     before do
       sign_in admin
       visit queue_path
@@ -17,35 +17,50 @@ describe "Post pages" do
     it { should have_content("Queue") }
     it { should have_title("Queue") }
     it { should have_content(post.created_at) }
-    it { should have_content(post.updated_at) }
+    it { should have_content(post.sort_date) }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }
     it { should_not have_content("[image]") }
     it { should have_content(post.state) }
 
     describe "order of posts" do
-      let!(:older_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago) }
-      before { visit queue_path }
-
-      it "oldest post is first" do
-        expect(first('tr')).to have_content(older_post.content)
+      let!(:post2) { FactoryGirl.create(:post) }
+      before do
+        post2.update_column(:sort_date, 5.minutes.ago)
+        visit queue_path
       end
 
-      context "after expiring", focus:true do
+      it "older post(by sort_date) is first" do
+        expect(first('tr')).to have_content(post2.content)
+      end
+
+      describe "after answered and reposted" do
         before do
-          older_post.accept!
-          older_post.expire!
+          post2.answer!
+          post2.repost!
           visit queue_path
         end
 
-        it "does not change order" do
-          expect(first('tr')).to have_content(older_post.content)
+        it "sort_date is changed" do
+          expect(first('tr')).to have_content(post.content)
+        end
+      end
+
+      describe "after accepted and expired" do
+        before do
+          post2.accept!
+          post2.expire!
+          visit queue_path
+        end
+
+        it "sort_date is unchanged" do
+          expect(first('tr')).to have_content(post2.content)
         end
       end
     end
 
     describe "does not include answered posts" do
-      let(:answered_post) { FactoryGirl.create(:post, state: 'answered', content: 'foobar') }
+      let(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
       before { visit queue_path }
 
       it { should_not have_content(answered_post.content) }
@@ -106,19 +121,54 @@ describe "Post pages" do
 
   describe "Index page" do
     let(:user) { FactoryGirl.create(:user) }
-    let!(:post) { FactoryGirl.create(:post, updated_at: 1.hour.ago, state: 'answered') }
+    let!(:post) { FactoryGirl.create(:post, state: 'answered') }
     before { visit posts_path }
 
     it { should have_title("Thoughts") }
-    # it { should have_content(post.user.username) }
-    it { should have_content(post.content) }
+    it { should have_link(post.content) }
 
     describe "order of posts" do
-      let!(:newer_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago, state: 'answered') }
-      before { visit posts_path }
+      let!(:post2) { FactoryGirl.create(:post, state: 'answered') }
+      before do
+        post2.update_column(:sort_date, 5.minutes.ago)
+        visit posts_path
+      end
 
-      it "most recently updated (responded) post is first" do
-        expect(first('h3')).to have_content(newer_post.content)
+      it "newer post(by sort_date) is first" do
+        expect(first('h3')).to have_content(post.content)
+      end
+
+      describe "after reposted" do
+        before do
+          post2.repost!
+        end
+
+        it "sort_date is unchanged" do
+          expect(first('h3')).to have_content(post.content)
+        end
+
+        context "and answered" do
+          before do
+            post2.answer!
+            visit posts_path
+          end
+
+          it "sort_date is changed" do
+            expect(first('h3')).to have_content(post2.content)
+          end
+        end
+
+        context "and expired" do
+          before do
+            #repost_and_expire -> changes state from pending back to reposted
+            post2.expire!
+            visit posts_path
+          end
+
+          it "sort_date is unchanged" do
+            expect(first('h3')).to have_content(post.content)
+          end
+        end
       end
     end
 
@@ -255,7 +305,7 @@ describe "Post pages" do
 
     describe "Flag action" do
 
-      context "with no available posts" do
+      context "with no other available posts" do
         before { click_link "offensive or inappropriate?" }
 
         it "displays flash and redirects to home page" do

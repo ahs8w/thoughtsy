@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
   end
 
   def posts_available
-    Post.available(self).size > 0
+    Post.answerable(self).size > 0
   end
 
   # def oldest_available_post  # also means unsubscribed
@@ -103,12 +103,12 @@ class User < ActiveRecord::Base
 # Subscriptions
   def subscribe!(post)
     self.subscriptions.create!(post_id: post.id)
-    post.subscribe!     #subscribed
+    post.repost!
   end
 
   def unsubscribe!(post)
     self.subscriptions.find_by(post_id: post.id).destroy!
-    # post.unsubscribe!    #pending
+    post.update_column(:state, 'answered')
   end
 
 # Reputation

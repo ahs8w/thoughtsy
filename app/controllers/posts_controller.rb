@@ -14,6 +14,7 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.answered.descending.paginate(page: params[:page], :per_page => 20)
+    # @posts = Post.answered.order("answered_at DESC").paginate(page: params[:page], :per_page => 20)
   end
 
   def show
@@ -60,7 +61,7 @@ class PostsController < ApplicationController
 # Response#New #
   def flag
     @post = Post.find(params[:id])
-    @token_post = Post.available(current_user).ascending.first
+    @token_post = Post.answerable(current_user).ascending.first
     @post.flag!       # sends flag_email on transition
     current_user.reset_tokens
     flash[:warning] = "Thought flagged."
@@ -74,7 +75,7 @@ class PostsController < ApplicationController
   def language
     @post = Post.find(params[:id])
     @post.add_unavailable_users(current_user)
-    @token_post = Post.available(current_user).ascending.first
+    @token_post = Post.answerable(current_user).ascending.first
     @post.unanswer!
     current_user.reset_tokens
     flash[:info] = "Thought reposted."

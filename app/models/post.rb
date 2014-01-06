@@ -17,11 +17,12 @@ class Post < ActiveRecord::Base
   after_create do |post|
     post.user.update_score!(1)
     post.add_unavailable_users(post.user)
+    post.set_sort_date
   end
 
 
-  scope :ascending,   -> { order('updated_at ASC') }
-  scope :descending,  -> { order('updated_at DESC') }
+  scope :ascending,   -> { order('sort_date ASC') }
+  scope :descending,  -> { order('sort_date DESC') }
   # scope :unanswered,  ->(user) { where("(state = ? OR state = ?) AND posts.user_id != ?",
   #                                      "unanswered", "reposted", user.id) }
   scope :queued,    -> { where("state = ? OR state = ?", "unanswered", "reposted") }
@@ -42,13 +43,13 @@ class Post < ActiveRecord::Base
     end
 
     after_transition on: :expire, do: :reset_token_timer
-    after_transition on: :answer, do: :set_answered_at
+    after_transition on: :answer, do: :set_sort_date
 
     event :accept do
       transition any => :pending
     end
 
-    event :expire do
+    event :expire do    # use expire_check instead of expire!
       transition :reposted => same
       transition any => :unanswered
     end
@@ -61,10 +62,6 @@ class Post < ActiveRecord::Base
       transition any => :unanswered
     end
 
-    event :subscribe do
-      transition any => :reposted
-    end
-
     event :flag do
       transition any => :flagged
     end
@@ -72,6 +69,11 @@ class Post < ActiveRecord::Base
     event :repost do
       transition any => :reposted
     end
+  end
+
+  def expire_check
+    self.update_column(:state, 'reposted') if self.subscriptions.any?
+    self.expire!
   end
 
   def set_token_timer
@@ -82,8 +84,8 @@ class Post < ActiveRecord::Base
     self.update_attribute(:token_timer, nil)
   end
 
-  def set_answered_at
-    self.update_attribute(:answered_at, Time.zone.now)
+  def set_sort_date
+    self.update_attribute(:sort_date, Time.zone.now)
   end
 
   def add_unavailable_users(user)
@@ -96,15 +98,6 @@ class Post < ActiveRecord::Base
     self.update_attribute(:unavailable_users, (unavailable_users.delete(user.id); unavailable_users))
   end                                         # delete returns deleted value rather than the array...
 
-  def repost_or_expire
-    if followers.any?
-      update_column(:state, 'reposted')     # update_column does not 'touch' timestamp 'updated_at'
-      update_column(:token_timer, nil)
-    else
-      expire!
-    end
-  end
-
   ############# Heroku Scheduler ##############
   def Post.check_expirations
     pending_posts = Post.where(state: 'pending')
@@ -115,10 +108,10 @@ class Post < ActiveRecord::Base
 
   def check_expiration
     if token_timer? && token_timer < 24.hours.ago
-      repost_or_expire unless answered? || reposted?
+      expire! unless answered? || reposted?
     end
   end
-
+    ## need test to make this fail -> expire_check
 
   ### Carrierwave-direct image upload helpers ###
   def image_name
@@ -146,9 +139,8 @@ private
   def image_or_content
     errors.add(:base, "Post must include either an image or content") unless content.present? || has_image_upload?
   end
-  
-end
 
+end
 
 ## keep for reference!!  pass in arguments to the transition callback  
   # after_transition on: :accept do |post, transition|

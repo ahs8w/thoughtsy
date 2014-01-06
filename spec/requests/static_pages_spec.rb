@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "StaticPages" do
   let(:user) { FactoryGirl.create(:user) }
-  let!(:post) { FactoryGirl.create(:post, user: user) }
 
   subject { page }
 
@@ -12,6 +11,7 @@ describe "StaticPages" do
   end
   
   describe "Home page" do
+    let!(:post) { FactoryGirl.create(:post) }
     before { visit root_path }
 
     let(:heading)    { 'Thoughtsy' }
@@ -34,16 +34,17 @@ describe "StaticPages" do
       end
 
       it { should have_link("Post!") }
+      it { should have_link("Respond!") }
       it { should_not have_link('Sign up now!', href: signup_path) }
       it { should_not have_link('Sign in',      href: signin_path) }
       it { should have_link(user.username) }
       it { should have_link('Thoughts') }
 
-      describe "::rollback_tokens action" do
+      describe "::rollback_tokens" do  # timer expired
         before do
-          user.token_timer = 25.hours.ago
-          user.token_id = post.id
-          user.save
+          FactoryGirl.create(:subscription, post_id: post.id)
+          user.update_columns(token_timer: 25.hours.ago, token_id: post.id)
+          post.update_columns(token_timer: 25.hours.ago, state: 'pending')
           visit root_path
         end
 
@@ -51,12 +52,14 @@ describe "StaticPages" do
           user.reload
           expect(user.token_timer).to be_nil
           expect(user.token_id).to be_nil
-          expect(user.score).to eq -2
+          expect(user.score).to eq -3
         end
 
         it "updates post.unavailable_users" do
           post.reload
-          expect(post.unavailable_users).to eq [user.id]
+          expect(post.unavailable_users).to eq [post.user.id, user.id]
+          expect(post.token_timer).to be_nil
+          expect(post).to be_reposted
         end
       end
     end
@@ -85,10 +88,10 @@ describe "StaticPages" do
     end
 
     describe "with token_timer" do
-      let!(:token_response) { FactoryGirl.create(:post, state: 'pending', updated_at: 2.days.ago) }
-      before { user.update_attribute(:token_id, token_response.id) }
+      let!(:accepted_post) { FactoryGirl.create(:post, state: 'pending') }
+      before { user.update_attribute(:token_id, accepted_post.id) }
 
-      context "unexpired" do
+      describe "unexpired" do
         before do
           user.update_attribute(:token_timer, 12.hours.ago)
           visit root_path
@@ -97,13 +100,13 @@ describe "StaticPages" do
         it { should have_link("Respond") }
         it { should have_content("until your response expires!") }
 
-        it "respond button yields token_response" do
+        it "respond button yields accepted_post" do
           click_link "Respond"
-          expect(page).to have_content(token_response.content)
+          expect(page).to have_content(accepted_post.content)
         end
       end
 
-      context "expired" do
+      describe "expired" do
         before do
           user.update_attribute(:token_timer, 25.hours.ago)
           visit root_path
@@ -113,7 +116,7 @@ describe "StaticPages" do
           expect(page).not_to have_content("* Post must include either an image or content")
         end
 
-        context "with no available posts" do
+        describe "with no available posts" do
           it { should have_content("Your response expired") }
           it { should have_content("There are currently no unanswered posts available.") }
           it { should_not have_link("Respond") }
@@ -121,12 +124,13 @@ describe "StaticPages" do
       end
     end
 
-    describe "with an available post" do        # must be a new visit because tokens all reset after first
-      let!(:available) { FactoryGirl.create(:post, state: 'unanswered', updated_at: 2.hours.ago) }
-      let!(:token_response) { FactoryGirl.create(:post, state: 'pending', updated_at: 2.days.ago) }
+    # must be a new visit because tokens all reset after first
+    describe "expired with an available post" do
+      let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
+      let!(:accepted_post) { FactoryGirl.create(:post, state: 'pending') }
       before do
         user.token_timer = 25.hours.ago
-        user.token_id = token_response.id
+        user.token_id = accepted_post.id
         user.save
         visit root_path
       end
@@ -145,6 +149,7 @@ describe "StaticPages" do
   end
 
   describe "Notification Area" do
+    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
     before do
       sign_in user
       visit root_path

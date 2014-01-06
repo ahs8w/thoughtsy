@@ -25,7 +25,7 @@ describe Post do
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
   it { should respond_to(:responders) }
-  it { should respond_to(:answered_at) }
+  it { should respond_to(:sort_date) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
   its(:token_timer) { should be_nil }
@@ -50,6 +50,7 @@ describe Post do
     end
   end
 
+## Model relationships ##
   describe "#responders" do
     let(:response) { FactoryGirl.create(:response, post_id: @post.id) }
     let(:second_response) { FactoryGirl.create(:response, post_id: @post.id) }
@@ -60,7 +61,11 @@ describe Post do
       expect(@post.responders).to include response.user
     end
   end
+  
+  describe "#followers" do
+  end
 
+## Model methods ##
   describe "#add_unavailable_users" do
     let(:user2) { FactoryGirl.create(:user) }
     before { @post.save }
@@ -190,7 +195,10 @@ describe Post do
 
 ## Callbacks ##
   describe "::after_create" do
-    before { @post.save }
+    before do
+      Timecop.freeze
+      @post.save
+    end
 
     it "updates author's score" do
       user.reload
@@ -200,19 +208,27 @@ describe Post do
     it "adds author to unavailable_users" do
       expect(@post.unavailable_users).to include(user.id)
     end
+
+    it "sets sort_date" do
+      expect(@post.sort_date).to eq @post.created_at
+    end
   end
-## 
 
 ## Post Scopes ##
   describe "ordered scopes" do
-    let!(:newer_post) { FactoryGirl.create(:post, updated_at: 5.minutes.ago) }
-    let!(:older_post) { FactoryGirl.create(:post, updated_at: 5.hours.ago) }
+    let!(:newer_post) { FactoryGirl.create(:post) }
+    let!(:older_post) { FactoryGirl.create(:post) }
 
-    it ".ascending" do
+    before do
+      newer_post.update_column(:sort_date, 5.minutes.ago)
+      older_post.update_column(:sort_date, 5.hours.ago)
+    end
+
+    it ".ascending" do                # Queue
       expect(Post.ascending.first).to eq older_post
     end
 
-    it ".descending" do
+    it ".descending" do               # Index
       expect(Post.descending.first).to eq newer_post
     end
   end
@@ -247,24 +263,20 @@ describe Post do
   end
 
 ## Post State ##
-  describe "state behavior and transitions" do
+  describe "state and transitions" do
     
-    describe ":unanswered" do
-
-      it "should be the initial state" do
-        expect(@post).to be_unanswered
-      end
-
-      it "changes state to :pending on #accept" do
-        @post.accept!
-        expect(@post).to be_pending
-      end
+    it "initial state is :unanswered" do
+      expect(@post).to be_unanswered
     end
 
-    describe ":pending" do
+    describe "#accept!" do
       before { @post.accept! }
 
-      it "#sets token_timer" do
+      it "changes state to :pending" do
+        expect(@post).to be_pending
+      end
+
+      it "sets token_timer" do
         expect(@post.token_timer).not_to be_nil
       end
 
@@ -280,16 +292,52 @@ describe Post do
         end
       end
 
-      it "should change to :answered on #answer" do
-        @post.answer!
-        expect(@post).to be_answered
+      describe "#answer!" do
+        before do
+          Timecop.freeze
+          @post.answer!
+        end
+        
+        it "changes state to :answered" do
+          expect(@post).to be_answered
+        end
+
+        it "sets sort_date" do
+          expect(@post.sort_date).to eq Time.zone.now
+        end
+
+        describe "#unanswer!" do
+          before { @post.unanswer! }
+
+          it "changes state to :unanswered" do
+            expect(@post).to be_unanswered
+          end
+        end
+
+        describe "#repost!" do
+          before { @post.repost! }
+
+          it "changes state to :reposted" do
+            expect(@post).to be_reposted
+          end
+
+          describe "#expire!" do
+            before do
+              @post.expire!
+            end
+
+            it "state remains reposted" do
+              expect(@post).to be_reposted
+            end
+          end
+        end
       end
     end
 
-    describe ":flagged" do
+    describe "#flag" do
       before { @post.flag! }
 
-      it "changes to :flagged on #flag" do
+      it "changes state to :flagged" do
         expect(@post).to be_flagged
       end
 
@@ -303,51 +351,20 @@ describe Post do
         expect(user.score).to eq -2
       end
     end
+  end
 
-    describe ":reposted" do
-      before { @post.subscribe! }
-
-      it "changes to :reposted on #subscribe" do
-        expect(@post).to be_reposted
-      end
-
-      it "does not change on #expire" do
-        @post.expire!
-        expect(@post).to be_reposted
-      end
+  describe "#expire_check" do
+    before do
+      @post.save
+      FactoryGirl.create(:subscription, post_id: @post.id)
+      @post.accept!
     end
 
-    describe ":answered" do
-      before do
-        Timecop.freeze
-        @post.answer!
-      end
+    it { should be_pending }
 
-      it "changes to :answered on #answer" do
-        expect(@post).to be_answered
-      end
-
-      it "updates answered_at column" do
-        expect(@post.answered_at).to eq Time.zone.now
-      end
-
-      it "should change to :unanswered on #unanswer" do
-        @post.unanswer!
-        expect(@post).to be_unanswered
-      end
-
-      it "should change to :subscribed on #subscribe" do
-        @post.subscribe!
-        expect(@post).to be_reposted
-      end
-
-      describe "#repost!" do
-        before { @post.repost! }
-
-        it "changes state to :reposted" do
-          expect(@post).to be_reposted
-        end
-      end
+    it "returns state back to reposted" do
+      @post.expire_check
+      expect(@post).to be_reposted
     end
   end
 end

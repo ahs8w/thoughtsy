@@ -152,7 +152,7 @@ describe User do
   end
 
 ## Scope ##
-  describe "score descending scope" do
+  describe "score_descending scope" do
     let!(:second_user) { FactoryGirl.create(:user, score: 10) }
     before do
       @user.save
@@ -321,7 +321,7 @@ describe User do
     end
   end
 
-## User.followed_posts, Post.followers ##
+## Subscriptions ##
   describe "#subscribe!" do
     let(:response) { FactoryGirl.create(:response, user_id: @user.id) }
     before { @user.save }
@@ -340,7 +340,7 @@ describe User do
         @user.unsubscribe!(response.post)
         expect(@user.followed_posts).not_to include(response.post)
         expect(response.post.followers).not_to include(@user)
-        # expect(response.post.state).to eq 'pending'
+        expect(response.post.state).to eq 'answered'
       end
     end
   end
