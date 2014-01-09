@@ -1,14 +1,13 @@
 class RatingsController < ApplicationController
   before_action :signed_in_user
-  before_action :follower_or_author
+  # before_action :follower_or_author
  
   def create
     @rating = current_user.ratings.build(rating_params)
-    @response = @rating.response
-    @post = @response.post
+    @rateable = @rating.rateable
     @message = Message.new
     if @rating.save
-      UserMailer.delay.brilliant_email(@response) if @rating.value == 5
+      # UserMailer.delay.brilliant_email(@response) if @rating.value == 5
       flash.now[:success] = "Rating saved."
       respond_to do |format|
         format.html { redirect_to :back }
@@ -27,7 +26,7 @@ class RatingsController < ApplicationController
 
   private
     def rating_params
-      params.require(:rating).permit(:response_id, :value)
+      params.require(:rating).permit(:rateable_id, :rateable_type, :value)
     end
 
     def follower_or_author

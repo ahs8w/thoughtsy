@@ -1,9 +1,11 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts, counter_cache: true
+  
   has_many :responses
-  has_many :ratings, through: :responses
-
   has_many :responders, through: :responses, source: :user
+
+  has_many :ratings, as: :rateable, dependent: :destroy
+  has_many :raters, through: :ratings, source: :user
 
   has_many :subscriptions
   has_many :followers, through: :subscriptions, source: :user

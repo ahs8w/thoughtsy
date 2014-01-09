@@ -106,7 +106,7 @@ describe "Authentication  : " do
 
         describe "visiting the index page" do
           before { visit posts_path }
-          it { should have_title('Sign in') }
+          it { should have_title('Thoughts') }
         end
       end
 
@@ -161,8 +161,8 @@ describe "Authentication  : " do
       end
     end
 
-    describe "as the wrong user" do
-      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+    describe "as an unauthorized user" do
+      let(:wrong_user) { FactoryGirl.create(:user) }
       before { sign_in wrong_user, no_capybara: true }
 
       describe "in Users Controller" do
@@ -193,23 +193,16 @@ describe "Authentication  : " do
         end
       end
 
-      describe "in the Ratings Controller" do
-        let(:response) { FactoryGirl.create(:response) }
+      # describe "in the Ratings Controller", focus:true do
+      #   let(:response) { FactoryGirl.create(:response) }
 
-        it "submitting to create action" do
-          post ratings_path, rating: { response_id: response.id }
-          expect(response).to redirect_to(root_url)
-        end
-      end
+      #   it "submitting to create action" do
+      #     post ratings_path, rating: {rateable_id: response.id, rateable_type: 'Response', user_id: wrong_user.id, value: 3}
+      #     expect(response).to redirect_to(root_url)
+      #   end
+      # end
 
       describe "in the Responses Controller" do
-        
-        # describe "visiting the show page" do
-        #   let!(:post) { FactoryGirl.create(:post) }
-        #   let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-        #   before { get "posts/1/responses/1" }
-        #   specify { expect(response).to redirect_to(root_url) }
-        # end
 
         describe "submitting to the create action" do
           before { post "posts/1/responses" }

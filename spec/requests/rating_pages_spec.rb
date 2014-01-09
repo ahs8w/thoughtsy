@@ -2,25 +2,25 @@ require 'spec_helper'
 
 ### Response#Show ###
 
-describe "Rating Creation" do
+describe "Rating Form" do
   subject { page }
 
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
-  let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+  let!(:response) { FactoryGirl.create(:response, id: 5) }
   before do
-    sign_in user
-    visit post_path(post)
+    sign_in response.post.user
+    visit post_path(response.post)
   end
-    
+
+  it { should have_selector('form#new_rating', :count => 4) }
+
   describe "clicking 'weak'" do
     before { click_button 'weak' }
   
     it { should have_content("You rated this article: weak") }
 
     it "should update response author's score" do
-      response.user.reload
-      expect(response.user.score).to eq 1
+      # response.user.reload
+      expect(response.user(true).score).to eq 1
     end
   end
 
@@ -45,42 +45,51 @@ describe "Rating Creation" do
       expect(Rating.where(value: 5).count).to eq 1
     end
 
-    it "sends an email to admin" do
-      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      expect(last_email.to).to include ('a.h.schiller@gmail.com')
-    end
+    # it "sends an email to admin" do
+    #   Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+    #   expect(last_email.to).to include ('a.h.schiller@gmail.com')
+    # end
 
     describe "reloading the page" do
-      before { visit post_path(post) }
+      before { visit post_path(response.post) }
 
-      it "form is replaced by current rating" do
-        page.has_no_xpath?("//form.new_rating")
+      it "form is replaced by current user rating" do
+        page.has_no_selector?("form#new_rating")
         expect(page).to have_content("You rated this article: brilliant!")
+      end
+
+      ## RatingsHelper - current_user_rating ##
+      context "with another rating sharing the same rateable_id" do
+        let(:post) { FactoryGirl.create(:post, id: 5) }
+        let(:rating) { post.ratings.new(user_id: response.post.user.id, value: 1) }
+        before do
+          rating.save
+          visit post_path(response.post)
+        end
+
+        it "displays correct rating" do
+          expect(page).to have_content("You rated this article: brilliant")
+        end
       end
     end
   end
 
   # context "with AJAX", :js=>true do
-  #   let(:response) { FactoryGirl.create(:response, post_id: post.id) }
-  #   before { visit post_path(post) }
-
+    
   #   describe "clicking 'weak'" do
-
-  #     context "as post author" do
-  #       before { click_button 'weak' }
-      
-  #       it "repost link appears and functions" do
-  #         expect(page).to have_link("repost this thought")
-  #         click_link("repost this thought")
-  #         expect(page).to have_button("Post a thought")
-  #         expect(page).to have_success_message("Thought reposted.")
-  #       end
+  #     before { click_button 'weak' }
+    
+  #     it "repost link appears and functions" do
+  #       expect(page).to have_link("repost this thought")
+  #       click_link("repost this thought")
+  #       expect(page).to have_button("Post a thought")
+  #       expect(page).to have_success_message("Thought reposted.")
   #     end
 
   #     context "as post follower" do     ## not authorized to repost a thought ##
   #       let(:follower) { FactoryGirl.create(:user) }
   #       before do
-  #         follower.subscribe!(post)
+  #         follower.subscribe!(response.post)
   #         sign_in follower
   #         visit post_path(post)
   #         click_button 'weak'

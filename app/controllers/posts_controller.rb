@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :signed_in_user
+  before_action :signed_in_user, except: :index
   before_action :admin_user, only: [:destroy, :queue]
   before_action :post_author, only: :repost
   before_action :tokened_responder, only: :flag

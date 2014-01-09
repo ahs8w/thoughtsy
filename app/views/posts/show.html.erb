@@ -24,8 +24,8 @@
                   <div class="panel-focus">
                     <div class="panel-response">
                       <%= render partial: "shared/thought", object: response %>
-                      <% if author_or_follower(@post) %>
-                        <%= render partial: 'ratings/form', locals: { response: response } unless current_user.id == response.user.id %>
+                      <% if author_or_responder(@post) %>
+                        <%= render partial: 'ratings/form', locals: { rateable: response } unless current_user.id == response.user.id %>
                       <% end %>
                     </div>
                   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140105155735) do
+ActiveRecord::Schema.define(version: 20140108144337) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -60,7 +60,8 @@ ActiveRecord::Schema.define(version: 20140105155735) do
     t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "response_id"
+    t.integer  "rateable_id"
+    t.string   "rateable_type"
   end
 
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree

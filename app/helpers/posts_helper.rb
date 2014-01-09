@@ -48,6 +48,10 @@ module PostsHelper
     a.ascending.first
   end
 
+  def author_or_responder(post)
+    post.responders.include?(current_user) || current_user == post.user
+  end
+
   private
 
     def wrap_long_string(text, max_width = 30)

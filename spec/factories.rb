@@ -38,7 +38,7 @@ FactoryGirl.define do
 
   factory :rating do
     user
-    response
+    association :rateable, factory: :response
     value 3
   end
 

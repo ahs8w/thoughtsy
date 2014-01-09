@@ -2,7 +2,7 @@ class Response < ActiveRecord::Base
   belongs_to :user, inverse_of: :responses, counter_cache: true
   belongs_to :post                  # must be on two seperate lines -> undefined method 'arity'
   
-  has_many :ratings, dependent: :destroy
+  has_many :ratings, as: :rateable, dependent: :destroy
   has_many :raters, through: :ratings, source: :user
 
   mount_uploader :image, ImageUploader

@@ -222,30 +222,21 @@ describe "Post pages" do
       it { should have_selector('img') }
     end
 
-    describe "user specific behavior" do
+    describe "response ratings" do
 
       context "as post author" do
         it { should have_selector("div.rating_form") }
       end
 
-      context "as post follower" do
-        let(:follower) { FactoryGirl.create(:user) }
+      context "as guest" do
+        let(:guest) { FactoryGirl.create(:user) }
+
         before do
-          sign_in follower
-          follower.subscribe!(post)
+          sign_in guest
           visit post_path(post)
         end
 
-        it { should have_selector("div.rating_form") }
-
-        context "as guest" do
-          before do
-            follower.unsubscribe!(post)
-            visit post_path(post)
-          end
-
-          it { should_not have_selector("div.rating_form") }
-        end
+        it { should_not have_selector("div.rating_form") }
       end
 
       context "as response author" do
@@ -256,15 +247,16 @@ describe "Post pages" do
 
         it { should_not have_selector("div.rating_form") }
         it { should have_button("Repost") }
+      end
 
-        context "as follower" do
-          before do
-            response.user.subscribe!(post)
-            visit post_path(post)
-          end
-
-          it { should_not have_button("Repost") }
+      context "as another responder" do
+        let(:another_response) { FactoryGirl.create(:response, post_id: post.id) }
+        before do
+          sign_in another_response.user
+          visit post_path(post)
         end
+
+        it { should have_selector('div.rating_form') }
       end
     end
   end

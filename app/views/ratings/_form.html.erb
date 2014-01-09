@@ -1,34 +1,38 @@
 <div class="ratings">
-  <% if !response.ratings.empty? && response.raters.include?(current_user) %>
+  <% if rateable.ratings.any? && rateable.raters.include?(current_user) %>
     <div>
-      <p class="center small">You rated this article: <%= current_user_rating(response) %></p>
+      <p class="center small">You rated this article: <%= current_user_rating(rateable) %></p>
     </div>
   <% else %>
-    <div class="rating_form" id="rating_form_<%= response.id %>">
+    <div class="rating_form" id="rating_form_<%= rateable.id %>">
       <span id="1">
         <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:rateable_id, :value => rateable.id) %>
+          <%= f.hidden_field(:rateable_type, :value => rateable.class.name ) %>
           <%= f.hidden_field(:value, :value => '1') %>
           <%= button_tag "weak", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="2">
         <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:rateable_id, :value => rateable.id) %>
+          <%= f.hidden_field(:rateable_type, :value => rateable.class.name ) %>
           <%= f.hidden_field(:value, :value => '2') %>
           <%= button_tag "average", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="3">
         <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:rateable_id, :value => rateable.id) %>
+          <%= f.hidden_field(:rateable_type, :value => rateable.class.name ) %>
           <%= f.hidden_field(:value, :value => '3') %>
           <%= button_tag "thought provoking", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="4">
         <%= form_for(@rating, remote: true) do |f| %>
-          <%= f.hidden_field(:response_id, :value => response.id) %>
+          <%= f.hidden_field(:rateable_id, :value => rateable.id) %>
+          <%= f.hidden_field(:rateable_type, :value => rateable.class.name ) %>
           <%= f.hidden_field(:value, :value => '5') %>
           <%= button_tag "brilliant!", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>

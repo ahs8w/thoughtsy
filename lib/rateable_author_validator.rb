@@ -1,7 +1,7 @@
-class ResponseAuthorValidator < ActiveModel::Validator
+class RateableAuthorValidator < ActiveModel::Validator
   def validate(record)
-    response = Response.find(record.response_id)
-    if record.user_id == response.user_id
+    rateable = record.rateable
+    if record.user_id == rateable.user_id
       record.errors[:base] << "You cannot rate your own response"
     end
   end

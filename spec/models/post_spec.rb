@@ -26,6 +26,8 @@ describe Post do
   it { should respond_to(:unavailable_users) }
   it { should respond_to(:responders) }
   it { should respond_to(:sort_date) }
+  it { should respond_to(:ratings) }
+  it { should respond_to(:raters) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
   its(:token_timer) { should be_nil }
@@ -63,6 +65,9 @@ describe Post do
   end
   
   describe "#followers" do
+  end
+
+  describe "#raters" do
   end
 
 ## Model methods ##

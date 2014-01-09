@@ -1,1 +1,1 @@
-require 'response_author_validator'
+require 'rateable_author_validator'
