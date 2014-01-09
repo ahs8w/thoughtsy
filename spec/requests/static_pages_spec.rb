@@ -109,17 +109,56 @@ describe "StaticPages" do
       describe "expired" do
         before do
           user.update_attribute(:token_timer, 25.hours.ago)
-          visit root_path
         end
 
-        it "post form does not have an error message" do
-          expect(page).not_to have_content("* Post must include either an image or content")
-        end
+        context "with no available posts" do
+          before { visit root_path }
 
-        describe "with no available posts" do
           it { should have_content("Your response expired") }
           it { should have_content("There are currently no unanswered posts available.") }
           it { should_not have_link("Respond") }
+
+          it "post form does not have an error message" do
+            expect(page).not_to have_content("* Post must include either an image or content")
+          end
+        end
+
+        context "with an available post" do
+          let!(:available) { FactoryGirl.create(:post) }
+          before do
+            visit root_path
+          end
+
+          it "satisfies conditions [sanity check -> setup is correct]" do
+            expect(user.timer_valid).to be_false
+            expect(user.posts_available).to be_true
+          end
+
+          it { should have_content("Your response expired") }
+          it { should have_content("Click the button to get another thought.") }
+
+          it "clicking respond yields available post" do
+            click_link "Respond"
+            expect(page).to have_content(available.content)
+          end
+        end
+
+        context "when post has been answered since last visiting" do
+          before do
+            accepted_post.answer!
+            visit root_path
+          end
+
+          it { should have_content("Your response expired") }
+        end
+
+        context "when post has been reposted since last visiting" do
+          before do
+            accepted_post.repost!
+            visit root_path
+          end
+
+          it { should have_content("Your response expired") }
         end
       end
     end
