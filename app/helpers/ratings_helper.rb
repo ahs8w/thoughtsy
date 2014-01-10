@@ -2,11 +2,11 @@ module RatingsHelper
 
   def current_user_rating(thought)
     rating = current_user.ratings.find_by_rateable_id_and_rateable_type(thought.id, thought.class.name)
-    human_value(rating.value)
+    value_in_words(rating.value)
   end
   ## find by rateable_id and type
 
-  def human_value(value)
+  def value_in_words(value)
     if value == 1 then "weak"
     elsif value == 2 then "average"
     elsif value == 3 then "thought provoking"

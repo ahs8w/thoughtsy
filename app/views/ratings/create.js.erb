@@ -1,12 +1,10 @@
 var flash = $('#js_flash_messages');
-var rating = $('#rating_form_<%= @response.id %>');
+var rating = $('#rating_form_<%= @rateable.id %>');
 
 <% if @rating.save %>
   $('#notification_response').replaceWith("<%= escape_javascript(render('layouts/notification_response')) %>");
   $('#notification_response').tooltip();
-  <% if @rating.value == 1 && current_user == @rating.rateable.user %>
-    rating.html("<%= escape_javascript(render('ratings/repost')) %>");
-  <% elsif @rating.value >= 3 %>
+  <% if @rating.value >= 3 %>
     rating.html("<%= escape_javascript(render('ratings/message')) %>");
   <% else %>
     rating.html("<%= escape_javascript(render('ratings/rating')) %>");

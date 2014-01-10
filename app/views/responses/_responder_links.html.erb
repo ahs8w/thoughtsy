@@ -1,8 +1,9 @@
 <div id="responder_links">
   <span class="pull-left">
-    <small><%= link_to "offensive or inappropriate?", flag_post_path(@post.id) %></small>
+    <small><%= link_to "inappropriate post?", flag_post_path(@post.id) %></small>
   </span>
+  <%= render partial: 'ratings/form', locals: { rateable: @post } %>
   <span class="pull-right">
-    <small><%= link_to "don't understand?", language_post_path(@post.id) %></small>
+    <small><%= link_to "not your language?", language_post_path(@post.id) %></small>
   </span>
 </div>

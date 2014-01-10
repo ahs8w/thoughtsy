@@ -7,6 +7,7 @@ class ResponsesController < ApplicationController
     @post = Post.find(params[:post_id])
     @post.accept!
     @response = @post.responses.new(key: params[:key])
+    @rating = Rating.new
   end
 
   def show
@@ -26,6 +27,7 @@ class ResponsesController < ApplicationController
       redirect_to posts_path
     else
       @post
+      @rating = Rating.new
       render 'new'
     end
   end

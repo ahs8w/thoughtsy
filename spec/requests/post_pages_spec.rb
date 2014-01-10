@@ -302,7 +302,7 @@ describe "Post pages" do
     describe "Flag action" do
 
       context "with no other available posts" do
-        before { click_link "offensive or inappropriate?" }
+        before { click_link "inappropriate post?" }
 
         it "displays flash and redirects to home page" do
           expect(page).to have_content "Thought flagged."
@@ -324,7 +324,7 @@ describe "Post pages" do
 
       context "with available post" do
         let!(:token_post) { FactoryGirl.create(:post) }
-        before { click_link "offensive or inappropriate?" }
+        before { click_link "inappropriate post?" }
 
         it "gets a new post and sets states" do
           expect(page).to have_content(token_post.content)
@@ -337,7 +337,7 @@ describe "Post pages" do
     describe "Language action" do
 
       context "with no available posts" do
-        before { click_link "don't understand?" }
+        before { click_link "not your language?" }
 
         it "displays flash and redirects to home page" do
           expect(page).to have_content "Thought reposted."
@@ -355,7 +355,7 @@ describe "Post pages" do
 
       context "with available post" do
         let!(:token_post) { FactoryGirl.create(:post) }
-        before { click_link "don't understand?" }
+        before { click_link "not your language?" }
 
         it "gets a new post and sets states" do
           expect(page).to have_content(token_post.content)
