@@ -11,7 +11,7 @@ class Response < ActiveRecord::Base
   validate :image_or_content
 
 
-  scope :descending, -> { order('created_at DESC') }  # scopes take an anonymous function (for 'lazy' evaluation)
+  scope :descending, -> { order('created_at DESC') }
   scope :ascending,  -> { order('created_at ASC') }
 
 
@@ -30,23 +30,11 @@ class Response < ActiveRecord::Base
     def perform
       response = Response.find(id)
       response.key = key
-      # response.image_processed = true
       response.remote_image_url = response.image.direct_fog_url(with_path: true)
       response.update_column(:image_processed, true)
       response.save!
     end
   end
-
-  # def enqueue_image
-  #   if has_image_upload? && !image_processed
-  #     self.process_image
-  #   end
-  # end
-  # def process_image
-  #   self.remote_image_url = image.direct_fog_url(with_path: true)
-  #   self.update_column(:image_processed, true)
-  #   save
-  # end
 
   def update_all
     self.post.answer!

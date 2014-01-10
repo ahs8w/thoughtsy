@@ -35,7 +35,6 @@ describe UserMailer do
     let(:user) { FactoryGirl.create(:user) }
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }
     let(:responder) { FactoryGirl.create(:user) }
-    let(:follower) { FactoryGirl.create(:user) }
     let(:response) { FactoryGirl.create(:response, user_id: responder.id, post_id: post.id) }
 
     describe "to poster" do
@@ -49,28 +48,6 @@ describe UserMailer do
 
       it "renders the email body" do
         expect(mail.body.encoded).to match(post_path(post))
-      end
-    end
-
-    describe "to followers" do
-      before do
-        responder.subscribe!(post)
-        follower.subscribe!(post)
-      end
-
-      it "sends correct mail to follower" do
-        mail = UserMailer.follower_email(follower, response)
-        expect(mail.subject).to eq("Your followed post has a new response!")
-        expect(mail.to).to eq([follower.email])
-        expect(mail.from).to eq (["Thoughtsy@thoughtsy.com"])
-        expect(mail.body.encoded).to match(post_path(post))
-      end
-
-      it "doesn't send mail to responder" do
-        UserMailer.response_emails(response)
-        ActionMailer::Base.deliveries.each do |d|
-          expect(d.to).not_to eq([responder.email])
-        end
       end
     end
   end

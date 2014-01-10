@@ -2,26 +2,19 @@ class User < ActiveRecord::Base
 # associations
   has_many :posts, inverse_of: :user, dependent: :destroy
   has_many :responses, inverse_of: :user, dependent: :destroy
-  has_many :posts_responded_to, through: :responses, source: :post
-    # returns posts with responses where response.user = user
+  has_many :response_posts, through: :responses, source: :post
+    # all posts of user.responses
 
   has_many :ratings
-  # has_many :rated_responses, through: :ratings, source: :response  
-    # all responses rated by user.  matches rating.user_id to user
   has_many :response_ratings, through: :responses, source: :ratings
     # all ratings for user.responses
 
   has_many :messages, inverse_of: :user
   has_many :received_messages, class_name: 'Message', foreign_key: :receiver_id
-
-  has_many :subscriptions, inverse_of: :user
-    # returns subscriptions where subscription.user = user
-  has_many :followed_posts, through: :subscriptions, source: :post
-    # returns posts which the user is following
-  has_many :inverse_subscriptions, through: :posts, source: :subscriptions
-    # returns subscriptions where post.user == user
   
+
   scope :score_descending,  -> { order('score DESC') }
+
 
 # callbacks
   before_save { email.downcase! }
@@ -87,28 +80,6 @@ class User < ActiveRecord::Base
 
   def posts_available
     Post.answerable(self).size > 0
-  end
-
-  # def oldest_available_post  # also means unsubscribed
-  #   posts = Post.available(self).ascending.includes(:subscriptions).limit(10)
-  #   a = []
-  #   posts.each do |post|
-  #     unless post.followers.include?(self)
-  #       a << post
-  #     end
-  #   end
-  #   a.first
-  # end
-
-# Subscriptions
-  def subscribe!(post)
-    self.subscriptions.create!(post_id: post.id)
-    post.repost!
-  end
-
-  def unsubscribe!(post)
-    self.subscriptions.find_by(post_id: post.id).destroy!
-    post.update_column(:state, 'answered')
   end
 
 # Reputation

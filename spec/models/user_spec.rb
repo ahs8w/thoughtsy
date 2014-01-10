@@ -25,10 +25,6 @@ describe User do
   it { should respond_to(:response_ratings) }
   it { should respond_to(:messages) }
   it { should respond_to(:received_messages) }
-  it { should respond_to(:subscriptions) }
-  it { should respond_to(:followed_posts) }
-  it { should respond_to(:subscribe!) }
-  it { should respond_to(:unsubscribe!) }
   it { should respond_to(:score) }
 
   it { should be_valid }
@@ -164,7 +160,7 @@ describe User do
   end 
 
 ## Post Associations ##
-  describe "post-user association" do
+  describe "Post association" do
     before { @user.save }
     let!(:older_post) { FactoryGirl.create(:post, user: @user, created_at: 1.day.ago) }
     let!(:newer_post) { FactoryGirl.create(:post, user: @user, created_at: 1.hour.ago) }
@@ -184,7 +180,7 @@ describe User do
   end
 
 ## Response Associations ##
-  describe "response-user association" do
+  describe "Response association" do
     before { @user.save }
     let!(:response) { FactoryGirl.create(:response, user: @user) }
 
@@ -197,11 +193,18 @@ describe User do
       end
     end
 
-    describe "through rating" do
+    describe "#response_ratings" do
       let(:rating) { response.ratings.create(user_id: 5, value: 5) }
 
-      it "user.response_ratings works" do
+      it "returns all ratings of user.responses" do
         expect(@user.response_ratings).to include(rating)
+      end
+    end
+
+    describe "#response_posts" do
+
+      it "returns all posts of user.responses" do
+        expect(@user.response_posts).to include(response.post)
       end
     end
   end
@@ -318,30 +321,6 @@ describe User do
       @user.send_password_reset
       Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers      
       expect(last_email.to).to include(@user.email)
-    end
-  end
-
-## Subscriptions ##
-  describe "#subscribe!" do
-    let(:response) { FactoryGirl.create(:response, user_id: @user.id) }
-    before { @user.save }
-
-    it "adds post to 'followed_posts'" do
-      @user.subscribe!(response.post)
-      expect(@user.followed_posts).to include(response.post)
-      expect(response.post.followers).to include(@user)
-      expect(response.post.state).to eq 'reposted'
-    end
-
-    describe "#unsubscribe!" do
-      before { @user.subscribe!(response.post) }
-
-      it "removes post from 'followed_posts'" do
-        @user.unsubscribe!(response.post)
-        expect(@user.followed_posts).not_to include(response.post)
-        expect(response.post.followers).not_to include(@user)
-        expect(response.post.state).to eq 'answered'
-      end
     end
   end
 

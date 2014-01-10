@@ -19,7 +19,6 @@ Thoughtsy::Application.routes.draw do
   resources :messages,  only: [:create, :destroy] do
     put 'view', on: :member
   end
-  resources :subscriptions, only: [:create, :destroy]
 
   resources :images, only: [:new] do
     get 'remove', on: :collection

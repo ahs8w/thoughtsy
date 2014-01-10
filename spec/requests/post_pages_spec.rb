@@ -144,7 +144,6 @@ describe "Post pages" do
 
       describe "after reposted" do
         before do
-          FactoryGirl.create(:subscription, post_id: post2.id)
           post2.repost!
         end
 
@@ -246,7 +245,6 @@ describe "Post pages" do
         end
 
         it { should_not have_selector("div.rating_form") }
-        it { should have_button("Repost") }
       end
 
       context "as another responder" do

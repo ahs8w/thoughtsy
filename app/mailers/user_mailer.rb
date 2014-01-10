@@ -20,22 +20,10 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: 'Someone has responded to your thought!'
   end
 
-  def follower_email(user, response)
-    @response = response
-    @post = @response.post
-    @username = user.username
-    mail to: user.email, subject: "Your followed post has a new response!"
-  end
-
   def self.response_emails(response)
     @post = response.post
     @user = @post.user
     delay.poster_email(@user, response)
-    unless @post.followers.empty?
-      @post.followers.each do |follower|
-        delay.follower_email(follower, response) unless follower == response.user
-      end
-    end
   end
 
   def message_email(message)

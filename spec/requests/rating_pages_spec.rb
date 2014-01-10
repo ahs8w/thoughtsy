@@ -85,21 +85,6 @@ describe "Rating Form" do
   #       expect(page).to have_button("Post a thought")
   #       expect(page).to have_success_message("Thought reposted.")
   #     end
-
-  #     context "as post follower" do     ## not authorized to repost a thought ##
-  #       let(:follower) { FactoryGirl.create(:user) }
-  #       before do
-  #         follower.subscribe!(response.post)
-  #         sign_in follower
-  #         visit post_path(post)
-  #         click_button 'weak'
-  #       end
-
-  #       it "does not show repost link" do
-  #         expect(page).not_to have_link("repost this thought")
-  #         expect(page).to have_content("You rated this article: weak")
-  #       end
-  #     end
   #   end
 
   #   describe "clicking 'thought provoking'" do

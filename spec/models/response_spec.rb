@@ -48,41 +48,17 @@ describe Response do
   end
 
   describe "#update_all" do
+    before { @response.update_all }
 
-    context "with no followers" do
-      before { @response.update_all }
-
-      it "updates post state and user tokens" do
-        post.reload
-        expect(post.state).to eq 'answered'
-        expect(user.token_id).to eq nil
-      end
-
-      it "sends email to responder" do
-        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-        expect(last_email.to).to include(post.user.email)
-      end
+    it "updates post state and user tokens" do
+      post.reload
+      expect(post.state).to eq 'answered'
+      expect(user.token_id).to eq nil
     end
 
-    context "with several followers" do
-      let(:follower) { FactoryGirl.create(:user) }
-      let(:follower2) { FactoryGirl.create(:user) }
-      before do
-        follower.subscribe!(post)
-        follower2.subscribe!(post)
-        user.subscribe!(post)
-        @response.update_all
-      end
-
-      it "sends follower email to followers" do
-        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-        expect(ActionMailer::Base.deliveries.size).to eq 3
-      end
-
-      it "does not send follower email to responder" do
-        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-        expect(last_email.to).not_to include(user.email)
-      end
+    it "sends email to responder" do
+      Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+      expect(last_email.to).to include(post.user.email)
     end
   end
 

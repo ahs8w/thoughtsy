@@ -42,7 +42,6 @@ describe "StaticPages" do
 
       describe "::rollback_tokens" do  # timer expired
         before do
-          FactoryGirl.create(:subscription, post_id: post.id)
           user.update_columns(token_timer: 25.hours.ago, token_id: post.id)
           post.update_columns(token_timer: 25.hours.ago, state: 'pending')
           visit root_path
@@ -59,7 +58,7 @@ describe "StaticPages" do
           post.reload
           expect(post.unavailable_users).to eq [post.user.id, user.id]
           expect(post.token_timer).to be_nil
-          expect(post).to be_reposted
+          # expect(post).to be_reposted
         end
       end
     end

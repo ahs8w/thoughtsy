@@ -7,10 +7,6 @@ class Post < ActiveRecord::Base
   has_many :ratings, as: :rateable, dependent: :destroy
   has_many :raters, through: :ratings, source: :user
 
-  has_many :subscriptions
-  has_many :followers, through: :subscriptions, source: :user
-    # returns users which are following the post
-
   mount_uploader :image, ImageUploader
   
   validates_presence_of :user_id
@@ -50,7 +46,7 @@ class Post < ActiveRecord::Base
     end
 
     event :expire do
-      transition :pending => :reposted, :if => lambda {|post| post.subscriptions.any?}
+      # transition :pending => :reposted, :if => lambda {|post| post.subscriptions.any?}
       transition :pending => :unanswered
     end
 

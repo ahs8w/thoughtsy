@@ -36,7 +36,7 @@ module ProfileHelper
   # end
 
   def public_posts(user)
-    posts = user.posts.answered + user.posts_responded_to.uniq
+    posts = user.posts.answered + user.response_posts.uniq
     posts.sort_by { |post| post[:sort_date] }.reverse!   # posts sorted by most recent update/responses
   end
 

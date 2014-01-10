@@ -1,6 +1,5 @@
 class RatingsController < ApplicationController
   before_action :signed_in_user
-  # before_action :follower_or_author
  
   def create
     @rating = current_user.ratings.build(rating_params)
@@ -24,18 +23,11 @@ class RatingsController < ApplicationController
     end
   end
 
-  private
-    def rating_params
-      params.require(:rating).permit(:rateable_id, :rateable_type, :value)
-    end
 
-    def follower_or_author
-      response = Response.find(rating_params[:response_id])  # or (params[:rating][:response_id])
-      post = response.post
-      author = post.user
-      unless current_user.id == author.id || current_user.followed_posts.include?(post)
-        flash[:info] = "Unauthorized access"
-        redirect_to root_path
-      end
-    end
+private
+
+
+  def rating_params
+    params.require(:rating).permit(:rateable_id, :rateable_type, :value)
+  end
 end

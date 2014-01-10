@@ -19,8 +19,6 @@ describe Post do
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
   it { should respond_to(:reposted?) }
-  it { should respond_to(:subscriptions) }
-  it { should respond_to(:followers) }
   it { should respond_to(:image) }
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
@@ -64,9 +62,6 @@ describe Post do
     end
   end
   
-  describe "#followers" do
-  end
-
   describe "#raters" do
   end
 
@@ -128,18 +123,7 @@ describe Post do
         end
       end
 
-      context "unanswered with subscription" do
-        before { FactoryGirl.create(:subscription, post_id: @post.id) }
-
-        it "resets post state to 'reposted'" do
-          Post.check_expirations
-          @post.reload
-          expect(@post).to be_reposted
-          expect(@post.token_timer).to be_nil
-        end
-      end
-
-      context "with a response" do
+      context "answered" do
         before do
           @post.answer!
         end
@@ -316,7 +300,6 @@ describe Post do
     describe "#repost!" do
       before do
         @post.save
-        FactoryGirl.create(:subscription, post_id: @post.id)
         @post.repost!
       end
 
@@ -324,16 +307,16 @@ describe Post do
         expect(@post).to be_reposted
       end
 
-      describe "#expire!" do
-        before do
-          @post.accept!
-          @post.expire!
-        end
+      # describe "#expire!" do
+      #   before do
+      #     @post.accept!
+      #     @post.expire!
+      #   end
 
-        it "state remains reposted" do
-          expect(@post).to be_reposted
-        end
-      end
+      #   it "state remains reposted" do
+      #     expect(@post).to be_reposted
+      #   end
+      # end
     end
 
     describe "#flag" do
