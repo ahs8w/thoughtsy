@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   before_action :tokened_responder, only: :flag
 
   def queue
-    @posts = Post.where.not(state: "answered").ascending.paginate(page: params[:page])
+    @posts = Post.where.not(state: "unqueued").ascending.paginate(page: params[:page])
   end
 
   def new

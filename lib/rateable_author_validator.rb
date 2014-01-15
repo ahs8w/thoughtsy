@@ -2,7 +2,7 @@ class RateableAuthorValidator < ActiveModel::Validator
   def validate(record)
     rateable = record.rateable
     if record.user_id == rateable.user_id
-      record.errors[:base] << "You cannot rate your own response"
+      record.errors[:base] << "You cannot rate your own thought"
     end
   end
 end

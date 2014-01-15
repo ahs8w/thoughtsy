@@ -21,7 +21,7 @@ describe "StaticPages" do
     describe "when not signed in" do
       it { should_not have_link("Users") }
       it { should_not have_link("Post!") }
-      it { should_not have_link("Respond") }
+      it { should_not have_link("Respond!") }
       it { should_not have_link(user.username) }
       it { should have_link("Sign up now!") }
       it { should have_link("Sign in") }
@@ -185,6 +185,17 @@ describe "StaticPages" do
       end
     end
   end
+
+  # describe "Response button queue", focus:true do
+  #   let!(:response) { FactoryGirl.create(:response) }
+  #   let!(:response2) { FactoryGirl.create(:response, post_id: response.post.id) }
+  #   before do
+  #     sign_in user
+  #     visit root_path
+  #   end
+
+  #   it { should have_link "Respond!" }
+  # end
 
   describe "Notification Area" do
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }

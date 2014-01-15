@@ -16,10 +16,10 @@ describe "Post pages" do
 
     it { should have_content("Queue") }
     it { should have_title("Queue") }
-    it { should have_content(post.created_at) }
     it { should have_content(post.sort_date) }
     it { should have_content(post.user.username) }
     it { should have_content(post.content) }
+    it { should have_content(post.responses.size) }
     it { should_not have_content("[image]") }
     it { should have_content(post.state) }
 
@@ -59,11 +59,11 @@ describe "Post pages" do
       end
     end
 
-    describe "does not include answered posts" do
-      let(:answered_post) { FactoryGirl.create(:post, state: 'answered') }
+    describe "does not include unqueued posts" do
+      let(:unqueued_post) { FactoryGirl.create(:post, state: 'unqueued') }
       before { visit queue_path }
 
-      it { should_not have_content(answered_post.content) }
+      it { should_not have_content(unqueued_post.content) }
     end
 
     describe "includes pending posts" do
@@ -78,6 +78,13 @@ describe "Post pages" do
       before { visit queue_path }
 
       it { should have_content(flagged.content) }
+    end
+
+    describe "includes answered posts" do
+      let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
+      before { visit queue_path }
+
+      it { should have_content(answered.content) }
     end
 
     # describe "pagination" do

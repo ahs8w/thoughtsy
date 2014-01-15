@@ -21,8 +21,10 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('sort_date ASC') }
   scope :descending,  -> { order('sort_date DESC') }
-  scope :queued,    -> { where("state = ? OR state = ?", "unanswered", "reposted") }
+
+  scope :queued,      -> { where("state = ? OR state = ? OR state = ?", "unanswered", "reposted", "answered") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
+
   scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
   scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
 
@@ -34,12 +36,12 @@ class Post < ActiveRecord::Base
       post.user.update_score!(-3)
     end
 
-    after_transition on: :accept do |post, transition|
-      post.set_token_timer
-    end
-
+    after_transition on: :accept, do: :set_token_timer
     after_transition on: :expire, do: :reset_token_timer
-    after_transition on: :answer, do: :set_sort_date
+    after_transition on: :answer do |post, transition| 
+      post.set_sort_date
+      post.unqueue! unless post.respondable?
+    end
 
     event :accept do
       transition any => :pending
@@ -64,6 +66,22 @@ class Post < ActiveRecord::Base
 
     event :repost do
       transition any => :reposted
+    end
+
+    event :unqueue do
+      transition any => :unqueued
+    end
+  end
+
+  def respondable?
+    self.responses.size < 3 || self.avg_score >= 4
+  end
+
+  def avg_score
+    if self.ratings.size != 0
+      self.ratings.sum('value')/self.ratings.size
+    else
+      0
     end
   end
 

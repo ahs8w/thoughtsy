@@ -18,8 +18,8 @@ module ProfileHelper
     end
   end
 
-  def average_rating(response)
-    response.ratings.sum('value')/response.ratings.size
+  def average_rating(thought)
+    thought.ratings.sum('value')/thought.ratings.size
   end
 
   def unrated_count(post)
