@@ -17,7 +17,7 @@ class StaticPagesController < ApplicationController
           @oldpost = Post.find(current_user.token_id)
           # can't reset_tokens here because it sets off Post validation error
           @token_post = Post.answerable(current_user).ascending.first
-          @oldpost.expire! unless @oldpost.state == 'answered' || @oldpost.state == 'reposted'
+          @oldpost.expire! if @oldpost.state == 'pending'
           user_expire_effects
         end
       else                                                        # no token_id

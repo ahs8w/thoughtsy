@@ -1,32 +1,55 @@
 <div id="social_links">
-  <a href="https://twitter.com/intent/tweet?url=<%= post_url(@post) %>&text=<%= wrapped(@response.content, 65) unless @response.content.nil? %>&via=Thoughtsy" target="_blank">
-    <i class="ion-social-twitter"></i>
-  </a>
-
-  <a href="https://facebook.com/sharer.php?u=<%= post_url(@post) %>" target="_blank">
-    <i class="ion-social-facebook"></i>
-  </a>
-
-  <a href="https://plus.google.com/share?url=<%= post_url(@post) %>" target="_blank">
-    <i class="ion-social-googleplus"></i>
-  </a>
-
-  <% if @response.image? %>
-    <a href="http://pinterest.com/pin/create/button/?url=<%= post_url(@post) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@response) %>" target="_blank">
-      <i class="ion-social-pinterest"></i>
+  <% if @rateable.class.name == 'Response' %>
+    <a href="https://twitter.com/intent/tweet?url=<%= post_url(@rateable.post) %>&text=<%= wrapped(@rateable.content, 65) unless @rateable.content.nil? %>&via=Thoughtsy" target="_blank">
+      <i class="fa fa-twitter"></i>
     </a>
-    <!-- everything after second url is optional for adding description or photo
-         Haven't tested in browser because I don't have an account
-     -->
+
+    <a href="https://facebook.com/sharer.php?u=<%= post_url(@rateable.post) %>" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+
+    <a href="https://plus.google.com/share?url=<%= post_url(@rateable.post) %>" target="_blank">
+      <i class="fa fa-google-plus"></i>
+    </a>
+
+    <% if @rateable.image? %>
+      <a href="http://pinterest.com/pin/create/button/?url=<%= post_url(@rateable.post) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@rateable) %>" target="_blank">
+        <i class="fa fa-pinterest"></i>
+      </a>
+      <!-- everything after second url is optional for adding description or photo
+           Haven't tested in browser because I don't have an account
+       -->
+    <% end %>
+
+    <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= post_url(@rateable.post) %>" target="_blank">
+      <i class="fa fa-envelope"></i>
+    </a>
+  <% else %>
+    <a href="https://twitter.com/intent/tweet?url=<%= post_url(@rateable) %>&text=<%= wrapped(@rateable.content, 100) unless @rateable.content.nil? %>&via=Thoughtsy" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+
+    <a href="https://facebook.com/sharer.php?u=<%= post_url(@rateable) %>" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+
+    <a href="https://plus.google.com/share?url=<%= post_url(@rateable) %>" target="_blank">
+      <i class="fa fa-google-plus"></i>
+    </a>
+
+    <% if @rateable.image? %>
+      <a href="http://pinterest.com/pin/create/button/?url=<%= post_url(@rateable) %>&description=A+great+post+from+Thoughtsy.com&media=<%= image_url(@rateable) %>" target="_blank">
+        <i class="fa fa-pinterest"></i>
+      </a>
+      <!-- everything after second url is optional for adding description or photo
+           Haven't tested in browser because I don't have an account
+       -->
+    <% end %>
+
+    <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= post_url(@rateable) %>" target="_blank">
+      <i class="fa fa-envelope"></i>
+    </a>
   <% end %>
-
-  <a href="http://reddit.com/submit?url=<%= post_url(@post) %>&title=Great Response from Thoughtsy.com" target="_blank">
-    <i class="ion-social-reddit"></i>
-  </a>
-
-  <a href="mailto:?subject=A great response on Thoughtsy.com&body=I thought you might find this interesting%0d%0a%0d%0a<%= post_url(@post) %>" target="_blank">
-    <i class="ion-ios7-email"></i>
-  </a>
 </div>
 
 
@@ -37,4 +60,7 @@
 
 <a href="http://digg.com/submit?
   url=YOURURLHERE" target="_blank">Digg</a>
+
+<a href="http://reddit.com/submit?url=YOURURLHERE&title=A great response on Thoughtsy.com" target="_blank">
+</a>
  -->

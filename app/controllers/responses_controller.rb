@@ -1,16 +1,16 @@
 class ResponsesController < ApplicationController
   before_action :signed_in_user
   before_action :tokened_responder, only: :create
-  before_action :set_user_tokens, only: :new
+
+  after_action  :accept_and_set_tokens, only: :new
 
   def new 
     @post = Post.find(params[:post_id])
-    @post.accept!
     @response = @post.responses.new(key: params[:key])
+    @rating = Rating.new
   end
 
-  def show
-    # Ratings Page #
+  def show  # Ratings Page #
     @response = Response.find(params[:id])
     @post = @response.post
     @rating = Rating.new
@@ -26,19 +26,23 @@ class ResponsesController < ApplicationController
       redirect_to posts_path
     else
       @post
+      @rating = Rating.new
       render 'new'
     end
   end
 
-  private
-    def response_params
-      params.require(:response).permit(:content, :post_id, :image, :key)
-    end
+private
 
-    def set_user_tokens
-      post = Post.find(params[:post_id])
-      current_user.set_tokens(post.id)
-    end
+  def response_params
+    params.require(:response).permit(:content, :post_id, :image, :key)
+  end
+
+  def accept_and_set_tokens
+    post = Post.find(params[:post_id])
+    current_user.set_tokens(post.id)
+    post.accept!
+    post.add_unavailable_users(current_user)
+  end
 end
 
 

@@ -296,50 +296,82 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     margin-bottom: 10px;
   }
 
-/* shared/thought */
+/* shared/thought  and  ratings */
     
-    .thought_wrapper {
-      .thought {
-        margin: 15px;
-        .thought_content {
-          font-size: 1.15em;
-          text-align: center;
-        }
-        .thought_author {
-          @include clearfix();
-          font-size: .85em;
-          padding-top: 5px;
+  .thought_wrapper {
+    .thought {
+      margin: 15px;
+      .thought_content {
+        font-size: 1.15em;
+        text-align: center;
+      }
+      .thought_author {
+        @include clearfix();
+        font-size: .85em;
+        padding-top: 5px;
+      }
+    }
+  }
+
+  .index_post {
+    text-align: center;
+    h3 {
+      line-height: 1.3;
+      margin: 10px;
+    }
+    .label {
+      vertical-align: bottom;
+    }
+    a {
+      text-decoration: none;
+    }
+    .gravatar {
+      margin-right: 10px;
+      float: left;
+    }
+    .image {
+      width: 50%;
+      @include center-block();
+    }
+  }
+
+  .ratings {
+    .rating_form {
+      text-align: center;
+      form.new_rating {
+        display: inline;
+        input.btn {
+          margin-bottom: 0;
         }
       }
+    }
+    .modal-content {
+      @include clearfix();
     }
 
-    .index_post {
-      text-align: center;
-      h3 {
-        line-height: 1.3;
-        margin: 10px;
-      }
-      .label {
-        vertical-align: bottom;
-      }
-      a {
-        text-decoration: none;
-      }
-      .gravatar {
-        margin-right: 10px;
-        float: left;
-      }
-      .image {
-        width: 50%;
-        @include center-block();
+    #social_links {
+      i {
+        font-size: 26px;
+        margin: 0 10px;
       }
     }
+  }
+
 
 /* Response#new Post#new */
 
   #responder_links {
     @include clearfix();
-    margin-top: 5px;
+    margin-top: 10px;
+    text-align: center;
+    .ratings {
+      width: 300px;
+      display: inline-block;
+      .rating_form {
+        padding-bottom: 0;
+        width: 300px;
+      }
+    }
   }
 
   #spacer {
@@ -453,7 +485,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
   /* Show */
 
-    #subscribe {
+    /*#subscribe {
       text-align: center;
       @extend .lighter-links;
       form {
@@ -471,12 +503,15 @@ rgb(237, 255, 143), rgb(50, 118, 177))
           color: #fff;
           text-decoration: none;
         }
-      }
-    }
+      }  no longer used
+    }*/
    
     #posts_show {
       img {
         margin-bottom: 10px;
+      }
+      .ratings {
+        margin: -34px auto 10px;
       }
     }
 
@@ -490,30 +525,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         font-weight: 500;
         p {
           line-height: 1.3;
-        }
-      }
-    }
-
-    .ratings {
-      margin-top: -34px;
-      .rating_form {
-        text-align: center;
-        padding-bottom: 10px;
-        form.new_rating {
-          display: inline;
-          input.btn {
-            margin-bottom: 0;
-          }
-        }
-      }
-      .modal-content {
-        @include clearfix();
-      }
-
-      #social_links {
-        i {
-          font-size: 26px;
-          margin: 0 10px;
         }
       }
     }

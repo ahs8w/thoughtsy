@@ -7,7 +7,6 @@ Thoughtsy::Application.routes.draw do
   resources :posts,     except: [:update, :edit] do
     resources :responses, only: [:new, :create]
     member do
-      get 'repost'
       get 'flag'
       get 'language'
     end
@@ -19,7 +18,6 @@ Thoughtsy::Application.routes.draw do
   resources :messages,  only: [:create, :destroy] do
     put 'view', on: :member
   end
-  resources :subscriptions, only: [:create, :destroy]
 
   resources :images, only: [:new] do
     get 'remove', on: :collection

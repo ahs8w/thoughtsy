@@ -1,13 +1,11 @@
 class Post < ActiveRecord::Base
   belongs_to :user, inverse_of: :posts, counter_cache: true
+  
   has_many :responses
-  has_many :ratings, through: :responses
-
   has_many :responders, through: :responses, source: :user
 
-  has_many :subscriptions
-  has_many :followers, through: :subscriptions, source: :user
-    # returns users which are following the post
+  has_many :ratings, as: :rateable, dependent: :destroy
+  has_many :raters, through: :ratings, source: :user
 
   mount_uploader :image, ImageUploader
   
@@ -23,10 +21,12 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('sort_date ASC') }
   scope :descending,  -> { order('sort_date DESC') }
-  scope :queued,    -> { where("state = ? OR state = ?", "unanswered", "reposted") }
+
+  scope :queued,      -> { where("state = ? OR state = ?", "unanswered", "answered") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
-  scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
-  scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
+
+  scope :answered,    -> { where("state = ?", "answered") }
+  scope :personal,    -> { where.not("state = ?", "answered") }
 
 
   state_machine :state, initial: :unanswered do
@@ -36,19 +36,19 @@ class Post < ActiveRecord::Base
       post.user.update_score!(-3)
     end
 
-    after_transition on: :accept do |post, transition|
-      post.set_token_timer
-    end
-
+    after_transition on: :accept, do: :set_token_timer
     after_transition on: :expire, do: :reset_token_timer
-    after_transition on: :answer, do: :set_sort_date
+    after_transition on: :answer do |post, transition| 
+      post.set_sort_date
+      post.unqueue! unless post.respondable?
+    end
 
     event :accept do
       transition any => :pending
     end
 
     event :expire do
-      transition :pending => :reposted, :if => lambda {|post| post.subscriptions.any?}
+      transition :pending => :answered, :if => lambda { |post| post.responses.any? }
       transition :pending => :unanswered
     end
 
@@ -64,8 +64,20 @@ class Post < ActiveRecord::Base
       transition any => :flagged
     end
 
-    event :repost do
-      transition any => :reposted
+    event :unqueue do
+      transition any => :unqueued
+    end
+  end
+
+  def respondable?
+    self.responses.size < 3 || self.avg_score >= 4
+  end
+
+  def avg_score
+    if self.ratings.size != 0
+      self.ratings.sum('value')/self.ratings.size
+    else
+      0
     end
   end
 

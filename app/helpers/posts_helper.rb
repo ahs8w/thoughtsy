@@ -37,15 +37,8 @@ module PostsHelper
     truncate(wrap(content), length: length, separator: ' ')
   end
 
-  def not_subscribed(user)
-    posts = Post.available(user).includes(:subscription).limit(10)
-    a = []
-    posts.each do |post|
-      unless post.followers.include(user)
-        a << post
-      end
-    end
-    a.ascending.first
+  def author_or_responder(post)
+    post.responders.include?(current_user) || current_user == post.user
   end
 
   private

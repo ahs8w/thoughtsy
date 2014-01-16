@@ -127,16 +127,15 @@ describe "UserPages" do
 
         # describe "thought stats", js: true do
         #   before do
-        #     FactoryGirl.create(:rating, response: user_response)
-        #     FactoryGirl.create(:subscription, user: user)
+        #     FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response')
+        #     FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response', value: 4)
         #     visit user_path(user)
         #     click_button "Thought Stats"
         #   end
 
-        #   it "displays dropdown stats menu" do
+        #   it "displays dropdown stats menu", focus:true do
         #     expect(page).to have_content("Responses: 1")
-        #     expect(page).to have_content("Average rating: 3")
-        #     expect(page).to have_content("Reposts: 1")
+        #     expect(page).to have_content("Average rating: 3.5")
         #     expect(page).to have_content("Answered: 1")
         #     expect(page).to have_content("Unanswered: 1")
         #   end

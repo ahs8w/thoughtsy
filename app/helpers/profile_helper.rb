@@ -12,14 +12,14 @@ module ProfileHelper
   def average_user_rating(user)
     ratings = user.response_ratings
     unless ratings.empty?     
-      "Average rating: #{ratings.sum('value')/ratings.size}"
+      "Average rating: #{ratings.sum('value').to_f/ratings.size}"
     else
       "No ratings"
     end
   end
 
-  def average_rating(response)
-    response.ratings.sum('value')/response.ratings.size
+  def average_rating(thought)
+    thought.ratings.sum('value')/thought.ratings.size
   end
 
   def unrated_count(post)
@@ -36,7 +36,7 @@ module ProfileHelper
   # end
 
   def public_posts(user)
-    posts = user.posts.answered + user.posts_responded_to.uniq
+    posts = user.posts.answered + user.response_posts.uniq
     posts.sort_by { |post| post[:sort_date] }.reverse!   # posts sorted by most recent update/responses
   end
 

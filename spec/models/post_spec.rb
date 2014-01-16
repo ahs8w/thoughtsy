@@ -18,14 +18,13 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
-  it { should respond_to(:reposted?) }
-  it { should respond_to(:subscriptions) }
-  it { should respond_to(:followers) }
   it { should respond_to(:image) }
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
   it { should respond_to(:responders) }
   it { should respond_to(:sort_date) }
+  it { should respond_to(:ratings) }
+  it { should respond_to(:raters) }
   its(:user) { should eq user }
   its(:state) { should eq "unanswered" }
   its(:token_timer) { should be_nil }
@@ -50,7 +49,7 @@ describe Post do
     end
   end
 
-## Model relationships ##
+## Relationships ##
   describe "#responders" do
     let(:response) { FactoryGirl.create(:response, post_id: @post.id) }
     let(:second_response) { FactoryGirl.create(:response, post_id: @post.id) }
@@ -62,10 +61,10 @@ describe Post do
     end
   end
   
-  describe "#followers" do
+  describe "#raters" do
   end
 
-## Model methods ##
+## Methods ##
   describe "#add_unavailable_users" do
     let(:user2) { FactoryGirl.create(:user) }
     before { @post.save }
@@ -121,20 +120,21 @@ describe Post do
           expect(@post).to be_unanswered
           expect(@post.token_timer).to be_nil
         end
-      end
 
-      context "unanswered with subscription" do
-        before { FactoryGirl.create(:subscription, post_id: @post.id) }
+        # Updates user score only after visiting home page (need current_user)
 
-        it "resets post state to 'reposted'" do
-          Post.check_expirations
-          @post.reload
-          expect(@post).to be_reposted
-          expect(@post.token_timer).to be_nil
+        describe "with existing responses" do
+          let!(:response) { FactoryGirl.create(:response, post_id: @post.id) }
+
+          it "returns post state to 'answered'" do
+            Post.check_expirations
+            @post.reload
+            expect(@post).to be_answered
+          end
         end
       end
 
-      context "with a response" do
+      context "answered" do
         before do
           @post.answer!
         end
@@ -185,6 +185,10 @@ describe Post do
     # end
   end
 
+  # describe "#respondable? and #avg_score" do
+  #   functionality tested in 'Post State' section as an after answer! callback
+  # end
+
 ## Callbacks ##
   describe "::after_create" do
     before do
@@ -231,25 +235,25 @@ describe Post do
     let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-    let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', updated_at: 5.minutes.ago) }
+    let!(:unqueued) { FactoryGirl.create(:post, state: 'unqueued') }
 
     it ".answerable" do
-      expect(Post.answerable(user)).not_to include(user_post, answered, pending)
-      expect(Post.answerable(user)).to include(unanswered, reposted)
+      expect(Post.answerable(user)).not_to include(user_post, pending, unqueued)
+      expect(Post.answerable(user)).to include(unanswered, answered)
     end
 
-    it "queued" do
-      expect(Post.queued).not_to include(answered, pending, flagged)
-      expect(Post.queued).to include(user_post, unanswered, reposted)
+    it ".queued" do
+      expect(Post.queued).not_to include(unqueued, pending, flagged)
+      expect(Post.queued).to include(user_post, unanswered, answered)
     end
 
     it ".answered" do
       expect(Post.answered).not_to include(user_post, pending, unanswered)
-      expect(Post.answered).to include(answered, reposted)
+      expect(Post.answered).to include(answered)
     end
 
     it ".personal" do
-      expect(Post.personal).not_to include(answered, reposted)
+      expect(Post.personal).not_to include(answered)
       expect(Post.personal).to include(flagged, pending, unanswered)
     end
   end
@@ -286,47 +290,66 @@ describe Post do
     end
 
     describe "#answer!" do
-      before do
-        Timecop.freeze
-        @post.answer!
-      end
-      
-      it "changes state to :answered" do
-        expect(@post).to be_answered
-      end
+      before { @post.save }
 
-      it "sets sort_date" do
-        expect(@post.sort_date).to eq Time.zone.now
-      end
+      context "an answered post" do
+        let!(:response) { FactoryGirl.create(:response, post_id: @post.id) }
+        let!(:second_response) { FactoryGirl.create(:response, post_id: @post.id) }
 
-      describe "#unanswer!" do
-        before { @post.unanswer! }
-
-        it "changes state to :unanswered" do
-          expect(@post).to be_unanswered
-        end
-      end
-    end
-
-    describe "#repost!" do
-      before do
-        @post.save
-        FactoryGirl.create(:subscription, post_id: @post.id)
-        @post.repost!
-      end
-
-      it "changes state to :reposted" do
-        expect(@post).to be_reposted
-      end
-
-      describe "#expire!" do
         before do
-          @post.accept!
-          @post.expire!
+          Timecop.freeze
+          @post.answer!
+        end
+        
+        its(:respondable?) { should eq true }
+
+        it "changes state to :answered" do
+          expect(@post).to be_answered
         end
 
-        it "state remains reposted" do
-          expect(@post).to be_reposted
+        it "sets sort_date" do
+          expect(@post.sort_date).to eq Time.zone.now
+        end
+
+        describe "#unanswer!" do
+          before { @post.unanswer! }
+
+          it "changes state to :unanswered" do
+            expect(@post).to be_unanswered
+          end
+        end
+
+        context "with three responses" do
+          let!(:third_response) { FactoryGirl.create(:response, post_id: @post.id) }
+
+          context "and no ratings" do
+            its(:respondable?) { should eq false }
+            before { @post.answer! }
+
+            it "changes state to :unqueued" do
+              expect(@post).to be_unqueued
+            end
+          end
+
+          context "and an avg score < 4" do
+            let!(:rating) { FactoryGirl.create(:rating, rateable_id: @post.id, rateable_type: 'Post', value: 3) }
+            before { @post.answer! }
+
+            it "changes state to :unqueued" do
+              expect(@post).to be_unqueued
+            end
+          end
+
+          context "and an avg score = 4" do
+            let!(:second_rating) { FactoryGirl.create(:rating, rateable_id: @post.id, rateable_type: 'Post', value: 5) }
+            before { @post.answer! }
+
+            its(:respondable?) { should eq true }
+
+            it "changes state to :answered" do
+              expect(@post).to be_answered
+            end
+          end
         end
       end
     end

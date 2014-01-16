@@ -11,9 +11,6 @@
     <li role="presentation"><a role="menuitem" tabindex="-1">
       <%= average_user_rating(@user) %></a>
     </li>
-    <li role="presentation"><a role="menuitem" tabindex="-1">
-      <%= "Reposts: #{@user.subscriptions.count}" %></a>
-    </li>
       
     <li role="presentation" class="divider"></li>
 
@@ -23,9 +20,6 @@
     </li>
     <li role="presentation"><a role="menuitem" tabindex="-1">
       <%= "Unanswered: #{@user.posts.personal.count}" %></a>
-    </li>
-    <li role="presentation"><a role="menuitem" tabindex="-1">
-      <%= "Reposts: #{@user.inverse_subscriptions.count}" %></a>
     </li>
   </ul>
 </div>

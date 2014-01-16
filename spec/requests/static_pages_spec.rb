@@ -21,7 +21,7 @@ describe "StaticPages" do
     describe "when not signed in" do
       it { should_not have_link("Users") }
       it { should_not have_link("Post!") }
-      it { should_not have_link("Respond") }
+      it { should_not have_link("Respond!") }
       it { should_not have_link(user.username) }
       it { should have_link("Sign up now!") }
       it { should have_link("Sign in") }
@@ -42,7 +42,6 @@ describe "StaticPages" do
 
       describe "::rollback_tokens" do  # timer expired
         before do
-          FactoryGirl.create(:subscription, post_id: post.id)
           user.update_columns(token_timer: 25.hours.ago, token_id: post.id)
           post.update_columns(token_timer: 25.hours.ago, state: 'pending')
           visit root_path
@@ -59,7 +58,6 @@ describe "StaticPages" do
           post.reload
           expect(post.unavailable_users).to eq [post.user.id, user.id]
           expect(post.token_timer).to be_nil
-          expect(post).to be_reposted
         end
       end
     end
@@ -151,41 +149,20 @@ describe "StaticPages" do
 
           it { should have_content("Your response expired") }
         end
-
-        context "when post has been reposted since last visiting" do
-          before do
-            accepted_post.repost!
-            visit root_path
-          end
-
-          it { should have_content("Your response expired") }
-        end
-      end
-    end
-
-    # must be a new visit because tokens all reset after first
-    describe "expired with an available post" do
-      let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
-      let!(:accepted_post) { FactoryGirl.create(:post, state: 'pending') }
-      before do
-        user.token_timer = 25.hours.ago
-        user.token_id = accepted_post.id
-        user.save
-        visit root_path
-      end
-      
-      it { should have_content("Click the button to get another thought.") }
-      it { should have_link("Respond") }
-
-      describe "after clicking respond" do
-        before { click_link('Respond') }
-
-        it "does not display the user's previous thought" do
-          expect(page).to have_content(available.content)
-        end
       end
     end
   end
+
+  # describe "Response button queue", focus:true do
+  #   let!(:response) { FactoryGirl.create(:response) }
+  #   let!(:response2) { FactoryGirl.create(:response, post_id: response.post.id) }
+  #   before do
+  #     sign_in user
+  #     visit root_path
+  #   end
+
+  #   it { should have_link "Respond!" }
+  # end
 
   describe "Notification Area" do
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }

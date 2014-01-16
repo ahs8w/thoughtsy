@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "ResponsePages" do
+describe "Response pages" do
 
   subject { page }
 
@@ -8,7 +8,7 @@ describe "ResponsePages" do
   let!(:post) { FactoryGirl.create(:post, created_at: 2.minutes.ago) }
   before { sign_in user }
 
-  describe "new page" do
+  describe "New page" do
     let!(:user_post) { FactoryGirl.create(:post, user: user, content: "fake", created_at: 5.minutes.ago) }
     before do
       visit root_path
@@ -18,9 +18,22 @@ describe "ResponsePages" do
     it { should_not have_content(user_post.content) }
     it { should have_content(post.content) }
     it { should have_selector('#form_hint') }
-    it { should have_link("offensive or inappropriate?") }
+    it { should have_link("inappropriate post?") }
     it { should have_selector('#new_response') }
-    it { should have_link("don't understand?") }
+    it { should have_link("not your language?") }
+    it { should have_selector('div.rating_form') }
+
+    it "sets user tokens" do
+      user.reload
+      expect(user.token_id).to eq post.id
+      expect(user.token_timer).to be_present
+    end
+
+    it "changes post state and adds user to unavailable users" do
+      post.reload
+      expect(post.state).to eq 'pending'
+      expect(post.unavailable_users).to include user.id
+    end
   end
 
   describe "create action" do
@@ -42,6 +55,16 @@ describe "ResponsePages" do
         expect { click_button "Respond" }.not_to change(Response, :count)
 
         expect(page).to have_content("* Response must include either an image or content")
+      end
+
+      context "with post already rated" do
+        before { click_button 'weak' }
+
+        it "does not reset rating form" do
+          click_button "Respond"
+          expect(page).to have_content("* Response must include either an image or content")
+          expect(page).to have_content("You rated this")
+        end
       end
     end
 
