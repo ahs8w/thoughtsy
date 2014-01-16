@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
   before_action :signed_in_user, except: :index
   before_action :admin_user, only: [:destroy, :queue]
-  before_action :post_author, only: :repost
   before_action :tokened_responder, only: :flag
 
   def queue
@@ -14,7 +13,6 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.answered.descending.paginate(page: params[:page], :per_page => 20)
-    # @posts = Post.answered.order("answered_at DESC").paginate(page: params[:page], :per_page => 20)
   end
 
   def show
@@ -34,11 +32,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # if @post.save_and_process_image             necessary?!
-  #     flash[:notice] = "User being created"
-  #     redirect_to :action => :index
-  #   else
-
   def destroy
     @post = Post.find(params[:id])
     @user = @post.user
@@ -50,14 +43,6 @@ class PostsController < ApplicationController
     end
   end
 
-# Ratings (value=1) #
-  def repost
-    @post = Post.find(params[:id])
-    @post.repost!
-    flash[:info] = "Thought reposted."
-    redirect_to root_url
-  end
-#
 # Response#New #
   def flag
     @post = Post.find(params[:id])
@@ -74,9 +59,8 @@ class PostsController < ApplicationController
 
   def language
     @post = Post.find(params[:id])
-    @post.add_unavailable_users(current_user)
     @token_post = Post.answerable(current_user).ascending.first
-    @post.unanswer!
+    @post.expire!
     current_user.reset_tokens
     flash[:info] = "Thought reposted."
     if @token_post

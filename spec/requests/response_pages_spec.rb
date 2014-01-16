@@ -22,6 +22,18 @@ describe "Response pages" do
     it { should have_selector('#new_response') }
     it { should have_link("not your language?") }
     it { should have_selector('div.rating_form') }
+
+    it "sets user tokens" do
+      user.reload
+      expect(user.token_id).to eq post.id
+      expect(user.token_timer).to be_present
+    end
+
+    it "changes post state and adds user to unavailable users" do
+      post.reload
+      expect(post.state).to eq 'pending'
+      expect(post.unavailable_users).to include user.id
+    end
   end
 
   describe "create action" do

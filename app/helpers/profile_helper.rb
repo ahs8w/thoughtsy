@@ -12,7 +12,7 @@ module ProfileHelper
   def average_user_rating(user)
     ratings = user.response_ratings
     unless ratings.empty?     
-      "Average rating: #{ratings.sum('value')/ratings.size}"
+      "Average rating: #{ratings.sum('value').to_f/ratings.size}"
     else
       "No ratings"
     end

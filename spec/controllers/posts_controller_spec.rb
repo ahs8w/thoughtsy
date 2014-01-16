@@ -66,15 +66,4 @@ describe PostsController do
       expect(post.state).to eq 'flagged'
     end
   end
-
-  describe "repost" do
-    let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
-
-    it "unanswers post and flashes message" do
-      xhr :get, :repost, id: post.id
-      expect(flash[:info]).to eq "Thought reposted."
-      post.reload
-      expect(post.state).to eq 'reposted'
-    end
-  end
 end

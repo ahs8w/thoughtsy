@@ -58,7 +58,6 @@ describe "StaticPages" do
           post.reload
           expect(post.unavailable_users).to eq [post.user.id, user.id]
           expect(post.token_timer).to be_nil
-          # expect(post).to be_reposted
         end
       end
     end
@@ -149,38 +148,6 @@ describe "StaticPages" do
           end
 
           it { should have_content("Your response expired") }
-        end
-
-        context "when post has been reposted since last visiting" do
-          before do
-            accepted_post.repost!
-            visit root_path
-          end
-
-          it { should have_content("Your response expired") }
-        end
-      end
-    end
-
-    # must be a new visit because tokens all reset after first
-    describe "expired with an available post" do
-      let!(:available) { FactoryGirl.create(:post, state: 'unanswered') }
-      let!(:accepted_post) { FactoryGirl.create(:post, state: 'pending') }
-      before do
-        user.token_timer = 25.hours.ago
-        user.token_id = accepted_post.id
-        user.save
-        visit root_path
-      end
-      
-      it { should have_content("Click the button to get another thought.") }
-      it { should have_link("Respond") }
-
-      describe "after clicking respond" do
-        before { click_link('Respond') }
-
-        it "does not display the user's previous thought" do
-          expect(page).to have_content(available.content)
         end
       end
     end

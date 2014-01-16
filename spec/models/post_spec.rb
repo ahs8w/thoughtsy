@@ -18,7 +18,6 @@ describe Post do
   it { should respond_to(:pending?) }
   it { should respond_to(:answered?) }
   it { should respond_to(:flagged?) }
-  it { should respond_to(:reposted?) }
   it { should respond_to(:image) }
   it { should respond_to(:token_timer) }
   it { should respond_to(:unavailable_users) }
@@ -50,7 +49,7 @@ describe Post do
     end
   end
 
-## Model relationships ##
+## Relationships ##
   describe "#responders" do
     let(:response) { FactoryGirl.create(:response, post_id: @post.id) }
     let(:second_response) { FactoryGirl.create(:response, post_id: @post.id) }
@@ -65,7 +64,7 @@ describe Post do
   describe "#raters" do
   end
 
-## Model methods ##
+## Methods ##
   describe "#add_unavailable_users" do
     let(:user2) { FactoryGirl.create(:user) }
     before { @post.save }
@@ -120,6 +119,18 @@ describe Post do
           @post.reload
           expect(@post).to be_unanswered
           expect(@post.token_timer).to be_nil
+        end
+
+        # Updates user score only after visiting home page (need current_user)
+
+        describe "with existing responses" do
+          let!(:response) { FactoryGirl.create(:response, post_id: @post.id) }
+
+          it "returns post state to 'answered'" do
+            Post.check_expirations
+            @post.reload
+            expect(@post).to be_answered
+          end
         end
       end
 
@@ -224,26 +235,25 @@ describe Post do
     let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-    let!(:reposted) { FactoryGirl.create(:post, state: 'reposted', updated_at: 5.minutes.ago) }
     let!(:unqueued) { FactoryGirl.create(:post, state: 'unqueued') }
 
     it ".answerable" do
       expect(Post.answerable(user)).not_to include(user_post, pending, unqueued)
-      expect(Post.answerable(user)).to include(unanswered, answered, reposted)
+      expect(Post.answerable(user)).to include(unanswered, answered)
     end
 
     it ".queued" do
       expect(Post.queued).not_to include(unqueued, pending, flagged)
-      expect(Post.queued).to include(user_post, unanswered, reposted, answered)
+      expect(Post.queued).to include(user_post, unanswered, answered)
     end
 
     it ".answered" do
       expect(Post.answered).not_to include(user_post, pending, unanswered)
-      expect(Post.answered).to include(answered, reposted)
+      expect(Post.answered).to include(answered)
     end
 
     it ".personal" do
-      expect(Post.personal).not_to include(answered, reposted)
+      expect(Post.personal).not_to include(answered)
       expect(Post.personal).to include(flagged, pending, unanswered)
     end
   end
@@ -342,28 +352,6 @@ describe Post do
           end
         end
       end
-    end
-
-    describe "#repost!" do
-      before do
-        @post.save
-        @post.repost!
-      end
-
-      it "changes state to :reposted" do
-        expect(@post).to be_reposted
-      end
-
-      # describe "#expire!" do
-      #   before do
-      #     @post.accept!
-      #     @post.expire!
-      #   end
-
-      #   it "state remains reposted" do
-      #     expect(@post).to be_reposted
-      #   end
-      # end
     end
 
     describe "#flag" do

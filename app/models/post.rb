@@ -22,11 +22,11 @@ class Post < ActiveRecord::Base
   scope :ascending,   -> { order('sort_date ASC') }
   scope :descending,  -> { order('sort_date DESC') }
 
-  scope :queued,      -> { where("state = ? OR state = ? OR state = ?", "unanswered", "reposted", "answered") }
+  scope :queued,      -> { where("state = ? OR state = ?", "unanswered", "answered") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
 
-  scope :answered,    -> { where("state = ? OR state = ?", "answered", "reposted") }
-  scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "reposted") }
+  scope :answered,    -> { where("state = ?", "answered") }
+  scope :personal,    -> { where.not("state = ?", "answered") }
 
 
   state_machine :state, initial: :unanswered do
@@ -48,7 +48,7 @@ class Post < ActiveRecord::Base
     end
 
     event :expire do
-      # transition :pending => :reposted, :if => lambda {|post| post.subscriptions.any?}
+      transition :pending => :answered, :if => lambda { |post| post.responses.any? }
       transition :pending => :unanswered
     end
 
@@ -62,10 +62,6 @@ class Post < ActiveRecord::Base
 
     event :flag do
       transition any => :flagged
-    end
-
-    event :repost do
-      transition any => :reposted
     end
 
     event :unqueue do

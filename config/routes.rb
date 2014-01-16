@@ -7,7 +7,6 @@ Thoughtsy::Application.routes.draw do
   resources :posts,     except: [:update, :edit] do
     resources :responses, only: [:new, :create]
     member do
-      get 'repost'
       get 'flag'
       get 'language'
     end

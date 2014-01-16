@@ -4,10 +4,7 @@ describe Response do
   include CarrierWaveDirect::Test::Helpers
   
   let(:user) { FactoryGirl.create(:user) }
-  let(:poster) { FactoryGirl.create(:user) }
-  let(:post) { FactoryGirl.create(:post, user: poster, content: "blah", 
-                                  created_at: 2.hours.ago, updated_at: 2.hours.ago) }
-
+  let(:post) { FactoryGirl.create(:post, content: "blah", created_at: 2.hours.ago) }
   before { @response = user.responses.build(content: "blahblah", post_id: post.id) }
 
   subject { @response }

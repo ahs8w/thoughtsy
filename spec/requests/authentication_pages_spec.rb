@@ -170,11 +170,6 @@ describe "Authentication  : " do
       describe "in the Posts Controller" do
         let!(:post) { FactoryGirl.create(:post) }
 
-        describe "submitting to the repost action" do
-          before { get repost_post_path(post) }
-          specify { expect(response).to redirect_to(root_url) }
-        end
-
         describe "submitting to the flag action" do
           before { get flag_post_path(post) }
           specify { expect(response).to redirect_to(root_url) }

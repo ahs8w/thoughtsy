@@ -34,10 +34,9 @@ describe "Post pages" do
         expect(first('tr')).to have_content(post2.content)
       end
 
-      describe "after answered and reposted" do
+      describe "after answered" do
         before do
           post2.answer!
-          post2.repost!
           visit queue_path
         end
 
@@ -149,37 +148,27 @@ describe "Post pages" do
         expect(first('h3')).to have_content(post.content)
       end
 
-      describe "after reposted" do
+      context "after reanswered" do
         before do
-          post2.repost!
+          post2.answer!
+          visit posts_path
+        end
+
+        it "sort_date is changed" do
+          expect(first('h3')).to have_content(post2.content)
+        end
+      end
+
+      context "after reaccepted and expired" do
+        before do
+          #repost_and_expire -> changes state from pending back to reposted
+          post2.accept!
+          post2.expire!
+          visit posts_path
         end
 
         it "sort_date is unchanged" do
           expect(first('h3')).to have_content(post.content)
-        end
-
-        context "and answered" do
-          before do
-            post2.answer!
-            visit posts_path
-          end
-
-          it "sort_date is changed" do
-            expect(first('h3')).to have_content(post2.content)
-          end
-        end
-
-        context "and expired" do
-          before do
-            #repost_and_expire -> changes state from pending back to reposted
-            post2.accept!
-            post2.expire!
-            visit posts_path
-          end
-
-          it "sort_date is unchanged" do
-            expect(first('h3')).to have_content(post.content)
-          end
         end
       end
     end
@@ -188,14 +177,12 @@ describe "Post pages" do
       let(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
       let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
       let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-      let!(:reposted) { FactoryGirl.create(:post, state: 'reposted') }
       let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
       before { visit posts_path }
 
       it { should_not have_content(unanswered.content) }
       it { should_not have_content(pending.content) }
       it { should_not have_content(flagged.content) }
-      it { should have_content(reposted.content) }
       it { should have_content(answered.content) }
     end
   end
@@ -210,7 +197,6 @@ describe "Post pages" do
     it { should have_content(post.content) }
     it { should have_content(response.content) }
     it { should have_content(response.user.username) }
-    it { should_not have_link('delete') }
     
     describe "response order" do
       let!(:older_response) { FactoryGirl.create(:response, post: post, created_at: 5.minutes.ago) }
@@ -352,11 +338,13 @@ describe "Post pages" do
           expect(page).to have_content "currently no unanswered posts"
         end
 
-        it "resets post state and user tokens" do
+        it "resets post state and user tokens (not score)" do
           post.reload
           expect(post).to be_unanswered
+          expect(post.token_timer).to be nil
           user.reload
           expect(user.token_id).to be nil
+          expect(user.score).to eq 0
         end
       end
 
@@ -370,6 +358,16 @@ describe "Post pages" do
           expect(user.token_id).to eq token_post.id
         end
       end
+
+      context "with existing responses" do
+        let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+        before { click_link "not your language" }
+
+        it "returns post state to 'answered'" do
+          post.reload
+          expect(post).to be_answered
+        end
+      end
     end
   end
 
@@ -378,57 +376,7 @@ describe "Post pages" do
     # action covered in posts_controller_spec
   end
 
-## StaticPages#Home ##
-
-  ## 'Respond_button' ##
-  describe "Persistance:" do
-    let!(:post) { FactoryGirl.create(:post, updated_at: 1.minute.ago) }
-    before do
-      visit root_path
-      click_link "Respond"
-    end
-
-    describe "with an earlier post in existence" do
-      let!(:older_post) { FactoryGirl.create(:post, content: "blah", updated_at: 5.minutes.ago) }
-
-      it "the same post persists upon returning to page" do
-        visit root_path
-        click_link "Respond"
-        expect(page).to have_content(post.content)
-      end
-    end
-
-    describe "after 24 hours" do
-      let!(:newer_post) { FactoryGirl.create(:post, content: "blah") } #need a post to have 'Respond' button
-      before do
-        user.token_timer = 25.hours.ago
-        user.save
-        visit root_path
-        click_link "Respond"
-      end
-
-      it "the same post does not persist" do
-        expect(page).to have_content(newer_post.content)
-      end
-
-      # describe "with only younger posts in existence" do
-      #   before do
-      #     post.updated_at = 2.days.ago
-      #     post.save
-      #     visit root_path
-      #   end
-
-      #   it "the user should not have same token_id" do
-      #     click_button "Respond"
-      #     user.reload
-      #     expect(user.token_id).not_to eq post.id
-      #   end
-      # end
-    end
-  end
-
-  ## Response creation ##
-  describe "States:" do
+  describe "Post States:" do
     let!(:post) { FactoryGirl.create(:post) }
     before { visit root_path }
 
@@ -458,6 +406,17 @@ describe "Post pages" do
           click_button "Respond"
           post.reload
           expect(post).to be_answered
+        end
+
+        describe "as the third response (without ratings)" do
+          let!(:response1) { FactoryGirl.create(:response, post_id: post.id) }
+          let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
+
+          it "updates the state to 'unqueued'" do
+            click_button "Respond"
+            post.reload
+            expect(post).to be_unqueued
+          end
         end
       end
     end
