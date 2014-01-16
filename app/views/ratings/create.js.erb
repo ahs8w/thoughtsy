@@ -5,7 +5,11 @@ var rating = $('#rating_form_<%= @rateable.id %>');
   $('#notification_response').replaceWith("<%= escape_javascript(render('layouts/notification_response')) %>");
   $('#notification_response').tooltip();
   <% if @rating.value >= 3 %>
-    rating.html("<%= escape_javascript(render('ratings/message')) %>");
+    <% if @rating.rateable.instance_of?(Response) %>
+      rating.html("<%= escape_javascript(render('ratings/message')) %>");
+    <% else %>
+      rating.html("<%= escape_javascript(render('ratings/social')) %>");
+    <% end %>
   <% else %>
     rating.html("<%= escape_javascript(render('ratings/rating')) %>");
   <% end %>

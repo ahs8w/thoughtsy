@@ -47,10 +47,10 @@ describe "Rating" do
         expect(Rating.where(value: 5).count).to eq 1
       end
 
-      # it "sends an email to admin" do
-      #   Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      #   expect(last_email.to).to include ('a.h.schiller@gmail.com')
-      # end
+      it "sends an email to admin" do
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+        expect(last_email.to).to include ('a.h.schiller@gmail.com')
+      end
 
       describe "reloading the page" do
         before { visit post_path(response.post) }
@@ -77,12 +77,6 @@ describe "Rating" do
     end
 
     # context "with AJAX", :js=>true do
-      
-    #   describe "clicking 'weak'" do
-    #     before { click_button 'weak' }
-
-    #     it { should have_content("You rated this thought: weak") }
-    #   end
 
     #   describe "clicking 'thought provoking'" do
     #     before { click_button 'thought provoking' }
@@ -143,10 +137,10 @@ describe "Rating" do
         expect(Rating.where(value: 5).count).to eq 1
       end
 
-      # it "sends an email to admin" do
-      #   Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
-      #   expect(last_email.to).to include ('a.h.schiller@gmail.com')
-      # end
+      it "sends an email to admin" do
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+        expect(last_email.to).to include ('a.h.schiller@gmail.com')
+      end
 
       describe "reloading the page" do
         before { visit new_post_response_path(post) }
@@ -174,12 +168,6 @@ describe "Rating" do
 
     # context "with AJAX", :js=>true do
 
-    #   describe "clicking 'weak'" do
-    #     before { click_button 'weak' }
-      
-    #     it { should have_content("You rated this thought: weak") }
-    #   end
-
     #   describe "clicking 'thought provoking'" do
     #     before { click_button 'thought provoking' }
 
@@ -190,7 +178,7 @@ describe "Rating" do
     #     before { click_button 'brilliant!' }
 
     #     it "has links for message and sharing" do
-    #       expect(page).to have_link('Send a message')
+    #       expect(page).not_to have_link('Send a message')
     #       expect(page).to have_selector('div#social_links')
     #     end
     #   end

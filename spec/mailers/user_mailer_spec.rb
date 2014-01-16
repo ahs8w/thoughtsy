@@ -88,17 +88,34 @@ describe UserMailer do
   end
 
   describe "brilliant_email" do
-    let(:response) { FactoryGirl.create(:response) }
-    let(:mail) { UserMailer.brilliant_email(response) }
+    context "from a response" do
+      let(:response) { FactoryGirl.create(:response) }
+      let(:mail) { UserMailer.brilliant_email(response) }
 
-    it "sends brilliant_email to admin" do
-      expect(mail.subject).to eq("Thoughtsy: response rated 'brilliant'")
-      expect(mail.to).to eq(['a.h.schiller@gmail.com'])
-      expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      it "sends brilliant_email to admin" do
+        expect(mail.subject).to eq("Thoughtsy: thought rated 'brilliant'")
+        expect(mail.to).to eq(['a.h.schiller@gmail.com'])
+        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      end
+
+      it "renders the email body" do
+        expect(mail.body.encoded).to match(post_path(response.post))
+      end
     end
 
-    it "renders the email body" do
-      expect(mail.body.encoded).to match(post_path(response.post))
+    context "from a post" do
+      let(:post) { FactoryGirl.create(:post) }
+      let(:mail) { UserMailer.brilliant_email(post) }
+
+      it "sends brilliant_email to admin" do
+        expect(mail.subject).to eq("Thoughtsy: thought rated 'brilliant'")
+        expect(mail.to).to eq(['a.h.schiller@gmail.com'])
+        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      end
+
+      it "renders the email body" do
+        expect(mail.body.encoded).to match(post_path(post))
+      end
     end
   end
 end

@@ -38,9 +38,13 @@ class UserMailer < ActionMailer::Base
     mail to: 'a.h.schiller@gmail.com', subject: "Thoughtsy: post flagged"
   end
 
-  def brilliant_email(response)
-    @response = response
-    @post = @response.post
-    mail to: 'a.h.schiller@gmail.com', subject: "Thoughtsy: response rated 'brilliant'"
+  def brilliant_email(rateable)
+    @rateable = rateable.class.find(rateable.id)
+    if @rateable.instance_of?(Post)
+      @post = @rateable
+    else
+      @post = @rateable.post
+    end
+    mail to: 'a.h.schiller@gmail.com', subject: "Thoughtsy: thought rated 'brilliant'"
   end
 end

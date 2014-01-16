@@ -348,8 +348,11 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     .modal-content {
       @include clearfix();
     }
-
+    #message_toggle {
+      margin-top: 5px;
+    }
     #social_links {
+      margin-top: 10px;
       i {
         font-size: 26px;
         margin: 0 10px;

@@ -371,11 +371,6 @@ describe "Post pages" do
     end
   end
 
-  describe "Repost action" do
-    # covered in ratings_pages_spec -> accessed through AJAX ratings form
-    # action covered in posts_controller_spec
-  end
-
   describe "Post States:" do
     let!(:post) { FactoryGirl.create(:post) }
     before { visit root_path }
