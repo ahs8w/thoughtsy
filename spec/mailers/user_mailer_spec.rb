@@ -31,23 +31,34 @@ describe UserMailer do
     end
   end
 
-  describe "response_emails" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+  describe "response_emails", focus:true do
+    let(:poster) { FactoryGirl.create(:user) }
+    let(:post) { FactoryGirl.create(:post, user_id: poster.id) }
     let(:responder) { FactoryGirl.create(:user) }
     let(:response) { FactoryGirl.create(:response, user_id: responder.id, post_id: post.id) }
+    let(:responder2) { FactoryGirl.create(:user) }
+    let(:response2) { FactoryGirl.create(:response, user_id: responder2.id, post_id: post.id) } 
 
     describe "to poster" do
-      let(:mail) { UserMailer.poster_email(user, response) }
+      let(:mail) { UserMailer.poster_email(poster, response) }
 
       it "sends correct mail" do
         expect(mail.subject).to eq("Someone has responded to your thought!")
-        expect(mail.to).to eq([user.email])
+        expect(mail.to).to eq([poster.email])
         expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
       end
 
       it "renders the email body" do
         expect(mail.body.encoded).to match(post_path(post))
+      end
+    end
+
+    describe "to other responders" do
+      let(:mail) { UserMailer.responder_email(responder, response) }
+
+      it "sends correct mail" do
+        expect(mail.subject).to eq("Someone has responded to a shared thought!")
+        expect(mail.to).to eq([responder.email, responder2.email])
       end
     end
   end

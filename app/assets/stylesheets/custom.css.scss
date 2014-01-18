@@ -636,6 +636,14 @@ rgb(237, 255, 143), rgb(50, 118, 177))
       @include center-block();
       width: 80%;
     }
+    .public_posts, .personal_posts {
+      .thought_content {
+        font-size: 20px;
+        a {
+          line-height: 1.2;
+        }
+      }
+    }
   }
 
   .profile_link {

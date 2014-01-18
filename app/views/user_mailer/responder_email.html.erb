@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @username %>,</h1>
+    <p>
+      <%= @response.user.username %> has responded to a thought that you responded to.
+    </p>
+    <p>
+      To checkout the response, head on over to <%= link_to "Thoughtsy", post_url(@post) %>.
+    </p>
+    <p>Thanks for participating and have a great day!</p>
+  </body>
+</html>

@@ -5,10 +5,10 @@
     <% if profile %>
       <% if thought.instance_of?(Response) %>
         <%= render partial: 'shared/thumb', object: thought %>
-        <%= link_to custom_format(thought.content), post_path(thought.post) unless thought.content.nil? %>
+        <%= link_to wrapped(thought.content, 200), post_path(thought.post) unless thought.content.nil? %>
       <% else %>
         <%= render partial: 'shared/thumb', object: thought %>
-        <%= link_to custom_format(thought.content), post_path(thought) unless thought.content.nil? %>
+        <%= link_to wrapped(thought.content, 200), post_path(thought) unless thought.content.nil? %>
       <% end %>
     <% else %>
       <% if thought.image.present? %>

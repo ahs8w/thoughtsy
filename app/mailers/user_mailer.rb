@@ -20,9 +20,24 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: 'Someone has responded to your thought!'
   end
 
+  def responder_email(user, response)
+    @response = response
+    @post = response.post
+    @username = user.username
+    mail to: user.email, subject: 'Someone has responded to a shared thought!'
+  end
+
   def self.response_emails(response)
     @post = response.post
     @user = @post.user
+    @author = response.user
+    @responders = []
+    @post.responses.each do |response|
+      @responders << response.user unless user.id == @author.id
+    end
+    @responders.each do |user|
+      delay.responder_email(user, response)
+    end
     delay.poster_email(@user, response)
   end
 
