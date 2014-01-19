@@ -31,34 +31,32 @@ describe UserMailer do
     end
   end
 
-  describe "response_emails", focus:true do
-    let(:poster) { FactoryGirl.create(:user) }
-    let(:post) { FactoryGirl.create(:post, user_id: poster.id) }
-    let(:responder) { FactoryGirl.create(:user) }
-    let(:response) { FactoryGirl.create(:response, user_id: responder.id, post_id: post.id) }
-    let(:responder2) { FactoryGirl.create(:user) }
-    let(:response2) { FactoryGirl.create(:response, user_id: responder2.id, post_id: post.id) } 
+  describe "response_emails" do
+    let(:post) { FactoryGirl.create(:post) }
+    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
 
-    describe "to poster" do
-      let(:mail) { UserMailer.poster_email(poster, response) }
+    describe "to post author" do
 
       it "sends correct mail" do
-        expect(mail.subject).to eq("Someone has responded to your thought!")
-        expect(mail.to).to eq([poster.email])
-        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
-      end
-
-      it "renders the email body" do
-        expect(mail.body.encoded).to match(post_path(post))
+        UserMailer.response_emails(response)
+        expect(last_email.subject).to eq("Someone has responded to your thought!")
+        expect(last_email.to).to eq([post.user.email])
+        expect(last_email.from).to eq(["Thoughtsy@thoughtsy.com"])
+        expect(last_email.body.encoded).to match(post_path(post))
+        expect(ActionMailer::Base.deliveries.count).to eq 1
       end
     end
 
     describe "to other responders" do
-      let(:mail) { UserMailer.responder_email(responder, response) }
+      let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
+      let!(:response3) { FactoryGirl.create(:response, post_id: post.id) }
 
       it "sends correct mail" do
-        expect(mail.subject).to eq("Someone has responded to a shared thought!")
-        expect(mail.to).to eq([responder.email, responder2.email])
+        UserMailer.response_emails(response)
+        expect(last_email.subject).to eq("Someone has responded to a shared thought!")
+        expect(last_email.to).to eq([response2.user.email])  # reverses order apparently...
+        expect(last_email.body.encoded).to match(post_path(post))
+        expect(ActionMailer::Base.deliveries.count).to eq 3  # poster, responder2, and responder3 (no responder1)
       end
     end
   end

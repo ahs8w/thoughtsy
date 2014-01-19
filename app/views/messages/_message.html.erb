@@ -16,7 +16,7 @@
         <%= message.content %>
         <% if current_user == message.receiver %>
           <div id="message_toggle">
-            <a href="#" data-toggle="modal" data-target="#messagemodal">Reply</a>
+            <a href="#" data-toggle="modal" data-target="#messagemodal_<%= message.id %>">Reply</a>
           </div>
         <% end %>
       </div>
@@ -25,7 +25,7 @@
 </div>
 
 <!-- Reply Modal -->
-<div class="modal fade" id="messagemodal" tabindex="-1" role="dialog" aria-labelledby="replyToUser"
+<div class="modal fade" id="messagemodal_<%= message.id %>" tabindex="-1" role="dialog" aria-labelledby="replyToUser"
      aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
