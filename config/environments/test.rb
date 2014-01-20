@@ -1,6 +1,13 @@
 Thoughtsy::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Reverting to earlier version of firefox (manual install)
+  Capybara.register_driver :selenium do |app|
+    require 'selenium/webdriver'
+    Selenium::WebDriver::Firefox::Binary.path= "/opt/firefox/firefox/firefox"
+    Capybara::Selenium::Driver.new(app, :browser => :firefox)
+  end
+
   # The test environment is used exclusively to run your application's
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped

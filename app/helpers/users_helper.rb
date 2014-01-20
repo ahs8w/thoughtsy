@@ -17,6 +17,13 @@ module UsersHelper
         end
       end
     end
+    user.response_posts.each do |post|
+      post.responses.each do |response|
+        if response.ratings.where(user_id: user.id).empty?
+          unrated << response if response.user != user
+        end
+      end
+    end
     return unrated
   end
 

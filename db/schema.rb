@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140108144337) do
+ActiveRecord::Schema.define(version: 20140119172022) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -79,17 +79,6 @@ ActiveRecord::Schema.define(version: 20140108144337) do
   add_index "responses", ["created_at"], name: "index_responses_on_created_at", using: :btree
   add_index "responses", ["post_id"], name: "index_responses_on_post_id", using: :btree
   add_index "responses", ["user_id"], name: "index_responses_on_user_id", using: :btree
-
-  create_table "subscriptions", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "post_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "subscriptions", ["post_id", "user_id"], name: "index_subscriptions_on_post_id_and_user_id", unique: true, using: :btree
-  add_index "subscriptions", ["post_id"], name: "index_subscriptions_on_post_id", using: :btree
-  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username"

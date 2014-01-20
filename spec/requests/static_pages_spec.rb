@@ -176,16 +176,23 @@ describe "StaticPages" do
       it { should_not have_link("notification_response") }
     end
 
-    context "with notices" do   # tooltips need to be tested with JS
+    context "with a message notice" do   # tooltips need to be tested with JS
       let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
+      before { visit root_path }
+
+      it "has link to message page" do
+        expect(page).to have_link("", href: user_messages_path(user))
+      end
+    end
+
+    context "with a response notice" do
       let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
       before do
         post.answer!
         visit root_path
       end
 
-      it "has links to appropriate pages" do
-        expect(page).to have_link("", href: user_messages_path(user))
+      it "has link to post page" do
         expect(page).to have_link("", href: post_path(post))
       end
 
@@ -195,6 +202,17 @@ describe "StaticPages" do
 
         it "pluralizes and links to profile" do
           expect(page).to have_link("", href: user_path(user))
+        end
+
+        context "as another responder" do
+          before do
+            sign_in response.user
+            visit root_path
+          end
+
+          it "has link to post page" do
+            expect(page).to have_link("", href: post_path(post))
+          end
         end
       end
     end

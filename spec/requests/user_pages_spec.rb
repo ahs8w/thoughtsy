@@ -97,6 +97,19 @@ describe "UserPages" do
             expect(page).to have_link(unanswered.content)
             expect(page).to have_link(user_response.content)
           end
+
+          describe "with ratings" do
+            let!(:post_rating) { FactoryGirl.create(:rating, rateable_id: answered.id, rateable_type: 'Post', value: 3) }
+            let!(:post_rating2) { FactoryGirl.create(:rating, rateable_id: answered.id, rateable_type: 'Post', value: 4) }
+            let!(:response_rating) { FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response', value: 5) }
+            let!(:response_rating2) { FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response', value: 4) }
+            before { visit user_path(user) }
+
+            it "shows badges with average rating" do
+              expect(find('div.panel-response')).to have_content(4.5)
+              expect(find('div.public_posts').find('div.panel-post')).to have_content(3.5)
+            end
+          end
         end
 
         describe "order" do
@@ -129,15 +142,17 @@ describe "UserPages" do
         #   before do
         #     FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response')
         #     FactoryGirl.create(:rating, rateable_id: user_response.id, rateable_type: 'Response', value: 4)
+        #     FactoryGirl.create(:rating, rateable_id: answered.id, rateable_type: 'Post', value: 2)
         #     visit user_path(user)
         #     click_button "Thought Stats"
         #   end
 
         #   it "displays dropdown stats menu", focus:true do
         #     expect(page).to have_content("Responses: 1")
-        #     expect(page).to have_content("Average rating: 3.5")
+        #     expect(find('#average_response_rating')).to have_content("Average rating: 3.5")
         #     expect(page).to have_content("Answered: 1")
         #     expect(page).to have_content("Unanswered: 1")
+        #     expect(find('#average_post_rating')).to have_content("Average rating: 2")
         #   end
         # end
 
@@ -229,13 +244,17 @@ describe "UserPages" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
 
-      describe "after saving the user" do
+      describe "after submitting" do
         before { click_button submit }
-        let(:user) { User.find_by(email: 'user@example.com') }
 
         it { should have_link("Post") }
         it { should have_success_message('Welcome') }
         it { should have_link('Sign out') }
+
+        it "sends welcome email" do
+          Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+          expect(last_email.subject).to eq("Welcome to Thoughtsy")
+        end
       end
     end
   end

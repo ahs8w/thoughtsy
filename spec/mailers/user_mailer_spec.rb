@@ -1,6 +1,21 @@
 require "spec_helper"
 
 describe UserMailer do
+  describe "welcome email" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:mail) { UserMailer.welcome_email(user) }
+
+    it "sends user welcome_email" do
+      expect(mail.subject).to eq("Welcome to Thoughtsy")
+      expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+    end
+
+    it "renders the email body" do
+      expect(mail.body.encoded).to match(root_path)
+    end
+  end
+
   describe "password_reset email" do
     let(:user) { FactoryGirl.create(:user, :password_reset_token => "anything") }
     let(:mail) { UserMailer.password_reset(user) }
@@ -32,22 +47,32 @@ describe UserMailer do
   end
 
   describe "response_emails" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:post) { FactoryGirl.create(:post, user_id: user.id) }
-    let(:responder) { FactoryGirl.create(:user) }
-    let(:response) { FactoryGirl.create(:response, user_id: responder.id, post_id: post.id) }
+    let(:post) { FactoryGirl.create(:post) }
+    let(:response) { FactoryGirl.create(:response, post_id: post.id) }
 
-    describe "to poster" do
-      let(:mail) { UserMailer.poster_email(user, response) }
+    describe "to post author" do
 
       it "sends correct mail" do
-        expect(mail.subject).to eq("Someone has responded to your thought!")
-        expect(mail.to).to eq([user.email])
-        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+        UserMailer.response_emails(response)
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+        expect(last_email.subject).to eq("Someone has responded to your thought!")
+        expect(last_email.to).to eq([post.user.email])
+        expect(last_email.from).to eq(["Thoughtsy@thoughtsy.com"])
+        expect(last_email.body.encoded).to match(post_path(post))
+        expect(ActionMailer::Base.deliveries.count).to eq 1
       end
+    end
 
-      it "renders the email body" do
-        expect(mail.body.encoded).to match(post_path(post))
+    describe "to other responders" do
+      let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
+      let!(:response3) { FactoryGirl.create(:response, post_id: post.id) }
+
+      it "sends correct mail" do
+        UserMailer.response_emails(response)
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+        expect(last_email.subject).to eq("Someone has responded to a shared thought!")
+        expect(last_email.body.encoded).to match(post_path(post))
+        expect(ActionMailer::Base.deliveries.count).to eq 3  # poster, responder2, and responder3 (no responder1)
       end
     end
   end
@@ -88,17 +113,34 @@ describe UserMailer do
   end
 
   describe "brilliant_email" do
-    let(:response) { FactoryGirl.create(:response) }
-    let(:mail) { UserMailer.brilliant_email(response) }
+    context "from a response" do
+      let(:response) { FactoryGirl.create(:response) }
+      let(:mail) { UserMailer.brilliant_email(response) }
 
-    it "sends brilliant_email to admin" do
-      expect(mail.subject).to eq("Thoughtsy: response rated 'brilliant'")
-      expect(mail.to).to eq(['a.h.schiller@gmail.com'])
-      expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      it "sends brilliant_email to admin" do
+        expect(mail.subject).to eq("Thoughtsy: thought rated 'brilliant'")
+        expect(mail.to).to eq(['a.h.schiller@gmail.com'])
+        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      end
+
+      it "renders the email body" do
+        expect(mail.body.encoded).to match(post_path(response.post))
+      end
     end
 
-    it "renders the email body" do
-      expect(mail.body.encoded).to match(post_path(response.post))
+    context "from a post" do
+      let(:post) { FactoryGirl.create(:post) }
+      let(:mail) { UserMailer.brilliant_email(post) }
+
+      it "sends brilliant_email to admin" do
+        expect(mail.subject).to eq("Thoughtsy: thought rated 'brilliant'")
+        expect(mail.to).to eq(['a.h.schiller@gmail.com'])
+        expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+      end
+
+      it "renders the email body" do
+        expect(mail.body.encoded).to match(post_path(post))
+      end
     end
   end
 end

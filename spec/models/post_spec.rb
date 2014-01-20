@@ -249,11 +249,11 @@ describe Post do
 
     it ".answered" do
       expect(Post.answered).not_to include(user_post, pending, unanswered)
-      expect(Post.answered).to include(answered)
+      expect(Post.answered).to include(answered, unqueued)
     end
 
     it ".personal" do
-      expect(Post.personal).not_to include(answered)
+      expect(Post.personal).not_to include(answered, unqueued)
       expect(Post.personal).to include(flagged, pending, unanswered)
     end
   end

@@ -25,8 +25,8 @@ class Post < ActiveRecord::Base
   scope :queued,      -> { where("state = ? OR state = ?", "unanswered", "answered") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }
 
-  scope :answered,    -> { where("state = ?", "answered") }
-  scope :personal,    -> { where.not("state = ?", "answered") }
+  scope :answered,    -> { where("state = ? OR state = ?", "answered", "unqueued") }
+  scope :personal,    -> { where.not("state = ? OR state = ?", "answered", "unqueued") }
 
 
   state_machine :state, initial: :unanswered do
