@@ -216,6 +216,20 @@ describe "StaticPages" do
         end
       end
     end
+
+    context "with AJAX", js:true do
+      let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
+      let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+      before do
+        post.answer!
+        visit root_path
+      end
+
+      it "has appropriate tooltips", focus:true do
+        expect(find('#notification_response')['title data-original-title']).to eq("You have 1 unrated response")
+        expect(find('#notification_message')['title data-original-title']).to eq("You have 1 unread message")
+      end
+    end
   end
 
 ## Auxillary Pages ##
