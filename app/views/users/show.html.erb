@@ -43,8 +43,8 @@
                 <% if post.user == @user %>
                   <div class="panel-focus">
                     <div class="panel-post">
-                      <% if post.responses.unrated.any? && current_user?(@user) %>
-                        <span class="badge"><%= unrated_count(post) %></span>
+                      <% if post.ratings.any? && current_user?(@user) %>
+                        <span class="badge">rated: <%= average_rating(post) %></span>
                       <% end %>
                       <%= render partial: 'posts/index_post', object: post %>
                     </div>

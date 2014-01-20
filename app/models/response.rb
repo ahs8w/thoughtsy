@@ -13,6 +13,7 @@ class Response < ActiveRecord::Base
 
   scope :descending, -> { order('created_at DESC') }
   scope :ascending,  -> { order('created_at ASC') }
+  scope :unrated,    -> { includes(:ratings).where("ratings.id IS NULL").references(:ratings) }
 
 
   # Carrierwave-direct image upload helper
@@ -46,10 +47,5 @@ private
 
   def image_or_content
     errors.add(:base, "Response must include either an image or content") unless content.present? || has_image_upload?
-  end
-
-  def self.unrated
-    includes(:ratings).where("ratings.id IS NULL").references(:ratings)
-    # joins('LEFT OUTER JOIN ratings ON ratings.response_id = responses.id WHERE ratings.id IS NULL')
   end
 end

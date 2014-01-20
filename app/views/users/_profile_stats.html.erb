@@ -8,8 +8,8 @@
     <li role="presentation"><a role="menuitem" tabindex="-1">
       <%= "Responses: #{@user.responses.count}" %></a>
     </li>
-    <li role="presentation"><a role="menuitem" tabindex="-1">
-      <%= average_user_rating(@user) %></a>
+    <li role="presentation"><a role="menuitem" tabindex="-1" id="average_response_rating">
+      <%= average_response_rating(@user) %></a>
     </li>
       
     <li role="presentation" class="divider"></li>
@@ -20,6 +20,9 @@
     </li>
     <li role="presentation"><a role="menuitem" tabindex="-1">
       <%= "Unanswered: #{@user.posts.personal.count}" %></a>
+    </li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" id="average_post_rating">
+      <%= average_post_rating(@user) %></a>
     </li>
   </ul>
 </div>

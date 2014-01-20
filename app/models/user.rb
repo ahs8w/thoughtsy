@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :ratings
   has_many :response_ratings, through: :responses, source: :ratings
     # all ratings for user.responses
+  has_many :post_ratings, through: :posts, source: :ratings
+    # all ratings for user.posts
 
   has_many :messages, inverse_of: :user
   has_many :received_messages, class_name: 'Message', foreign_key: :receiver_id
