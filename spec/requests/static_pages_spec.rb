@@ -164,7 +164,7 @@ describe "StaticPages" do
   #   it { should have_link "Respond!" }
   # end
 
-  describe "Notification Area" do
+  describe "Notification Area" do   # tooltips need to be tested with JS
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }
     before do
       sign_in user
@@ -176,7 +176,7 @@ describe "StaticPages" do
       it { should_not have_link("notification_response") }
     end
 
-    context "with a message notice" do   # tooltips need to be tested with JS
+    context "with a message notice" do
       let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
       before { visit root_path }
 

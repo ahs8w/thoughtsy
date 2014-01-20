@@ -15,6 +15,9 @@ class Response < ActiveRecord::Base
   scope :ascending,  -> { order('created_at ASC') }
   scope :unrated,    -> { includes(:ratings).where("ratings.id IS NULL").references(:ratings) }
 
+  scope :unrated_by, ->(user) { where("responses.id NOT IN (SELECT ratings.rateable_id from ratings where ratings.user_id = ?)", user.id) }
+    # returns responses without ratings and where ratings.user_id != user.id
+
 
   # Carrierwave-direct image upload helper
   def image_name
