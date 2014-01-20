@@ -6,7 +6,6 @@ class UsersController < ApplicationController
   before_action :admin_user,        only: :destroy
   before_action :already_signed_in, only: [:new, :create]
 
-
   def show
     @user = User.find(params[:id])
     @public_posts = public_posts(@user).paginate(page: params[:page], :per_page => 5)
@@ -29,6 +28,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:success] = "Welcome to Thoughtsy!"
+      UserMailer.delay.welcome_email(@user)
       redirect_to root_path
     else
       render 'new'

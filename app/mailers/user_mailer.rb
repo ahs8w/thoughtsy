@@ -3,6 +3,11 @@ include PostsHelper
 class UserMailer < ActionMailer::Base
   default from: "Thoughtsy@thoughtsy.com"      #hash of default values for emails sent from this mailer
 
+  def welcome_email(user)
+    @user = user
+    mail to: @user.email, subject: 'Welcome to Thoughtsy'
+  end
+
   def password_reset(user)
     @user = user
     mail to: @user.email, subject: 'Password reset'

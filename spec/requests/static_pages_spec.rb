@@ -185,7 +185,7 @@ describe "StaticPages" do
       end
     end
 
-    context "with a response notice", focus:true do
+    context "with a response notice" do
       let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
       before do
         post.answer!

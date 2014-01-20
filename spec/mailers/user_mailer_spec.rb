@@ -1,6 +1,21 @@
 require "spec_helper"
 
 describe UserMailer do
+  describe "welcome email" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:mail) { UserMailer.welcome_email(user) }
+
+    it "sends user welcome_email" do
+      expect(mail.subject).to eq("Welcome to Thoughtsy")
+      expect(mail.to).to eq([user.email])
+      expect(mail.from).to eq(["Thoughtsy@thoughtsy.com"])
+    end
+
+    it "renders the email body" do
+      expect(mail.body.encoded).to match(root_path)
+    end
+  end
+
   describe "password_reset email" do
     let(:user) { FactoryGirl.create(:user, :password_reset_token => "anything") }
     let(:mail) { UserMailer.password_reset(user) }
@@ -39,6 +54,7 @@ describe UserMailer do
 
       it "sends correct mail" do
         UserMailer.response_emails(response)
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
         expect(last_email.subject).to eq("Someone has responded to your thought!")
         expect(last_email.to).to eq([post.user.email])
         expect(last_email.from).to eq(["Thoughtsy@thoughtsy.com"])
@@ -53,8 +69,8 @@ describe UserMailer do
 
       it "sends correct mail" do
         UserMailer.response_emails(response)
+        Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
         expect(last_email.subject).to eq("Someone has responded to a shared thought!")
-        expect(last_email.to).to eq([response2.user.email])  # reverses order apparently...
         expect(last_email.body.encoded).to match(post_path(post))
         expect(ActionMailer::Base.deliveries.count).to eq 3  # poster, responder2, and responder3 (no responder1)
       end

@@ -229,13 +229,17 @@ describe "UserPages" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
 
-      describe "after saving the user" do
+      describe "after submitting" do
         before { click_button submit }
-        let(:user) { User.find_by(email: 'user@example.com') }
 
         it { should have_link("Post") }
         it { should have_success_message('Welcome') }
         it { should have_link('Sign out') }
+
+        it "sends welcome email" do
+          Delayed::Worker.new.work_off        ## Rspec 'all' tests failed without workers
+          expect(last_email.subject).to eq("Welcome to Thoughtsy")
+        end
       end
     end
   end
