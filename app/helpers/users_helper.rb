@@ -10,14 +10,8 @@ module UsersHelper
 
   def unrated_array(user)
     unrated = []
-    user.posts.answered.each do |post|
-      post.responses.each do |response|
-        if response.ratings.where(user_id: user.id).empty?
-          unrated << response
-        end
-      end
-    end
-    user.response_posts.each do |post|
+    posts = user.posts.answered + user.response_posts
+    posts.each do |post|
       post.responses.each do |response|
         if response.ratings.where(user_id: user.id).empty?
           unrated << response if response.user != user
@@ -45,14 +39,9 @@ module UsersHelper
     end
   end
 
-  def unrated_response_text(user)
-    unrated = unrated_array(user)
-    if unrated.count == 1
-      "1 unrated response"
-    elsif unrated.count > 1
-      "#{pluralize(unrated.count, 'unrated response')}"
-    end
-  end
+  # def unrated_response_text(user)
+  #   "#{pluralize(unrated_array(user).count, 'unrated response')}"
+  # end
 
   def unread_messages(user)
     msgs = user.received_messages.unread

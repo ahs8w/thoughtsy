@@ -98,17 +98,17 @@ describe Response do
       expect(Response.unrated).to eq([newer_response, older_response])
     end
 
-    it "unrated_by" do
-      expect(Response.unrated_by(user)).to eq([newer_response, older_response])
-    end
+    # it "unrated_by" do
+    #   expect(Response.unrated_by(user)).to eq([newer_response, older_response])
+    # end
 
-    describe "with ratings" do
-      let!(:user_rating) { FactoryGirl.create(:rating, rateable_id: newer_response.id, rateable_type: 'Response', user_id: user.id) }
-      let!(:rating) { FactoryGirl.create(:rating, rateable_id: older_response.id, rateable_type: 'Response') }
+    # describe "with ratings" do
+    #   let!(:user_rating) { FactoryGirl.create(:rating, rateable_id: newer_response.id, rateable_type: 'Response', user_id: user.id) }
+    #   let!(:rating) { FactoryGirl.create(:rating, rateable_id: older_response.id, rateable_type: 'Response') }
 
-      it "unrated_by returns response not rated by user" do
-        expect(Response.unrated_by(user)).to eq([older_response])
-      end
-    end
+    #   it "unrated_by returns response not rated by user" do
+    #     expect(Response.unrated_by(user)).to eq([older_response])
+    #   end
+    # end
   end
 end

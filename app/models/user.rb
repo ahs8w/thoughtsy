@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_many :posts, inverse_of: :user, dependent: :destroy
   has_many :responses, inverse_of: :user, dependent: :destroy
   has_many :response_posts, through: :responses, source: :post
-    # all posts of user.responses
+    # all posts that a user has responded to
 
   has_many :ratings
   has_many :response_ratings, through: :responses, source: :ratings

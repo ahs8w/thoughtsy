@@ -209,8 +209,9 @@ describe "StaticPages" do
     end
   end
 
-  describe "Notification Area" do   # tooltips need to be tested with JS
+  describe "Notification Area" do
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }
+    let(:user_response) {FactoryGirl.create(:response, user_id: user.id) }
     before do
       sign_in user
       visit root_path
@@ -226,7 +227,8 @@ describe "StaticPages" do
       before { visit root_path }
 
       it "has link to message page" do
-        expect(page).to have_link("", href: user_messages_path(user))
+        expect(find('#notification_message')).to have_link("", href: user_messages_path(user))
+        expect(find('#notification_message')['title']).to eq("You have 1 unread message")
       end
     end
 
@@ -238,15 +240,17 @@ describe "StaticPages" do
       end
 
       it "has link to post page" do
-        expect(page).to have_link("", href: post_path(post))
+        expect(find('#notification_response')).to have_link("", href: post_path(post))
       end
 
-      context "with multiple responses" do
+      context "with a post response and a communal response" do
         let!(:response2) { FactoryGirl.create(:response, post_id: post.id) }
+        let!(:response3) { FactoryGirl.create(:response, post_id: user_response.post.id) }
         before { visit root_path }
 
         it "pluralizes and links to profile" do
-          expect(page).to have_link("", href: user_path(user))
+          expect(find('#notification_response')).to have_link("", href: user_path(user))
+          expect(find('#notification_response')['title']).to eq("You have 3 unrated responses")
         end
 
         context "as another responder" do
@@ -256,25 +260,12 @@ describe "StaticPages" do
           end
 
           it "has link to post page" do
-            expect(page).to have_link("", href: post_path(post))
+            expect(find('#notification_response')).to have_link("", href: post_path(post))
+            expect(find('#notification_response')['title']).to eq("You have 1 unrated response")
           end
         end
       end
     end
-
-    # context "with AJAX", js:true do
-    #   let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
-    #   let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-    #   before do
-    #     post.answer!
-    #     visit root_path
-    #   end
-
-    #   it "has appropriate tooltips", focus:true do
-    #     expect(find('#notification_response')['title data-original-title']).to eq("You have 1 unrated response")
-    #     expect(find('#notification_message')['title data-original-title']).to eq("You have 1 unread message")
-    #   end
-    # end
   end
 
 ## Auxillary Pages ##
