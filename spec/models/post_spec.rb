@@ -230,16 +230,16 @@ describe Post do
   end
 
   describe "state scopes" do
-    let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
-    let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
     let!(:pending) { FactoryGirl.create(:post, state: 'pending') }
+    let!(:user_post) { FactoryGirl.create(:post, user_id: user.id, state: 'unanswered') }
+    let!(:unqueued) { FactoryGirl.create(:post, state: 'unqueued') }
+    let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
     let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
     let!(:flagged) { FactoryGirl.create(:post, state: 'flagged') }
-    let!(:unqueued) { FactoryGirl.create(:post, state: 'unqueued') }
 
     it ".answerable" do
-      expect(Post.answerable(user)).not_to include(user_post, pending, unqueued)
-      expect(Post.answerable(user)).to include(unanswered, answered)
+      expect(Post.queued.answerable(user)).not_to include(user_post, pending, unqueued)
+      expect(Post.queued.answerable(user)).to include(unanswered, answered)
     end
 
     it ".queued" do
@@ -255,6 +255,48 @@ describe Post do
     it ".personal" do
       expect(Post.personal).not_to include(answered, unqueued)
       expect(Post.personal).to include(flagged, pending, unanswered)
+    end
+
+    it ".ascending.ordered" do
+      pending.update_attribute(:sort_date, 1.minute.ago)
+      answered.update_attribute(:sort_date, 5.minutes.ago)
+      flagged.update_attribute(:sort_date, 3.minutes.ago)
+      unanswered.update_attribute(:sort_date, 10.minute.ago)
+      user_post.update_attribute(:sort_date, 1.minutes.ago)
+      expect(Post.ascending.ordered).to eq([unanswered, user_post, answered, flagged, pending, unqueued])
+    end
+  end
+
+  describe "Queue" do
+    describe "with an answerable post" do
+      let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
+      let!(:user_answered) { FactoryGirl.create(:post, state: 'answered') }
+      let!(:answered) { FactoryGirl.create(:post, state: 'answered') }   
+      before { user_answered.add_unavailable_users(user) }
+
+      it "yields answerable post" do
+        expect(Post.answerable(user).ordered.first).to eq(answered)
+      end
+
+      describe "with an unanswered post" do
+        let!(:unanswered) { FactoryGirl.create(:post, state: 'unanswered') }
+
+        it "yields unanswered" do
+          expect(Post.answerable(user).ordered.first).to eq(unanswered)
+        end
+
+        describe "with sort_dates" do
+          let!(:earlier_answered) { FactoryGirl.create(:post, state: 'answered') }
+          before do
+            earlier_answered.update_attribute(:sort_date, 5.minutes.ago)
+            answered.update_attribute(:sort_date, 1.minute.ago)
+          end
+
+          it "yields earlier_answered" do
+            expect(Post.answerable(user).ascending.ordered).to eq([unanswered, earlier_answered, answered])
+          end
+        end
+      end
     end
   end
 

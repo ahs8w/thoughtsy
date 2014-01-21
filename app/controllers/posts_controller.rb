@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   before_action :tokened_responder, only: :flag
 
   def queue
-    @posts = Post.where.not(state: "unqueued").ascending.paginate(page: params[:page])
+    @posts = Post.where.not(state: "unqueued").ascending.ordered.paginate(page: params[:page])
   end
 
   def new
@@ -46,7 +46,7 @@ class PostsController < ApplicationController
 # Response#New #
   def flag
     @post = Post.find(params[:id])
-    @token_post = Post.answerable(current_user).ascending.first
+    @token_post = Post.answerable(current_user).ascending.ordered.first
     @post.flag!       # sends flag_email on transition
     current_user.reset_tokens
     flash[:warning] = "Thought flagged."
@@ -59,7 +59,7 @@ class PostsController < ApplicationController
 
   def language
     @post = Post.find(params[:id])
-    @token_post = Post.answerable(current_user).ascending.first
+    @token_post = Post.answerable(current_user).ascending.ordered.first
     @post.expire!
     current_user.reset_tokens
     flash[:info] = "Thought reposted."

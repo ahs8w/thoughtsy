@@ -21,6 +21,11 @@ class Post < ActiveRecord::Base
 
   scope :ascending,   -> { order('sort_date ASC') }
   scope :descending,  -> { order('sort_date DESC') }
+  scope :ordered,     -> { order("CASE
+                                    WHEN state = 'unanswered' THEN 1
+                                    WHEN state = 'answered' OR state = 'pending' OR state = 'flagged' THEN 2
+                                    WHEN state = 'unqueued' THEN 3
+                                  END") }
 
   scope :queued,      -> { where("state = ? OR state = ?", "unanswered", "answered") }
   scope :answerable,  ->(user) { queued.where.not("? = ANY (unavailable_users)", user.id) }

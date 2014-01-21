@@ -102,7 +102,7 @@ describe Response do
       expect(Response.unrated_by(user)).to eq([newer_response, older_response])
     end
 
-    describe "with ratings", focus:true do
+    describe "with ratings" do
       let!(:user_rating) { FactoryGirl.create(:rating, rateable_id: newer_response.id, rateable_type: 'Response', user_id: user.id) }
       let!(:rating) { FactoryGirl.create(:rating, rateable_id: older_response.id, rateable_type: 'Response') }
 

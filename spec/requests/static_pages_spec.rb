@@ -63,7 +63,7 @@ describe "StaticPages" do
     end
   end
 
-  describe "Response button behavior" do
+  describe "Response button and message" do
     before do
       sign_in user
       visit root_path
@@ -153,16 +153,61 @@ describe "StaticPages" do
     end
   end
 
-  # describe "Response button queue", focus:true do
-  #   let!(:response) { FactoryGirl.create(:response) }
-  #   let!(:response2) { FactoryGirl.create(:response, post_id: response.post.id) }
-  #   before do
-  #     sign_in user
-  #     visit root_path
-  #   end
+  describe "Response Queue" do
+    before { sign_in user }
 
-  #   it { should have_link "Respond!" }
-  # end
+    context "as post author and post responder" do
+      let!(:user_post) { FactoryGirl.create(:post, user_id: user.id) }
+      let(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
+      before do
+        user_response.post.answer!
+        user_response.post.add_unavailable_users(user)    # occurs with accept! action on Response#New
+        visit root_path
+      end
+
+      it { should_not have_link "Respond" }
+    end
+
+    context "with answerable posts" do
+      let(:response) { FactoryGirl.create(:response) }
+      let!(:answered) { FactoryGirl.create(:post, state: 'answered') }
+      before do
+        answered.update_attribute(:sort_date, 5.minutes.ago)
+        response.post.update_attribute(:sort_date, 1.minute.ago)
+        response.post.answer!
+        visit root_path
+      end
+
+      it "clicking respond yields response.post" do
+        click_link "Respond"
+        expect(page).to have_content(answered.content)
+      end
+
+      context "and unanswered posts" do
+        let!(:unanswered) { FactoryGirl.create(:post) }
+        let!(:unanswered2) { FactoryGirl.create(:post) }
+        before do
+          unanswered.update_attribute(:sort_date, 1.minute.ago)
+          unanswered2.update_attribute(:sort_date, 5.minutes.ago)
+          visit root_path
+          click_link "Respond"
+        end
+
+        it { should have_content(unanswered2.content) }
+
+        describe "after responding" do
+          before do
+            fill_in 'response_content', with: "Lorem Ipsum"
+            click_button "Respond"
+            visit root_path
+            click_link "Respond"
+          end
+
+          it { should have_content(unanswered.content) }
+        end
+      end
+    end
+  end
 
   describe "Notification Area" do   # tooltips need to be tested with JS
     let(:post) { FactoryGirl.create(:post, user_id: user.id) }
@@ -217,19 +262,19 @@ describe "StaticPages" do
       end
     end
 
-    context "with AJAX", js:true do
-      let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
-      let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
-      before do
-        post.answer!
-        visit root_path
-      end
+    # context "with AJAX", js:true do
+    #   let!(:message) { FactoryGirl.create(:message, receiver_id: user.id) }
+    #   let!(:response) { FactoryGirl.create(:response, post_id: post.id) }
+    #   before do
+    #     post.answer!
+    #     visit root_path
+    #   end
 
-      it "has appropriate tooltips", focus:true do
-        expect(find('#notification_response')['title data-original-title']).to eq("You have 1 unrated response")
-        expect(find('#notification_message')['title data-original-title']).to eq("You have 1 unread message")
-      end
-    end
+    #   it "has appropriate tooltips", focus:true do
+    #     expect(find('#notification_response')['title data-original-title']).to eq("You have 1 unrated response")
+    #     expect(find('#notification_message')['title data-original-title']).to eq("You have 1 unread message")
+    #   end
+    # end
   end
 
 ## Auxillary Pages ##

@@ -16,12 +16,12 @@ class StaticPagesController < ApplicationController
           end
           @oldpost = Post.find(current_user.token_id)
           # can't reset_tokens here because it sets off Post validation error
-          @token_post = Post.answerable(current_user).ascending.first
+          @token_post = Post.answerable(current_user).ascending.ordered.first
           @oldpost.expire! if @oldpost.state == 'pending'
           user_expire_effects
         end
       else                                                        # no token_id
-        @token_post = Post.answerable(current_user).ascending.first
+        @token_post = Post.answerable(current_user).ascending.ordered.first
         if current_user.posts_available                           #     posts available
           output_2
         else                                                      #     not available
