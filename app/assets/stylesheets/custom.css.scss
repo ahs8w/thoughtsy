@@ -360,7 +360,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     }
   }
 
-
 /* Response#new Post#new */
 
   #responder_links {
@@ -478,6 +477,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
   /* Index */
     #posts_index {
+      text-align: center;
       .panel-post {
         position: relative;
         .gravatar {
