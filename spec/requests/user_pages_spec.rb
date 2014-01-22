@@ -83,6 +83,18 @@ describe "UserPages" do
         expect(page).to have_content("no unanswered thoughts")
       end
 
+      describe "profile links" do
+        it "clicking settings directs to settings page" do
+          find('.user_stats').click_link "Settings"
+          expect(page).to have_content "Update your profile"
+        end
+
+        it "clicking messages directs to messages page" do
+          find('.user_stats').click_link "Messages"
+          expect(page).to have_content "Personal Messages"
+        end
+      end
+
       describe "with content" do
         let!(:user_response) { FactoryGirl.create(:response, user_id: user.id) }
         let!(:answered) { FactoryGirl.create(:post, user: user, state: 'answered') }
@@ -110,46 +122,59 @@ describe "UserPages" do
               expect(find('div.public_posts').find('div.panel-post')).to have_content(3.5)
             end
           end
+        end
 
-          describe "unrated rateable styling" do
+        describe "unrated styling" do
 
-            context "with no unrated rateable responses" do
-              it "has no extra styling" do
+          context "with no rateable responses" do
+            it "has no extra styling" do
+              expect(find('#profile_response')).not_to have_css('#unrated_response')
+              expect(find('#profile_post')).not_to have_css('#unrated_response')
+            end
+          end
+
+          context "with rateable responses" do
+            let!(:response_response) { FactoryGirl.create(:response, post_id: user_response.post.id) }
+            let!(:post_response) { FactoryGirl.create(:response, post_id: answered.id) }
+            before { visit user_path(user) }
+
+            it "shows unrated response panels with border" do
+              expect(find('#profile_response')).to have_css('#unrated_response')
+              expect(find('#profile_post')).to have_css('#unrated_response')
+            end
+
+            describe "already rated" do
+              before do
+                response_rating = response_response.ratings.create(user_id: user.id, value: 2)
+                post_rating = post_response.ratings.create(user_id: user.id, value: 3)
+                visit user_path(user)
+              end
+
+              it "does not have styling" do
                 expect(find('#profile_response')).not_to have_css('#unrated_response')
                 expect(find('#profile_post')).not_to have_css('#unrated_response')
               end
             end
 
-            context "with unrated rateable responses" do
-              let!(:response_response) { FactoryGirl.create(:response, post_id: user_response.post.id) }
-              let!(:post_response) { FactoryGirl.create(:response, post_id: answered.id) }
+            describe "after rating" do
+              let!(:rating) { FactoryGirl.create(:rating, rateable_id: post_response.id, rateable_type: 'Response', user_id: user.id, value: 3) }
               before { visit user_path(user) }
 
-              it "shows unrated response panels with border" do
-                expect(find('#profile_response')).to have_css('#unrated_response')
-                expect(find('#profile_post')).to have_css('#unrated_response')
-              end
-
-              describe "after rating response" do
-                let!(:rating) { FactoryGirl.create(:rating, rateable_id: post_response.id, rateable_type: 'Response', user_id: user.id, value: 3) }
-                before { visit user_path(user) }
-
-                it "styling is removed" do
-                  expect(find('#profile_post')).not_to have_css('#unrated_response')
-                end
+              it "styling is removed" do
+                expect(find('#profile_post')).not_to have_css('#unrated_response')
               end
             end
+          end
 
-            context "with an existing response" do
-              let!(:response) { FactoryGirl.create(:response) }
+          describe "an existing response" do
+            let!(:response) { FactoryGirl.create(:response) }
 
-              context "a new user response" do
-                let!(:new_user_response) { FactoryGirl.create(:response, post_id: response.post.id, user_id: user.id) }
-                before { visit user_path(user) }
+            describe "after a new user response" do
+              let!(:new_user_response) { FactoryGirl.create(:response, post_id: response.post.id, user_id: user.id) }
+              before { visit user_path(user) }
 
-                it "has unrated styling" do
-                  expect(find('#unrated_response')).to have_content(new_user_response.content)
-                end
+              it "is styled in the profile" do
+                expect(find('#unrated_response')).to have_content(new_user_response.content)
               end
             end
           end
@@ -207,7 +232,7 @@ describe "UserPages" do
             visit user_path(user)
           end
 
-          it "should have correct layout and display" do
+          it "has correct layout and display" do
             expect(page).to have_content("#{user.username} | #{user.score}")
             expect(page).to have_title(user.username)
             expect(page).not_to have_link("Settings", href: edit_user_path(user))
@@ -219,18 +244,11 @@ describe "UserPages" do
             expect(page).not_to have_content("Unanswered thoughts")
             expect(page).not_to have_link(unanswered.content)
           end
-        end
-      end
 
-      describe "profile links" do
-        it "clicking settings directs to settings page" do
-          find('.user_stats').click_link "Settings"
-          expect(page).to have_content "Update your profile"
-        end
-
-        it "clicking messages directs to messages page" do
-          find('.user_stats').click_link "Messages"
-          expect(page).to have_content "Personal Messages"
+          it "does not have unrated response styling" do
+            expect(find('#profile_response')).not_to have_css('#unrated_response')
+            expect(find('#profile_post')).not_to have_css('#unrated_response')
+          end
         end
       end
 
