@@ -83,8 +83,10 @@ describe Response do
 
   ## Response Scopes ##
   describe "scopes" do
-    let!(:newer_response) { FactoryGirl.create(:response, created_at: 5.minutes.ago) }
-    let!(:older_response) { FactoryGirl.create(:response, created_at: 5.hours.ago) }
+    let!(:post) { FactoryGirl.create(:post, user_id: user.id) }
+    let!(:newer_response) { FactoryGirl.create(:response, post_id: post.id, created_at: 5.minutes.ago) }
+    let!(:older_response) { FactoryGirl.create(:response, post_id: post.id, created_at: 5.hours.ago) }
+    let!(:user_response)  { FactoryGirl.create(:response, post_id: post.id, user_id: user.id, created_at: 20.minutes.ago) }
 
     it "ascending" do
       expect(Response.ascending.first).to eq older_response
@@ -94,21 +96,26 @@ describe Response do
       expect(Response.descending.first).to eq newer_response
     end
 
-    it "unrated" do
-      expect(Response.unrated).to eq([newer_response, older_response])
+    it "rateable(user)" do
+      expect(post.responses.rateable(user)).to eq([older_response, newer_response])
     end
 
-    # it "unrated_by" do
-    #   expect(Response.unrated_by(user)).to eq([newer_response, older_response])
-    # end
+    describe "unrated_by(user)" do
+      context "with no ratings" do
 
-    # describe "with ratings" do
-    #   let!(:user_rating) { FactoryGirl.create(:rating, rateable_id: newer_response.id, rateable_type: 'Response', user_id: user.id) }
-    #   let!(:rating) { FactoryGirl.create(:rating, rateable_id: older_response.id, rateable_type: 'Response') }
+        it "includes all unrated responses not authored by user" do
+          expect(post.responses.unrated_by(user)).to eq([older_response, newer_response])
+        end
+      end
 
-    #   it "unrated_by returns response not rated by user" do
-    #     expect(Response.unrated_by(user)).to eq([older_response])
-    #   end
-    # end
+      context "with ratings" do
+        let!(:user_rating) { FactoryGirl.create(:rating, rateable_id: newer_response.id, rateable_type: 'Response', user_id: user.id) }
+        let!(:rating) { FactoryGirl.create(:rating, rateable_id: older_response.id, rateable_type: 'Response') }
+
+        it "includes only rateable responses unrated by user" do
+          expect(post.responses.unrated_by(user)).to eq([older_response])
+        end
+      end
+    end
   end
 end

@@ -110,6 +110,36 @@ describe "UserPages" do
               expect(find('div.public_posts').find('div.panel-post')).to have_content(3.5)
             end
           end
+
+          describe "unrated rateable styling" do
+
+            context "with no unrated rateable responses" do
+              it "has no extra styling" do
+                expect(find('#profile_response')).not_to have_css('#unrated_response')
+                expect(find('#profile_post')).not_to have_css('#unrated_response')
+              end
+            end
+
+            context "with unrated rateable responses" do
+              let!(:response_response) { FactoryGirl.create(:response, post_id: user_response.post.id) }
+              let!(:post_response) { FactoryGirl.create(:response, post_id: answered.id) }
+              before { visit user_path(user) }
+
+              it "shows unrated response panels with border" do
+                expect(find('#profile_response')).to have_css('#unrated_response')
+                expect(find('#profile_post')).to have_css('#unrated_response')
+              end
+
+              describe "after rating response" do
+                let!(:rating) { FactoryGirl.create(:rating, rateable_id: post_response.id, rateable_type: 'Response', user_id: user.id, value: 3) }
+                before { visit user_path(user) }
+
+                it "styling is removed" do
+                  expect(find('#profile_post')).not_to have_css('#unrated_response')
+                end
+              end
+            end
+          end
         end
 
         describe "order" do

@@ -31,8 +31,12 @@ module ProfileHelper
     (thought.ratings.sum('value').to_f/thought.ratings.size).round(2)
   end
 
-  def unrated_count(post)
-    pluralize(post.responses.unrated.size, "unrated response")
+  def unrated(post)
+    unless post.responses.unrated_by(current_user).empty?
+      'unrated_response'
+    else
+      'rated'
+    end
   end
 
   def personal_posts(user)
