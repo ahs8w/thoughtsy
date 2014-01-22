@@ -12,7 +12,7 @@ module ProfileHelper
   def average_response_rating(user)
     ratings = user.response_ratings
     unless ratings.empty?     
-      "Average rating: #{ratings.sum('value').to_f/ratings.size}"
+      "Average rating: #{(ratings.sum('value').to_f/ratings.size).round(2)}"
     else
       "No ratings"
     end
@@ -21,14 +21,14 @@ module ProfileHelper
   def average_post_rating(user)
     ratings = user.post_ratings
     unless ratings.empty?     
-      "Average rating: #{ratings.sum('value').to_f/ratings.size}"
+      "Average rating: #{(ratings.sum('value').to_f/ratings.size).round(2)}"
     else
       "No ratings"
     end
   end
 
   def average_rating(thought)
-    thought.ratings.sum('value').to_f/thought.ratings.size
+    (thought.ratings.sum('value').to_f/thought.ratings.size).round(2)
   end
 
   def unrated_count(post)
