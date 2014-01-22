@@ -104,7 +104,7 @@ describe Response do
       context "with no ratings" do
 
         it "includes all unrated responses not authored by user" do
-          expect(post.responses.unrated_by(user)).to eq([older_response, newer_response])
+          expect(post.responses.rateable(user).unrated_by(user)).to eq([older_response, newer_response])
         end
       end
 

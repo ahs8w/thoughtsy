@@ -139,6 +139,19 @@ describe "UserPages" do
                 end
               end
             end
+
+            context "with an existing response" do
+              let!(:response) { FactoryGirl.create(:response) }
+
+              context "a new user response" do
+                let!(:new_user_response) { FactoryGirl.create(:response, post_id: response.post.id, user_id: user.id) }
+                before { visit user_path(user) }
+
+                it "has unrated styling" do
+                  expect(find('#unrated_response')).to have_content(new_user_response.content)
+                end
+              end
+            end
           end
         end
 

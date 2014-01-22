@@ -45,7 +45,7 @@ class Response < ActiveRecord::Base
     self.user.reset_tokens
     UserMailer.response_emails(self)
   end
-  
+
 private
 
   def image_or_content
