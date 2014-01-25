@@ -32,10 +32,10 @@ describe "Rating" do
       it { should have_content("You rated this thought: average") }
     end
 
-    describe "clicking 'thought provoking'" do
-      before { click_button 'thought provoking' }
+    describe "clicking 'thoughtful'" do
+      before { click_button 'thoughtful' }
 
-      it { should have_content("You rated this thought: thought provoking") }
+      it { should have_content("You rated this thought: thoughtful") }
     end
 
     describe "clicking 'brilliant'" do
@@ -78,8 +78,8 @@ describe "Rating" do
 
     # context "with AJAX", :js=>true do
 
-    #   describe "clicking 'thought provoking'" do
-    #     before { click_button 'thought provoking' }
+    #   describe "clicking 'thoughtful'" do
+    #     before { click_button 'thoughtful' }
 
     #     it { should have_link('Send a message') }
     #   end
@@ -122,10 +122,10 @@ describe "Rating" do
       it { should have_content("You rated this thought: average") }
     end
 
-    describe "clicking 'thought provoking'" do
-      before { click_button 'thought provoking' }
+    describe "clicking 'thoughtful'" do
+      before { click_button 'thoughtful' }
 
-      it { should have_content("You rated this thought: thought provoking") }
+      it { should have_content("You rated this thought: thoughtful") }
     end
 
     describe "clicking 'brilliant'" do
@@ -168,8 +168,8 @@ describe "Rating" do
 
     # context "with AJAX", :js=>true do
 
-    #   describe "clicking 'thought provoking'" do
-    #     before { click_button 'thought provoking' }
+    #   describe "clicking 'thoughtful'" do
+    #     before { click_button 'thoughtful' }
 
     #     it { should have_link('Send a message') }
     #   end

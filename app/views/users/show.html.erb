@@ -4,7 +4,7 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="well" id="profile">
       <h1>
-        <%= gravatar_for(@user, size: 55) %>
+        <div class="hidden-xs"><%= gravatar_for(@user, size: 55) %></div>
         <%= @user.username %>
         <small> | <%= @user.score %></small>
       </h1>
@@ -12,22 +12,22 @@
       <% if current_user?(@user) %>
         <div class="user_stats center">
           <span>
-            <div class="btn btn-default">
+            <button class="btn btn-default">
               <%= link_to "Messages", user_messages_path(@user) %>
               <% if @user.received_messages.unread.empty? %>
                 <i class="fa fa-envelope"></i>
               <% else %>
                 <span class="badge"><%= @user.received_messages.unread.size %></span>
               <% end %>
-            </div>
+            </button>
           </span>
           <span>
             <%= render "profile_stats" %>
           </span>
           <span>
-            <div class="btn btn-default">
+            <button class="btn btn-default">
               <%= link_to "Settings", edit_user_path(@user) %> <i class="fa fa-cog"></i>
-            </div>
+            </button>
           </span>
         </div>
       <% end %>

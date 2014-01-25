@@ -1,6 +1,6 @@
 <div class="index_post">
   <h3>
-    <%= link_to gravatar_for(index_post.user, size: 50), user_path(index_post.user) %>
+    <div class="hidden-xs"><%= link_to gravatar_for(index_post.user, size: 50), user_path(index_post.user) %></div>
     <%= link_to wrapped(index_post.content, 200), post_path(index_post) unless index_post.content.nil? %>
     <div class="image">
       <%= render partial: 'shared/thumb', object: index_post, locals: { path: 'post_path(index_post)' } %>

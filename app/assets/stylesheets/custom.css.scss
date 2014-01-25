@@ -191,7 +191,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     color: #666;
   }
 
-  .timestamp {
+  .timestamp, .user_score {
     @extend .lighter;
   }
 
@@ -268,7 +268,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         text-decoration: none;
       }
     }
-    small {
+    .cc_license {
       float: left;
     }
     ul {
@@ -336,6 +336,11 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   }
 
   .ratings {
+    .current_user_rating {
+      font-size: .85em;
+      padding-top: 2px;
+      text-align: center;
+    }
     .rating_form {
       text-align: center;
       form.new_rating {
@@ -350,6 +355,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     }
     #message_toggle {
       margin-top: 5px;
+      font-size: .85em;
     }
     #social_links {
       margin-top: 10px;
@@ -487,27 +493,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     }
 
   /* Show */
-
-    /*#subscribe {
-      text-align: center;
-      @extend .lighter-links;
-      form {
-        display: inline-block;
-        margin: 0;
-        input {
-          font-family: 'Open Sans', sans-serif;
-          font-size: 99%;
-          padding: 0;
-          border: 0;
-          margin-bottom: 2px;
-          color: #ccc;
-        }
-        input:hover {
-          color: #fff;
-          text-decoration: none;
-        }
-      }  no longer used
-    }*/
    
     #posts_show {
       img {
@@ -574,7 +559,7 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
   .user_stats {
     margin: -10px auto 70px;
-    button, .btn {
+    button, div.btn {
       font-size: 20px;
       a {
         color: #101010;
@@ -639,9 +624,6 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     .public_posts, .personal_posts {
       .thought_content {
         font-size: 20px;
-        a {
-          line-height: 1.2;
-        }
       }
     }
     #unrated_response {

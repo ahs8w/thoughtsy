@@ -1,6 +1,6 @@
 <div class="ratings">
   <% if rateable.ratings.any? && rateable.raters.include?(current_user) %>
-    <div class="center small">You rated this thought: <%= current_user_rating(rateable) %></div>
+    <div class="current_user_rating">You rated this thought: <%= current_user_rating(rateable) %></div>
   <% else %>
     <div class="rating_form" id="rating_form_<%= rateable.id %>">
       <span id="1">
@@ -24,7 +24,7 @@
           <%= f.hidden_field(:rateable_id, :value => rateable.id) %>
           <%= f.hidden_field(:rateable_type, :value => rateable.class.name ) %>
           <%= f.hidden_field(:value, :value => '3') %>
-          <%= button_tag "thought provoking", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
+          <%= button_tag "thoughtful", class: "btn btn-xs btn-primary", id: "rating_button", data: { 'loading-text' => "Rating..." } %>
         <% end %>
       </span>
       <span id="4">

@@ -9,7 +9,7 @@ module RatingsHelper
   def value_in_words(value)
     if value == 1 then "weak"
     elsif value == 2 then "average"
-    elsif value == 3 then "thought provoking"
+    elsif value == 3 then "thoughtful"
     elsif value == 5 then "brilliant!"
     end
   end

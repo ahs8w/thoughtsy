@@ -25,7 +25,7 @@
   <div class="thought_author">
     <% unless profile %>
       <%= link_to "#{thought.user.username}", user_path(thought.user) %>
-      <span class="lighter"> | <%= thought.user.score %></span>
+      <span class="user_score"> | <%= thought.user.score %></span>
     <% end %>
     <span class="timestamp pull-right"><%= created_time(thought) %></span>
   </div>

@@ -1,0 +1,80 @@
+@import "custom.css.scss";
+
+@media screen and (max-width: 500px) {
+
+  p {
+    font-size: .9em;
+    line-height: 1.5em;
+  }
+
+  .navbar #brand {
+    margin-left: 10px;
+  }
+
+/* Home Page */
+  #title_banner {
+    margin-top: 0;
+    h1 {
+      font-size: 5em;
+      color: #333;
+    }
+    p.lead {
+      font-size: 1.5em;
+      margin-top: 40px;
+    }
+  }
+
+  #signup_button {
+    margin-top: 50px;
+  }
+
+  #post_response_buttons {
+    margin-top: 20px;
+  }
+
+/* Posts#Index */
+  #posts_index {
+    padding: 5px;
+    h3 {
+      font-size: 18px;
+    }
+  }
+
+/* Users#Show */
+  #profile {
+    .user_stats {
+      margin-bottom: 20px;
+    }
+    .public_posts, .personal_posts {
+      .thought_content {
+        font-size: 16px;
+      }
+    }
+    .panel-focus {
+      padding: 5px;
+      h3 {
+        font-size: 18px;
+      }
+      .badge {
+        top: -4px;
+        right: -4px;
+      }
+    }
+    #profile_response {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .user_score {
+    visibility: hidden;
+  }
+
+  .ratings {
+    .current_user_rating, .rating_form {
+      padding-top: 30px;
+    }
+  }
+}
