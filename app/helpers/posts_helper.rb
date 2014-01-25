@@ -38,7 +38,7 @@ module PostsHelper
   end
 
   def author_or_responder(post)
-    post.responders.include?(current_user) || current_user == post.user
+    (post.responders.include?(current_user) || current_user == post.user) if signed_in?
   end
 
   private

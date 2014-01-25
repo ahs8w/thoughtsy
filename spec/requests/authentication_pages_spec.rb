@@ -108,6 +108,12 @@ describe "Authentication  : " do
           before { visit posts_path }
           it { should have_title('Thoughts') }
         end
+
+        describe "visiting the show page" do
+          let(:response) { FactoryGirl.create(:response) }
+          before { visit post_path(response.post) }
+          it { should have_title('Responses') }
+        end
       end
 
       describe "in the Responses Controller" do

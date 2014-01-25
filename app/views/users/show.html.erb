@@ -42,7 +42,7 @@
               <% @public_posts.each do |post| %>
                 <% if post.user == @user %>
                   <div id="profile_post">
-                    <div class="panel-focus" id="<%= unrated(post) if @user.id == current_user.id %>">
+                    <div class="panel-focus" id="<%= unrated(post) if signed_in? && @user.id == current_user.id %>">
                       <div class="panel-post">
                         <% if post.ratings.any? && current_user?(@user) %>
                           <span class="badge">rated: <%= average_rating(post) %></span>
@@ -56,7 +56,7 @@
                 <% post.responses.descending.each do |response| %>
                   <% if response.user == @user %>
                     <div class="thought_wrapper" id="profile_response">
-                      <div class="panel-focus" id="<%= unrated(post) if @user.id == current_user.id %>">
+                      <div class="panel-focus" id="<%= unrated(post) if signed_in? && @user.id == current_user.id %>">
                         <div class="panel-response">
                           <% if response.ratings.any? && current_user?(@user) %>
                             <span class="badge">rated: <%= average_rating(response) %></span>
