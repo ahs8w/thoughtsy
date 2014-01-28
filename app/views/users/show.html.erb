@@ -1,33 +1,29 @@
 <% provide(:page_title, @user.username) %>
+<% provide(:page_description, "User profile: posted thoughts and responses, personal messages, statistics") %>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="well" id="profile">
-      <h1>
-        <div class="hidden-xs"><%= gravatar_for(@user, size: 55) %></div>
-        <%= @user.username %>
-        <small> | <%= @user.score %></small>
-      </h1>
+
+      <div class="profile_header">
+        <span><%= gravatar_for(@user, size: 55) %></span>
+        <h1><%= @user.username %> <small>| <%= @user.score %></small></h1>
+      </div>
 
       <% if current_user?(@user) %>
-        <div class="user_stats center">
+        <div class="user_stats">
           <span>
-            <button class="btn btn-default">
-              <%= link_to "Messages", user_messages_path(@user) %>
-              <% if @user.received_messages.unread.empty? %>
-                <i class="fa fa-envelope"></i>
-              <% else %>
-                <span class="badge"><%= @user.received_messages.unread.size %></span>
-              <% end %>
-            </button>
+            <%= link_to(user_messages_path(@user), class: 'btn btn-default') do %>
+              <span class="text">Messages</span><i class="fa fa-envelope"></i>
+            <% end %>
           </span>
           <span>
             <%= render "profile_stats" %>
           </span>
           <span>
-            <button class="btn btn-default">
-              <%= link_to "Settings", edit_user_path(@user) %> <i class="fa fa-cog"></i>
-            </button>
+            <%= link_to(edit_user_path(@user), class: 'btn btn-default') do %>
+              <span class="text">Settings</span><i class="fa fa-cog"></i>
+            <% end %>
           </span>
         </div>
       <% end %>

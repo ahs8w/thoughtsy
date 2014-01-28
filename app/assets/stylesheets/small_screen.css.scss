@@ -33,17 +33,31 @@
   }
 
 /* Posts#Index */
-  #posts_index {
-    padding: 5px;
+  #posts_index, #profile_post {
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 3px;
+    .panel-focus {
+      padding: 3px;
+    }
     h3 {
       font-size: 18px;
     }
   }
 
+  #posts_show {
+    .panel-focus {
+      margin-right: -5px;
+      margin-left: -5px;
+    }
+  }
+
 /* Users#Show */
   #profile {
-    .user_stats {
-      margin-bottom: 20px;
+    .profile_header {
+      .gravatar {
+        display: none;
+      }
     }
     .public_posts, .personal_posts {
       .thought_content {
@@ -51,7 +65,8 @@
       }
     }
     .panel-focus {
-      padding: 5px;
+      margin-right: -5px;
+      margin-left: -5px;
       h3 {
         font-size: 18px;
       }
@@ -64,17 +79,71 @@
       width: 100%;
     }
   }
+
+  /* #Edit */
+  #edit_user {
+    .gravatar {
+      display: none;
+    }
+    .update_gravatar {
+      font-size: 14px;
+    }
+    input.btn-primary {
+      font-size: 14px;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
 
-  .user_score {
-    visibility: hidden;
+  .profile_link {
+    margin-top: -20px;
   }
 
-  .ratings {
+  .user_score {
+    display: none;
+  }
+
+  .panel-response {
     .current_user_rating, .rating_form {
       padding-top: 30px;
+    }
+  }
+
+  #responder_links {
+    .ratings {
+      margin-top: 15px;
+    }
+  }
+
+  .user_stats {
+    margin-bottom: 20px;
+    span.text {
+      display: none;
+    }
+    .fa {
+      margin-left: 0;
+      font-size: 24px;
+    }
+    .dropdown-menu {
+      width: 160px !important;
+      left: -55px;
+      a {
+        font-size: 12px !important;
+      }
+    }
+  }
+
+  #thought_form, .thought_wrapper {
+    margin: 30px -10px 10px;
+    .panel-focus {
+      padding: 3px;
+    }
+  }
+
+  #messages_index {
+    .gravatar {
+      display: none;
     }
   }
 }

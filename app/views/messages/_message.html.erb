@@ -15,7 +15,7 @@
       <div class="panel-body">
         <%= message.content %>
         <% if current_user == message.receiver %>
-          <div id="message_toggle">
+          <div id="reply_toggle">
             <a href="#" data-toggle="modal" data-target="#messagemodal_<%= message.id %>">Reply</a>
           </div>
         <% end %>

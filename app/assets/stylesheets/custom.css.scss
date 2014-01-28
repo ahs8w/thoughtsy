@@ -373,11 +373,10 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     margin-top: 10px;
     text-align: center;
     .ratings {
-      width: 300px;
+      max-width: 250px;
       display: inline-block;
       .rating_form {
         padding-bottom: 0;
-        width: 300px;
       }
     }
   }
@@ -527,28 +526,22 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         overflow: auto;
         padding: 10px 0;
         border-top: 1px solid $gray-lighter;
-        aside {
-          section {
-            border: 0;
-            padding-top: 0;
-            .gravatar {
-              float: left;
-              margin-right: 10px;
-            }
-            span {
-              display: block;
-              margin-bottom: 3px;
-              line-height: 1;
-            }
-            h3 {
-              font-size: 1.4em;
-              text-align: left;
-              letter-spacing: -1px;
-              margin-bottom: 3px;
-              margin-top: 0px;
-              font-variant: small-caps;
-            }
-          }
+        .gravatar {
+          float: left;
+          margin-right: 10px;
+        }
+        span {
+          display: block;
+          margin-bottom: 3px;
+          line-height: 1;
+        }
+        h3 {
+          font-size: 1.4em;
+          text-align: left;
+          letter-spacing: -1px;
+          margin-bottom: 3px;
+          margin-top: 0px;
+          font-variant: small-caps;
         }
       }
       li:first-child {
@@ -558,33 +551,25 @@ rgb(237, 255, 143), rgb(50, 118, 177))
   }
 
   .user_stats {
-    margin: -10px auto 70px;
-    button, div.btn {
+    text-align: center;
+    margin: 0 auto 40px;
+    a, button {
       font-size: 20px;
-      a {
-        color: #101010;
-      }
-      a:hover {
-        text-decoration: none;
-      }
-    }
-    button:hover {
-      background-color: darken(#ddd, 10%)
     }
     .dropdown {
       display: inline-block;
       margin-left: 20px;
       margin-right: 20px;
       .dropdown-menu {
-        width: 179px;
+        width: 184px;
+        a {
+          font-size: 16px;
+        }
       }
-    }
-    .badge {
-      background-color: #428bca;
     }
     .fa {
       margin-left: 10px;
-      font-size: 18px;
+      font-size: 20px;
     }
   }
 
@@ -596,6 +581,14 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
   #profile {
     text-align: center;
+    .profile_header {
+      h1 {
+        display: inline-block;
+      }
+      .gravatar {
+        vertical-align: top;
+      }
+    }
     h2 {
       margin-bottom: 20px;
     }
@@ -635,6 +628,14 @@ rgb(237, 255, 143), rgb(50, 118, 177))
     text-align: center;
     margin: -35px 0 50px;
     @extend .lighter-links;
+  }
+
+  #edit_user {
+    .update_gravatar {
+      @extend .lighter-links;
+      float: right;
+      font-size: 18px;
+    }
   }
 
 /* Home page */
@@ -700,6 +701,9 @@ rgb(237, 255, 143), rgb(50, 118, 177))
         text-align: center;
         margin-top: 0;
       }
+      #reply_toggle {
+        margin-top: 10px;
+      }
     }
     .modal {
       overflow-y: auto;
@@ -733,9 +737,13 @@ rgb(237, 255, 143), rgb(50, 118, 177))
 
   #team {
     text-align: center;
+    .gravatar {
+      margin: 10px;
+    }
   }
 
-  h4#password_reset {
+  #password_reset {
     text-align: center;
-    margin-bottom: 40px;
+    font-size: 18px;
+    margin: 10px 0 40px;
   }

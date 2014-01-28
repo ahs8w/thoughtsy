@@ -1,4 +1,5 @@
 <% provide(:page_title, "Users") %>
+<% provide(:page_description, "A list of top users") %>
 
 <div class="col-md-4 col-md-offset-4">
   <div class="well"
@@ -7,11 +8,7 @@
       <div class="panel-focus">
         <%= will_paginate %>
         <ul class="users">
-          <% @users.each do |user| %>
-            <li>
-              <%= render 'user_info', user: user %>
-            </li>
-          <% end %>
+          <%= render @users %>
         </ul>
         <%= will_paginate %>
       </div>
